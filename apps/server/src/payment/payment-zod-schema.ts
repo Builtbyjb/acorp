@@ -11,3 +11,8 @@ export const PaystackPlanResponseSchema = z.array(
         id: z.number(),
     }),
 );
+
+export const PaystackSubscriptionSchema = z.object({
+    subscriptionCode: z.string(),
+    emailToken: z.string(),
+});

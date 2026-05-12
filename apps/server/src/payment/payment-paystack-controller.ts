@@ -1,10 +1,13 @@
 import { Hono } from "hono";
-import { Bindings, ErrorResult } from "@/lib/types";
-import { parseToken, verifyPaystackSignature } from "@/lib/utils";
+import { Bindings, TokenPayload } from "@/lib/types";
+import { verifyPaystackSignature } from "@/lib/utils";
 import { plans, freePlan } from "@/lib/store";
-import { PaystackPlanResponseSchema } from "./payment-zod-schema";
+import { PaystackPlanResponseSchema, PaystackSubscriptionSchema } from "./payment-zod-schema";
+import { authMiddleware } from "@/middleware/auth-middleware";
+import { zValidator } from "@hono/zod-validator";
 
 const paymentRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/payments");
+paymentRouteV1.use("*", authMiddleware());
 
 paymentRouteV1.get("/paystack/plans", async (c) => {
     try {
@@ -47,9 +50,7 @@ paymentRouteV1.get("/paystack/plans", async (c) => {
 paymentRouteV1.post("/paystack/subscribe", async (c) => {
     // TODO: Validate data
     const data = await c.req.json();
-
-    const parsedToken = await parseToken(c, "refresh_token");
-    if (parsedToken instanceof ErrorResult) return c.json({ message: parsedToken.message }, parsedToken.code);
+    const jWtPayload = c.get("jwtPayload") as TokenPayload;
 
     try {
         const response = await fetch("https://api.paystack.co/transaction/initialize", {
@@ -59,7 +60,7 @@ paymentRouteV1.post("/paystack/subscribe", async (c) => {
                 Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
             },
             body: JSON.stringify({
-                email: parsedToken.email,
+                email: jWtPayload.email,
                 amount: 0,
                 plan: data.planCode,
             }),
@@ -72,15 +73,15 @@ paymentRouteV1.post("/paystack/subscribe", async (c) => {
         return c.json({ data: result }, 200);
     } catch (error) {
         console.log(error);
+        return c.json({ error: "Internal Server Error" }, 500);
     }
 });
 
 paymentRouteV1.get("/paystack/subscriptions", async (c) => {
-    const parsed = await parseToken(c, "refresh_token");
-    if (parsed instanceof ErrorResult) return c.json({ message: parsed.message }, parsed.code);
+    const jwtPayload = c.get("jwtPayload") as TokenPayload;
 
     try {
-        const response = await fetch(`https://api.paystack.co/subscription?customer=${parsed.paystackCustomerId}`, {
+        const response = await fetch(`https://api.paystack.co/subscription?customer=${jwtPayload.paystackCustomerId}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
@@ -108,13 +109,63 @@ paymentRouteV1.get("/paystack/subscriptions", async (c) => {
         return c.json({ data: subs }, 200);
     } catch (error) {
         console.log(error);
+        return c.json({ error: "Internal Server Error" }, 500);
     }
 });
 
-// TODO: zod validate
-paymentRouteV1.post("/paystack/subcriptions/enable", async (c) => {});
+paymentRouteV1.post("/paystack/subcriptions/enable", zValidator("json", PaystackSubscriptionSchema), async (c) => {
+    const data = c.req.valid("json");
 
-paymentRouteV1.post("/paystack/subcriptions/disable", async (c) => {});
+    try {
+        const response = await fetch("https://api.paystack.co/subscription/enable", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
+            },
+            body: JSON.stringify({
+                code: data.subscriptionCode,
+                token: data.emailToken,
+            }),
+        });
+
+        if (!response.ok) throw new Error("An error occurred while enabling subscription");
+
+        const result: any = await response.json();
+
+        return c.json({ message: result.message }, 200);
+    } catch (error) {
+        console.log(error);
+        return c.json({ error: "Internal Server Error" }, 500);
+    }
+});
+
+paymentRouteV1.post("/paystack/subcriptions/disable", zValidator("json", PaystackSubscriptionSchema), async (c) => {
+    const data = c.req.valid("json");
+
+    try {
+        const response = await fetch("https://api.paystack.co/subscription/disable", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
+            },
+            body: JSON.stringify({
+                code: data.subscriptionCode,
+                token: data.emailToken,
+            }),
+        });
+
+        if (!response.ok) throw new Error("An error occurred while disabling subscription");
+
+        const result: any = await response.json();
+
+        return c.json({ message: result.message }, 200);
+    } catch (error) {
+        console.log(error);
+        return c.json({ error: "Internal Server Error" }, 500);
+    }
+});
 
 paymentRouteV1.get("/paystack/callback", async (c) => {
     // Get the reference from the URL
