@@ -5,9 +5,12 @@ import { plans, freePlan } from "@/lib/store";
 import { PaystackPlanResponseSchema, PaystackSubscriptionSchema } from "./payment-zod-schema";
 import { authMiddleware } from "@/middleware/auth-middleware";
 import { zValidator } from "@hono/zod-validator";
+import { drizzle } from "drizzle-orm/d1";
+import { organizations } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 const paymentRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/payments");
-paymentRouteV1.use("*", authMiddleware());
+paymentRouteV1.use("/paystack/*", authMiddleware());
 
 paymentRouteV1.get("/paystack/plans", async (c) => {
     try {
@@ -186,9 +189,10 @@ paymentRouteV1.post("/paystack/subscriptions/update", zValidator("json", Paystac
     }
 });
 
-paymentRouteV1.get("/paystack/callback", async (c) => {
+paymentRouteV1.get("/paystack-fn/callback", async (c) => {
     // Get the reference from the URL
     const reference = c.req.query("reference");
+    const db = drizzle(c.env.DB);
 
     if (!reference) return c.json({ error: "No reference found" }, 400);
 
@@ -204,23 +208,28 @@ paymentRouteV1.get("/paystack/callback", async (c) => {
         const data: any = await response.json();
         console.log("Callback: ", data);
 
-        if (data.status && data.data.status === "success") {
-            // Success: Update your DB (e.g., set user as "active")
-            // Then redirect the user to your frontend success page
-            // TODO: Use env variables instead
-            // TODO: Figure out a way to denote success and failure
-            return c.redirect("http://localhost:5173/settings/billing");
-        } else {
-            // Payment failed or is still pending
-            return c.redirect("http://localhost:5173/settings/billing");
+        const url = c.env.FRONTEND_URL;
+        if (!url) {
+            console.log("Frontend url not set");
+            return c.json({ error: "Internal Server Error" }, 500);
         }
+
+        if (data.status && data.data.status === "success") {
+            // Update db on success
+            await db
+                .update(organizations)
+                .set({ paystackSubscriptionStatus: true })
+                .where(eq(organizations.paystackCustomerId, data.data.customer.id));
+        }
+
+        return c.redirect(`${url}/settings/billing`);
     } catch (error) {
         console.log(error);
         return c.json({ error: "Verification failed" }, 500);
     }
 });
 
-paymentRouteV1.post("/paystack/webhook", async (c) => {
+paymentRouteV1.post("/paystack-fn/webhook", async (c) => {
     const signature = c.req.header("x-paystack-signature") ?? "";
 
     // Get the raw body as a string for verification
@@ -234,9 +243,7 @@ paymentRouteV1.post("/paystack/webhook", async (c) => {
     const event = JSON.parse(body);
     console.log("Webhook: ", event);
 
-    if (event.event === "charge.success") {
-        // Update your database here
-    }
+    // if (event.event === "charge.success") {}
 
     // Return a 200 OK to acknowledge receipt
     return c.json({ status: "success" }, 200);
