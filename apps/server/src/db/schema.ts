@@ -1,6 +1,6 @@
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
-import { InvoiceItem } from "@/lib/types";
+import { InvoiceItem, InvoiceNumber } from "@/lib/types";
 
 export const users = sqliteTable("users", {
     id: int("id").primaryKey({ autoIncrement: true }),
@@ -24,6 +24,17 @@ export const organizations = sqliteTable("organizations", {
     city: text("city"),
     country: text("country"),
     website: text("website"),
+    invoiceNumber: text("invoice_number", { mode: "json" })
+        .$type<InvoiceNumber>()
+        .notNull()
+        .default({ currentNumber: 0, year: 2000 }),
+    paystackCustomerCode: text("paystack_customer_code").notNull().unique(),
+    paystackCustomerId: int("paystack_customer_id").notNull().unique(),
+    paystackPlanCode: text("paystack_plan_code"),
+    paystackPlanId: int("paystack_plan_id"),
+    paystackSubscriptionStatus: text("paystack_subscription_status", { enum: ["active", "disable", "none"] })
+        .notNull()
+        .default("none"),
     deleted: int("deleted", { mode: "boolean" }).notNull().default(false),
     createdAt: int("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
     updatedAt: int("updated_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
@@ -65,21 +76,34 @@ export const clients = sqliteTable("clients", {
     city: text("city"),
     country: text("country"),
     deleted: int("deleted", { mode: "boolean" }).notNull().default(false),
-    createdAt: int("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
-    updatedAt: int("updated_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+    createdAt: int("created_at", { mode: "timestamp" })
+        .notNull()
+        .default(sql`(unixepoch())`),
+    updatedAt: int("updated_at", { mode: "timestamp" })
+        .notNull()
+        .default(sql`(unixepoch())`),
 });
 
 export const invoices = sqliteTable("invoices", {
     id: text("id").primaryKey(),
-    clientId: text("client_id").references(() => clients.id),
+    clientId: text("client_id")
+        .references(() => clients.id)
+        .notNull(),
     issueDate: int("issue_date", { mode: "timestamp" }).notNull(),
     dueDate: int("due_date", { mode: "timestamp" }).notNull(),
     status: text("status").notNull(),
-    taxRate: int("tax_rate", { mode: "number" }),
-    items: text("items", { mode: "json" }).$type<InvoiceItem[]>().default([]),
+    taxRate: int("tax_rate", { mode: "number" }).notNull().default(0),
+    items: text("items", { mode: "json" })
+        .$type<InvoiceItem[]>()
+        .notNull()
+        .default(sql`'[]'`),
     notes: text("notes"),
     currency: text("currency").notNull(),
     deleted: int("deleted", { mode: "boolean" }).notNull().default(false),
-    createdAt: int("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
-    updatedAt: int("updated_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+    createdAt: int("created_at", { mode: "timestamp" })
+        .notNull()
+        .default(sql`(unixepoch())`),
+    updatedAt: int("updated_at", { mode: "timestamp" })
+        .notNull()
+        .default(sql`(unixepoch())`),
 });

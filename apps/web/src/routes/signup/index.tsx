@@ -12,24 +12,21 @@ import Step3 from "@/components/SignupFormSteps/step3";
 import { STEPS } from "@/components/SignupFormSteps/form-steps";
 import { Progress } from "@/components/ui/progress";
 import { useSignupForm } from "@/hooks/useSignupForm";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import type { SignupFormField } from "@/lib/types";
+import { useFetch } from "@/hooks/useFetch";
 
 function RouteComponent() {
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const [stepIndex, setStepIndex] = useState<number>(0);
   const progress = (stepIndex / (STEPS.length - 1)) * 100;
 
+  const { doPOST } = useFetch();
   const navigate = useNavigate();
 
   const form = useSignupForm(async (value) => {
     try {
-      const response = await fetch(`${API_URL}/api/v1/auth/signup`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(value),
-      });
+      const response = await doPOST("/api/v1/auth/signup", value);
+      if (response instanceof Error) throw response;
 
       if (!response.ok) throw new Error("Error setting profile");
 
@@ -48,7 +45,7 @@ function RouteComponent() {
   const next = async () => {
     // Validate only the current step's fields before advancing
     const fields = STEPS[stepIndex].fields;
-    const results = await Promise.all(fields.map((field) => form.validateField(field, "change")));
+    const results = await Promise.all(fields.map((field: SignupFormField) => form.validateField(field, "change")));
     const hasErrors = results.some((r) => r.length > 0);
     if (!hasErrors) setStepIndex((i) => i + 1);
   };
