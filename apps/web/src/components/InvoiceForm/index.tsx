@@ -13,21 +13,28 @@ import { Field, FieldLabel, FieldError, FieldContent, FieldTitle } from "@/compo
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { calculateTotalAmount, calculateTaxAmount, formatCurrency } from "@/lib/utils";
+import {
+  calculateTotalAmount,
+  calculateTaxAmount,
+  formatCurrency,
+  calculateDiscount,
+  calculateSubTotal,
+} from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { CURRENCIES } from "@/lib/constant";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { useFetch } from "@/hooks/useFetch";
+import NumberInput from "../Form/NumberInput";
 
 const invoiceFormSchema = z.object({
   issueDate: z.date(),
   dueDate: z.date(),
   taxRate: z.number().min(0).max(100),
+  discount: z.number().min(0).max(100),
   status: z.enum(["draft", "sent", "paid", "overdue"]),
   items: z.array(
     z.object({
       description: z.string(),
-      quantity: z.number().positive(),
+      quantity: z.number(),
       unitPrice: z.number().positive(),
     }),
   ),
@@ -51,30 +58,25 @@ const status = [
 ];
 
 export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: InvoiceFormProps) {
+  const { doPOST, doPUT } = useFetch();
+
   const handleCreate = async (value: InvoiceForm) => {
     try {
       if (!clientInfo) throw new Error("Client Id not found");
 
       const payload = { ...value, clientId: clientInfo.id };
 
-      const response = await fetch(`${API_URL}/api/v1/clients/${clientInfo.id}/invoices/create`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const response = await doPOST(`/api/v1/clients/${clientInfo.id}/invoices/create`, payload);
+      if (response instanceof Error) throw response;
 
-      if (!response.ok) throw new Error("Failed to create invoice");
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message);
 
       toast.success("Invoice created");
       form.reset();
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.log(error);
-        toast.error("Failed to create invoice: " + error.message);
-      } else {
-        console.log(String(error));
-      }
+      if (error instanceof Error) toast.error(error.message);
+      console.log(error);
     }
   };
 
@@ -85,23 +87,16 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
 
       const payload = { ...value, clientId: clientInfo.id };
 
-      const response = await fetch(`${API_URL}/api/v1/clients/${clientInfo.id}/invoices/${invoiceId}/edit`, {
-        method: "PUT",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const response = await doPUT(`/api/v1/clients/${clientInfo.id}/invoices/${invoiceId}/edit`, payload);
+      if (response instanceof Error) throw response;
 
-      if (!response.ok) throw new Error("Failed to create invoice");
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message);
 
       toast.success("Invoice Edited");
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.log(error);
-        toast.error("Failed to create invoice: " + error.message);
-      } else {
-        console.log(String(error));
-      }
+      if (error instanceof Error) toast.error(error.message);
+      console.log(error);
     }
   };
 
@@ -110,6 +105,7 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
       issueDate: new Date(),
       dueDate: new Date(),
       taxRate: 0,
+      discount: 0,
       status: "draft" as InvoiceStatus,
       items: [
         {
@@ -138,6 +134,7 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
       form.setFieldValue("status", existingInvoice.status);
       form.setFieldValue("items", existingInvoice.items);
       form.setFieldValue("taxRate", existingInvoice.taxRate);
+      form.setFieldValue("discount", existingInvoice.discount || 0);
       form.setFieldValue("items", existingInvoice.items);
       form.setFieldValue("notes", existingInvoice.notes);
       form.setFieldValue("currency", existingInvoice.currency);
@@ -186,7 +183,7 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
                 </div>
               </FieldContent>
             </Field>
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center">
               <form.Field
                 name="status"
                 children={(field) => {
@@ -229,7 +226,7 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
                   return (
                     <Field data-invalid={isInvalid}>
                       <FieldLabel htmlFor="currency-input">
-                        Currency <span className="text-destructive">*</span>
+                        Currency <p className="text-destructive pb-0 mb-0">*</p>
                       </FieldLabel>
                       <Select
                         required
@@ -347,25 +344,50 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
             />
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
+                <span className="text-muted-foreground">Discount</span>
+                {/* Discount Rate */}
+                <form.Field
+                  name="discount"
+                  children={(field) => {
+                    return (
+                      <div className="w-16">
+                        <NumberInput field={field} id="discount-input" label={field.name} shouldLabel={false} />
+                      </div>
+                    );
+                  }}
+                />
+                <span className="text-muted-foreground">%</span>
+              </div>
+              {/* Discount amount */}
+              <div>
+                <form.Subscribe
+                  selector={(s) => {
+                    const subTotal = calculateSubTotal(s.values.items);
+                    return calculateDiscount(subTotal, s.values.discount);
+                  }}
+                  children={(amount) => {
+                    return (
+                      <Field>
+                        <FieldContent>
+                          <span>{formatCurrency(amount)}</span>
+                        </FieldContent>
+                      </Field>
+                    );
+                  }}
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-2">
                 <span className="text-muted-foreground">Tax</span>
                 {/* Tax Rate */}
                 <form.Field
                   name="taxRate"
                   children={(field) => {
-                    const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                     return (
-                      <Field data-invalid={isInvalid} className="w-16">
-                        <Input
-                          id="tax-rate-input"
-                          name={field.name}
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(Number(e.target.value))}
-                          className="w-16 h-8 text-center"
-                          min="0"
-                          max="100"
-                        />
-                        {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                      </Field>
+                      <div className="w-16">
+                        <NumberInput field={field} id="tax-rate-input" label={field.name} shouldLabel={false} />
+                      </div>
                     );
                   }}
                 />
@@ -374,7 +396,10 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
               {/* Tax amount */}
               <div>
                 <form.Subscribe
-                  selector={(s) => calculateTaxAmount(s.values.items, s.values.taxRate)}
+                  selector={(s) => {
+                    const subTotal = calculateSubTotal(s.values.items);
+                    return calculateTaxAmount(subTotal, s.values.taxRate);
+                  }}
                   children={(taxAmount) => {
                     return (
                       <Field>
@@ -389,7 +414,7 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
             </div>
             {/* Total amount to pay */}
             <form.Subscribe
-              selector={(s) => calculateTotalAmount(s.values.items, s.values.taxRate)}
+              selector={(s) => calculateTotalAmount(s.values.items, s.values.taxRate, s.values.discount)}
               children={(total) => {
                 return (
                   <div className="flex justify-between pt-4 border-t border-border">
@@ -414,127 +439,101 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
           <div className="space-y-4">
             <form.Field name="items" mode="array">
               {(field) => (
-                <>
-                  <div className="">
-                    <FieldTitle className="text-lg mb-4">Line Items</FieldTitle>
-                    {field.state.value.map((_, idx) => (
-                      <>
-                        {field.state.value.length > 1 && <Separator key={`s-${idx}`} className="mt-6 mb-6" />}
-                        <Field key={idx} orientation="responsive" className="grid md:grid-cols-12 gap-4">
-                          <form.Field
-                            name={`items[${idx}].description`}
-                            children={(field) => {
-                              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-                              return (
-                                <Field data-invalid={isInvalid} className="col-span-5">
-                                  <FieldLabel htmlFor={`line-item-description-${idx}`}>Description</FieldLabel>
-                                  <Input
-                                    className="w-auto"
-                                    required
-                                    id={`line-item-description-${idx}`}
-                                    name={field.name}
-                                    value={field.state.value}
-                                    onBlur={field.handleBlur}
-                                    onChange={(e) => field.handleChange(e.target.value)}
-                                    aria-invalid={isInvalid}
-                                    placeholder="Item description"
-                                    autoComplete="off"
-                                  />
-                                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                                </Field>
-                              );
-                            }}
-                          />
-                          <form.Field
-                            name={`items[${idx}].quantity`}
-                            children={(field) => {
-                              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-                              return (
-                                <Field data-invalid={isInvalid} className="col-span-2">
-                                  <FieldLabel htmlFor={`line-item-quantity-${idx}`}>Quantity</FieldLabel>
-                                  <Input
-                                    className="w-auto"
-                                    required
-                                    id={`line-item-quantity-${idx}`}
-                                    name={field.name}
-                                    value={field.state.value}
-                                    onBlur={field.handleBlur}
-                                    onChange={(e) => field.handleChange(Number(e.target.value))}
-                                    aria-invalid={isInvalid}
-                                  />
-                                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                                </Field>
-                              );
-                            }}
-                          />
-                          <form.Field
-                            name={`items[${idx}].unitPrice`}
-                            children={(field) => {
-                              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-                              return (
-                                <Field data-invalid={isInvalid} className="col-span-2">
-                                  <FieldLabel htmlFor={`line-item-unit-price-${idx}`}>Unit Price</FieldLabel>
-                                  <Input
-                                    className="w-auto"
-                                    required
-                                    id={`line-item-unit-price-${idx}`}
-                                    name={field.name}
-                                    value={field.state.value}
-                                    onBlur={field.handleBlur}
-                                    onChange={(e) => field.handleChange(Number(e.target.value))}
-                                    aria-invalid={isInvalid}
-                                  />
-                                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                                </Field>
-                              );
-                            }}
-                          />
-                          <form.Subscribe
-                            selector={(s) => {
-                              const item = s.values.items[idx];
-                              if (item && item.quantity && item.unitPrice) return item.quantity * item.unitPrice;
-                              else return 0;
-                            }}
-                            children={(total) => {
-                              return (
-                                <Field className="col-span-2">
-                                  <FieldLabel>Total</FieldLabel>
-                                  <FieldContent>
-                                    <span className="font-medium">{formatCurrency(total)}</span>
-                                  </FieldContent>
-                                </Field>
-                              );
-                            }}
-                          />
-                          <Field className="col-span-1">
-                            <FieldContent>
-                              <Button
-                                type="button"
-                                variant="destructive"
-                                size="icon"
-                                onClick={() => field.removeValue(idx)}
-                                disabled={field.state.value.length === 1}
-                                className="h-9 w-9"
-                              >
-                                <Trash2 className="h-4 w-4 " />
-                              </Button>
-                            </FieldContent>
-                          </Field>
+                <div>
+                  <FieldTitle className="text-lg mb-4">Line Items</FieldTitle>
+                  {field.state.value.map((_, idx) => (
+                    <div key={idx}>
+                      {field.state.value.length > 1 && <Separator key={`s-${idx}`} className="mt-6 mb-6" />}
+                      <Field key={idx} orientation="responsive" className="grid md:grid-cols-12 gap-4">
+                        <form.Field
+                          name={`items[${idx}].description`}
+                          children={(field) => {
+                            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+                            return (
+                              <Field data-invalid={isInvalid} className="col-span-5">
+                                <FieldLabel htmlFor={`line-item-description-${idx}`}>Description</FieldLabel>
+                                <Input
+                                  className="w-auto"
+                                  required
+                                  id={`line-item-description-${idx}`}
+                                  name={field.name}
+                                  value={field.state.value}
+                                  onBlur={field.handleBlur}
+                                  onChange={(e) => field.handleChange(e.target.value)}
+                                  aria-invalid={isInvalid}
+                                  placeholder="Item description"
+                                  autoComplete="off"
+                                />
+                                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                              </Field>
+                            );
+                          }}
+                        />
+                        <form.Field
+                          name={`items[${idx}].quantity`}
+                          children={(field) => {
+                            return (
+                              <div className="col-span-2">
+                                <NumberInput field={field} id={`line-item-quantity-${idx}`} label="Quantity" />
+                              </div>
+                            );
+                          }}
+                        />
+                        <form.Field
+                          name={`items[${idx}].unitPrice`}
+                          children={(field) => {
+                            return (
+                              <div className="col-span-2">
+                                <NumberInput field={field} id={`line-item-unit-price-${idx}`} label="Unit Price" />
+                              </div>
+                            );
+                          }}
+                        />
+                        <form.Subscribe
+                          selector={(s) => {
+                            const item = s.values.items[idx];
+                            if (item && item.quantity && item.unitPrice) return item.quantity * item.unitPrice;
+                            else return 0;
+                          }}
+                          children={(total) => {
+                            return (
+                              <Field className="col-span-2">
+                                <FieldLabel>Total</FieldLabel>
+                                <FieldContent>
+                                  <span className="font-medium">{formatCurrency(total)}</span>
+                                </FieldContent>
+                              </Field>
+                            );
+                          }}
+                        />
+                        <Field className="col-span-1">
+                          <FieldContent>
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon"
+                              onClick={() => field.removeValue(idx)}
+                              disabled={field.state.value.length === 1}
+                              className="h-9 w-9"
+                            >
+                              <Trash2 className="h-4 w-4 " />
+                            </Button>
+                          </FieldContent>
                         </Field>
-                      </>
-                    ))}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="mt-8"
-                      onClick={() => field.pushValue({ description: "", quantity: 0, unitPrice: 0 })}
-                    >
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add Item
-                    </Button>
-                  </div>
-                </>
+                      </Field>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="mt-8"
+                    onClick={() => field.pushValue({ description: "", quantity: 0, unitPrice: 0 })}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Item
+                  </Button>
+                </div>
               )}
             </form.Field>
           </div>
