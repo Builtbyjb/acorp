@@ -118,6 +118,7 @@ invoiceRouteV1.put("/:invoiceId/edit", zValidator("json", invoiceFormSchema), as
             issueDate: data.issueDate,
             dueDate: data.dueDate,
             status: data.status,
+            discount: data.discount,
             taxRate: data.taxRate,
             items: data.items,
             notes: data.notes,

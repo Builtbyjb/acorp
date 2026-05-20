@@ -104,3 +104,8 @@ export type FetchInstance = {
     doPUT: (url: string, data: any, contentType?: string) => Promise<Response | Error>;
     doDELETE: () => void;
 };
+
+export type SelectData = {
+    label: string;
+    value: string;
+};
