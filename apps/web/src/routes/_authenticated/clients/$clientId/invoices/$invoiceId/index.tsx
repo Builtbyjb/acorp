@@ -18,7 +18,7 @@ function RouteComponent() {
   const { clientId, invoiceId } = Route.useParams();
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [client, setClient] = useState<Client | null>(null);
-  const [shouldPreview, setShouldPreview] = useState<boolean>(false);
+  // const [shouldPreview, setShouldPreview] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const router = useRouter();
@@ -52,7 +52,7 @@ function RouteComponent() {
   }, [clientId, invoiceId, doGET]);
 
   const handlePreview = () => {
-    setShouldPreview(true);
+    // setShouldPreview(true);
   };
 
   return (
