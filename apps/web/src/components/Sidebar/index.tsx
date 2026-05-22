@@ -49,11 +49,11 @@ const navItems = [
     url: "/clients",
     icon: Users,
   },
-  {
-    title: "Templates",
-    url: "/templates",
-    icon: LayoutTemplate,
-  },
+  // {
+  //   title: "Templates",
+  //   url: "/templates",
+  //   icon: LayoutTemplate,
+  // },
   {
     title: "Settings",
     url: "/settings",

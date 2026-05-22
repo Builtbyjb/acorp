@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft, Download, Pencil, View } from "lucide-react";
+import { ArrowLeft, Download, Pencil } from "lucide-react";
 import type { Client, Invoice } from "@/lib/types";
 import { DefaultInvoiceTemplate } from "@/components/InvoiceTemplates/DefaultTemplate";
 import { calculateSubTotal, calculateTaxAmount, calculateTotalAmount } from "@/lib/utils";
@@ -51,9 +51,9 @@ function RouteComponent() {
     })();
   }, [clientId, invoiceId, doGET]);
 
-  const handlePreview = () => {
-    // setShouldPreview(true);
-  };
+  // const handlePreview = () => {
+  // setShouldPreview(true);
+  // };
 
   return (
     <div className="space-y-6 w-full">
@@ -77,10 +77,10 @@ function RouteComponent() {
                 <Pencil className="mr-2 h-4 w-4" />
                 Edit
               </Button>
-              <Button variant="outline" onClick={handlePreview}>
+              {/*<Button variant="outline" onClick={handlePreview}>
                 <View className="mr-2 h-4 w-4" />
                 Preview
-              </Button>
+              </Button>*/}
               <Button onClick={download}>
                 <Download className="mr-2 h-4 w-4" />
                 Download PDF
@@ -122,7 +122,7 @@ function RouteComponent() {
                         <TableHead>Description</TableHead>
                         <TableHead className="text-center">Qty</TableHead>
                         <TableHead className="text-right">Unit Price</TableHead>
-                        <TableHead className="text-right">Total</TableHead>
+                        <TableHead className="text-right">Amount</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>

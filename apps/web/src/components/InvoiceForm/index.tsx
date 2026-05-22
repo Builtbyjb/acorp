@@ -387,7 +387,7 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
                           children={(total) => {
                             return (
                               <Field className="col-span-2">
-                                <FieldLabel>Total</FieldLabel>
+                                <FieldLabel>Amount</FieldLabel>
                                 <FieldContent>
                                   <span className="font-medium">{formatCurrency(total)}</span>
                                 </FieldContent>

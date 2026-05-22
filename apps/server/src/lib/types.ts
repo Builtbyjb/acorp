@@ -12,7 +12,7 @@ export type Bindings = {
     ENV: string;
     PAYSTACK_SECRET: string;
     FRONTEND_URL: string;
-    // Add other variables like KV, R2, or Secret Keys here
+    R2: R2Bucket;
 };
 
 export type TokenPayload = JWTPayload & {

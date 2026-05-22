@@ -16,7 +16,7 @@ export const DefaultInvoiceTemplate = forwardRef<HTMLDivElement, InvoicePDFProps
     <main ref={ref} className="bg-white w-[210mm] min-h-[290mm] mx-auto p-[10mm] text-gray-900 print:p-[10mm]">
       <div className="h-full flex flex-col justify-between">
         {/* Top Content */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {/* Header */}
           <div className="flex justify-between items-start border-b pb-6">
             <div>
@@ -51,7 +51,7 @@ export const DefaultInvoiceTemplate = forwardRef<HTMLDivElement, InvoicePDFProps
               <p>Description</p>
               <p className="text-center">Qty</p>
               <p className="text-right">Unit</p>
-              <p className="text-right">Total</p>
+              <p className="text-right">Amount</p>
             </div>
 
             {invoice.items.map((item, index) => (
