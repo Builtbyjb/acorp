@@ -12,45 +12,12 @@ import {
     getRecentInvoices,
 } from "./user-service";
 import { authMiddleware } from "@/middleware/auth-middleware";
-import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { getBlobURL } from "@/lib/utils";
+import { UserSchema, BusinessSchema } from "@shared/lib/zod-schema";
 
 const userRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/user");
 userRouteV1.use("*", authMiddleware());
-
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-
-const UserProfileSettingSchema = z.object({
-    username: z.string(),
-    avatar: z
-        .instanceof(Blob)
-        .optional()
-        .refine((blob) => !blob || blob?.size <= MAX_IMAGE_SIZE, `Max image size is 5mb.`)
-        .refine(
-            (blob) => !blob || ACCEPTED_IMAGE_TYPES.includes(blob?.type),
-            "Only .jpg, .jpeg, .png and .webp formats are supported.",
-        ),
-});
-
-const BusinessSchema = z.object({
-    name: z.string(),
-    email: z.string().email(),
-    // phone: z.string(),
-    website: z.string(),
-    address: z.string(),
-    city: z.string(),
-    country: z.string(),
-    logo: z
-        .instanceof(Blob)
-        .optional()
-        .refine((blob) => !blob || blob?.size <= MAX_IMAGE_SIZE, `Max image size is 5MB.`)
-        .refine(
-            (blob) => !blob || ACCEPTED_IMAGE_TYPES.includes(blob?.type),
-            "Only .jpg, .jpeg, .png and .webp formats are supported.",
-        ),
-});
 
 userRouteV1.get("/dashboard", async (c) => {
     const db = drizzle(c.env.DB);
@@ -127,7 +94,7 @@ userRouteV1.get("/settings", async (c) => {
     return c.json({ message: "Profile setting", data: setting }, 200);
 });
 
-userRouteV1.put("/settings/profile", zValidator("form", UserProfileSettingSchema), async (c) => {
+userRouteV1.put("/settings/profile", zValidator("form", UserSchema), async (c) => {
     const data = c.req.valid("form");
     const db = drizzle(c.env.DB);
 
