@@ -8,9 +8,7 @@ blobRouteV1.get("/:key", async (c) => {
 
     const object = await c.env.R2.get(key);
 
-    if (!object) {
-        return c.json({ message: "File Not Found" }, 404);
-    }
+    if (!object) return c.json({ message: "File Not Found" }, 404);
 
     const headers = new Headers();
     object.writeHttpMetadata(headers);

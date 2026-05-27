@@ -46,3 +46,78 @@ export const BusinessSettingsSchema = z.object({
     city: z.string(),
     country: z.string(),
 });
+
+/* Invoice Zod Schemas */
+export const InvoiceStatusSchema = z.enum(["draft", "sent", "paid", "overdue"]);
+
+export const InvoiceFormSchema = z.object({
+    clientId: z.string().optional(),
+    issueDate: z.coerce.date(),
+    dueDate: z.coerce.date(),
+    discount: z.number().min(0).max(100),
+    taxRate: z.number().min(0).max(100),
+    status: InvoiceStatusSchema,
+    signature: z.string().optional(),
+    items: z.array(
+        z.object({
+            description: z.string(),
+            quantity: z.number().positive(),
+            unitPrice: z.number().positive(),
+        }),
+    ),
+    currency: z.string(),
+    notes: z.string(),
+});
+
+export const InvoiceItemSchema = z.object({
+    description: z.string(),
+    quantity: z.number(),
+    unitPrice: z.number(),
+});
+
+export const InvoiceSchema = z.object({
+    id: z.string(),
+    invoiceNumber: z.string(),
+    clientId: z.string(),
+    items: z.array(InvoiceItemSchema),
+    taxRate: z.number(),
+    discount: z.number(),
+    status: InvoiceStatusSchema,
+    signature: z.string().optional(),
+    issueDate: z.string(),
+    dueDate: z.string(),
+    currency: z.string(),
+    notes: z.string(),
+    createdAt: z.string(),
+});
+
+/* Client Zod Schemas */
+export const ClientSchema = z.object({
+    id: z.string(),
+    organizationId: z.number(),
+    name: z.string(),
+    email: z.string().email(),
+    phone: z.string(),
+    address: z.string(),
+    city: z.string(),
+    country: z.string(),
+    createdAt: z.string(),
+});
+
+export const ClientListSchema = z.array(ClientSchema);
+
+export const ClientFormSchema = z.object({
+    name: z.string().nonempty(),
+    email: z.string().email(),
+    phone: z.string(),
+    address: z.string(),
+    city: z.string(),
+    country: z.string(),
+});
+
+export const TopStatsSchema = z.object({
+    totalRevenue: z.number(),
+    paidInvoices: z.number(),
+    pendingAmount: z.number(),
+    totalClients: z.number(),
+});

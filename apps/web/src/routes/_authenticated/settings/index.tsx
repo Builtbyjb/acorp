@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
 import { useLayout } from "@/hooks/useLayout";
-import Banner from "@/components/Banner";
-import { BadgeInfo } from "lucide-react";
 import { useForm } from "@tanstack/react-form";
 import * as z from "zod";
 import TextInputField from "@/components/Form/TextInputField";
@@ -215,7 +213,7 @@ function BusinessSettings({ settings }: { settings: BusinessSettingsType }) {
                       field={field}
                       id="picture"
                       label="Business Logo"
-                      description="Select your logo. Max size is 5mb. This appears on your Invoice"
+                      description="Select your logo. Max size is 5mb."
                     />
                   );
                 }}
@@ -382,7 +380,6 @@ function RouteComponent() {
 
   return (
     <div className="space-y-6 mb-32">
-      <Banner backgroundColor={"bg-sky-100"} icon={<BadgeInfo />} text="Coming soon!" />
       <UserSettings settings={settings.user} />
       <BusinessSettings settings={settings.business} />
     </div>

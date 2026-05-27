@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "npx wrangler dev --env=dev --local",
     "deploy": "npx wrangler deploy --minify",
-    "cf-typegen": "npx wrangler types --env-interface CloudflareBindings"
+    "cf-typegen": "npx wrangler types --env-interface CloudflareBindings",
+    "lint": "npx eslint ."
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.6",

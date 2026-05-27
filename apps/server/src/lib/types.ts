@@ -27,12 +27,6 @@ export type TokenPayload = JWTPayload & {
     paystackCustomerId?: number;
 };
 
-export type InvoiceItem = {
-    description: string;
-    quantity: number;
-    unitPrice: number;
-};
-
 export type ReturnId = {
     id: number | undefined;
 };
@@ -52,8 +46,3 @@ export class ErrorResult extends Error {
 
 export type Client = typeof clients.$inferSelect;
 export type Invoice = typeof invoices.$inferSelect;
-
-export type InvoiceNumber = {
-    year: number;
-    currentNumber: number;
-};
