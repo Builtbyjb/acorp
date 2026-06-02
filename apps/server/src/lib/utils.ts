@@ -99,3 +99,10 @@ export async function verifyPaystackSignature(secret: string, body: string, sign
 export function getBlobURL(c: Context, key: string): string {
     return `${c.env.SERVER_URL}/api/v1/blobs/${key}`;
 }
+
+export function handleZodValidate(result: any, c: Context) {
+    if (!result.success) {
+        console.error(`Zod Validation Error: ${result.error}`);
+        return c.json({ message: "Zod Validation Error" }, 400);
+    }
+}

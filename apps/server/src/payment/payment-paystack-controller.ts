@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { Bindings, TokenPayload } from "@/lib/types";
-import { verifyPaystackSignature } from "@/lib/utils";
+import { verifyPaystackSignature, handleZodValidate } from "@/lib/utils";
 import { plans, freePlan } from "@/lib/plan";
 import {
     PaystackPlanResponseSchema,
@@ -48,41 +48,47 @@ paymentRouteV1.get("/paystack-fn/plans", async (c) => {
     return c.json({ plans: [freePlan, ...subPlans] }, 200);
 });
 
-paymentRouteV1.post("/paystack/subscribe", zValidator("json", PaystackSubscribeSchema), async (c) => {
-    const data = c.req.valid("json");
-    const jwtPayload = c.get("jwtPayload") as TokenPayload;
+paymentRouteV1.post(
+    "/paystack/subscribe",
+    zValidator("json", PaystackSubscribeSchema, (result, c) => {
+        return handleZodValidate(result, c);
+    }),
+    async (c) => {
+        const data = c.req.valid("json");
+        const jwtPayload = c.get("jwtPayload") as TokenPayload;
 
-    if (!jwtPayload.paystackCustomerId) return c.json({ message: "No customer ID found" }, 400);
+        if (!jwtPayload.paystackCustomerId) return c.json({ message: "No customer ID found" }, 400);
 
-    const subscriptions = await fetchSubscriptions(c, jwtPayload.paystackCustomerId);
-    if (subscriptions instanceof Error) return c.json({ message: "Failed to fetch subscriptions" }, 500);
+        const subscriptions = await fetchSubscriptions(c, jwtPayload.paystackCustomerId);
+        if (subscriptions instanceof Error) return c.json({ message: "Failed to fetch subscriptions" }, 500);
 
-    if (subscriptions.data) {
-        for (const subscription of subscriptions.data) {
-            if (subscription.status === "active") {
-                return c.json({ message: "You already have an active subscription" }, 400);
+        if (subscriptions.data) {
+            for (const subscription of subscriptions.data) {
+                if (subscription.status === "active") {
+                    return c.json({ message: "You already have an active subscription" }, 400);
+                }
             }
         }
-    }
 
-    const response = await fetch("https://api.paystack.co/transaction/initialize", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
-        },
-        body: JSON.stringify({
-            email: jwtPayload.email,
-            amount: 0,
-            plan: data.planCode,
-        }),
-    });
+        const response = await fetch("https://api.paystack.co/transaction/initialize", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
+            },
+            body: JSON.stringify({
+                email: jwtPayload.email,
+                amount: 0,
+                plan: data.planCode,
+            }),
+        });
 
-    // TODO: Validate result
-    const result = await response.json();
+        // TODO: Validate result
+        const result = await response.json();
 
-    return c.json({ data: result }, 200);
-});
+        return c.json({ data: result }, 200);
+    },
+);
 
 paymentRouteV1.get("/paystack/subscriptions", async (c) => {
     const jwtPayload = c.get("jwtPayload") as TokenPayload;
@@ -140,49 +146,61 @@ paymentRouteV1.get("/paystack/subscriptions", async (c) => {
 //     return c.json({ message: result.message }, 200);
 // });
 
-paymentRouteV1.post("/paystack/subscription/disable", zValidator("json", PaystackSubscriptionSchema), async (c) => {
-    const data = c.req.valid("json");
-    const db = drizzle(c.env.DB);
-    const jwtPayload = c.get("jwtPayload") as TokenPayload;
+paymentRouteV1.post(
+    "/paystack/subscription/disable",
+    zValidator("json", PaystackSubscriptionSchema, (result, c) => {
+        return handleZodValidate(result, c);
+    }),
+    async (c) => {
+        const data = c.req.valid("json");
+        const db = drizzle(c.env.DB);
+        const jwtPayload = c.get("jwtPayload") as TokenPayload;
 
-    const response = await fetch("https://api.paystack.co/subscription/disable", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
-        },
-        body: JSON.stringify({
-            code: data.subscriptionCode,
-            token: data.emailToken,
-        }),
-    });
+        const response = await fetch("https://api.paystack.co/subscription/disable", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
+            },
+            body: JSON.stringify({
+                code: data.subscriptionCode,
+                token: data.emailToken,
+            }),
+        });
 
-    const result: any = await response.json();
-    if (!response.ok) throw new Error("An error occurred while disabling subscription");
+        const result: any = await response.json();
+        if (!response.ok) throw new Error("An error occurred while disabling subscription");
 
-    // Update subscription status to disable
-    await db
-        .update(organizations)
-        .set({ paystackSubscriptionStatus: "disable" })
-        .where(eq(organizations.id, jwtPayload.currentOrgId));
+        // Update subscription status to disable
+        await db
+            .update(organizations)
+            .set({ paystackSubscriptionStatus: "disable" })
+            .where(eq(organizations.id, jwtPayload.currentOrgId));
 
-    return c.json({ message: result.message }, 200);
-});
+        return c.json({ message: result.message }, 200);
+    },
+);
 
-paymentRouteV1.post("/paystack/subscription/update", zValidator("json", PaystackSubscriptionSchema), async (c) => {
-    const data = c.req.valid("json");
+paymentRouteV1.post(
+    "/paystack/subscription/update",
+    zValidator("json", PaystackSubscriptionSchema, (result, c) => {
+        return handleZodValidate(result, c);
+    }),
+    async (c) => {
+        const data = c.req.valid("json");
 
-    const response = await fetch(`https://api.paystack.co/subscription/${data.subscriptionCode}/manage/link`, {
-        headers: {
-            Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
-        },
-    });
+        const response = await fetch(`https://api.paystack.co/subscription/${data.subscriptionCode}/manage/link`, {
+            headers: {
+                Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
+            },
+        });
 
-    if (!response.ok) throw new Error("An error occurred while fetching subscription update link");
+        if (!response.ok) throw new Error("An error occurred while fetching subscription update link");
 
-    const result: any = await response.json();
-    return c.json({ updateLink: result.data.link }, 200);
-});
+        const result: any = await response.json();
+        return c.json({ updateLink: result.data.link }, 200);
+    },
+);
 
 paymentRouteV1.get("/paystack-fn/callback", async (c) => {
     // Get the reference from the URL
@@ -206,7 +224,7 @@ paymentRouteV1.get("/paystack-fn/callback", async (c) => {
     const url = c.env.FRONTEND_URL;
     if (!url) {
         console.log("Frontend url not set");
-        return c.json({ error: "Internal Server Error" }, 500);
+        return c.json({ message: "Internal Server Error" }, 500);
     }
 
     if (parsedData.status && parsedData.data.status === "success") {

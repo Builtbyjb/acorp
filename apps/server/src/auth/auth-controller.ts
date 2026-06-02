@@ -4,7 +4,7 @@ import { Bindings } from "@/lib/types";
 import { drizzle } from "drizzle-orm/d1";
 import { DrizzleQueryError, eq } from "drizzle-orm";
 import { members, organizations, users } from "@/db/schema";
-import { parseToken, signToken, sendOTPEmail } from "@/lib/utils";
+import { parseToken, signToken, sendOTPEmail, handleZodValidate } from "@/lib/utils";
 import { setCookie, deleteCookie } from "hono/cookie";
 import type { TokenPayload } from "@/lib/types";
 import { ErrorResult } from "@/lib/types";
@@ -13,123 +13,30 @@ import { loginSchema, otpSchema, signupSchema, PaystackCustomerResponseSchema } 
 
 const authRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/auth");
 
-authRouteV1.post("/login", zValidator("json", loginSchema), async (c) => {
-    const { email } = c.req.valid("json");
-    const db = drizzle(c.env.DB);
+authRouteV1.post(
+    "/login",
+    zValidator("json", loginSchema, (result, c) => {
+        return handleZodValidate(result, c);
+    }),
+    async (c) => {
+        const { email } = c.req.valid("json");
+        const db = drizzle(c.env.DB);
 
-    const user = await db.select().from(users).where(eq(users.email, email)).get();
-    if (!user) {
-        console.log("Error finding user");
-        return c.json({ message: "User not found" }, 404);
-    }
+        const user = await db.select().from(users).where(eq(users.email, email)).get();
+        if (!user) {
+            console.log("Error finding user");
+            return c.json({ message: "User not found" }, 404);
+        }
 
-    const otp = await sendOTPEmail(c, email);
-    if (otp instanceof Error) return c.json({ message: "Internal server error" }, 500);
-
-    const payload: TokenPayload = {
-        userId: user.id,
-        email: user.email,
-        username: user.username,
-        currentOrgId: user.currentOrgId,
-        otp: otp,
-        exp: getAccessTokenExp(),
-    };
-
-    const signResult = await signToken(c, payload);
-    if (signResult instanceof Error) return c.json({ message: signResult.message }, 500);
-
-    setCookie(c, "otp_token", signResult, {
-        httpOnly: true,
-        secure: true,
-        sameSite: c.env.ENV === "dev" ? "none" : "lax",
-        path: "/",
-        maxAge: ACCESS_TOKEN_MAX_AGE,
-    });
-
-    return c.json({ message: "OTP sent to your email" }, 200);
-});
-
-authRouteV1.post("/signup", zValidator("json", signupSchema), async (c) => {
-    const data = c.req.valid("json");
-    const db = drizzle(c.env.DB);
-
-    // Check if user exists
-    const prevUser = await db.select().from(users).where(eq(users.email, data.email)).get();
-    if (prevUser) return c.json({ message: "A user with this email address exists" }, 400);
-
-    let organization: { id: number } | undefined;
-    let user: { id: number; email: string; username: string } | undefined;
-    let member: { id: number } | undefined;
-
-    try {
-        // Create Paystack customer
-        const response = await fetch("https://api.paystack.co/customer", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
-            },
-            body: JSON.stringify({
-                email: data.email,
-                first_name: data.firstname,
-                last_name: data.lastname,
-            }),
-        });
-
-        const paystackResult = await response.json();
-        const parsePaystackResult = PaystackCustomerResponseSchema.parse(paystackResult);
-
-        // Create organization
-        organization = await db
-            .insert(organizations)
-            .values({
-                name: data.businessName,
-                type: data.businessType,
-                address: data.businessAddress,
-                city: data.city,
-                country: data.country,
-                website: data.website,
-                paystackCustomerCode: parsePaystackResult.data.customer_code,
-                paystackCustomerId: parsePaystackResult.data.id,
-            })
-            .returning({ id: organizations.id })
-            .get();
-
-        // Create user
-        user = await db
-            .insert(users)
-            .values({
-                email: data.email,
-                firstname: data.firstname,
-                lastname: data.lastname,
-                username: data.username,
-                currentOrgId: organization.id,
-            })
-            .returning()
-            .get();
-
-        // Create member
-        member = await db
-            .insert(members)
-            .values({
-                userId: user.id,
-                organizationId: organization.id,
-                roleId: 1,
-            })
-            .returning({ id: members.id })
-            .get();
-
-        const otp = await sendOTPEmail(c, data.email);
+        const otp = await sendOTPEmail(c, email);
         if (otp instanceof Error) return c.json({ message: "Internal server error" }, 500);
 
         const payload: TokenPayload = {
             userId: user.id,
             email: user.email,
             username: user.username,
-            currentOrgId: organization.id,
+            currentOrgId: user.currentOrgId,
             otp: otp,
-            paystackCustomerCode: parsePaystackResult.data.customer_code,
-            paystackCustomerId: parsePaystackResult.data.id,
             exp: getAccessTokenExp(),
         };
 
@@ -139,91 +46,206 @@ authRouteV1.post("/signup", zValidator("json", signupSchema), async (c) => {
         setCookie(c, "otp_token", signResult, {
             httpOnly: true,
             secure: true,
-            sameSite: c.env.ENV === "dev" ? "None" : "lax",
+            sameSite: c.env.ENV === "dev" ? "none" : "lax",
             path: "/",
             maxAge: ACCESS_TOKEN_MAX_AGE,
         });
 
-        return c.json({ message: "Sign up completed" }, 200);
-    } catch (error) {
-        // Clean up on failure
-        if (error instanceof DrizzleQueryError) {
-            if (user?.id) await db.delete(users).where(eq(users.id, user.id));
-            if (organization?.id) await db.delete(organizations).where(eq(organizations.id, organization.id));
-            if (member?.id) await db.delete(members).where(eq(members.id, member.id));
-        }
+        return c.json({ message: "OTP sent to your email" }, 200);
+    },
+);
 
-        throw error;
-    }
-});
+authRouteV1.post(
+    "/signup",
+    zValidator("json", signupSchema, (result, c) => {
+        return handleZodValidate(result, c);
+    }),
+    async (c) => {
+        const data = c.req.valid("json");
+        const db = drizzle(c.env.DB);
 
-authRouteV1.post("/verify-otp", zValidator("json", otpSchema), async (c) => {
-    const db = drizzle(c.env.DB);
-    const { otp } = c.req.valid("json");
+        // Check if user exists
+        const prevUser = await db.select().from(users).where(eq(users.email, data.email)).get();
+        if (prevUser) return c.json({ message: "A user with this email address exists" }, 400);
 
-    const parsed = await parseToken(c, "otp_token");
-    if (parsed instanceof ErrorResult) return c.json({ message: parsed.message }, parsed.code);
+        let organization: { id: number } | undefined;
+        let user: { id: number; email: string; username: string } | undefined;
+        let member: { id: number } | undefined;
 
-    // Verify OTP code
-    if (!parsed.otp) return c.json({ message: "OTP not found" }, 400);
-    if (parsed.otp !== otp) return c.json({ message: "Invalid OTP" }, 400);
+        try {
+            // Create Paystack customer
+            const response = await fetch("https://api.paystack.co/customer", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
+                },
+                body: JSON.stringify({
+                    email: data.email,
+                    first_name: data.firstname,
+                    last_name: data.lastname,
+                }),
+            });
 
-    // Verify user exists
-    const user = await db.select().from(users).where(eq(users.id, parsed.userId)).get();
-    if (!user) return c.json({ message: "User not found" }, 404);
+            const paystackResult = await response.json();
+            const parsePaystackResult = PaystackCustomerResponseSchema.parse(paystackResult);
 
-    // Get organization details
-    const organization = await db.select().from(organizations).where(eq(organizations.id, parsed.currentOrgId)).get();
-    if (!organization) return c.json({ message: "User organization not found" }, 404);
+            // Create organization
+            organization = await db
+                .insert(organizations)
+                .values({
+                    name: data.businessName,
+                    type: data.businessType,
+                    address: data.businessAddress,
+                    city: data.city,
+                    country: data.country,
+                    website: data.website,
+                    paystackCustomerCode: parsePaystackResult.data.customer_code,
+                    paystackCustomerId: parsePaystackResult.data.id,
+                })
+                .returning({ id: organizations.id })
+                .get();
 
-    const payload: TokenPayload = {
-        userId: parsed.userId,
-        username: user.username,
-        email: user.email,
-        currentOrgId: parsed.currentOrgId,
-        organizationName: organization.name,
-        paystackCustomerCode: organization.paystackCustomerCode,
-        paystackCustomerId: organization.paystackCustomerId,
-        exp: getRefreshTokenExp(),
-    };
+            // Create user
+            user = await db
+                .insert(users)
+                .values({
+                    email: data.email,
+                    firstname: data.firstname,
+                    lastname: data.lastname,
+                    username: data.username,
+                    currentOrgId: organization.id,
+                })
+                .returning()
+                .get();
 
-    const refreshToken = await signToken(c, payload);
-    if (refreshToken instanceof Error) return c.json({ message: refreshToken.message }, 500);
+            // Create member
+            member = await db
+                .insert(members)
+                .values({
+                    userId: user.id,
+                    organizationId: organization.id,
+                    roleId: 1,
+                })
+                .returning({ id: members.id })
+                .get();
 
-    setCookie(c, "refresh_token", refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: c.env.ENV === "dev" ? "none" : "lax",
-        path: "/",
-        maxAge: REFRESH_TOKEN_MAX_AGE,
-    });
+            const otp = await sendOTPEmail(c, data.email);
+            if (otp instanceof Error) return c.json({ message: "Internal server error" }, 500);
 
-    const accessPayload: TokenPayload = {
-        userId: parsed.userId,
-        username: user.username,
-        email: user.email,
-        currentOrgId: parsed.currentOrgId,
-        organizationName: organization.name,
-        paystackCustomerCode: organization.paystackCustomerCode,
-        paystackCustomerId: organization.paystackCustomerId,
-        exp: getAccessTokenExp(),
-    };
-
-    const accessToken = await signToken(c, accessPayload);
-    if (accessToken instanceof Error) c.json({ message: accessToken.message }, 500);
-
-    return c.json(
-        {
-            accessToken: accessToken,
-            user: {
-                username: user.username,
-                organizationName: organization.name,
+            const payload: TokenPayload = {
+                userId: user.id,
                 email: user.email,
+                username: user.username,
+                currentOrgId: organization.id,
+                otp: otp,
+                paystackCustomerCode: parsePaystackResult.data.customer_code,
+                paystackCustomerId: parsePaystackResult.data.id,
+                exp: getAccessTokenExp(),
+            };
+
+            const signResult = await signToken(c, payload);
+            if (signResult instanceof Error) return c.json({ message: signResult.message }, 500);
+
+            setCookie(c, "otp_token", signResult, {
+                httpOnly: true,
+                secure: true,
+                sameSite: c.env.ENV === "dev" ? "None" : "lax",
+                path: "/",
+                maxAge: ACCESS_TOKEN_MAX_AGE,
+            });
+
+            return c.json({ message: "Sign up completed" }, 200);
+        } catch (error) {
+            // Clean up on failure
+            if (error instanceof DrizzleQueryError) {
+                if (user?.id) await db.delete(users).where(eq(users.id, user.id));
+                if (organization?.id) await db.delete(organizations).where(eq(organizations.id, organization.id));
+                if (member?.id) await db.delete(members).where(eq(members.id, member.id));
+            }
+
+            throw error;
+        }
+    },
+);
+
+authRouteV1.post(
+    "/verify-otp",
+    zValidator("json", otpSchema, (result, c) => {
+        return handleZodValidate(result, c);
+    }),
+    async (c) => {
+        const db = drizzle(c.env.DB);
+        const { otp } = c.req.valid("json");
+
+        const parsed = await parseToken(c, "otp_token");
+        if (parsed instanceof ErrorResult) return c.json({ message: parsed.message }, parsed.code);
+
+        // Verify OTP code
+        if (!parsed.otp) return c.json({ message: "OTP not found" }, 400);
+        if (parsed.otp !== otp) return c.json({ message: "Invalid OTP" }, 400);
+
+        // Verify user exists
+        const user = await db.select().from(users).where(eq(users.id, parsed.userId)).get();
+        if (!user) return c.json({ message: "User not found" }, 404);
+
+        // Get organization details
+        const organization = await db
+            .select()
+            .from(organizations)
+            .where(eq(organizations.id, parsed.currentOrgId))
+            .get();
+        if (!organization) return c.json({ message: "User organization not found" }, 404);
+
+        const payload: TokenPayload = {
+            userId: parsed.userId,
+            username: user.username,
+            email: user.email,
+            currentOrgId: parsed.currentOrgId,
+            organizationName: organization.name,
+            paystackCustomerCode: organization.paystackCustomerCode,
+            paystackCustomerId: organization.paystackCustomerId,
+            exp: getRefreshTokenExp(),
+        };
+
+        const refreshToken = await signToken(c, payload);
+        if (refreshToken instanceof Error) return c.json({ message: refreshToken.message }, 500);
+
+        setCookie(c, "refresh_token", refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: c.env.ENV === "dev" ? "none" : "lax",
+            path: "/",
+            maxAge: REFRESH_TOKEN_MAX_AGE,
+        });
+
+        const accessPayload: TokenPayload = {
+            userId: parsed.userId,
+            username: user.username,
+            email: user.email,
+            currentOrgId: parsed.currentOrgId,
+            organizationName: organization.name,
+            paystackCustomerCode: organization.paystackCustomerCode,
+            paystackCustomerId: organization.paystackCustomerId,
+            exp: getAccessTokenExp(),
+        };
+
+        const accessToken = await signToken(c, accessPayload);
+        if (accessToken instanceof Error) c.json({ message: accessToken.message }, 500);
+
+        return c.json(
+            {
+                accessToken: accessToken,
+                user: {
+                    username: user.username,
+                    organizationName: organization.name,
+                    email: user.email,
+                },
             },
-        },
-        200,
-    );
-});
+            200,
+        );
+    },
+);
 
 authRouteV1.get("/refresh-token", async (c) => {
     const db = drizzle(c.env.DB);
