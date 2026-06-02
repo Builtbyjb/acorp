@@ -28,6 +28,9 @@
           "name": "SEND_EMAIL",
         },
       ],
+      "triggers": {
+        "crons": ["* * * * *"],
+      },
     },
     "uat": {
       "name": "ihod-server-uat",
@@ -53,6 +56,9 @@
           "name": "SEND_EMAIL",
         },
       ],
+      "triggers": {
+        "crons": ["* * * * *"],
+      },
     },
   },
   "dev": {

@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { Bindings, TokenPayload } from "@/lib/types";
-import { verifyPaystackSignature, handleZodValidate } from "@/lib/utils";
+import { verifyPaystackSignature, handleZodValidate, fetchSubscriptions } from "@/lib/utils";
 import { plans, freePlan } from "@/lib/plan";
 import {
     PaystackPlanResponseSchema,
@@ -13,7 +13,6 @@ import { zValidator } from "@hono/zod-validator";
 import { drizzle } from "drizzle-orm/d1";
 import { organizations } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { fetchSubscriptions } from "./payment-paystack-service";
 
 const paymentRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/payments");
 paymentRouteV1.use("/paystack/*", authMiddleware());
@@ -59,7 +58,7 @@ paymentRouteV1.post(
 
         if (!jwtPayload.paystackCustomerId) return c.json({ message: "No customer ID found" }, 400);
 
-        const subscriptions = await fetchSubscriptions(c, jwtPayload.paystackCustomerId);
+        const subscriptions = await fetchSubscriptions(jwtPayload.paystackCustomerId, c.env.PAYSTACK_SECRET);
         if (subscriptions instanceof Error) return c.json({ message: "Failed to fetch subscriptions" }, 500);
 
         if (subscriptions.data) {
@@ -95,7 +94,7 @@ paymentRouteV1.get("/paystack/subscriptions", async (c) => {
 
     if (!jwtPayload.paystackCustomerId) return c.json({ message: "No customer ID found" }, 500);
 
-    const result = await fetchSubscriptions(c, jwtPayload.paystackCustomerId);
+    const result = await fetchSubscriptions(jwtPayload.paystackCustomerId, c.env.PAYSTACK_SECRET);
     if (result instanceof Error) return c.json({ message: "Failed to fetch subscriptions" }, 500);
 
     const subs = result.data.map((r: any) => {

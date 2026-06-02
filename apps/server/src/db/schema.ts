@@ -125,6 +125,7 @@ export const invoices = sqliteTable("invoices", {
         .default(sql`'[]'`),
     notes: text("notes"),
     currency: text("currency").notNull(),
+    notified: int("notified", { mode: "boolean" }).notNull().default(false),
     deleted: int("deleted", { mode: "boolean" }).notNull().default(false),
     createdAt: int("created_at", { mode: "timestamp" })
         .notNull()
