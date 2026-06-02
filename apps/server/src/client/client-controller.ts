@@ -7,6 +7,7 @@ import { clients, invoices, members } from "@/db/schema";
 import invoiceRouteV1 from "@/invoice/invoice-controller";
 import { ClientFormSchema, ClientListSchema, ClientSchema } from "@shared/lib/zod-schema";
 import { authMiddleware } from "@/middleware/auth-middleware";
+import { handleZodValidate } from "@/lib/utils";
 
 const clientRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/clients");
 clientRouteV1.use("*", authMiddleware());
@@ -42,44 +43,52 @@ clientRouteV1.get("/:id", async (c) => {
         .from(clients)
         .where(and(eq(clients.id, id), eq(clients.deleted, false)))
         .get();
+
     if (!client) return c.json("Client not found", 404);
 
     const invoicesResult = await db
         .select()
         .from(invoices)
-        .where(and(eq(invoices.clientId, client.id), eq(invoices.deleted, false)));
+        .where(and(eq(invoices.clientId, client.id), eq(invoices.deleted, false)))
+        .orderBy(desc(invoices.createdAt));
 
     return c.json({ clientInfo: client, invoices: invoicesResult }, 200);
 });
 
-clientRouteV1.post("/create", zValidator("json", ClientFormSchema), async (c) => {
-    const data = c.req.valid("json");
-    const db = drizzle(c.env.DB);
+clientRouteV1.post(
+    "/create",
+    zValidator("json", ClientFormSchema, (result, c) => {
+        return handleZodValidate(result, c);
+    }),
+    async (c) => {
+        const data = c.req.valid("json");
+        const db = drizzle(c.env.DB);
 
-    const jwtPayload = c.get("jwtPayload") as TokenPayload;
+        const jwtPayload = c.get("jwtPayload") as TokenPayload;
 
-    const member = await db.select().from(members).where(eq(members.userId, jwtPayload.userId));
-    if (member.length == 0) return c.json("User is not part of an organization", 400);
+        const member = await db.select().from(members).where(eq(members.userId, jwtPayload.userId));
+        if (member.length == 0) return c.json("User is not part of an organization", 400);
 
-    const client = await db
-        .insert(clients)
-        .values({
-            id: crypto.randomUUID(),
-            organizationId: member[0].organizationId,
-            name: data.name,
-            email: data.email,
-            phone: data.phone,
-            address: data.address,
-            city: data.city,
-            country: data.country,
-        })
-        .returning()
-        .get();
+        const client = await db
+            .insert(clients)
+            .values({
+                id: crypto.randomUUID(),
+                organizationId: member[0].organizationId,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                address: data.address,
+                city: data.city,
+                country: data.country,
+            })
+            .returning()
+            .get();
 
-    const parsedClient = ClientSchema.parse(client);
+        const parsedClient = ClientSchema.parse(client);
 
-    return c.json({ message: "Client created", client: parsedClient }, 200);
-});
+        return c.json({ message: "Client created", client: parsedClient }, 200);
+    },
+);
 
 clientRouteV1.delete("/delete/:id", async (c) => {
     const db = drizzle(c.env.DB);
@@ -90,25 +99,31 @@ clientRouteV1.delete("/delete/:id", async (c) => {
     return c.json({ message: "Client Deleted" }, 200);
 });
 
-clientRouteV1.put("/edit/:id", zValidator("json", ClientFormSchema), async (c) => {
-    const db = drizzle(c.env.DB);
-    const data = c.req.valid("json");
-    const id = c.req.param("id");
+clientRouteV1.put(
+    "/edit/:id",
+    zValidator("json", ClientFormSchema, (result, c) => {
+        return handleZodValidate(result, c);
+    }),
+    async (c) => {
+        const db = drizzle(c.env.DB);
+        const data = c.req.valid("json");
+        const id = c.req.param("id");
 
-    await db
-        .update(clients)
-        .set({
-            name: data.name,
-            email: data.email,
-            phone: data.phone,
-            address: data.address,
-            city: data.city,
-            country: data.country,
-        })
-        .where(eq(clients.id, id));
+        await db
+            .update(clients)
+            .set({
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                address: data.address,
+                city: data.city,
+                country: data.country,
+            })
+            .where(eq(clients.id, id));
 
-    return c.json({ message: "Client data edited" }, 200);
-});
+        return c.json({ message: "Client data edited" }, 200);
+    },
+);
 
 clientRouteV1.post("/search", async (c) => {
     const db = drizzle(c.env.DB);

@@ -58,7 +58,7 @@ function RouteComponent() {
             <Card key={plan.id}>
               <CardHeader>
                 <CardTitle>
-                  <h3 className="text-xl font-semibold text-foreground">{plan.name}</h3>
+                  <h3 className="text-xl font-medium text-foreground">{plan.name}</h3>
                   <p className="text-sm text-muted-foreground mt-1">{plan.description}</p>
                 </CardTitle>
               </CardHeader>

@@ -4,8 +4,9 @@ import { zValidator } from "@hono/zod-validator";
 import { drizzle } from "drizzle-orm/d1";
 import { eq, and, desc } from "drizzle-orm";
 import { clients, invoices, organizations } from "@/db/schema";
-import { getNewInvoiceNumber } from "@/lib/utils";
+import { getNewInvoiceNumber, handleZodValidate } from "@/lib/utils";
 import { InvoiceFormSchema } from "@shared/lib/zod-schema";
+import { planAccessMiddleware } from "@/middleware/plan-access-middleware";
 
 const invoiceRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/invoices");
 
@@ -56,11 +57,9 @@ invoiceRouteV1.get("/:invoiceId", async (c) => {
 
 invoiceRouteV1.post(
     "/create",
+    planAccessMiddleware(),
     zValidator("json", InvoiceFormSchema, (result, c) => {
-        if (!result.success) {
-            console.error(`Zod Validation Error: ${result.error}`);
-            return c.json({ message: "Zod Validation Error" }, 400);
-        }
+        return handleZodValidate(result, c);
     }),
     async (c) => {
         const db = drizzle(c.env.DB);
@@ -115,10 +114,7 @@ invoiceRouteV1.post(
 invoiceRouteV1.put(
     "/:invoiceId/edit",
     zValidator("json", InvoiceFormSchema, (result, c) => {
-        if (!result.success) {
-            console.error(`Zod Validation Error: ${result.error}`);
-            return c.json({ message: "Zod Validation Error" }, 400);
-        }
+        return handleZodValidate(result, c);
     }),
     async (c) => {
         const invoiceId = c.req.param("invoiceId");
