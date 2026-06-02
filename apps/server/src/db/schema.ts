@@ -1,6 +1,6 @@
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
-import { InvoiceItem, InvoiceNumber } from "@/lib/types";
+import { InvoiceItem, InvoiceNumber } from "@shared/lib/types";
 
 export const users = sqliteTable("users", {
     id: int("id").primaryKey({ autoIncrement: true }),

@@ -182,8 +182,8 @@ authRouteV1.post("/verify-otp", zValidator("json", otpSchema), async (c) => {
         email: user.email,
         currentOrgId: parsed.currentOrgId,
         organizationName: organization.name,
-        paystackCustomerCode: parsed.paystackCustomerCode,
-        paystackCustomerId: parsed.paystackCustomerId,
+        paystackCustomerCode: organization.paystackCustomerCode,
+        paystackCustomerId: organization.paystackCustomerId,
         exp: getRefreshTokenExp(),
     };
 
@@ -204,8 +204,8 @@ authRouteV1.post("/verify-otp", zValidator("json", otpSchema), async (c) => {
         email: user.email,
         currentOrgId: parsed.currentOrgId,
         organizationName: organization.name,
-        paystackCustomerCode: parsed.paystackCustomerCode,
-        paystackCustomerId: parsed.paystackCustomerId,
+        paystackCustomerCode: organization.paystackCustomerCode,
+        paystackCustomerId: organization.paystackCustomerId,
         exp: getAccessTokenExp(),
     };
 
