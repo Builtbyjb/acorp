@@ -1,4 +1,4 @@
-import { Context } from "hono";
+import type { Context } from "hono";
 import { ErrorResult, TokenPayload } from "./types";
 import type { InvoiceNumber } from "@shared/lib/types";
 import { getCurrentYear } from "@shared/utils/util";

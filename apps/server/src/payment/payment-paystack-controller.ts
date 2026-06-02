@@ -13,11 +13,12 @@ import { zValidator } from "@hono/zod-validator";
 import { drizzle } from "drizzle-orm/d1";
 import { organizations } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { fetchSubscriptions } from "./payment-paystack-service";
 
 const paymentRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/payments");
 paymentRouteV1.use("/paystack/*", authMiddleware());
 
-paymentRouteV1.get("/paystack/plans", async (c) => {
+paymentRouteV1.get("/paystack-fn/plans", async (c) => {
     const response = await fetch("https://api.paystack.co/plan", {
         method: "GET",
         headers: {
@@ -49,7 +50,20 @@ paymentRouteV1.get("/paystack/plans", async (c) => {
 
 paymentRouteV1.post("/paystack/subscribe", zValidator("json", PaystackSubscribeSchema), async (c) => {
     const data = c.req.valid("json");
-    const jWtPayload = c.get("jwtPayload") as TokenPayload;
+    const jwtPayload = c.get("jwtPayload") as TokenPayload;
+
+    if (!jwtPayload.paystackCustomerId) return c.json({ message: "No customer ID found" }, 400);
+
+    const subscriptions = await fetchSubscriptions(c, jwtPayload.paystackCustomerId);
+    if (subscriptions instanceof Error) return c.json({ message: "Failed to fetch subscriptions" }, 500);
+
+    if (subscriptions.data) {
+        for (const subscription of subscriptions.data) {
+            if (subscription.status === "active") {
+                return c.json({ message: "You already have an active subscription" }, 400);
+            }
+        }
+    }
 
     const response = await fetch("https://api.paystack.co/transaction/initialize", {
         method: "POST",
@@ -58,7 +72,7 @@ paymentRouteV1.post("/paystack/subscribe", zValidator("json", PaystackSubscribeS
             Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
         },
         body: JSON.stringify({
-            email: jWtPayload.email,
+            email: jwtPayload.email,
             amount: 0,
             plan: data.planCode,
         }),
@@ -73,14 +87,10 @@ paymentRouteV1.post("/paystack/subscribe", zValidator("json", PaystackSubscribeS
 paymentRouteV1.get("/paystack/subscriptions", async (c) => {
     const jwtPayload = c.get("jwtPayload") as TokenPayload;
 
-    const response = await fetch(`https://api.paystack.co/subscription?customer=${jwtPayload.paystackCustomerId}`, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
-        },
-    });
+    if (!jwtPayload.paystackCustomerId) return c.json({ message: "No customer ID found" }, 500);
 
-    const result: any = await response.json();
+    const result = await fetchSubscriptions(c, jwtPayload.paystackCustomerId);
+    if (result instanceof Error) return c.json({ message: "Failed to fetch subscriptions" }, 500);
 
     const subs = result.data.map((r: any) => {
         return {
@@ -100,31 +110,40 @@ paymentRouteV1.get("/paystack/subscriptions", async (c) => {
     return c.json({ data: subs }, 200);
 });
 
-paymentRouteV1.post("/paystack/subcriptions/enable", zValidator("json", PaystackSubscriptionSchema), async (c) => {
+// paymentRouteV1.post("/paystack/subscription/enable", zValidator("json", PaystackSubscriptionSchema), async (c) => {
+//     const data = c.req.valid("json");
+//     const db = drizzle(c.env.DB);
+//     const jwtPayload = c.get("jwtPayload") as TokenPayload;
+
+//     const response = await fetch("https://api.paystack.co/subscription/enable", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
+//         },
+//         body: JSON.stringify({
+//             code: data.subscriptionCode,
+//             token: data.emailToken,
+//         }),
+//     });
+
+//     const result: any = await response.json();
+//     console.log(result);
+//     if (!response.ok) throw new Error("An error occurred while enabling subscription");
+
+//     // Update subscription status to active
+//     await db
+//         .update(organizations)
+//         .set({ paystackSubscriptionStatus: "active" })
+//         .where(eq(organizations.id, jwtPayload.currentOrgId));
+
+//     return c.json({ message: result.message }, 200);
+// });
+
+paymentRouteV1.post("/paystack/subscription/disable", zValidator("json", PaystackSubscriptionSchema), async (c) => {
     const data = c.req.valid("json");
-
-    const response = await fetch("https://api.paystack.co/subscription/enable", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
-        },
-        body: JSON.stringify({
-            code: data.subscriptionCode,
-            token: data.emailToken,
-        }),
-    });
-
-    if (!response.ok) throw new Error("An error occurred while enabling subscription");
-    // TODO: update subscription status to disable
-
-    const result: any = await response.json();
-
-    return c.json({ message: result.message }, 200);
-});
-
-paymentRouteV1.post("/paystack/subcriptions/disable", zValidator("json", PaystackSubscriptionSchema), async (c) => {
-    const data = c.req.valid("json");
+    const db = drizzle(c.env.DB);
+    const jwtPayload = c.get("jwtPayload") as TokenPayload;
 
     const response = await fetch("https://api.paystack.co/subscription/disable", {
         method: "POST",
@@ -138,15 +157,19 @@ paymentRouteV1.post("/paystack/subcriptions/disable", zValidator("json", Paystac
         }),
     });
 
-    if (!response.ok) throw new Error("An error occurred while disabling subscription");
-    // TODO: update subscription status to disable
-
     const result: any = await response.json();
+    if (!response.ok) throw new Error("An error occurred while disabling subscription");
+
+    // Update subscription status to disable
+    await db
+        .update(organizations)
+        .set({ paystackSubscriptionStatus: "disable" })
+        .where(eq(organizations.id, jwtPayload.currentOrgId));
 
     return c.json({ message: result.message }, 200);
 });
 
-paymentRouteV1.post("/paystack/subscriptions/update", zValidator("json", PaystackSubscriptionSchema), async (c) => {
+paymentRouteV1.post("/paystack/subscription/update", zValidator("json", PaystackSubscriptionSchema), async (c) => {
     const data = c.req.valid("json");
 
     const response = await fetch(`https://api.paystack.co/subscription/${data.subscriptionCode}/manage/link`, {
