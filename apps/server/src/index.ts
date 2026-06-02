@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { Bindings } from "@/lib/types";
+import { invoiceNotify } from "./lib/utils";
 
 /* Routes  */
 import authRouteV1 from "./auth/auth-controller";
@@ -36,4 +37,10 @@ app.route("/api/v1", clientRouteV1);
 app.route("/api/v1", paymentRouteV1);
 app.route("/api/v1", blobRouteV1);
 
-export default app;
+export default {
+    fetch: app.fetch,
+
+    async scheduled(event: ScheduledEvent, env: Bindings, ctx: ExecutionContext) {
+        ctx.waitUntil(invoiceNotify(env));
+    },
+};

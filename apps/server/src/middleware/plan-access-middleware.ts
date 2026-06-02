@@ -3,7 +3,7 @@ import type { TokenPayload, Bindings } from "@/lib/types";
 import { drizzle, type DrizzleD1Database } from "drizzle-orm/d1";
 import { clients, organizations, invoices } from "@/db/schema";
 import { eq, and, sql } from "drizzle-orm";
-import { fetchSubscriptions } from "@/payment/payment-paystack-service";
+import { hasActiveSubscription } from "@/lib/utils";
 
 const MAX_INVOICE_COUNT = 5;
 
@@ -45,19 +45,12 @@ export function planAccessMiddleware(): MiddlewareHandler<{
             if (!jwtPayload.paystackCustomerId) return c.json({ message: "Customer ID not found" }, 400);
 
             // Check for non renewing but still active subscriptions
-            const subscriptions = await fetchSubscriptions(c, jwtPayload.paystackCustomerId);
-            if (subscriptions.data && subscriptions.data.length > 0) {
-                const hasActiveOrNonRenewing = subscriptions.data.some(
-                    (s: any) =>
-                        s.status === "active" ||
-                        (s.status === "non-renewing" && s.next_payment_date >= new Date().toISOString()),
-                );
+            const hasActiveOrNonRenewing = await hasActiveSubscription(
+                Number(jwtPayload.paystackCustomerId),
+                c.env.PAYSTACK_SECRET,
+            );
 
-                if (!hasActiveOrNonRenewing) {
-                    if (!(await verifyInvoiceCount(db, jwtPayload.currentOrgId)))
-                        return c.json({ message: "Subscription expired" }, 403);
-                }
-            } else {
+            if (!hasActiveOrNonRenewing) {
                 if (!(await verifyInvoiceCount(db, jwtPayload.currentOrgId)))
                     return c.json({ message: "Subscription expired" }, 403);
             }

@@ -1,9 +1,12 @@
 import type { Context } from "hono";
-import { ErrorResult, TokenPayload } from "./types";
+import { ErrorResult, type TokenPayload, type Bindings } from "./types";
 import type { InvoiceNumber } from "@shared/lib/types";
 import { getCurrentYear } from "@shared/utils/util";
 import { getCookie } from "hono/cookie";
 import { verify, sign } from "hono/jwt";
+import { drizzle } from "drizzle-orm/d1";
+import { clients, invoices, users, organizations } from "@/db/schema";
+import { eq, and } from "drizzle-orm";
 
 export function generateOTP(): string {
     const otp = (crypto.getRandomValues(new Uint32Array(1))[0] % 90000000) + 10000000;
@@ -104,5 +107,79 @@ export function handleZodValidate(result: any, c: Context) {
     if (!result.success) {
         console.error(`Zod Validation Error: ${result.error}`);
         return c.json({ message: "Zod Validation Error" }, 400);
+    }
+}
+
+export async function fetchSubscriptions(customerId: number, paystackSecret: string): Promise<any> {
+    const response = await fetch(`https://api.paystack.co/subscription?customer=${customerId}`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${paystackSecret}`,
+        },
+    });
+    if (!response.ok) return new Error("Failed to fetch subscriptions");
+
+    const result: any = await response.json();
+
+    return result;
+}
+
+export async function hasActiveSubscription(customerId: number, paystackSecret: string): Promise<boolean> {
+    try {
+        const subscriptions = await fetchSubscriptions(customerId, paystackSecret);
+        if (subscriptions.data && subscriptions.data.length > 0) {
+            const hasActiveOrNonRenewing = subscriptions.data.some(
+                (s: any) =>
+                    s.status === "active" ||
+                    (s.status === "non-renewing" && s.next_payment_date >= new Date().toISOString()),
+            );
+
+            return hasActiveOrNonRenewing;
+        }
+
+        return false;
+    } catch {
+        return false;
+    }
+}
+
+export async function invoiceNotify(env: Bindings): Promise<any> {
+    const db = drizzle(env.DB);
+
+    const allUsers = await db.select().from(users).where(eq(users.deleted, false));
+
+    for (const user of allUsers) {
+        const organization = await db.select().from(organizations).where(eq(organizations.id, user.currentOrgId)).get();
+        if (!organization) continue;
+
+        const hasActive = await hasActiveSubscription(organization.paystackCustomerId, env.PAYSTACK_SECRET);
+        if (!hasActive) continue;
+
+        const allClients = await db
+            .select()
+            .from(clients)
+            .where(and(eq(clients.deleted, false), eq(clients.organizationId, user.currentOrgId)));
+
+        for (const client of allClients) {
+            const allInvoices = await db.select().from(invoices).where(eq(invoices.clientId, client.id));
+
+            for (const invoice of allInvoices) {
+                if (invoice.notified) continue;
+
+                if (invoice.status === "sent" || invoice.status === "overdue") {
+                    if (new Date(invoice.dueDate) < new Date()) {
+                        // Send notification
+                        await env.SEND_EMAIL.send({
+                            from: "notify-noreply@acorp.app",
+                            to: user.email,
+                            subject: `Invoice Overdue: ${invoice.invoiceNumber}`,
+                            text: `Invoice ${invoice.invoiceNumber} for ${client.name} is overdue. Consider sending a payment reminder.`,
+                        });
+
+                        await db.update(invoices).set({ notified: true }).where(eq(invoices.id, invoice.id));
+                    }
+                }
+            }
+        }
     }
 }
