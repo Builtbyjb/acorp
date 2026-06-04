@@ -39,7 +39,9 @@ export const organizations = sqliteTable("organizations", {
     paystackCustomerId: int("paystack_customer_id").notNull().unique(),
     paystackPlanCode: text("paystack_plan_code"),
     paystackPlanId: int("paystack_plan_id"),
-    paystackSubscriptionStatus: text("paystack_subscription_status", { enum: ["active", "disable", "none"] })
+    paystackSubscriptionStatus: text("paystack_subscription_status", {
+        enum: ["active", "non-renewing", "cancelled", "none"],
+    })
         .notNull()
         .default("none"),
     deleted: int("deleted", { mode: "boolean" }).notNull().default(false),
