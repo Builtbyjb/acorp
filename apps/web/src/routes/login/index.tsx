@@ -10,6 +10,7 @@ import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/c
 import { ArrowLeft } from "lucide-react";
 import OTP from "@/components/OTP";
 import { useAuth } from "@/hooks/auth";
+import Logo from "@/components/Logo";
 
 const emailFormSchema = z.object({
   email: z.string().email(),
@@ -33,9 +34,7 @@ function RouteComponent() {
         toast.success("Verification email sent");
         if (success) setIsVerified(true);
       } catch (error: unknown) {
-        if (error instanceof Error) {
-          toast.error("Login failed: " + error.message);
-        }
+        if (error instanceof Error) toast.error(error.message);
         console.error(error);
       }
     },
@@ -43,6 +42,8 @@ function RouteComponent() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen mx-auto w-[90%]">
+      <Logo />
+      <br />
       <Card className="w-full max-w-sm">
         <CardHeader>
           <div className="flex gap-6 items-center mb-2">

@@ -19,7 +19,7 @@ function RouteComponent() {
     setTitle("Referrals");
   }, [setTitle]);
 
-  const referralLink = "https://invoice.acorp.app/ref/USER12345";
+  const referralLink = "https://invoice.acorp.app/signup?referral=user12345";
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
