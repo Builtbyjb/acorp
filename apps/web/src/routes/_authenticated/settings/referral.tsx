@@ -6,12 +6,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Copy, Users, BadgeInfo } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { getBadgeVariant, formatCurrency } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import { formatCurrency } from "@/lib/utils";
 import { APP_NAME } from "@/lib/constant";
 import Banner from "@/components/Banner";
+import { toast } from "sonner";
 
 function RouteComponent() {
+  const [referralEnabled, setReferralEnabled] = useState(true);
   const { setTitle } = useLayout();
 
   useEffect(() => {
@@ -20,7 +21,10 @@ function RouteComponent() {
 
   const referralLink = "https://invoice.acorp.app/ref/USER12345";
 
-  const [referralEnabled, setReferralEnabled] = useState(true);
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success("Copied to clipboard");
+  };
 
   return (
     <div className="space-y-8 mb-8">
@@ -48,6 +52,7 @@ function RouteComponent() {
             <Card>
               <CardHeader>
                 <CardTitle>Total Referrals</CardTitle>
+                <CardDescription>The total number of users you have referred.</CardDescription>
               </CardHeader>
               <CardContent>
                 <span className="flex gap-4 items-center">
@@ -59,6 +64,7 @@ function RouteComponent() {
             <Card>
               <CardHeader>
                 <CardTitle>Active Referrals</CardTitle>
+                <CardDescription>The number of referred users with an active subscription.</CardDescription>
               </CardHeader>
               <CardContent>
                 <span className="flex gap-4 items-center">
@@ -70,6 +76,7 @@ function RouteComponent() {
             <Card>
               <CardHeader>
                 <CardTitle>Total Earnings</CardTitle>
+                <CardDescription>The total earnings from your referrals.</CardDescription>
               </CardHeader>
               <CardContent>
                 <h1 className="text-xl md:text-2xl">{formatCurrency(350_542, "NGN")}</h1>
@@ -78,10 +85,10 @@ function RouteComponent() {
             <Card>
               <CardHeader>
                 <CardTitle>Payout</CardTitle>
+                <CardDescription>The potential payout for your referrals this month.</CardDescription>
               </CardHeader>
               <CardContent>
                 <h1 className="text-xl md:text-2xl">{formatCurrency(35_420, "NGN")}</h1>
-                <Badge className={getBadgeVariant("active")}>Paid</Badge>
               </CardContent>
             </Card>
           </div>
@@ -93,7 +100,10 @@ function RouteComponent() {
             <CardContent>
               <div className="flex items-center gap-2">
                 <Input type="text" value={referralLink} readOnly className="w-90" />
-                <Copy className="ml-2 text-gray-600 hover:cursor-pointer hover:text-gray-800" />
+                <Copy
+                  className="ml-2 text-gray-600 hover:cursor-pointer hover:text-gray-800"
+                  onClick={() => handleCopy(referralLink)}
+                />
               </div>
             </CardContent>
           </Card>
