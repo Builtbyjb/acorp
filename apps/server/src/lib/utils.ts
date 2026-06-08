@@ -4,6 +4,7 @@ import type { InvoiceNumber } from "@shared/lib/types";
 import { getCurrentYear } from "@shared/utils/util";
 import { getCookie } from "hono/cookie";
 import { verify, sign } from "hono/jwt";
+import { otpTemplate } from "@/templates/util";
 
 export function generateOTP(): string {
     const otp = (crypto.getRandomValues(new Uint32Array(1))[0] % 90000000) + 10000000;
@@ -64,13 +65,15 @@ export async function sendOTPEmail(c: Context, email: string): Promise<Error | s
         console.error("EMAIL_DOMAIN not configured");
         return new Error("Sender not configured");
     }
+    const htmlBody = fillTemplate(otpTemplate, { OTP_CODE: otp });
 
-    // Send OTP to user name
+    // Send OTP to user email
     await c.env.SEND_EMAIL.send({
         from: sender,
         to: email,
         subject: "Your OTP code",
-        text: `Your OTP code is: ${otp}`,
+        html: htmlBody,
+        text: `Your one time passcode is: ${otp}`,
     });
 
     return otp;
@@ -138,4 +141,8 @@ export async function hasActiveSubscription(customerId: number, paystackSecret: 
     } catch {
         return false;
     }
+}
+
+export function fillTemplate(template: string, variables: Record<string, string>): string {
+    return Object.entries(variables).reduce((html, [key, value]) => html.replaceAll(`{{${key}}}`, value), template);
 }
