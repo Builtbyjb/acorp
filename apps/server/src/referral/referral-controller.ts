@@ -6,7 +6,8 @@ import { organizations } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import { handleZodValidate, generateReferralCode } from "@/lib/utils";
+import { handleZodValidate } from "@/lib/utils";
+import { generateReferralCode } from "@/referral/referral-service";
 
 const referralRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/referral");
 referralRouteV1.use("*", authMiddleware());
@@ -14,6 +15,10 @@ referralRouteV1.use("*", authMiddleware());
 const ReferralToggleSchema = z.object({
     referralEnabled: z.boolean(),
 });
+
+// TODO: Fetch plan ammount
+const REWARD = 0.05; // 5% reward per referral
+const SUB_AMOUNT = 9870; // Pro plan subscription amount
 
 referralRouteV1.get("/details", async (c) => {
     const db = drizzle(c.env.DB);
@@ -31,14 +36,31 @@ referralRouteV1.get("/details", async (c) => {
         ? `https://invoice.acorp.app/signup?referral=${organization.referralCode}`
         : "No referral code";
 
+    const totalReferrals = await db.$count(
+        organizations,
+        and(eq(organizations.referredBy, organization.id), eq(organizations.deleted, false)),
+    );
+    const activeReferrals = await db.$count(
+        organizations,
+        and(
+            eq(organizations.referredBy, organization.id),
+            eq(organizations.paystackSubscriptionStatus, "active"),
+            eq(organizations.deleted, false),
+        ),
+    );
+
+    // Calculate payout
+    const payout = activeReferrals * SUB_AMOUNT * REWARD;
+
     const data = {
         referralEnabled: organization.referralEnabled,
         referralLink,
-        totalReferrals: 1578,
-        activeReferrals: 127,
-        totalEarnings: 350_542,
-        payout: 35_420,
+        totalReferrals,
+        activeReferrals,
+        totalEarnings: organization.totalEarnings,
+        payout,
     };
+
     return c.json({ message: "Referral details fetched successfully", data }, 200);
 });
 

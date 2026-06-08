@@ -38,6 +38,7 @@ export const organizations = sqliteTable("organizations", {
     referralCode: text("referral_code").unique(),
     referredBy: int("referred_by").unique(),
     referralEnabled: int("referral_enabled", { mode: "boolean" }).notNull().default(false),
+    totalEarnings: int("total_earnings").notNull().default(0),
     paystackCustomerCode: text("paystack_customer_code").notNull().unique(),
     paystackCustomerId: int("paystack_customer_id").notNull().unique(),
     paystackPlanCode: text("paystack_plan_code"),

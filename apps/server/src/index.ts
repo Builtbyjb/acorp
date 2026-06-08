@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { Bindings } from "@/lib/types";
-import { invoiceNotify } from "./lib/utils";
+import { invoiceNotify } from "./lib/crons";
 
 /* Routes  */
 import authRouteV1 from "./auth/auth-controller";
