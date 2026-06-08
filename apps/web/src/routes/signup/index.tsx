@@ -1,4 +1,4 @@
-import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect, useNavigate, useSearch } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -14,18 +14,29 @@ import { Progress } from "@/components/ui/progress";
 import { useSignupForm } from "@/hooks/useSignupForm";
 import type { SignupFormField } from "@/lib/types";
 import { useFetch } from "@/hooks/useFetch";
+import Logo from "@/components/Logo";
+import { handleError } from "@/lib/utils";
+import { z } from "zod";
+
+const QueryParamSchema = z.object({
+  referral: z.string().optional(),
+});
+
+type QueryParams = z.infer<typeof QueryParamSchema>;
 
 function RouteComponent() {
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const [stepIndex, setStepIndex] = useState<number>(0);
   const progress = (stepIndex / (STEPS.length - 1)) * 100;
+  const { referral } = useSearch({ from: "/signup/" }) as QueryParams;
 
   const { doPOST } = useFetch();
   const navigate = useNavigate();
 
   const form = useSignupForm(async (value) => {
     try {
-      const response = await doPOST("/api/v1/auth/signup", value);
+      const payload = { ...value, referral };
+      const response = await doPOST("/api/v1/auth/signup", payload);
       if (response instanceof Error) throw response;
 
       const result = await response.json();
@@ -34,10 +45,7 @@ function RouteComponent() {
       setIsVerified(true);
       toast.success("Verification Email Sent");
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error("Signup failed: " + error.message);
-      }
-      console.error(error);
+      handleError(error);
     }
   });
 
@@ -54,7 +62,9 @@ function RouteComponent() {
   const isLastStep = stepIndex === STEPS.length - 1;
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen mx-auto w-[90%] mt-4">
+    <main className="flex flex-col items-center justify-center min-h-screen mx-auto w-[90%]">
+      <Logo />
+      <br />
       <Card className="w-full max-w-sm">
         <CardHeader>
           <div className="flex items-center gap-6 mb-2">
@@ -94,7 +104,7 @@ function RouteComponent() {
           </Field>
         </CardFooter>
       </Card>
-      <div className="text-center text-xs mt-4">
+      <div className="text-center text-xs mt-4 text-muted-foreground">
         By clicking Submit, you agree to our{" "}
         <Link to="/terms-of-service" className="hover:font-bold underline">
           Terms of Service
@@ -124,5 +134,6 @@ export const Route = createFileRoute("/signup/")({
       });
     }
   },
+  validateSearch: (search) => QueryParamSchema.parse(search),
   component: RouteComponent,
 });

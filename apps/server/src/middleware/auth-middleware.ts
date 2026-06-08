@@ -8,13 +8,13 @@ export function authMiddleware(): MiddlewareHandler<{ Bindings: Bindings; Variab
         const token = getCookie(c, "refresh_token");
         if (!token) {
             console.log("refresh_token token not found");
-            return c.json({ error: "Unauthorized: Refresh token not found" }, 401);
+            return c.json({ message: "Unauthorized: Refresh token not found" }, 401);
         }
 
         const secret = c.env.JWT_SECRET;
         if (!secret) {
             console.error("JWT secret not configured");
-            return c.json({ error: "Internal Server Error" }, 500);
+            return c.json({ message: "Internal Server Error" }, 500);
         }
 
         try {
@@ -23,7 +23,7 @@ export function authMiddleware(): MiddlewareHandler<{ Bindings: Bindings; Variab
             await next();
         } catch (error) {
             console.log(error);
-            return c.json({ error: "Unauthorized: Invalid token" }, 401);
+            return c.json({ message: "Unauthorized: Invalid token" }, 401);
         }
     };
 }

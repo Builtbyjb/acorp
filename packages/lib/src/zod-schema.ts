@@ -126,3 +126,18 @@ export const FeedbackSchema = z.object({
     subject: z.string().optional(),
     description: z.string(),
 });
+
+/* Subscription Plan Zod Schemas */
+export const SubscriptionPlanSchema = z.object({
+    id: z.number(),
+    planCode: z.string(),
+    name: z.string(),
+    description: z.string(),
+    amount: z.number(),
+    currency: z.string(),
+    interval: z.string(),
+    features: z.array(z.string()),
+    disabled: z.boolean(),
+    featured: z.boolean(),
+    cta: z.string(),
+});

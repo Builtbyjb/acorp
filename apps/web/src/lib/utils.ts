@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { CURRENCY_MAP } from "./constant";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -45,7 +47,19 @@ export function getBadgeVariant(action: string): string {
             return gray;
         case "overdue":
             return red;
+        case "cancelled":
+            return red;
         default:
             return gray;
     }
+}
+
+export function handleError(error: unknown) {
+    if (error instanceof z.ZodError) {
+        toast.error("Something went wrong. Please report this issue through the feedback page");
+    } else if (error instanceof Error) {
+        toast.error(error.message);
+    }
+
+    console.error(error);
 }

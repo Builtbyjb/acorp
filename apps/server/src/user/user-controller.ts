@@ -13,7 +13,7 @@ import {
 } from "./user-service";
 import { authMiddleware } from "@/middleware/auth-middleware";
 import { zValidator } from "@hono/zod-validator";
-import { getBlobURL } from "@/lib/utils";
+import { getBlobURL, handleZodValidate } from "@/lib/utils";
 import { UserSchema, BusinessSchema, FeedbackSchema } from "@shared/lib/zod-schema";
 
 const userRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/user");
@@ -94,78 +94,96 @@ userRouteV1.get("/settings", async (c) => {
     return c.json({ message: "Profile setting", data: setting }, 200);
 });
 
-userRouteV1.put("/settings/profile", zValidator("form", UserSchema), async (c) => {
-    const data = c.req.valid("form");
-    const db = drizzle(c.env.DB);
+userRouteV1.put(
+    "/settings/profile",
+    zValidator("form", UserSchema, (result, c) => {
+        return handleZodValidate(result, c);
+    }),
+    async (c) => {
+        const data = c.req.valid("form");
+        const db = drizzle(c.env.DB);
 
-    // console.log(data);
-    const jwtPayload = c.get("jwtPayload") as TokenPayload;
+        // console.log(data);
+        const jwtPayload = c.get("jwtPayload") as TokenPayload;
 
-    let blobURL: string | null = null;
-    if (data.avatar) {
-        const value = await c.env.R2.put(`${jwtPayload.userId}-avatar`, data.avatar, {
-            httpMetadata: {
-                contentType: data.avatar.type,
-            },
+        let blobURL: string | null = null;
+        if (data.avatar) {
+            const value = await c.env.R2.put(`${jwtPayload.userId}-avatar`, data.avatar, {
+                httpMetadata: {
+                    contentType: data.avatar.type,
+                },
+            });
+            // console.log(value);
+
+            blobURL = getBlobURL(c, value?.key);
+        }
+
+        await db
+            .update(users)
+            .set({ avatarURL: blobURL || users.avatarURL, username: data.username })
+            .where(eq(users.id, jwtPayload.userId));
+
+        return c.json({ message: "User profile updated" }, 200);
+    },
+);
+
+userRouteV1.put(
+    "/settings/business",
+    zValidator("form", BusinessSchema, (result, c) => {
+        return handleZodValidate(result, c);
+    }),
+    async (c) => {
+        const data = c.req.valid("form");
+        const db = drizzle(c.env.DB);
+
+        // console.log(data);
+        const jwtPayload = c.get("jwtPayload") as TokenPayload;
+
+        let blobURL: string | null = null;
+        if (data.logo) {
+            const value = await c.env.R2.put(`${jwtPayload.currentOrgId}-logo`, data.logo, {
+                httpMetadata: {
+                    contentType: data.logo.type,
+                },
+            });
+            // console.log(value);
+
+            blobURL = getBlobURL(c, value?.key);
+        }
+
+        await db
+            .update(organizations)
+            .set({
+                logoURL: blobURL || organizations.logoURL,
+                name: data.name,
+                address: data.address,
+                city: data.city,
+                country: data.country,
+                website: data.website,
+            })
+            .where(eq(organizations.id, jwtPayload.currentOrgId));
+
+        return c.json({ message: "Business Profile updated" }, 200);
+    },
+);
+
+userRouteV1.post(
+    "/settings/feedback",
+    zValidator("json", FeedbackSchema, (result, c) => {
+        return handleZodValidate(result, c);
+    }),
+    async (c) => {
+        const data = c.req.valid("json");
+
+        await c.env.SEND_EMAIL.send({
+            from: "feedback@acorp.app",
+            to: "awotideajibola@gmail.com",
+            subject: `Feedback from ACORP Invoice: ${data.subject}`,
+            text: data.description,
         });
-        // console.log(value);
 
-        blobURL = getBlobURL(c, value?.key);
-    }
-
-    await db
-        .update(users)
-        .set({ avatarURL: blobURL || users.avatarURL, username: data.username })
-        .where(eq(users.id, jwtPayload.userId));
-
-    return c.json({ message: "User profile updated" }, 200);
-});
-
-userRouteV1.put("/settings/business", zValidator("form", BusinessSchema), async (c) => {
-    const data = c.req.valid("form");
-    const db = drizzle(c.env.DB);
-
-    // console.log(data);
-    const jwtPayload = c.get("jwtPayload") as TokenPayload;
-
-    let blobURL: string | null = null;
-    if (data.logo) {
-        const value = await c.env.R2.put(`${jwtPayload.currentOrgId}-logo`, data.logo, {
-            httpMetadata: {
-                contentType: data.logo.type,
-            },
-        });
-        // console.log(value);
-
-        blobURL = getBlobURL(c, value?.key);
-    }
-
-    await db
-        .update(organizations)
-        .set({
-            logoURL: blobURL || organizations.logoURL,
-            name: data.name,
-            address: data.address,
-            city: data.city,
-            country: data.country,
-            website: data.website,
-        })
-        .where(eq(organizations.id, jwtPayload.currentOrgId));
-
-    return c.json({ message: "Business Profile updated" }, 200);
-});
-
-userRouteV1.post("/settings/feedback", zValidator("json", FeedbackSchema), async (c) => {
-    const data = c.req.valid("json");
-
-    await c.env.SEND_EMAIL.send({
-        from: "feedback@acorp.app",
-        to: "awotideajibola@gmail.com",
-        subject: `Feedback from ACORP Invoice: ${data.subject}`,
-        text: data.description,
-    });
-
-    return c.json({ message: "Feedback submitted" }, 200);
-});
+        return c.json({ message: "Feedback submitted" }, 200);
+    },
+);
 
 export default userRouteV1;

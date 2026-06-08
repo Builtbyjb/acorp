@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useLayout } from "@/hooks/useLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getBadgeVariant, formatCurrency } from "@/lib/utils";
@@ -10,6 +10,7 @@ import { BadgeInfo, Calendar } from "lucide-react";
 import * as z from "zod";
 import { useFetch } from "@/hooks/useFetch";
 import Banner from "@/components/Banner";
+import { toast } from "sonner";
 
 const SubscriptionSchema = z.object({
   id: z.number(),
@@ -21,7 +22,7 @@ const SubscriptionSchema = z.object({
   }),
   subscriptionCode: z.string(),
   emailToken: z.string(),
-  nextBillingCycle: z.string(),
+  nextBillingCycle: z.string().nullable(),
 });
 
 type Subscription = z.infer<typeof SubscriptionSchema>;
@@ -47,10 +48,12 @@ function RouteComponent() {
         if (response instanceof Error) throw response;
 
         const result = await response.json();
-        const parsedResult = SubscriptionsSchema.parse(result.data);
+        if (!response.ok) throw new Error(result.message);
 
+        const parsedResult = SubscriptionsSchema.parse(result.data);
         setSubscriptions(parsedResult);
-      } catch (error) {
+      } catch (error: unknown) {
+        if (error instanceof Error) toast.error(error.message);
         console.error(error);
       }
     })();
@@ -58,7 +61,7 @@ function RouteComponent() {
 
   const handleDisable = async (subscription: Subscription) => {
     try {
-      const response = await doPOST("/api/v1/payments/paystack/subscriptions/disable", {
+      const response = await doPOST("/api/v1/payments/paystack/subscription/disable", {
         subscriptionCode: subscription.subscriptionCode,
         emailToken: subscription.emailToken,
       });
@@ -77,30 +80,30 @@ function RouteComponent() {
     }
   };
 
-  const handleEnable = async (subscription: Subscription) => {
-    try {
-      const response = await doPOST("/api/v1/payments/paystack/subscriptions/enable", {
-        subscriptionCode: subscription.subscriptionCode,
-        emailToken: subscription.emailToken,
-      });
-      if (response instanceof Error) throw response;
+  // const handleEnable = async (subscription: Subscription) => {
+  //   try {
+  //     const response = await doPOST("/api/v1/payments/paystack/subscription/enable", {
+  //       subscriptionCode: subscription.subscriptionCode,
+  //       emailToken: subscription.emailToken,
+  //     });
+  //     if (response instanceof Error) throw response;
 
-      if (!response.ok) throw new Error("An error occurred while enabling your subscription");
+  //     if (!response.ok) throw new Error("An error occurred while enabling your subscription");
 
-      setSubscriptions((prev) =>
-        prev.map((p) => {
-          if (p.id === subscription.id) p.status = "active";
-          return p;
-        }),
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     setSubscriptions((prev) =>
+  //       prev.map((p) => {
+  //         if (p.id === subscription.id) p.status = "active";
+  //         return p;
+  //       }),
+  //     );
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const handleUpdate = async (subscription: Subscription) => {
     try {
-      const response = await doPOST("/api/v1/payments/paystack/subscriptions/update", {
+      const response = await doPOST("/api/v1/payments/paystack/subscription/update", {
         subscriptionCode: subscription.subscriptionCode,
         emailToken: subscription.emailToken,
       });
@@ -110,9 +113,7 @@ function RouteComponent() {
       if (!response.ok) throw new Error("An error occurred while fetching subscription update link");
 
       const result = await response.json();
-      navigate({
-        href: result.updateLink,
-      });
+      if (result.updateLink) window.open(result.updateLink, "_blank", "noopener,noreferrer");
     } catch (error) {
       console.log(error);
     }
@@ -142,7 +143,7 @@ function RouteComponent() {
                     <CardTitle>{s.planName}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex justify-between mb-4">
+                    <div className="flex justify-between">
                       <div>
                         <Badge className={`${getBadgeVariant(s.status)}`}> {s.status}</Badge>
                         <p className="text-muted-foreground">
@@ -150,24 +151,26 @@ function RouteComponent() {
                         </p>
                         {s.status === "active" && (
                           <span className="text-muted-foreground flex gap-2 items-center justify-center">
-                            <Calendar className="w-5 h-5" /> Next billing Date: {formatDate(s.nextBillingCycle)}
+                            {s.nextBillingCycle && (
+                              <>
+                                <Calendar className="w-5 h-5" /> Next billing Date: {formatDate(s.nextBillingCycle)}
+                              </>
+                            )}
                           </span>
                         )}
                       </div>
-                      {s.status === "active" ? (
-                        <Button variant="destructive" onClick={() => handleDisable(s)}>
-                          Disable
-                        </Button>
-                      ) : (
-                        <Button variant="default" onClick={() => handleEnable(s)}>
-                          Enable
-                        </Button>
-                      )}
                     </div>
-                    <Button variant="outline" onClick={() => handleUpdate(s)}>
-                      Enable
-                    </Button>
                   </CardContent>
+                  <CardFooter className="flex gap-4 bg-background">
+                    <Button variant="outline" onClick={() => handleUpdate(s)}>
+                      Update
+                    </Button>
+                    {s.status === "active" && (
+                      <Button variant="destructive" onClick={() => handleDisable(s)}>
+                        Cancel
+                      </Button>
+                    )}
+                  </CardFooter>
                 </Card>
               ))}
             </>

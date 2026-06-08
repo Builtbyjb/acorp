@@ -33,7 +33,7 @@ export default defineConfig([
       "no-warning-comments": [
         "warn",
         {
-          terms: ["todo", "fixme"],
+          terms: ["todo", "fixme", "note"],
           location: "start",
         },
       ],

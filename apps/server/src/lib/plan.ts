@@ -8,7 +8,7 @@ type Plans = {
 export const plans: Record<string, Plans> = {
     PLN_2zz8jgorepk0t2n: {
         // Pro plan
-        features: ["Unlimited invoices", "Premium templates", "Automatic reminders", "Priority support"],
+        features: ["Unlimited invoices", "Automatic reminders", "Priority support"],
         cta: "Get Pro Plan",
         featured: true,
         disabled: false,
@@ -30,7 +30,7 @@ export const freePlan = {
     currency: "NGN",
     interval: "monthly",
     description: "Perfect for getting started",
-    features: ["Up to 5 invoices per month", "Basic templates", "Email support", "PDF downloads"],
+    features: ["Up to 5 invoices per month", "Email support", "PDF downloads"],
     cta: "Get started for free",
     featured: false,
     disabled: false,
