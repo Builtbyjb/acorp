@@ -68,6 +68,13 @@
     "enabled": true,
     "head_sampling_rate": 1, // optional. default = 1.
   },
+  "rules": [
+    {
+      "type": "Text",
+      "globs": ["**/*.html"],
+      "fallthrough": true,
+    },
+  ],
 
   // "compatibility_flags": [
   //   "nodejs_compat"

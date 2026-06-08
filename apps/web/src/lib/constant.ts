@@ -1,6 +1,6 @@
 import type { Currency } from "./types";
 
-export const APP_NAME = "ACORP Invoice";
+export const APP_NAME = "ACorp Invoice";
 
 export const CURRENCIES = [
     { label: "Naira", value: "NGN" },
