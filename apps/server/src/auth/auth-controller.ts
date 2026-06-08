@@ -10,6 +10,7 @@ import type { TokenPayload } from "@/lib/types";
 import { ErrorResult } from "@/lib/types";
 import { getAccessTokenExp, ACCESS_TOKEN_MAX_AGE, getRefreshTokenExp, REFRESH_TOKEN_MAX_AGE } from "@/lib/constants";
 import { loginSchema, otpSchema, signupSchema, PaystackCustomerResponseSchema } from "./auth-zod-schema";
+import { validateReferral } from "./auth-service";
 
 const authRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/auth");
 
@@ -64,6 +65,10 @@ authRouteV1.post(
         const data = c.req.valid("json");
         const db = drizzle(c.env.DB);
 
+        // verify referral
+        let referredBy: number | null = null;
+        if (data.referral) referredBy = await validateReferral(db, data.referral);
+
         // Check if user exists
         const prevUser = await db.select().from(users).where(eq(users.email, data.email)).get();
         if (prevUser) return c.json({ message: "A user with this email address exists" }, 400);
@@ -102,6 +107,7 @@ authRouteV1.post(
                     website: data.website,
                     paystackCustomerCode: parsePaystackResult.data.customer_code,
                     paystackCustomerId: parsePaystackResult.data.id,
+                    referredBy,
                 })
                 .returning({ id: organizations.id })
                 .get();

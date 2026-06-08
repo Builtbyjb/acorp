@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, ArrowLeft } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
-import * as z from "zod";
+import { z } from "zod";
 import { SubscriptionPlanSchema } from "@shared/lib/zod-schema";
 import { useSubscriptionPlan } from "@/hooks/useSubscriptionPlan";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";

@@ -97,7 +97,10 @@ paymentRouteV1.get("/paystack/subscriptions", async (c) => {
     const result = await fetchSubscriptions(jwtPayload.paystackCustomerId, c.env.PAYSTACK_SECRET);
     if (result instanceof Error) return c.json({ message: "Failed to fetch subscriptions" }, 500);
 
-    const subs = result.data.map((r: any) => {
+    // Remove cancelled subscriptions
+    const filteredResult = result.data.filter((r: any) => r.status !== "cancelled");
+
+    const subs = filteredResult.map((r: any) => {
         return {
             id: r.id,
             planName: r.plan.name,
@@ -170,10 +173,12 @@ paymentRouteV1.post(
         const result: any = await response.json();
         if (!response.ok) throw new Error("An error occurred while disabling subscription");
 
-        // Update subscription status to disable
+        // Update subscription status
+        // TODO: is the subscription status "cancelled" or "non-renewing"??
+        // NOTE: Can i find the current user's subscription status using the subscription code??
         await db
             .update(organizations)
-            .set({ paystackSubscriptionStatus: "disable" })
+            .set({ paystackSubscriptionStatus: "cancelled" })
             .where(eq(organizations.id, jwtPayload.currentOrgId));
 
         return c.json({ message: result.message }, 200);

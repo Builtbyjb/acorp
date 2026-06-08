@@ -1,4 +1,4 @@
-import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect, useNavigate, useSearch } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -15,18 +15,28 @@ import { useSignupForm } from "@/hooks/useSignupForm";
 import type { SignupFormField } from "@/lib/types";
 import { useFetch } from "@/hooks/useFetch";
 import Logo from "@/components/Logo";
+import { handleError } from "@/lib/utils";
+import { z } from "zod";
+
+const QueryParamSchema = z.object({
+  referral: z.string().optional(),
+});
+
+type QueryParams = z.infer<typeof QueryParamSchema>;
 
 function RouteComponent() {
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const [stepIndex, setStepIndex] = useState<number>(0);
   const progress = (stepIndex / (STEPS.length - 1)) * 100;
+  const { referral } = useSearch({ from: "/signup/" }) as QueryParams;
 
   const { doPOST } = useFetch();
   const navigate = useNavigate();
 
   const form = useSignupForm(async (value) => {
     try {
-      const response = await doPOST("/api/v1/auth/signup", value);
+      const payload = { ...value, referral };
+      const response = await doPOST("/api/v1/auth/signup", payload);
       if (response instanceof Error) throw response;
 
       const result = await response.json();
@@ -35,10 +45,7 @@ function RouteComponent() {
       setIsVerified(true);
       toast.success("Verification Email Sent");
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error("Signup failed: " + error.message);
-      }
-      console.error(error);
+      handleError(error);
     }
   });
 
@@ -127,5 +134,6 @@ export const Route = createFileRoute("/signup/")({
       });
     }
   },
+  validateSearch: (search) => QueryParamSchema.parse(search),
   component: RouteComponent,
 });
