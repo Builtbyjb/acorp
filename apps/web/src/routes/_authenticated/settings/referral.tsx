@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Copy, Users, BadgeInfo } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, handleError } from "@/lib/utils";
 import { APP_NAME } from "@/lib/constant";
 import Banner from "@/components/Banner";
 import { toast } from "sonner";
@@ -37,7 +37,7 @@ function RouteComponent() {
   const [referral, setReferral] = useState<Referral>(defaultReferral);
 
   const { setTitle } = useLayout();
-  const { doGET } = useFetch();
+  const { doGET, doPOST } = useFetch();
 
   useEffect(() => {
     setTitle("Referrals");
@@ -54,8 +54,8 @@ function RouteComponent() {
 
         const parsedData = ReferralSchema.parse(result.data);
         setReferral(parsedData);
-      } catch (error) {
-        console.error(error);
+      } catch (error: unknown) {
+        handleError(error);
       }
     })();
   }, [doGET]);
@@ -65,8 +65,18 @@ function RouteComponent() {
     toast.success("Copied to clipboard");
   };
 
-  const handleReferralStatus = () => {
-    setReferral({ ...referral, referralEnabled: !referral.referralEnabled });
+  const handleReferralStatus = async () => {
+    try {
+      const response = await doPOST("/api/v1/referral/toggle", { referralEnabled: !referral.referralEnabled });
+      if (response instanceof Error) throw response;
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message);
+
+      setReferral({ ...referral, referralEnabled: !referral.referralEnabled });
+    } catch (error: unknown) {
+      handleError(error);
+    }
   };
 
   return (
