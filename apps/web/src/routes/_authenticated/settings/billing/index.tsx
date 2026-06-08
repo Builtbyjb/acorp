@@ -22,7 +22,7 @@ const SubscriptionSchema = z.object({
   }),
   subscriptionCode: z.string(),
   emailToken: z.string(),
-  nextBillingCycle: z.string(),
+  nextBillingCycle: z.string().nullable(),
 });
 
 type Subscription = z.infer<typeof SubscriptionSchema>;
@@ -151,7 +151,11 @@ function RouteComponent() {
                         </p>
                         {s.status === "active" && (
                           <span className="text-muted-foreground flex gap-2 items-center justify-center">
-                            <Calendar className="w-5 h-5" /> Next billing Date: {formatDate(s.nextBillingCycle)}
+                            {s.nextBillingCycle && (
+                              <>
+                                <Calendar className="w-5 h-5" /> Next billing Date: {formatDate(s.nextBillingCycle)}
+                              </>
+                            )}
                           </span>
                         )}
                       </div>

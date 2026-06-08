@@ -35,6 +35,9 @@ export const organizations = sqliteTable("organizations", {
         .$type<InvoiceNumber>()
         .notNull()
         .default({ currentNumber: 0, year: 2000 }),
+    referralCode: text("referral_code").unique(),
+    referredBy: text("referred_by").unique(),
+    referralEnabled: int("referral_enabled", { mode: "boolean" }).notNull().default(false),
     paystackCustomerCode: text("paystack_customer_code").notNull().unique(),
     paystackCustomerId: int("paystack_customer_id").notNull().unique(),
     paystackPlanCode: text("paystack_plan_code"),

@@ -91,13 +91,16 @@ function RouteComponent() {
     <div className="space-y-6 w-full">
       {invoice ? (
         <>
-          <Banner
-            backgroundColor="bg-sky-100"
-            icon={<BadgeInfo />}
-            actionLabel="Add Logo"
-            onClick={() => navigate({ to: "/settings" })}
-            text={"Add your business logo to invoices from the Profile page in Settings."}
-          />
+          {!logoURL && (
+            // Only display the banner if no logo is set
+            <Banner
+              backgroundColor="bg-sky-100"
+              icon={<BadgeInfo />}
+              actionLabel="Add Logo"
+              onClick={() => navigate({ to: "/settings" })}
+              text={"Add your business logo to invoices from the Profile page in Settings."}
+            />
+          )}
           <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
             <Button variant="ghost" onClick={() => navigate({ to: `/clients/${clientId}` })} className="w-fit">
               <ArrowLeft className="mr-2 h-4 w-4" />

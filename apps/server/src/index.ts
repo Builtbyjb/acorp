@@ -9,6 +9,7 @@ import userRouteV1 from "./user/user-controller";
 import clientRouteV1 from "./client/client-controller";
 import paymentRouteV1 from "./payment/payment-paystack-controller";
 import blobRouteV1 from "./blob/blob-controller";
+import referralRouteV1 from "./referral/referral-controller";
 
 import { INTERNAL_ERROR_MESSAGE } from "./lib/constants";
 
@@ -36,6 +37,7 @@ app.route("/api/v1", userRouteV1);
 app.route("/api/v1", clientRouteV1);
 app.route("/api/v1", paymentRouteV1);
 app.route("/api/v1", blobRouteV1);
+app.route("/api/v1", referralRouteV1);
 
 export default {
     fetch: app.fetch,
