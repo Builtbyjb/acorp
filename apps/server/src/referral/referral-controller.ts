@@ -7,7 +7,7 @@ import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { handleZodValidate } from "@/lib/utils";
-import { generateReferralCode } from "@/referral/referral-service";
+import { generateReferralCode, generateReferralLink } from "@/referral/referral-service";
 
 const referralRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/referral");
 referralRouteV1.use("*", authMiddleware());
@@ -32,9 +32,7 @@ referralRouteV1.get("/details", async (c) => {
 
     if (!organization) return c.json({ message: "Organization not found" }, 404);
 
-    const referralLink = organization.referralCode
-        ? `https://invoice.acorp.app/signup?referral=${organization.referralCode}`
-        : "No referral code";
+    const referralLink = generateReferralLink(c.env.ENV, organization.referralCode);
 
     const totalReferrals = await db.$count(
         organizations,

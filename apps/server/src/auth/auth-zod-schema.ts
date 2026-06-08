@@ -19,6 +19,7 @@ export const signupSchema = z.object({
     city: z.string().min(2),
     country: z.string().min(2),
     website: z.string(),
+    referral: z.string().optional(),
 });
 
 export const PaystackCustomerResponseSchema = z.object({

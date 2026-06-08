@@ -4,11 +4,10 @@ import { useLayout } from "@/hooks/useLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Copy, Users, BadgeInfo } from "lucide-react";
+import { Copy, Users } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { formatCurrency, handleError } from "@/lib/utils";
 import { APP_NAME } from "@/lib/constant";
-import Banner from "@/components/Banner";
 import { toast } from "sonner";
 import { useFetch } from "@/hooks/useFetch";
 import * as z from "zod";
@@ -81,7 +80,6 @@ function RouteComponent() {
 
   return (
     <div className="space-y-8 mb-8">
-      <Banner backgroundColor="bg-sky-100" icon={<BadgeInfo />} text="Coming soon!" />
       <Card>
         <CardHeader>
           <CardTitle>Join Our Referral Program</CardTitle>
