@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { Bindings, TokenPayload } from "@/lib/types";
-import { authMiddleware } from "@/middleware/auth-middleware";
+import { authMiddleware } from "@/middleware/authentication";
 import { drizzle } from "drizzle-orm/d1";
 import { organizations } from "@/db/schema";
 import { eq, and } from "drizzle-orm";

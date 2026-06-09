@@ -66,11 +66,10 @@ export async function sendOTPEmail(c: Context, email: string): Promise<Error | s
         return new Error("Sender not configured");
     }
     const htmlBody = fillTemplate(otpTemplate, { OTP_CODE: otp });
-    const from = `ACorp Invoice <${sender}>`;
 
     // Send OTP to user email
     await c.env.SEND_EMAIL.send({
-        from: from,
+        from: `ACorp Invoice <${sender}>`,
         to: email,
         subject: "Your OTP code",
         html: htmlBody,
