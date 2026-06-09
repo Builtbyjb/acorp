@@ -18,7 +18,7 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="py-16 bg-muted/30">
+    <section id="how-it-works" className="py-12">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center mb-16">
           <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">How it works</p>
