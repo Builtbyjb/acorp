@@ -14,6 +14,7 @@ export type Bindings = {
     FRONTEND_URL: string;
     SERVER_URL: string;
     R2: R2Bucket;
+    RATE_LIMITER: RateLimit;
 };
 
 export type TokenPayload = JWTPayload & {

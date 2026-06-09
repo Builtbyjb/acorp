@@ -6,7 +6,7 @@ import { eq, and, desc } from "drizzle-orm";
 import { clients, invoices, organizations } from "@/db/schema";
 import { getNewInvoiceNumber, handleZodValidate } from "@/lib/utils";
 import { InvoiceFormSchema } from "@shared/lib/zod-schema";
-import { planAccessMiddleware } from "@/middleware/plan-access-middleware";
+import { planAccessMiddleware } from "@/middleware/plan-access";
 
 const invoiceRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/invoices");
 

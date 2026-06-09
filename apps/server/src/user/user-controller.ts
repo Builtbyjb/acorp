@@ -11,7 +11,7 @@ import {
     getMonthlyRevenues,
     getRecentInvoices,
 } from "./user-service";
-import { authMiddleware } from "@/middleware/auth-middleware";
+import { authMiddleware } from "@/middleware/authentication";
 import { zValidator } from "@hono/zod-validator";
 import { getBlobURL, handleZodValidate } from "@/lib/utils";
 import { UserSchema, BusinessSchema, FeedbackSchema } from "@shared/lib/zod-schema";

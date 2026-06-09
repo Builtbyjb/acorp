@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { Bindings } from "@/lib/types";
 import { invoiceNotify } from "./lib/crons";
+import rateLimiterMiddleware from "@/middleware/rate-limiter";
 
 /* Routes  */
 import authRouteV1 from "./auth/auth-controller";
@@ -25,6 +26,8 @@ app.use(
         credentials: true,
     }),
 );
+
+app.use("/api/*", rateLimiterMiddleware());
 
 app.onError((error, c) => {
     console.error(`${error.message}: ${error.stack}: ${error.cause}`);
