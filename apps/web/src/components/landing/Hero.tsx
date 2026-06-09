@@ -9,13 +9,7 @@ export default function Hero() {
     <section className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
-          <div className="mb-8 flex justify-center">
-            {/*<div className="inline-flex items-center gap-2 rounded-full bg-accent/70 px-4 py-1.5">
-              <Sparkles className="h-4 w-4" />
-              <span>New: Recurring invoices</span>
-              <ArrowRight className="h-3 w-3" />
-            </div>*/}
-          </div>
+          <div className="mb-8 flex justify-center"></div>
 
           <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl text-balance">
             Create invoices in seconds, get paid faster
@@ -34,7 +28,7 @@ export default function Hero() {
           </div>
 
           <p className="mt-4 text-muted-foreground">
-            No credit card required · Free forever for up to 3 invoices/month
+            No credit card required · Free forever for up to 5 invoices/month
           </p>
         </div>
 
