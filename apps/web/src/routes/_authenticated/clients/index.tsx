@@ -35,6 +35,7 @@ function RouteComponent() {
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(10);
   const [meta, setMeta] = useState<null | { total: number; page: number; size: number; totalPages: number }>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleEdit = (client: Client) => {
     setEditingClient(client);
@@ -52,9 +53,13 @@ function RouteComponent() {
 
   // Fetch clients for a specific page/size. Returns parsed result so callers can inspect meta.
   const skipAutoFetchRef = useRef(false);
+  const fetchIdRef = useRef(0);
 
   const fetchClients = useCallback(
     async (pageToFetch: number, sizeToFetch: number) => {
+      fetchIdRef.current += 1;
+      const fetchId = fetchIdRef.current;
+      setIsLoading(true);
       try {
         const response = await doGET(`/api/v1/clients?page=${pageToFetch}&size=${sizeToFetch}`);
         if (response instanceof Error) throw response;
@@ -70,6 +75,10 @@ function RouteComponent() {
       } catch (error) {
         console.log(error);
         return null;
+      } finally {
+        if (fetchId === fetchIdRef.current) {
+          setIsLoading(false);
+        }
       }
     },
     [doGET],
@@ -159,6 +168,7 @@ function RouteComponent() {
           setSize(s);
           setPage(1); // reset to first page when size changes
         }}
+        isLoading={isLoading}
       />
 
       <ClientForm

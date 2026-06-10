@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useForm } from "@tanstack/react-form";
@@ -19,6 +20,7 @@ const emailFormSchema = z.object({
 function RouteComponent() {
   const navigate = useNavigate();
   const [isVerified, setIsVerified] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { login } = useAuth();
 
   const form = useForm({
@@ -29,6 +31,7 @@ function RouteComponent() {
       onSubmit: emailFormSchema,
     },
     onSubmit: async ({ value }) => {
+      setIsSubmitting(true);
       try {
         const success = await login(value.email);
         toast.success("Verification email sent");
@@ -36,6 +39,8 @@ function RouteComponent() {
       } catch (error: unknown) {
         if (error instanceof Error) toast.error(error.message);
         console.error(error);
+      } finally {
+        setIsSubmitting(false);
       }
     },
   });
@@ -93,11 +98,12 @@ function RouteComponent() {
         </CardContent>
         <CardFooter className="bg-background">
           <Field orientation="horizontal">
-            <Button type="button" variant="outline" onClick={() => form.reset()}>
+            <Button type="button" variant="outline" onClick={() => form.reset()} disabled={isSubmitting}>
               Reset
             </Button>
-            <Button type="submit" form="login-form">
-              Submit
+            <Button type="submit" form="login-form" disabled={isSubmitting}>
+              {isSubmitting && <Spinner className="mr-2" aria-hidden="true" />}
+              {isSubmitting ? "Submitting..." : "Submit"}
             </Button>
           </Field>
         </CardFooter>

@@ -28,6 +28,7 @@ import { formatCurrency, getBadgeVariant } from "@/lib/utils";
 import { calculateTotalAmount } from "@shared/utils/util";
 import { toast } from "sonner";
 import { useFetch } from "@/hooks/useFetch";
+import { SkeletonTable } from "@/components/Skeleton";
 
 interface InvoicesTableProps {
   clientId: string;
@@ -36,7 +37,17 @@ interface InvoicesTableProps {
   meta?: { total: number; page: number; size: number; totalPages: number } | null;
   onPageChange?: (page: number) => void;
   onSizeChange?: (size: number) => void;
+  isLoading?: boolean;
 }
+
+const invoiceSkeletonColumns = [
+  { lines: ["h-4 w-28"] },
+  { className: "hidden md:table-cell", lines: ["h-3 w-24"] },
+  { className: "hidden lg:table-cell", lines: ["h-3 w-24"] },
+  { lines: ["h-3 w-28"] },
+  { lines: ["h-3 w-16"] },
+  { className: "text-right", isAction: true },
+];
 
 export default function InvoicesTable({
   invoices,
@@ -45,6 +56,7 @@ export default function InvoicesTable({
   meta = null,
   onPageChange,
   onSizeChange,
+  isLoading = false,
 }: InvoicesTableProps) {
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
@@ -80,104 +92,164 @@ export default function InvoicesTable({
 
   return (
     <>
-      <div className="rounded-lg border border-border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Invoice</TableHead>
-              <TableHead className="hidden md:table-cell">Date</TableHead>
-              <TableHead className="hidden lg:table-cell">Due Date</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="w-12.5"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {invoices && (
-              <>
-                {invoices.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="h-32 text-center text-muted-foreground">
-                      No invoices found. Create your first invoice to get started.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  invoices.map((invoice) => (
-                    <TableRow key={invoice.id}>
-                      <TableCell className="cursor-pointer" onClick={() => handleNavigate(clientId, invoice.id)}>
-                        <div className="flex flex-col">
-                          <span className="font-medium">{invoice.invoiceNumber}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell
-                        className="hidden md:table-cell text-sm cursor-pointer"
-                        onClick={() => handleNavigate(clientId, invoice.id)}
-                      >
-                        {format(new Date(invoice.issueDate), "MMM d, yyyy")}
-                      </TableCell>
-                      <TableCell
-                        className="hidden lg:table-cell text-sm cursor-pointer"
-                        onClick={() => handleNavigate(clientId, invoice.id)}
-                      >
-                        {format(new Date(invoice.dueDate), "MMM d, yyyy")}
-                      </TableCell>
-                      <TableCell
-                        className="font-semibold cursor-pointer"
-                        onClick={() => handleNavigate(clientId, invoice.id)}
-                      >
-                        {formatCurrency(
-                          calculateTotalAmount(invoice.items, invoice.taxRate, invoice.discount),
-                          invoice.currency,
-                        )}
-                      </TableCell>
-                      <TableCell className="cursor-pointer" onClick={() => handleNavigate(clientId, invoice.id)}>
-                        <Badge className={`capitalize ${getBadgeVariant(invoice.status)}`}>{invoice.status}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger className="cursor-pointer">
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Open menu</span>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-44">
-                            <DropdownMenuItem
-                              onClick={() =>
-                                navigate({
-                                  to: "/clients/$clientId/invoices/$invoiceId",
-                                  params: { invoiceId: invoice.id.toString(), clientId },
-                                })
-                              }
-                            >
-                              <Eye className="mr-2 h-4 w-4" />
-                              View
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() =>
-                                navigate({
-                                  to: "/clients/$clientId/invoices/$invoiceId/edit",
-                                  params: { invoiceId: invoice.id.toString(), clientId },
-                                })
-                              }
-                            >
-                              <Pencil className="mr-2 h-4 w-4" />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => setDeleteId(invoice.id)} className="text-destructive">
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
+      {isLoading ? (
+        <SkeletonTable columns={invoiceSkeletonColumns} />
+      ) : (
+        <>
+          <div className="rounded-lg border border-border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Invoice</TableHead>
+                  <TableHead className="hidden md:table-cell">Date</TableHead>
+                  <TableHead className="hidden lg:table-cell">Due Date</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="w-12.5"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {invoices && (
+                  <>
+                    {invoices.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={7} className="h-32 text-center text-muted-foreground">
+                          No invoices found. Create your first invoice to get started.
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      invoices.map((invoice) => (
+                        <TableRow key={invoice.id}>
+                          <TableCell className="cursor-pointer" onClick={() => handleNavigate(clientId, invoice.id)}>
+                            <div className="flex flex-col">
+                              <span className="font-medium">{invoice.invoiceNumber}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell
+                            className="hidden md:table-cell text-sm cursor-pointer"
+                            onClick={() => handleNavigate(clientId, invoice.id)}
+                          >
+                            {format(new Date(invoice.issueDate), "MMM d, yyyy")}
+                          </TableCell>
+                          <TableCell
+                            className="hidden lg:table-cell text-sm cursor-pointer"
+                            onClick={() => handleNavigate(clientId, invoice.id)}
+                          >
+                            {format(new Date(invoice.dueDate), "MMM d, yyyy")}
+                          </TableCell>
+                          <TableCell
+                            className="font-semibold cursor-pointer"
+                            onClick={() => handleNavigate(clientId, invoice.id)}
+                          >
+                            {formatCurrency(
+                              calculateTotalAmount(invoice.items, invoice.taxRate, invoice.discount),
+                              invoice.currency,
+                            )}
+                          </TableCell>
+                          <TableCell className="cursor-pointer" onClick={() => handleNavigate(clientId, invoice.id)}>
+                            <Badge className={`capitalize ${getBadgeVariant(invoice.status)}`}>{invoice.status}</Badge>
+                          </TableCell>
+                          <TableCell>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger className="cursor-pointer">
+                                <MoreHorizontal className="h-4 w-4" />
+                                <span className="sr-only">Open menu</span>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end" className="w-44">
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    navigate({
+                                      to: "/clients/$clientId/invoices/$invoiceId",
+                                      params: { invoiceId: invoice.id.toString(), clientId },
+                                    })
+                                  }
+                                >
+                                  <Eye className="mr-2 h-4 w-4" />
+                                  View
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    navigate({
+                                      to: "/clients/$clientId/invoices/$invoiceId/edit",
+                                      params: { invoiceId: invoice.id.toString(), clientId },
+                                    })
+                                  }
+                                >
+                                  <Pencil className="mr-2 h-4 w-4" />
+                                  Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => setDeleteId(invoice.id)} className="text-destructive">
+                                  <Trash2 className="mr-2 h-4 w-4" />
+                                  Delete
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </>
                 )}
-              </>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Pagination controls */}
+          <div className="flex items-center justify-between px-4 py-3">
+            <div className="text-sm text-muted-foreground">
+              {meta ? (meta.total === 0 ? "No invoices" : `Showing ${start} - ${end} of ${meta.total}`) : null}
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  disabled={!meta || (meta && meta.page <= 1)}
+                  onClick={() => {
+                    if (onPageChange) onPageChange(Math.max(1, (meta?.page ?? 1) - 1));
+                  }}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <span className="text-sm text-muted-foreground">
+                  {meta ? `Page ${meta.page} of ${meta.totalPages}` : ""}
+                </span>
+                <Button
+                  size="sm"
+                  disabled={!meta || (meta && meta.page >= (meta.totalPages || 1))}
+                  onClick={() => {
+                    if (onPageChange) onPageChange(Math.min(meta?.totalPages ?? 1, (meta?.page ?? 1) + 1));
+                  }}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-muted-foreground">Size</label>
+                <Select
+                  value={String(meta?.size ?? 10)}
+                  onValueChange={(val) => {
+                    if (val == null) return;
+                    if (onSizeChange) onSizeChange(parseInt(val, 10));
+                  }}
+                >
+                  <SelectTrigger size="sm" aria-label="Select page size">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="10">10</SelectItem>
+                    <SelectItem value="20">20</SelectItem>
+                    <SelectItem value="50">50</SelectItem>
+                    <SelectItem value="100">100</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
@@ -196,59 +268,6 @@ export default function InvoicesTable({
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Pagination controls */}
-      <div className="flex items-center justify-between px-4 py-3">
-        <div className="text-sm text-muted-foreground">
-          {meta ? (meta.total === 0 ? "No invoices" : `Showing ${start} - ${end} of ${meta.total}`) : null}
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              disabled={!meta || (meta && meta.page <= 1)}
-              onClick={() => {
-                if (onPageChange) onPageChange(Math.max(1, (meta?.page ?? 1) - 1));
-              }}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <span className="text-sm text-muted-foreground">
-              {meta ? `Page ${meta.page} of ${meta.totalPages}` : ""}
-            </span>
-            <Button
-              size="sm"
-              disabled={!meta || (meta && meta.page >= (meta.totalPages || 1))}
-              onClick={() => {
-                if (onPageChange) onPageChange(Math.min(meta?.totalPages ?? 1, (meta?.page ?? 1) + 1));
-              }}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-muted-foreground">Size</label>
-            <Select
-              value={String(meta?.size ?? 10)}
-              onValueChange={(val) => {
-                if (val == null) return;
-                if (onSizeChange) onSizeChange(parseInt(val, 10));
-              }}
-            >
-              <SelectTrigger size="sm" aria-label="Select page size">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="10">10</SelectItem>
-                <SelectItem value="20">20</SelectItem>
-                <SelectItem value="50">50</SelectItem>
-                <SelectItem value="100">100</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </div>
     </>
   );
 }
