@@ -5,27 +5,35 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/auth";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function OTP() {
   const [value, setValue] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
   const navigate = useNavigate();
   const { verifyOtp } = useAuth();
 
-  const handleChange = async (value: string) => {
-    setValue(value);
-    if (value.length == 8) {
-      try {
-        const response = await verifyOtp(value);
-        if (response) navigate({ to: "/dashboard" });
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.log(error);
-          toast.error("Error verifying OTP: " + error.message);
-        } else {
-          console.error(String(error));
-        }
+  const handleVerify = async (code: string) => {
+    if (code.length !== 8 || isVerifying) return;
+    setIsVerifying(true);
+    try {
+      const response = await verifyOtp(code);
+      if (response) navigate({ to: "/dashboard" });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error);
+        toast.error("Error verifying OTP: " + error.message);
+      } else {
+        console.error(String(error));
       }
+    } finally {
+      setIsVerifying(false);
     }
+  };
+
+  const handleChange = (nextValue: string) => {
+    setValue(nextValue);
+    void handleVerify(nextValue);
   };
 
   return (
@@ -49,7 +57,10 @@ export default function OTP() {
         </InputOTP>
       </CardContent>
       <CardFooter className="bg-background">
-        <Button onClick={() => handleChange(value)}>Submit</Button>
+        <Button onClick={() => handleVerify(value)} disabled={value.length !== 8 || isVerifying}>
+          {isVerifying && <Spinner className="mr-2" aria-hidden="true" />}
+          {isVerifying ? "Verifying" : "Submit"}
+        </Button>
       </CardFooter>
     </Card>
   );

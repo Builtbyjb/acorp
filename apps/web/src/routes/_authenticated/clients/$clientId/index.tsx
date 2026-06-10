@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFetch } from "@/hooks/useFetch";
 import { InvoiceSchema, ClientSchema } from "@shared/lib/zod-schema";
 import { z } from "zod";
+import { SkeletonClientInfoCard } from "@/components/Skeleton";
 
 const ClientInvoicesResponseSchema = z.object({
   clientInfo: ClientSchema,
@@ -30,8 +31,10 @@ function RouteComponent() {
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(10);
   const [meta, setMeta] = useState<null | { total: number; page: number; size: number; totalPages: number }>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const skipAutoFetchRef = useRef(false);
+  const fetchIdRef = useRef(0);
 
   const { clientId } = Route.useParams();
   const { doGET } = useFetch();
@@ -47,6 +50,9 @@ function RouteComponent() {
   // Fetch client info and invoices for a specific page/size
   const fetchClientAndInvoices = useCallback(
     async (pageToFetch: number, sizeToFetch: number) => {
+      fetchIdRef.current += 1;
+      const fetchId = fetchIdRef.current;
+      setIsLoading(true);
       try {
         const response = await doGET(`/api/v1/clients/${clientId}?page=${pageToFetch}&size=${sizeToFetch}`);
         if (response instanceof Error) throw response;
@@ -65,6 +71,10 @@ function RouteComponent() {
         if (error instanceof Error) toast.error(error.message);
         console.log(error);
         return null;
+      } finally {
+        if (fetchId === fetchIdRef.current) {
+          setIsLoading(false);
+        }
       }
     },
     [doGET, clientId],
@@ -126,7 +136,7 @@ function RouteComponent() {
         <ArrowLeft className="mr-2 h-8 w-8" />
         Back
       </Button>
-      {clientInfo && (
+      {clientInfo ? (
         <Card className="mb-8">
           <CardHeader className="flex items-center gap-3">
             <UserCircle className="h-6 w-6" />
@@ -168,6 +178,8 @@ function RouteComponent() {
             </div>
           </CardContent>
         </Card>
+      ) : (
+        isLoading && <SkeletonClientInfoCard />
       )}
       <div>
         <Button
@@ -187,6 +199,7 @@ function RouteComponent() {
             setSize(s);
             setPage(1);
           }}
+          isLoading={isLoading}
         />
       </div>
     </div>

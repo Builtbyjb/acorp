@@ -17,12 +17,14 @@ import { useLayout } from "@/hooks/useLayout";
 import { useFetch } from "@/hooks/useFetch";
 import ImagePreview from "@/components/ImagePreview";
 import Banner from "@/components/Banner";
+import { SkeletonInvoicePage } from "@/components/Skeleton";
 
 function RouteComponent() {
   const { clientId, invoiceId } = Route.useParams();
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [client, setClient] = useState<Client | null>(null);
   const [logoURL, setLogoURL] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -48,7 +50,13 @@ function RouteComponent() {
   }, [invoice, setTitle]);
 
   useEffect(() => {
+    let isSubscribed = true;
+
     (async () => {
+      setIsLoading(true);
+      setInvoice(null);
+      setClient(null);
+      setLogoURL(null);
       try {
         const response = await doGET(`/api/v1/clients/${clientId}/invoices/${invoiceId}`);
         if (response instanceof Error) throw response;
@@ -56,17 +64,26 @@ function RouteComponent() {
         const result = await response.json();
         if (!response.ok) throw new Error(result.message);
 
+        if (!isSubscribed) return;
+
         const parsedInvoice = InvoiceSchema.parse(result.invoice);
         setInvoice(parsedInvoice);
 
         const parsedClient = ClientSchema.parse(result.client);
         setClient(parsedClient);
 
-        setLogoURL(result.logoURL);
+        setLogoURL(result.logoURL ?? null);
       } catch (error) {
+        if (!isSubscribed) return;
         console.log(error);
+      } finally {
+        if (isSubscribed) setIsLoading(false);
       }
     })();
+
+    return () => {
+      isSubscribed = false;
+    };
   }, [clientId, invoiceId, doGET]);
 
   const handleDownload = async () => {
@@ -89,7 +106,9 @@ function RouteComponent() {
 
   return (
     <div className="space-y-6 w-full">
-      {invoice ? (
+      {isLoading ? (
+        <SkeletonInvoicePage />
+      ) : invoice ? (
         <>
           {!logoURL && (
             // Only display the banner if no logo is set
@@ -243,7 +262,6 @@ function RouteComponent() {
           </div>
         </>
       ) : (
-        // TODO: Add loading state
         <div className="p-4 md:p-6 flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-xl font-semibold mb-2">Invoice not found</h2>

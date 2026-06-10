@@ -17,6 +17,7 @@ import { useFetch } from "@/hooks/useFetch";
 import Logo from "@/components/Logo";
 import { handleError } from "@/lib/utils";
 import { z } from "zod";
+import { Spinner } from "@/components/ui/spinner";
 
 const QueryParamSchema = z.object({
   referral: z.string().optional(),
@@ -27,6 +28,7 @@ type QueryParams = z.infer<typeof QueryParamSchema>;
 function RouteComponent() {
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const [stepIndex, setStepIndex] = useState<number>(0);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const progress = (stepIndex / (STEPS.length - 1)) * 100;
   const { referral } = useSearch({ from: "/signup/" }) as QueryParams;
 
@@ -34,6 +36,7 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   const form = useSignupForm(async (value) => {
+    setIsSubmitting(true);
     try {
       const payload = { ...value, referral };
       const response = await doPOST("/api/v1/auth/signup", payload);
@@ -46,6 +49,8 @@ function RouteComponent() {
       toast.success("Verification Email Sent");
     } catch (error: unknown) {
       handleError(error);
+    } finally {
+      setIsSubmitting(false);
     }
   });
 
@@ -95,11 +100,12 @@ function RouteComponent() {
         </CardContent>
         <CardFooter className="bg-background">
           <Field orientation="horizontal">
-            <Button type="button" variant="outline" onClick={back} disabled={stepIndex === 0}>
+            <Button type="button" variant="outline" onClick={back} disabled={stepIndex === 0 || isSubmitting}>
               Back
             </Button>
-            <Button type="submit" form="signup-form">
-              {isLastStep ? "Submit" : "Continue"}
+            <Button type="submit" form="signup-form" disabled={isSubmitting}>
+              {isLastStep && isSubmitting && <Spinner className="mr-2" aria-hidden="true" />}
+              {isLastStep ? (isSubmitting ? "Submitting" : "Submit") : "Continue"}
             </Button>
           </Field>
         </CardFooter>
