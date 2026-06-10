@@ -8,7 +8,7 @@ import {
     PaystackSubscribeSchema,
     CallbackResponseSchema,
 } from "./payment-zod-schema";
-import { authMiddleware } from "@/middleware/auth-middleware";
+import { authMiddleware } from "@/middleware/authentication";
 import { zValidator } from "@hono/zod-validator";
 import { drizzle } from "drizzle-orm/d1";
 import { organizations } from "@/db/schema";

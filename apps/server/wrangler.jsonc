@@ -4,9 +4,22 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-04-17",
   "env": {
+    // Staging Environment
     "staging": {
       "name": "ihod-server-staging",
+      "ratelimits": [
+        {
+          "name": "RATE_LIMITER",
+          "namespace_id": "1001",
+          // 60 requests per minute
+          "simple": {
+            "limit": 60,
+            "period": 60,
+          },
+        },
+      ],
     },
+    //  Production Environment
     "production": {
       "name": "ihod-server-production",
       "d1_databases": [
@@ -31,10 +44,23 @@
       "triggers": {
         "crons": ["* * * * *"],
       },
+      "ratelimits": [
+        {
+          "name": "RATE_LIMITER",
+          "namespace_id": "1001",
+          // 60 requests per minute
+          "simple": {
+            "limit": 60,
+            "period": 60,
+          },
+        },
+      ],
     },
+    // UAT Environment
     "uat": {
       "name": "ihod-server-uat",
     },
+    // Development Environment
     "dev": {
       "name": "ihod-server-dev",
       "d1_databases": [
@@ -59,6 +85,17 @@
       "triggers": {
         "crons": ["* * * * *"],
       },
+      "ratelimits": [
+        {
+          "name": "RATE_LIMITER",
+          "namespace_id": "1001",
+          // 60 requests per minute
+          "simple": {
+            "limit": 60,
+            "period": 60,
+          },
+        },
+      ],
     },
   },
   "dev": {

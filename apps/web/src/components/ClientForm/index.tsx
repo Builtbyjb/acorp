@@ -12,10 +12,11 @@ import type { Client } from "@/lib/types";
 import { useForm } from "@tanstack/react-form";
 import * as z from "zod";
 import { Field } from "@/components/ui/field";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ClientSchema, ClientFormSchema } from "@shared/lib/zod-schema";
 import { useFetch } from "@/hooks/useFetch";
 import TextInputField from "../Form/TextInputField";
+import { Spinner } from "@/components/ui/spinner";
 
 type ClientFormProps = {
   open: boolean;
@@ -29,8 +30,10 @@ type ClientFormType = z.infer<typeof ClientFormSchema>;
 
 export default function ClientForm({ open, onOpenChange, client, addClient, editClient }: ClientFormProps) {
   const { doPOST, doPUT } = useFetch();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleClientCreate = async (value: ClientFormType) => {
+    setIsSubmitting(true);
     try {
       const response = await doPOST("/api/v1/clients/create", value);
       if (response instanceof Error) throw response;
@@ -46,10 +49,13 @@ export default function ClientForm({ open, onOpenChange, client, addClient, edit
     } catch (error: unknown) {
       if (error instanceof Error) toast.error(error.message);
       console.log(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleClientUpdate = async (id: string, value: ClientFormType) => {
+    setIsSubmitting(true);
     try {
       if (!client) throw new Error("Client not found");
 
@@ -69,6 +75,8 @@ export default function ClientForm({ open, onOpenChange, client, addClient, edit
     } catch (error: unknown) {
       if (error instanceof Error) toast.error(error.message);
       console.log(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -203,11 +211,12 @@ export default function ClientForm({ open, onOpenChange, client, addClient, edit
             />
           </Field>
           <DialogFooter className="bg-background border-t-0">
-            <Button type="button" variant="outline" onClick={() => form.reset()}>
+            <Button type="button" variant="outline" onClick={() => form.reset()} disabled={isSubmitting}>
               Reset
             </Button>
-            <Button type="submit" id="create-client-form">
-              {client ? "Update" : "Add"} Client
+            <Button type="submit" id="create-client-form" disabled={isSubmitting}>
+              {isSubmitting && <Spinner className="mr-2" aria-hidden="true" />}
+              {isSubmitting ? (client ? "Updating" : "Adding") : client ? "Update" : "Add"} Client
             </Button>
           </DialogFooter>
         </form>

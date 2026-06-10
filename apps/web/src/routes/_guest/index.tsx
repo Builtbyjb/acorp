@@ -4,7 +4,7 @@ import Hero from "@/components/landing/Hero";
 import Features from "@/components/landing/Features";
 import HowItWorks from "@/components/landing/HowItWorks";
 // import Stats from "@/components/landing/Stats";
-// import Testimonials from "@/components/landing/Testimonials";
+import Testimonials from "@/components/landing/Testimonials";
 import CTA from "@/components/landing/CTA";
 
 export const Route = createFileRoute("/_guest/")({
@@ -20,7 +20,7 @@ function RouteComponent() {
         <Features />
         <HowItWorks />
         {/*<Stats />*/}
-        {/*<Testimonials />*/}
+        <Testimonials />
         <CTA />
       </div>
     </>

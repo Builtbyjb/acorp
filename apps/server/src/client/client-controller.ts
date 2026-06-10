@@ -6,7 +6,7 @@ import { eq, and, like, desc } from "drizzle-orm";
 import { clients, invoices, members } from "@/db/schema";
 import invoiceRouteV1 from "@/invoice/invoice-controller";
 import { ClientFormSchema, ClientListSchema, ClientSchema } from "@shared/lib/zod-schema";
-import { authMiddleware } from "@/middleware/auth-middleware";
+import { authMiddleware } from "@/middleware/authentication";
 import { handleZodValidate } from "@/lib/utils";
 
 const clientRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/clients");
@@ -20,16 +20,50 @@ clientRouteV1.get("/", async (c) => {
     const member = await db.select().from(members).where(eq(members.userId, jwtPayload.userId));
     if (member.length == 0) return c.json("User is not part of an organization", 400);
 
-    // TODO: Pagination
+    // Pagination: query params ?page=1&size=10
+    const pageStr = c.req.query("page");
+    const sizeStr = c.req.query("size");
+
+    let page = parseInt(pageStr ?? "1", 10);
+    if (Number.isNaN(page) || page < 1) page = 1;
+
+    let size = parseInt(sizeStr ?? "10", 10);
+    if (Number.isNaN(size) || size < 1) size = 10;
+
+    const MAX_SIZE = 100;
+    size = Math.min(size, MAX_SIZE);
+
+    const baseWhere = and(eq(clients.organizationId, member[0].organizationId), eq(clients.deleted, false));
+
+    // Total items for pagination metadata
+    const total = await db.$count(clients, baseWhere);
+
+    const offset = (page - 1) * size;
+
+    // Fetch the page
     const result = await db
         .select()
         .from(clients)
-        .where(and(eq(clients.organizationId, member[0].organizationId), eq(clients.deleted, false)))
-        .orderBy(desc(clients.createdAt));
+        .where(baseWhere)
+        .orderBy(desc(clients.createdAt))
+        .limit(size)
+        .offset(offset);
 
     const parsedResult = ClientListSchema.parse(result);
 
-    return c.json({ message: "All Clients", clients: parsedResult }, 200);
+    return c.json(
+        {
+            message: "Clients fetched",
+            clients: parsedResult,
+            meta: {
+                total,
+                page,
+                size,
+                totalPages: Math.ceil(total / size),
+            },
+        },
+        200,
+    );
 });
 
 clientRouteV1.get("/:id", async (c) => {
@@ -37,7 +71,18 @@ clientRouteV1.get("/:id", async (c) => {
 
     const db = drizzle(c.env.DB);
 
-    // TODO: Improve and add pagination
+    const pageStr = c.req.query("page");
+    const sizeStr = c.req.query("size");
+
+    let page = parseInt(pageStr ?? "1", 10);
+    if (Number.isNaN(page) || page < 1) page = 1;
+
+    let size = parseInt(sizeStr ?? "10", 10);
+    if (Number.isNaN(size) || size < 1) size = 10;
+
+    const MAX_SIZE = 100;
+    size = Math.min(size, MAX_SIZE);
+
     const client = await db
         .select()
         .from(clients)
@@ -46,13 +91,34 @@ clientRouteV1.get("/:id", async (c) => {
 
     if (!client) return c.json("Client not found", 404);
 
+    const baseWhere = and(eq(invoices.clientId, client.id), eq(invoices.deleted, false));
+
+    // Total items for pagination metadata
+    const total = await db.$count(invoices, baseWhere);
+
+    const offset = (page - 1) * size;
+
     const invoicesResult = await db
         .select()
         .from(invoices)
-        .where(and(eq(invoices.clientId, client.id), eq(invoices.deleted, false)))
-        .orderBy(desc(invoices.createdAt));
+        .where(baseWhere)
+        .orderBy(desc(invoices.createdAt))
+        .limit(size)
+        .offset(offset);
 
-    return c.json({ clientInfo: client, invoices: invoicesResult }, 200);
+    return c.json(
+        {
+            clientInfo: client,
+            invoices: invoicesResult,
+            meta: {
+                total,
+                page,
+                size,
+                totalPages: Math.ceil(total / size),
+            },
+        },
+        200,
+    );
 });
 
 clientRouteV1.post(

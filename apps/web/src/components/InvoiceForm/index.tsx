@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,6 +21,7 @@ import DateField from "../Form/DateField";
 import SignatureCanvas from "react-signature-canvas";
 import { InvoiceFormSchema } from "@shared/lib/zod-schema";
 import { useNavigate } from "@tanstack/react-router";
+import { Spinner } from "@/components/ui/spinner";
 
 interface InvoiceFormProps {
   clientInfo: Client | null;
@@ -42,8 +43,10 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
   const navigate = useNavigate();
 
   const sigCanvas = useRef<SignatureCanvas | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCreate = async (value: InvoiceForm) => {
+    setIsSubmitting(true);
     try {
       if (!clientInfo) throw new Error("Client Id not found");
 
@@ -65,10 +68,13 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
     } catch (error: unknown) {
       if (error instanceof Error) toast.error(error.message);
       console.log(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleUpdate = async (value: InvoiceForm) => {
+    setIsSubmitting(true);
     try {
       if (!clientInfo) throw new Error("Client Id not found");
       if (!invoiceId) throw new Error("Invoice Id not found");
@@ -90,6 +96,8 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
     } catch (error: unknown) {
       if (error instanceof Error) toast.error(error.message);
       console.log(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -484,11 +492,12 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
       </Card>
 
       <div className="flex gap-4 justify-end">
-        <Button type="button" variant="outline" onClick={() => form.reset()}>
+        <Button type="button" variant="outline" onClick={() => form.reset()} disabled={isSubmitting}>
           Reset
         </Button>
-        <Button type="submit" form="create-invoice-form">
-          {existingInvoice ? "Update Invoice" : "Create Invoice"}
+        <Button type="submit" form="create-invoice-form" disabled={isSubmitting}>
+          {isSubmitting && <Spinner className="mr-2" aria-hidden="true" />}
+          {isSubmitting ? (existingInvoice ? "Updating" : "Creating") : existingInvoice ? "Update" : "Create"} Invoice
         </Button>
       </div>
     </form>

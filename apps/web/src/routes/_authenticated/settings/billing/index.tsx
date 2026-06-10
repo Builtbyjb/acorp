@@ -11,6 +11,7 @@ import * as z from "zod";
 import { useFetch } from "@/hooks/useFetch";
 import Banner from "@/components/Banner";
 import { toast } from "sonner";
+import { SkeletonSubscriptionsList } from "@/components/Skeleton";
 
 const SubscriptionSchema = z.object({
   id: z.number(),
@@ -37,12 +38,16 @@ function RouteComponent() {
   }, [setTitle]);
 
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const { doGET, doPOST } = useFetch();
 
   useEffect(() => {
+    let isMounted = true;
+
     (async () => {
+      setIsLoading(true);
       try {
         const response = await doGET("/api/v1/payments/paystack/subscriptions");
         if (response instanceof Error) throw response;
@@ -50,13 +55,20 @@ function RouteComponent() {
         const result = await response.json();
         if (!response.ok) throw new Error(result.message);
 
+        if (!isMounted) return;
         const parsedResult = SubscriptionsSchema.parse(result.data);
         setSubscriptions(parsedResult);
       } catch (error: unknown) {
         if (error instanceof Error) toast.error(error.message);
         console.error(error);
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
     })();
+
+    return () => {
+      isMounted = false;
+    };
   }, [doGET]);
 
   const handleDisable = async (subscription: Subscription) => {
@@ -134,8 +146,9 @@ function RouteComponent() {
       <div>
         <h1 className="text-xl font-medium mb-4">Your Subscriptions</h1>
         <div className="space-y-6">
-          {/*TODO: Add loading skeleton */}
-          {subscriptions.length > 0 ? (
+          {isLoading ? (
+            <SkeletonSubscriptionsList />
+          ) : subscriptions.length > 0 ? (
             <>
               {subscriptions.map((s) => (
                 <Card key={s.id}>

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import ClientsTable from "@/components/ClientsTable";
 import ClientForm from "@/components/ClientForm";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,15 @@ import { useLayout } from "@/hooks/useLayout";
 import { useFetch } from "@/hooks/useFetch";
 import { ClientSchema } from "@shared/lib/zod-schema";
 
-const clientsResponseSchema = z.array(ClientSchema);
+const clientsResponseSchema = z.object({
+  clients: z.array(ClientSchema),
+  meta: z.object({
+    total: z.number(),
+    page: z.number(),
+    size: z.number(),
+    totalPages: z.number(),
+  }),
+});
 
 function RouteComponent() {
   const { setTitle } = useLayout();
@@ -24,6 +32,10 @@ function RouteComponent() {
   const [formOpen, setFormOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [clients, setClients] = useState<Client[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [size, setSize] = useState<number>(10);
+  const [meta, setMeta] = useState<null | { total: number; page: number; size: number; totalPages: number }>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleEdit = (client: Client) => {
     setEditingClient(client);
@@ -39,31 +51,93 @@ function RouteComponent() {
     setClients((prev) => prev.map((client) => (client.id === editedClient.id ? editedClient : client)));
   };
 
-  const handleClientAdd = (client: Client) => {
-    setClients((prev) => [...prev, client]);
-  };
+  // Fetch clients for a specific page/size. Returns parsed result so callers can inspect meta.
+  const skipAutoFetchRef = useRef(false);
+  const fetchIdRef = useRef(0);
 
-  const handleClientDelete = (clientId: string) => {
-    setClients((prev) => prev.filter((c) => c.id !== clientId));
-  };
-
-  useEffect(() => {
-    (async () => {
+  const fetchClients = useCallback(
+    async (pageToFetch: number, sizeToFetch: number) => {
+      fetchIdRef.current += 1;
+      const fetchId = fetchIdRef.current;
+      setIsLoading(true);
       try {
-        const response = await doGET("/api/v1/clients");
+        const response = await doGET(`/api/v1/clients?page=${pageToFetch}&size=${sizeToFetch}`);
         if (response instanceof Error) throw response;
 
         if (!response.ok) throw new Error("Failed to fetch clients");
 
         const result = await response.json();
-        const parsedClients = clientsResponseSchema.parse(result.clients);
+        const parsed = clientsResponseSchema.parse(result);
 
-        setClients(parsedClients);
+        setClients(parsed.clients);
+        setMeta(parsed.meta);
+        return parsed;
       } catch (error) {
         console.log(error);
+        return null;
+      } finally {
+        if (fetchId === fetchIdRef.current) {
+          setIsLoading(false);
+        }
       }
-    })();
-  }, [doGET]);
+    },
+    [doGET],
+  );
+
+  useEffect(() => {
+    // Skip the auto-fetch if a manual fetch requested to avoid duplicate requests
+    if (skipAutoFetchRef.current) {
+      skipAutoFetchRef.current = false;
+      return;
+    }
+
+    // Fetch when page or size changes
+    fetchClients(page, size);
+  }, [fetchClients, page, size]);
+
+  const handleClientAdd = (client: Client) => {
+    // Reference the parameter to avoid unused variable lint errors, then re-fetch
+    void client;
+    fetchClients(page, size);
+  };
+
+  const handleClientDelete = async (clientId: string) => {
+    // Reference the parameter to avoid unused variable lint errors
+    void clientId;
+
+    // If we have meta, compute the expected new total after deletion to avoid briefly showing an empty page.
+    if (meta) {
+      const expectedTotal = Math.max(meta.total - 1, 0);
+      const expectedTotalPages = Math.max(Math.ceil(expectedTotal / size), 1);
+
+      // If expected total is zero, go back to page 1
+      if (expectedTotal === 0) {
+        skipAutoFetchRef.current = true;
+        setPage(1);
+        try {
+          await fetchClients(1, size);
+        } finally {
+          skipAutoFetchRef.current = false;
+        }
+        return;
+      }
+
+      // If current page would be past last page after deletion, jump to the last page
+      if (page > expectedTotalPages) {
+        skipAutoFetchRef.current = true;
+        setPage(expectedTotalPages);
+        try {
+          await fetchClients(expectedTotalPages, size);
+        } finally {
+          skipAutoFetchRef.current = false;
+        }
+        return;
+      }
+    }
+
+    // Default: re-fetch current page
+    await fetchClients(page, size);
+  };
 
   return (
     <main className="space-y-4">
@@ -84,7 +158,18 @@ function RouteComponent() {
         </Button>
       </div>
 
-      <ClientsTable onEdit={handleEdit} clients={clients} deleteClient={handleClientDelete} />
+      <ClientsTable
+        onEdit={handleEdit}
+        clients={clients}
+        deleteClient={handleClientDelete}
+        meta={meta}
+        onPageChange={(p) => setPage(p)}
+        onSizeChange={(s) => {
+          setSize(s);
+          setPage(1); // reset to first page when size changes
+        }}
+        isLoading={isLoading}
+      />
 
       <ClientForm
         open={formOpen}
