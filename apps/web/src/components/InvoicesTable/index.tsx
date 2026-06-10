@@ -18,7 +18,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { MoreHorizontal, Eye, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, Eye, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import type { Invoice } from "@shared/lib/types";
 import { format } from "date-fns";
 import { useNavigate } from "@tanstack/react-router";
@@ -30,10 +32,20 @@ import { useFetch } from "@/hooks/useFetch";
 interface InvoicesTableProps {
   clientId: string;
   invoices: Invoice[];
-  onDelete: (id: string) => void;
+  onDelete: (id: string) => Promise<void> | void;
+  meta?: { total: number; page: number; size: number; totalPages: number } | null;
+  onPageChange?: (page: number) => void;
+  onSizeChange?: (size: number) => void;
 }
 
-export default function InvoicesTable({ invoices, onDelete, clientId }: InvoicesTableProps) {
+export default function InvoicesTable({
+  invoices,
+  onDelete,
+  clientId,
+  meta = null,
+  onPageChange,
+  onSizeChange,
+}: InvoicesTableProps) {
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const navigate = useNavigate();
@@ -47,7 +59,8 @@ export default function InvoicesTable({ invoices, onDelete, clientId }: Invoices
 
         if (!response.ok) throw new Error("An error occurred while deleting the invoice");
 
-        onDelete(deleteId);
+        // Parent manages re-fetching/pagination
+        await onDelete(deleteId);
         toast.success("Invoice Deleted");
       } catch (error: unknown) {
         if (error instanceof Error) toast.error(error.message);
@@ -61,6 +74,9 @@ export default function InvoicesTable({ invoices, onDelete, clientId }: Invoices
   const handleNavigate = (clientId: string, invoiceId: string) => {
     navigate({ to: `/clients/${clientId}/invoices/${invoiceId}` });
   };
+
+  const start = meta && meta.total > 0 ? (meta.page - 1) * meta.size + 1 : 0;
+  const end = meta ? Math.min((meta.page || 1) * (meta.size || 10), meta.total || 0) : 0;
 
   return (
     <>
@@ -179,6 +195,60 @@ export default function InvoicesTable({ invoices, onDelete, clientId }: Invoices
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Pagination controls */}
+      <div className="flex items-center justify-between px-4 py-3">
+        <div className="text-sm text-muted-foreground">
+          {meta ? (meta.total === 0 ? "No invoices" : `Showing ${start} - ${end} of ${meta.total}`) : null}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              disabled={!meta || (meta && meta.page <= 1)}
+              onClick={() => {
+                if (onPageChange) onPageChange(Math.max(1, (meta?.page ?? 1) - 1));
+              }}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <span className="text-sm text-muted-foreground">
+              {meta ? `Page ${meta.page} of ${meta.totalPages}` : ""}
+            </span>
+            <Button
+              size="sm"
+              disabled={!meta || (meta && meta.page >= (meta.totalPages || 1))}
+              onClick={() => {
+                if (onPageChange) onPageChange(Math.min(meta?.totalPages ?? 1, (meta?.page ?? 1) + 1));
+              }}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-muted-foreground">Size</label>
+            <Select
+              value={String(meta?.size ?? 10)}
+              onValueChange={(val) => {
+                if (val == null) return;
+                if (onSizeChange) onSizeChange(parseInt(val, 10));
+              }}
+            >
+              <SelectTrigger size="sm" aria-label="Select page size">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="20">20</SelectItem>
+                <SelectItem value="50">50</SelectItem>
+                <SelectItem value="100">100</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Mail, MapPin, Phone, Plus, UserCircle, ArrowLeft } from "lucide-react";
@@ -13,11 +13,25 @@ import { useFetch } from "@/hooks/useFetch";
 import { InvoiceSchema, ClientSchema } from "@shared/lib/zod-schema";
 import { z } from "zod";
 
-const InvoicesSchema = z.array(InvoiceSchema);
+const ClientInvoicesResponseSchema = z.object({
+  clientInfo: ClientSchema,
+  invoices: z.array(InvoiceSchema),
+  meta: z.object({
+    total: z.number(),
+    page: z.number(),
+    size: z.number(),
+    totalPages: z.number(),
+  }),
+});
 
 function RouteComponent() {
   const [clientInfo, setClientInfo] = useState<Client>();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [size, setSize] = useState<number>(10);
+  const [meta, setMeta] = useState<null | { total: number; page: number; size: number; totalPages: number }>(null);
+
+  const skipAutoFetchRef = useRef(false);
 
   const { clientId } = Route.useParams();
   const { doGET } = useFetch();
@@ -30,30 +44,81 @@ function RouteComponent() {
 
   const navigate = useNavigate();
 
-  const handleInvoiceDelete = (invoiceId: string) => {
-    setInvoices((prev) => prev.filter((i) => i.id !== invoiceId));
-  };
-
-  useEffect(() => {
-    (async () => {
+  // Fetch client info and invoices for a specific page/size
+  const fetchClientAndInvoices = useCallback(
+    async (pageToFetch: number, sizeToFetch: number) => {
       try {
-        const response = await doGET(`/api/v1/clients/${clientId}`);
+        const response = await doGET(`/api/v1/clients/${clientId}?page=${pageToFetch}&size=${sizeToFetch}`);
         if (response instanceof Error) throw response;
 
         const result = await response.json();
         if (!response.ok) throw new Error(result.message);
 
-        const parsedClientInfo = ClientSchema.parse(result.clientInfo);
-        const parsedInvoices = InvoicesSchema.parse(result.invoices);
+        const parsed = ClientInvoicesResponseSchema.parse(result);
 
-        setClientInfo(parsedClientInfo);
-        setInvoices(parsedInvoices);
+        setClientInfo(parsed.clientInfo);
+        setInvoices(parsed.invoices);
+        setMeta(parsed.meta);
+
+        return parsed;
       } catch (error: unknown) {
         if (error instanceof Error) toast.error(error.message);
         console.log(error);
+        return null;
       }
-    })();
-  }, [doGET, clientId]);
+    },
+    [doGET, clientId],
+  );
+
+  useEffect(() => {
+    if (skipAutoFetchRef.current) {
+      skipAutoFetchRef.current = false;
+      return;
+    }
+
+    fetchClientAndInvoices(page, size);
+  }, [fetchClientAndInvoices, page, size]);
+
+  const handleInvoiceDelete = async (invoiceId: string) => {
+    // reference parameter to avoid lint error — deletion is performed by the table component
+    void invoiceId;
+
+    // The table component performs the delete request and then calls this handler.
+    // We will re-fetch and adjust the page if needed so the user is not left on an empty page.
+
+    // If we don't have meta, just re-fetch current page
+    if (!meta) {
+      await fetchClientAndInvoices(page, size);
+      return;
+    }
+
+    const expectedTotal = Math.max(meta.total - 1, 0);
+    const expectedTotalPages = Math.max(Math.ceil(expectedTotal / size), 1);
+
+    if (expectedTotal === 0) {
+      skipAutoFetchRef.current = true;
+      setPage(1);
+      try {
+        await fetchClientAndInvoices(1, size);
+      } finally {
+        skipAutoFetchRef.current = false;
+      }
+      return;
+    }
+
+    if (page > expectedTotalPages) {
+      skipAutoFetchRef.current = true;
+      setPage(expectedTotalPages);
+      try {
+        await fetchClientAndInvoices(expectedTotalPages, size);
+      } finally {
+        skipAutoFetchRef.current = false;
+      }
+      return;
+    }
+
+    await fetchClientAndInvoices(page, size);
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -112,7 +177,17 @@ function RouteComponent() {
           <Plus className="mr-2 h-4 w-4" />
           Create Invoice
         </Button>
-        <InvoicesTable clientId={clientId} invoices={invoices} onDelete={handleInvoiceDelete} />
+        <InvoicesTable
+          clientId={clientId}
+          invoices={invoices}
+          onDelete={handleInvoiceDelete}
+          meta={meta}
+          onPageChange={(p) => setPage(p)}
+          onSizeChange={(s) => {
+            setSize(s);
+            setPage(1);
+          }}
+        />
       </div>
     </div>
   );
