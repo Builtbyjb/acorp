@@ -4,6 +4,7 @@ import { eq, and } from "drizzle-orm";
 import { hasActiveSubscription } from "@/lib/utils";
 import { type Bindings } from "./types";
 
+/* Handles overdue invoice notifications */
 export async function invoiceNotify(env: Bindings): Promise<any> {
     const db = drizzle(env.DB);
 
@@ -30,6 +31,7 @@ export async function invoiceNotify(env: Bindings): Promise<any> {
                 if (invoice.status === "sent" || invoice.status === "overdue") {
                     if (new Date(invoice.dueDate) < new Date()) {
                         // Send notification
+                        // NOTE: if create email is available, send a remainder for the user????
                         await env.SEND_EMAIL.send({
                             from: "notify-noreply@acorp.app",
                             to: user.email,
@@ -43,4 +45,11 @@ export async function invoiceNotify(env: Bindings): Promise<any> {
             }
         }
     }
+}
+
+/* Handles referral rewards payout processing */
+export async function payout(env: Bindings): Promise<any> {
+    void env;
+    // TODO:
+    return;
 }

@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { Bindings } from "@/lib/types";
-import { invoiceNotify } from "./lib/crons";
+import { invoiceNotify, payout } from "./lib/crons";
 import rateLimiterMiddleware from "@/middleware/rate-limiter";
 
 /* Routes  */
@@ -46,6 +46,13 @@ export default {
     fetch: app.fetch,
 
     async scheduled(event: ScheduledEvent, env: Bindings, ctx: ExecutionContext) {
-        ctx.waitUntil(invoiceNotify(env));
+        if (event.cron === "* * * * *") {
+            ctx.waitUntil(invoiceNotify(env));
+            return;
+        }
+
+        if (event.cron === "0 0 1 * *") {
+            ctx.waitUntil(payout(env));
+        }
     },
 };
