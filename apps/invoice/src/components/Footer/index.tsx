@@ -1,64 +1,56 @@
 import { Link } from "@tanstack/react-router";
-import { FileText } from "lucide-react";
-import { APP_NAME } from "@/lib/constant";
 import { getCurrentYear } from "@shared/utils/util";
 
 const footerLinks = {
   Product: [
-    // { name: "Features", href: "#" },
     { name: "Pricing", href: "/pricing" },
-    // { name: "Templates", href: "#" },
-    // { name: "Integrations", href: "#" },
-    // { name: "API", href: "#" },
   ],
-  // Resources: [
-  //   { name: "Documentation", href: "#" },
-  //   { name: "Blog", href: "#" },
-  //   { name: "Guides", href: "#" },
-  //   { name: "Help Center", href: "#" },
-  //   { name: "Status", href: "#" },
-  // ],
-  // Company: [
-  //   { name: "About", href: "#" },
-  //   { name: "Careers", href: "#" },
-  //   { name: "Press", href: "#" },
-  //   { name: "Contact", href: "#" },
-  //   { name: "Partners", href: "#" },
-  // ],
   Legal: [
     { name: "Privacy", href: "/privacy-policy" },
     { name: "Terms", href: "/terms-of-service" },
-    // { name: "Security", href: "/security" },
-    // { name: "Cookies", href: "/cookies" },
   ],
 };
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border">
-      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-6">
-          <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-                <FileText className="h-5 w-5 text-primary-foreground" />
+    <footer className="border-t" style={{ borderColor: "#7F8CAA20" }}>
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        {/* Main row */}
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-10">
+          {/* Brand block */}
+          <div className="md:col-span-3">
+            <Link to="/" className="group flex items-center gap-2 mb-4">
+              <div
+                className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-black transition-transform group-hover:scale-95"
+                style={{ backgroundColor: "#4382df" }}
+              >
+                A
               </div>
-              <span className="text-xl font-bold tracking-tight">{APP_NAME}</span>
+              <span className="font-bold text-lg tracking-tight" style={{ color: "#0f172a" }}>
+                Corp
+              </span>
             </Link>
-            <p className="mt-4 text-sm text-muted-foreground max-w-xs">
-              The simplest way to create professional invoices and get paid faster.
+            <p className="text-sm leading-relaxed max-w-xs" style={{ color: "#7F8CAA" }}>
+              The simplest way to create professional invoices and get paid faster. Built for freelancers and growing businesses.
             </p>
           </div>
 
+          {/* Link columns */}
           {Object.entries(footerLinks).map(([category, links]) => (
-            <div key={category}>
-              <h3 className="text-sm font-semibold text-foreground mb-4">{category}</h3>
+            <div key={category} className="md:col-span-1">
+              <h3
+                className="text-xs font-bold uppercase tracking-widest mb-4"
+                style={{ color: "#0f172a" }}
+              >
+                {category}
+              </h3>
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link.name}>
                     <Link
                       to={link.href}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      className="text-sm transition-opacity hover:opacity-60"
+                      style={{ color: "#7F8CAA" }}
                     >
                       {link.name}
                     </Link>
@@ -69,28 +61,30 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">{`© ${getCurrentYear()} ACORP. All rights reserved.`}</p>
-          {/*<div className="flex items-center gap-6">
+        {/* Bottom bar */}
+        <div
+          className="mt-16 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4"
+          style={{ borderColor: "#7F8CAA18" }}
+        >
+          <p className="text-xs" style={{ color: "#7F8CAA" }}>
+            {`© ${getCurrentYear()} ACorp. All rights reserved.`}
+          </p>
+          <div className="flex items-center gap-6">
             <Link
-              to="#"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              to="/privacy-policy"
+              className="text-xs transition-opacity hover:opacity-60"
+              style={{ color: "#7F8CAA" }}
             >
-              Twitter
+              Privacy
             </Link>
             <Link
-              to="#"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              to="/terms-of-service"
+              className="text-xs transition-opacity hover:opacity-60"
+              style={{ color: "#7F8CAA" }}
             >
-              LinkedIn
+              Terms
             </Link>
-            <Link
-              to="#"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              GitHub
-            </Link>
-          </div>*/}
+          </div>
         </div>
       </div>
     </footer>

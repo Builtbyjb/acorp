@@ -38,10 +38,12 @@ export function TaskItem({ task, depth = 0, onOpenDetail }: Props) {
     <div className="flex flex-col">
       <div
         className={cn(
-          "group flex items-start gap-2 rounded-xl border border-transparent px-2 py-2 transition-colors hover:border-border hover:bg-muted/30",
+          "group flex items-start gap-2 rounded-xl border border-transparent px-2 py-2 transition-all hover:bg-white",
           isDone && "opacity-50"
         )}
-        style={{ paddingLeft: `${DEPTH_INDENT[depth] + 8}px` }}
+        style={{ borderColor: "transparent", paddingLeft: `${DEPTH_INDENT[depth] + 8}px` }}
+        onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#7F8CAA18"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.borderColor = "transparent"; }}
       >
         {/* Grip (desktop only) */}
         <GripVertical className="hidden md:block h-4 w-4 mt-0.5 text-transparent group-hover:text-muted-foreground flex-shrink-0 cursor-grab" />
@@ -122,8 +124,8 @@ export function TaskItem({ task, depth = 0, onOpenDetail }: Props) {
       {/* Inline add subtask form */}
       {addingChild && (
         <div
-          className="mx-2 mb-2 p-3 rounded-xl border border-border bg-card"
-          style={{ marginLeft: `${DEPTH_INDENT[depth] + 28}px` }}
+          className="mx-2 mb-2 p-3 rounded-xl"
+          style={{ border: "1px solid #7F8CAA18", backgroundColor: "#ffffff", marginLeft: `${DEPTH_INDENT[depth] + 28}px` }}
         >
           <TaskForm
             parentId={task.id}

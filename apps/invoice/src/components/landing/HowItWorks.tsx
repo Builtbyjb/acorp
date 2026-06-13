@@ -1,45 +1,88 @@
-export default function HowItWorks() {
-  const steps = [
-    {
-      step: "01",
-      title: "Add your details",
-      description: "Enter your business information once, and we'll save it for all future invoices.",
-    },
-    {
-      step: "02",
-      title: "Create your invoice",
-      description: "Add line items, set due dates, and customize the look with our intuitive editor.",
-    },
-    {
-      step: "03",
-      title: "Send & get paid",
-      description: "Send invoices via email or share a link. Accept payments online instantly.",
-    },
-  ];
+const steps = [
+  {
+    step: "01",
+    title: "Add your business",
+    description:
+      "Enter your business name, logo, and address once. We save it and pre-fill every future invoice automatically.",
+  },
+  {
+    step: "02",
+    title: "Add your client",
+    description:
+      "Create a client profile with their billing details. All their invoices and payment history live here.",
+  },
+  {
+    step: "03",
+    title: "Build your invoice",
+    description:
+      "Add line items, set your rates and quantities, apply taxes or discounts, and set a due date in seconds.",
+  },
+  {
+    step: "04",
+    title: "Download & track",
+    description:
+      "Export a pixel-perfect PDF, track payment status, and see all your revenue on the dashboard.",
+  },
+];
 
+export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-12">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center mb-16">
-          <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">How it works</p>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground text-balance">
-            Three simple steps to professional invoices
+    <section id="how-it-works" className="pb-24">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Section header */}
+        <div className="mb-12">
+          <p
+            className="animate-fade-up text-xs font-bold tracking-[0.25em] uppercase mb-2.5"
+            style={{ color: "#7F8CAA", animationDelay: "0.05s" }}
+          >
+            How it works
+          </p>
+          <h2
+            className="animate-fade-up text-4xl font-bold tracking-tight"
+            style={{ color: "#0f172a", animationDelay: "0.12s" }}
+          >
+            Four steps to your first invoice.
           </h2>
+          <p
+            className="animate-fade-up text-lg max-w-xl leading-relaxed mt-3"
+            style={{ color: "#7F8CAA", animationDelay: "0.18s" }}
+          >
+            No complex setup. No steep learning curve. You'll send your first invoice in under five minutes.
+          </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        {/* Steps grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {steps.map((item, index) => (
-            <div key={item.step} className="relative">
-              {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-8 left-[calc(50%+3rem)] w-[calc(100%-6rem)] h-px bg-border" />
-              )}
-              <div className="relative bg-card rounded-lg border border-border p-8 text-center">
-                <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground text-2xl font-bold mb-6">
+            <div
+              key={item.step}
+              className="animate-fade-up bg-white rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
+              style={{
+                boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07",
+                animationDelay: `${0.08 + index * 0.1}s`,
+              }}
+            >
+              {/* Step number */}
+              <div
+                className="text-4xl font-extrabold tracking-tight mb-5 leading-none"
+                style={{ color: "#4382df0e" /* very faint cobalt */ }}
+              >
+                <span
+                  className="text-4xl font-extrabold"
+                  style={{
+                    WebkitTextStroke: "1.5px #4382df",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
                   {item.step}
-                </div>
-                <h3 className="text-xl font-semibold text-foreground mb-3">{item.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{item.description}</p>
+                </span>
               </div>
+              <h3 className="text-lg font-bold mb-2" style={{ color: "#0f172a" }}>
+                {item.title}
+              </h3>
+              <p className="text-sm leading-relaxed" style={{ color: "#7F8CAA" }}>
+                {item.description}
+              </p>
             </div>
           ))}
         </div>

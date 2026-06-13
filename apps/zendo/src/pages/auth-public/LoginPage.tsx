@@ -24,7 +24,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-5">
       {step === "email" ? (
         <EmailStep
           heading="Welcome back"
@@ -40,9 +40,13 @@ export function LoginPage() {
         />
       )}
 
-      <p className="text-sm text-muted-foreground text-center">
+      <p className="text-sm text-center" style={{ color: "#7F8CAA" }}>
         Don't have an account?{" "}
-        <Link to="/signup" className="text-primary hover:underline font-medium">
+        <Link
+          to="/signup"
+          className="font-semibold transition-opacity hover:opacity-70"
+          style={{ color: "#4382df" }}
+        >
           Sign up
         </Link>
       </p>

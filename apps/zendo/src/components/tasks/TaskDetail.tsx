@@ -137,7 +137,7 @@ export function TaskDetail({ task, open, onClose }: Props) {
               )}
 
               {addingSubtask && (
-                <div className="p-3 rounded-xl border border-border bg-muted/30">
+                <div className="p-3 rounded-xl" style={{ border: "1px solid #7F8CAA18", backgroundColor: "#ebf0f0" }}>
                   <TaskForm
                     parentId={task.id}
                     parentLevel={task.level as 0 | 1}
@@ -174,7 +174,7 @@ function SubtaskRow({ task }: { task: Task }) {
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex items-center gap-2 p-2 rounded-lg border border-border/50 bg-background/50 text-sm">
+        <div className="flex items-center gap-2 p-2 rounded-lg text-sm" style={{ border: "1px solid #7F8CAA18", backgroundColor: "#ffffff" }}>
         <input
           type="checkbox"
           checked={isDone}

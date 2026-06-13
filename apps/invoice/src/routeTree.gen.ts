@@ -16,6 +16,8 @@ import { Route as SignupIndexRouteImport } from './routes/signup/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as GuestIndexRouteImport } from './routes/_guest/index'
 import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
+import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as AuthenticatedExpensesRouteImport } from './routes/_authenticated/expenses'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as GuestTermsOfServiceIndexRouteImport } from './routes/_guest/terms-of-service/index'
 import { Route as GuestPrivacyPolicyIndexRouteImport } from './routes/_guest/privacy-policy/index'
@@ -63,6 +65,16 @@ const GuestIndexRoute = GuestIndexRouteImport.update({
 const AuthenticatedTemplatesRoute = AuthenticatedTemplatesRouteImport.update({
   id: '/templates',
   path: '/templates',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedExpensesRoute = AuthenticatedExpensesRouteImport.update({
+  id: '/expenses',
+  path: '/expenses',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -157,6 +169,8 @@ export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/': typeof GuestIndexRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/expenses': typeof AuthenticatedExpensesRoute
+  '/reports': typeof AuthenticatedReportsRoute
   '/templates': typeof AuthenticatedTemplatesRoute
   '/login/': typeof LoginIndexRoute
   '/signup/': typeof SignupIndexRoute
@@ -179,6 +193,8 @@ export interface FileRoutesByTo {
   '/$': typeof SplatRoute
   '/': typeof GuestIndexRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/expenses': typeof AuthenticatedExpensesRoute
+  '/reports': typeof AuthenticatedReportsRoute
   '/templates': typeof AuthenticatedTemplatesRoute
   '/login': typeof LoginIndexRoute
   '/signup': typeof SignupIndexRoute
@@ -203,6 +219,8 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_guest': typeof GuestRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/expenses': typeof AuthenticatedExpensesRoute
+  '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/templates': typeof AuthenticatedTemplatesRoute
   '/_guest/': typeof GuestIndexRoute
   '/login/': typeof LoginIndexRoute
@@ -228,6 +246,8 @@ export interface FileRouteTypes {
     | '/$'
     | '/'
     | '/dashboard'
+    | '/expenses'
+    | '/reports'
     | '/templates'
     | '/login/'
     | '/signup/'
@@ -250,6 +270,8 @@ export interface FileRouteTypes {
     | '/$'
     | '/'
     | '/dashboard'
+    | '/expenses'
+    | '/reports'
     | '/templates'
     | '/login'
     | '/signup'
@@ -273,6 +295,8 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/_guest'
     | '/_authenticated/dashboard'
+    | '/_authenticated/expenses'
+    | '/_authenticated/reports'
     | '/_authenticated/templates'
     | '/_guest/'
     | '/login/'
@@ -350,6 +374,20 @@ declare module '@tanstack/react-router' {
       path: '/templates'
       fullPath: '/templates'
       preLoaderRoute: typeof AuthenticatedTemplatesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/expenses': {
+      id: '/_authenticated/expenses'
+      path: '/expenses'
+      fullPath: '/expenses'
+      preLoaderRoute: typeof AuthenticatedExpensesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/dashboard': {
@@ -462,6 +500,8 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedExpensesRoute: typeof AuthenticatedExpensesRoute
+  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedTemplatesRoute: typeof AuthenticatedTemplatesRoute
   AuthenticatedSettingsFeedbackRoute: typeof AuthenticatedSettingsFeedbackRoute
   AuthenticatedSettingsReferralRoute: typeof AuthenticatedSettingsReferralRoute
@@ -478,6 +518,8 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedExpensesRoute: AuthenticatedExpensesRoute,
+  AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedTemplatesRoute: AuthenticatedTemplatesRoute,
   AuthenticatedSettingsFeedbackRoute: AuthenticatedSettingsFeedbackRoute,
   AuthenticatedSettingsReferralRoute: AuthenticatedSettingsReferralRoute,

@@ -1,53 +1,84 @@
 import { Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
+
+function ArrowRight({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" stroke="currentColor"
+      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+      className="transition-transform group-hover:translate-x-0.5">
+      <path d="M2 7h10M7 2l5 5-5 5" />
+    </svg>
+  );
+}
 
 export function CtaBanner() {
   return (
-    <section className="relative py-24 md:py-32 px-6 md:px-12 overflow-hidden border-y border-border">
-      {/* Gradient background */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% 50%, hsl(var(--primary)/0.22) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 80% 30%, hsl(var(--timer)/0.1) 0%, transparent 60%)",
-        }}
-      />
-
-      <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center gap-6 text-center">
-        <p className="text-xs font-bold uppercase tracking-widest text-primary">
-          Your next focus session starts now
-        </p>
-        <h2 className="text-4xl md:text-5xl font-bold tracking-tighter leading-tight text-foreground">
-          Stop planning to be productive.{" "}
-          <span
-            className="bg-clip-text text-transparent"
+    <section className="pb-24 px-6">
+      <div className="max-w-7xl mx-auto">
+        <div
+          className="relative rounded-3xl overflow-hidden px-10 py-20 text-center"
+          style={{ backgroundColor: "#0f172a" }}
+        >
+          {/* Radial glow layer */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 pointer-events-none"
             style={{
               backgroundImage:
-                "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--timer)) 100%)",
+                "radial-gradient(ellipse at 25% 60%, #4382df20 0%, transparent 55%), radial-gradient(ellipse at 80% 30%, #7F8CAA18 0%, transparent 50%)",
             }}
-          >
-            Start being it.
-          </span>
-        </h2>
-        <p className="text-lg text-muted-foreground max-w-md leading-relaxed">
-          Join thousands of focused builders using Zendo to ship more and stress less.
-        </p>
-        <div className="flex flex-wrap gap-3 justify-center mt-2">
-          <Button
-            asChild
-            size="lg"
-            className="rounded-full px-10 shadow-[0_0_32px_hsl(var(--primary)/0.45)] hover:shadow-[0_0_48px_hsl(var(--primary)/0.65)] transition-shadow"
-          >
-            <Link to="/signup">Get started free</Link>
-          </Button>
-          <Button asChild variant="outline" size="lg" className="rounded-full px-8">
-            <a href="#pricing">View pricing</a>
-          </Button>
+          />
+          {/* Grid overlay */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 pointer-events-none opacity-20"
+            style={{
+              backgroundImage:
+                "linear-gradient(#4382df0e 1px, transparent 1px), linear-gradient(90deg, #4382df0e 1px, transparent 1px)",
+              backgroundSize: "48px 48px",
+            }}
+          />
+
+          <div className="relative">
+            <p
+              className="text-xs font-bold tracking-[0.25em] uppercase mb-4"
+              style={{ color: "#4382df" }}
+            >
+              Your next focus session starts now
+            </p>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-5 leading-tight">
+              Stop planning to be productive.
+              <br />
+              <span style={{ color: "#7F8CAA" }}>Start being it.</span>
+            </h2>
+            <p
+              className="text-base mb-10 max-w-lg mx-auto leading-relaxed"
+              style={{ color: "#7F8CAA" }}
+            >
+              Join thousands of focused builders using Zendo to ship more and stress less.
+            </p>
+
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Link
+                to="/signup"
+                className="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-92 active:scale-95"
+                style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+              >
+                Get started free <ArrowRight />
+              </Link>
+              <a
+                href="#pricing"
+                className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/10 active:scale-95"
+                style={{ color: "#7F8CAA", borderColor: "#7F8CAA45" }}
+              >
+                View pricing
+              </a>
+            </div>
+
+            <p className="text-xs mt-6" style={{ color: "#4382df80" }}>
+              Free plan forever · Pro trial, no card needed
+            </p>
+          </div>
         </div>
-        <p className="text-xs text-muted-foreground">
-          Free plan forever · Pro trial, no card needed
-        </p>
       </div>
     </section>
   );

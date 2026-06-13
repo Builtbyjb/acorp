@@ -1,6 +1,5 @@
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -22,6 +21,16 @@ interface Props {
   isLoading?: boolean;
 }
 
+function ArrowRight({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" stroke="currentColor"
+      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+      className="transition-transform group-hover:translate-x-0.5">
+      <path d="M2 7h10M7 2l5 5-5 5" />
+    </svg>
+  );
+}
+
 export function EmailStep({ heading, subheading, submitLabel, onSubmit, isLoading }: Props) {
   const form = useForm({
     defaultValues: { email: "" },
@@ -31,10 +40,15 @@ export function EmailStep({ heading, subheading, submitLabel, onSubmit, isLoadin
   });
 
   return (
-    <div className="flex flex-col gap-6">
+    <div
+      className="animate-fade-up bg-white rounded-3xl p-10 flex flex-col gap-6"
+      style={{ boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07" }}
+    >
       <div className="flex flex-col gap-1.5">
-        <h1 className="text-2xl font-bold tracking-tight">{heading}</h1>
-        <p className="text-sm text-muted-foreground">{subheading}</p>
+        <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#0f172a" }}>
+          {heading}
+        </h1>
+        <p className="text-sm" style={{ color: "#7F8CAA" }}>{subheading}</p>
       </div>
 
       <form
@@ -51,7 +65,9 @@ export function EmailStep({ heading, subheading, submitLabel, onSubmit, isLoadin
         >
           {(field) => (
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="email">Email address</Label>
+              <Label htmlFor="email" style={{ color: "#0f172a" }} className="text-sm font-medium">
+                Email address
+              </Label>
               <Input
                 id="email"
                 type="email"
@@ -61,6 +77,7 @@ export function EmailStep({ heading, subheading, submitLabel, onSubmit, isLoadin
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={field.state.meta.errors.length > 0 ? "border-destructive" : ""}
+                style={{ borderColor: field.state.meta.errors.length > 0 ? undefined : "#7F8CAA45" }}
               />
               {field.state.meta.errors.length > 0 && (
                 <p className="text-xs text-destructive">
@@ -73,9 +90,15 @@ export function EmailStep({ heading, subheading, submitLabel, onSubmit, isLoadin
 
         <form.Subscribe selector={(s) => [s.canSubmit, s.isSubmitting] as const}>
           {([canSubmit, isSubmitting]) => (
-            <Button type="submit" disabled={!canSubmit || isSubmitting || isLoading} className="w-full rounded-xl">
+            <button
+              type="submit"
+              disabled={!canSubmit || isSubmitting || isLoading}
+              className="group inline-flex items-center justify-center gap-2 w-full px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-92 active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
+              style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+            >
               {isSubmitting || isLoading ? "Sending…" : submitLabel}
-            </Button>
+              {!isSubmitting && !isLoading && <ArrowRight />}
+            </button>
           )}
         </form.Subscribe>
       </form>

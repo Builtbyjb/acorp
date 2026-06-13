@@ -16,14 +16,17 @@ export function UpcomingPage() {
   );
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 flex flex-col gap-6">
+    <div className="max-w-3xl mx-auto px-6 py-8 flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Upcoming</h1>
-        <p className="text-sm text-muted-foreground mt-1">Next 7 days</p>
+        <p className="text-xs font-bold tracking-[0.25em] uppercase mb-2" style={{ color: "#7F8CAA" }}>
+          Schedule
+        </p>
+        <h1 className="text-3xl font-bold tracking-tight" style={{ color: "#0f172a" }}>Upcoming</h1>
+        <p className="text-sm mt-1" style={{ color: "#7F8CAA" }}>Next 7 days</p>
       </div>
 
       {upcomingTasks.length === 0 ? (
-        <p className="text-sm text-muted-foreground text-center py-12">
+        <p className="text-sm text-center py-12" style={{ color: "#7F8CAA" }}>
           Nothing coming up in the next 7 days
         </p>
       ) : (
@@ -31,12 +34,15 @@ export function UpcomingPage() {
           {Object.entries(grouped).map(([date, tasks]) => (
             <div key={date} className="flex flex-col gap-3">
               <div className="flex items-center gap-3">
-                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                <p
+                  className="text-xs font-bold uppercase tracking-[0.25em]"
+                  style={{ color: "#7F8CAA" }}
+                >
                   {date !== "No date"
                     ? format(new Date(date + "T00:00:00"), "EEEE, MMM d")
                     : "No date"}
                 </p>
-                <div className="flex-1 h-px bg-border" />
+                <div className="flex-1 h-px" style={{ backgroundColor: "#7F8CAA20" }} />
               </div>
               <TaskList tasks={tasks} emptyMessage="" showAddButton={false} />
             </div>

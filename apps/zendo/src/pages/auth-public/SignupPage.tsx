@@ -24,7 +24,7 @@ export function SignupPage() {
   };
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-5">
       {step === "email" ? (
         <EmailStep
           heading="Create your account"
@@ -40,9 +40,13 @@ export function SignupPage() {
         />
       )}
 
-      <p className="text-sm text-muted-foreground text-center">
+      <p className="text-sm text-center" style={{ color: "#7F8CAA" }}>
         Already have an account?{" "}
-        <Link to="/login" className="text-primary hover:underline font-medium">
+        <Link
+          to="/login"
+          className="font-semibold transition-opacity hover:opacity-70"
+          style={{ color: "#4382df" }}
+        >
           Sign in
         </Link>
       </p>

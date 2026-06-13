@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { Separator } from "@/components/ui/separator";
 
 const SECTIONS = [
   {
@@ -198,42 +197,74 @@ const SECTIONS = [
 
 export function TermsOfServicePage() {
   return (
-    <div className="max-w-3xl mx-auto px-6 md:px-8 py-24 md:py-32">
-      {/* Breadcrumb */}
-      <Link
-        to="/"
-        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10"
-      >
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <path d="M9 11L5 7l4-4" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-        Back to home
-      </Link>
+    <div>
+      {/* Hero */}
+      <section className="relative pt-20 pb-16 px-6 overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: "radial-gradient(circle, #7F8CAA22 1.5px, transparent 1.5px)",
+            backgroundSize: "28px 28px",
+          }}
+        />
+        <div className="max-w-4xl mx-auto relative">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-60 mb-8"
+            style={{ color: "#7F8CAA" }}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <path d="M9 11L5 7l4-4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Back to home
+          </Link>
 
-      {/* Header */}
-      <div className="flex flex-col gap-3 mb-10">
-        <p className="text-xs font-bold uppercase tracking-widest text-primary">Legal</p>
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">Terms of Service</h1>
-        <p className="text-sm text-muted-foreground">Last updated: 12 June 2025</p>
-        <p className="text-base text-muted-foreground leading-relaxed mt-2">
-          Please read these Terms carefully before using Zendo. They outline your rights
-          and responsibilities as a user of the platform.
-        </p>
-      </div>
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold tracking-[0.18em] uppercase mb-4"
+            style={{ backgroundColor: "#ffffff70", borderColor: "#7F8CAA28", color: "#7F8CAA" }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#4382df" }} />
+            Legal
+          </div>
 
-      <Separator className="mb-10" />
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3" style={{ color: "#0f172a" }}>
+            Terms of Service
+          </h1>
+          <p className="text-sm mb-3" style={{ color: "#7F8CAA" }}>Last updated: 12 June 2025</p>
+          <p className="text-base leading-relaxed max-w-2xl" style={{ color: "#7F8CAA" }}>
+            Please read these Terms carefully before using Zendo. They outline your rights
+            and responsibilities as a user of the platform.
+          </p>
+        </div>
+      </section>
 
-      {/* Sections */}
-      <div className="flex flex-col gap-10">
-        {SECTIONS.map((s) => (
-          <section key={s.title} className="flex flex-col gap-4">
-            <h2 className="text-lg font-semibold text-foreground">{s.title}</h2>
-            <div className="flex flex-col gap-3 text-sm text-muted-foreground leading-relaxed [&_ul]:pl-5 [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-2 [&_li]:list-disc [&_strong]:text-foreground [&_strong]:font-semibold">
-              {s.content}
-            </div>
-          </section>
-        ))}
-      </div>
+      {/* Body */}
+      <section className="pb-24 px-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Main content card */}
+          <div
+            className="bg-white rounded-3xl overflow-hidden"
+            style={{ boxShadow: "0 1px 4px #0f172a0a, 0 0 0 1px #0f172a06" }}
+          >
+            {SECTIONS.map((s, i) => (
+              <div
+                key={s.title}
+                className="px-8 md:px-12 py-10"
+                style={{ borderTop: i > 0 ? "1px solid #7F8CAA18" : "none" }}
+              >
+                <h2 className="text-lg font-bold mb-4" style={{ color: "#0f172a" }}>{s.title}</h2>
+                <div
+                  className="flex flex-col gap-3 text-sm leading-relaxed [&_ul]:pl-5 [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-2 [&_li]:list-disc [&_a]:underline [&_a]:decoration-[#4382df40] [&_a]:text-[#4382df]"
+                  style={{ color: "#7F8CAA" }}
+                >
+                  {s.content}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

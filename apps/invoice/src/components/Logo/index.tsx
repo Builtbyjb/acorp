@@ -1,14 +1,17 @@
 import { Link } from "@tanstack/react-router";
-import { FileText } from "lucide-react";
-import { APP_NAME } from "@/lib/constant";
 
 export default function Logo() {
   return (
-    <Link to="/" className="flex items-center gap-2">
-      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-        <FileText className="h-5 w-5 text-primary-foreground" />
+    <Link to="/" className="group flex items-center gap-2">
+      <div
+        className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-black transition-transform group-hover:scale-95"
+        style={{ backgroundColor: "#4382df" }}
+      >
+        A
       </div>
-      <span className="text-xl font-bold tracking-tight">{APP_NAME}</span>
+      <span className="font-bold text-lg tracking-tight" style={{ color: "#0f172a" }}>
+        Corp
+      </span>
     </Link>
   );
 }

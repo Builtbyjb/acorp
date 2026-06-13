@@ -1,9 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { cn } from '@/lib/utils'
 import { PlusIcon, SearchIcon, SmsIcon, WhatsAppIcon } from '../-icons.tsx'
 
 export const Route = createFileRoute('/_auth/contacts')({
@@ -27,12 +24,29 @@ function initials(n: string) { return n.split(' ').map((w) => w[0]).join('') }
 
 function ContactsPage() {
   return (
-    <>
-      <header className="flex h-14 items-center justify-between border-b px-6 flex-shrink-0">
-        <h1 className="text-sm font-semibold text-foreground">Contacts</h1>
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Header */}
+      <header
+        className="flex h-14 items-center justify-between px-6 flex-shrink-0 bg-white"
+        style={{ borderBottom: '1px solid #7F8CAA18' }}
+      >
+        <div>
+          <p className="text-xs font-bold tracking-[0.22em] uppercase" style={{ color: '#7F8CAA' }}>Directory</p>
+          <h1 className="text-sm font-bold" style={{ color: '#0f172a' }}>Contacts</h1>
+        </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">Import CSV</Button>
-          <Button size="sm"><PlusIcon size={13} className="mr-1.5" />Add contact</Button>
+          <button
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold rounded-full border-2 transition-all hover:bg-white/60 active:scale-95"
+            style={{ color: '#7F8CAA', borderColor: '#7F8CAA45' }}
+          >
+            Import CSV
+          </button>
+          <button
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white rounded-full transition-all hover:opacity-90 active:scale-95"
+            style={{ backgroundColor: '#4382df', boxShadow: '0 2px 12px #4382df35' }}
+          >
+            <PlusIcon size={11} />Add contact
+          </button>
         </div>
       </header>
 
@@ -40,80 +54,122 @@ function ContactsPage() {
         {/* Filter bar */}
         <div className="mb-4 flex flex-wrap items-center gap-2">
           <div className="relative flex-1 min-w-52 max-w-xs">
-            <SearchIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <SearchIcon size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7F8CAA]" />
             <input
               type="search"
               placeholder="Search contacts…"
-              className="w-full rounded-md border bg-background pl-8 pr-3 py-1.5 text-sm outline-none focus:ring-1 focus:ring-primary placeholder:text-muted-foreground"
+              className="w-full rounded-full border bg-white pl-8 pr-4 py-1.5 text-sm outline-none focus:ring-2 placeholder:text-sm"
+              style={{
+                borderColor: '#c8d5e0',
+                color: '#0f172a',
+              }}
             />
           </div>
-          {(['All channels', 'SMS', 'WhatsApp'] as const).map((opt, i) => (
-            <select key={opt} defaultValue={i === 0 ? '' : opt}
-              className="rounded-md border bg-background px-3 py-1.5 text-sm text-muted-foreground outline-none focus:ring-1 focus:ring-primary">
-              {i === 0 && <option value="">All channels</option>}
-              {i === 1 && <><option value="">All channels</option><option>SMS</option><option>WhatsApp</option></>}
-              {i === 2 && <><option value="">All tags</option><option>Members</option><option>Volunteers</option><option>Donors</option><option>VIP</option></>}
-            </select>
-          ))}
+          <select
+            className="rounded-full border bg-white px-4 py-1.5 text-sm outline-none focus:ring-2 appearance-none pr-8"
+            style={{ borderColor: '#c8d5e0', color: '#7F8CAA' }}
+          >
+            <option value="">All channels</option>
+            <option>SMS</option>
+            <option>WhatsApp</option>
+          </select>
+          <select
+            className="rounded-full border bg-white px-4 py-1.5 text-sm outline-none focus:ring-2 appearance-none pr-8"
+            style={{ borderColor: '#c8d5e0', color: '#7F8CAA' }}
+          >
+            <option value="">All tags</option>
+            <option>Members</option>
+            <option>Volunteers</option>
+            <option>Donors</option>
+            <option>VIP</option>
+          </select>
         </div>
 
-        <div className="rounded-lg border">
+        {/* Table card */}
+        <div
+          className="bg-white rounded-3xl overflow-hidden"
+          style={{ boxShadow: '0 1px 4px #0f172a0a, 0 0 0 1px #0f172a06' }}
+        >
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Channel</TableHead>
-                <TableHead>Tags</TableHead>
-                <TableHead>Last Active</TableHead>
-                <TableHead>Status</TableHead>
+              <TableRow style={{ borderBottomColor: '#7F8CAA14' }}>
+                <TableHead className="text-xs font-bold tracking-[0.18em] uppercase" style={{ color: '#7F8CAA' }}>Name</TableHead>
+                <TableHead className="text-xs font-bold tracking-[0.18em] uppercase" style={{ color: '#7F8CAA' }}>Phone</TableHead>
+                <TableHead className="text-xs font-bold tracking-[0.18em] uppercase" style={{ color: '#7F8CAA' }}>Channel</TableHead>
+                <TableHead className="text-xs font-bold tracking-[0.18em] uppercase" style={{ color: '#7F8CAA' }}>Tags</TableHead>
+                <TableHead className="text-xs font-bold tracking-[0.18em] uppercase" style={{ color: '#7F8CAA' }}>Last Active</TableHead>
+                <TableHead className="text-xs font-bold tracking-[0.18em] uppercase" style={{ color: '#7F8CAA' }}>Status</TableHead>
                 <TableHead className="w-20" />
               </TableRow>
             </TableHeader>
             <TableBody>
               {CONTACTS.map((c) => {
-                const ChannelIcon = c.channel === 'wa' ? WhatsAppIcon : SmsIcon
-                const channelClass = c.channel === 'wa' ? 'text-green-600 dark:text-green-400' : 'text-blue-600 dark:text-blue-400'
+                const isWA = c.channel === 'wa'
+                const ChannelIcon = isWA ? WhatsAppIcon : SmsIcon
                 return (
-                  <TableRow key={c.id}>
+                  <TableRow key={c.id} className="hover:bg-[#7F8CAA04] transition-colors" style={{ borderBottomColor: '#7F8CAA10' }}>
                     <TableCell>
                       <div className="flex items-center gap-2.5">
                         <Avatar className="size-7 flex-shrink-0">
-                          <AvatarFallback className="bg-primary/10 text-primary text-[10px] font-semibold">
+                          <AvatarFallback
+                            className="text-white text-[10px] font-bold"
+                            style={{ backgroundColor: '#4382df' }}
+                          >
                             {initials(c.name)}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="text-sm font-medium">{c.name}</span>
+                        <span className="text-sm font-medium" style={{ color: '#0f172a' }}>{c.name}</span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-xs text-muted-foreground">{c.phone}</TableCell>
+                    <TableCell className="text-xs" style={{ color: '#7F8CAA' }}>{c.phone}</TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className={cn('gap-1 text-xs', channelClass)}>
-                        <ChannelIcon size={10} />
-                        {c.channel === 'wa' ? 'WhatsApp' : 'SMS'}
-                      </Badge>
+                      <span
+                        className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold"
+                        style={{
+                          backgroundColor: isWA ? '#22c55e12' : '#4382df0e',
+                          color: isWA ? '#16a34a' : '#4382df',
+                        }}
+                      >
+                        <ChannelIcon size={9} />
+                        {isWA ? 'WhatsApp' : 'SMS'}
+                      </span>
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-wrap gap-1">
                         {c.tags.map((t) => (
-                          <Badge key={t} variant="outline" className="text-[10px] py-0">{t}</Badge>
+                          <span
+                            key={t}
+                            className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border"
+                            style={{ borderColor: '#7F8CAA28', color: '#7F8CAA' }}
+                          >
+                            {t}
+                          </span>
                         ))}
                       </div>
                     </TableCell>
-                    <TableCell className="text-xs text-muted-foreground">{c.lastActive}</TableCell>
+                    <TableCell className="text-xs" style={{ color: '#7F8CAA' }}>{c.lastActive}</TableCell>
                     <TableCell>
-                      <Badge
-                        variant={c.status === 'subscribed' ? 'secondary' : 'destructive'}
-                        className={cn('text-[10px]', c.status === 'subscribed' && 'text-green-600 dark:text-green-400')}
+                      <span
+                        className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold"
+                        style={
+                          c.status === 'subscribed'
+                            ? { backgroundColor: '#16a34a12', color: '#16a34a' }
+                            : { backgroundColor: '#dc262612', color: '#dc2626' }
+                        }
                       >
+                        <span
+                          className="size-1.5 rounded-full"
+                          style={{ backgroundColor: c.status === 'subscribed' ? '#16a34a' : '#dc2626' }}
+                        />
                         {c.status}
-                      </Badge>
+                      </span>
                     </TableCell>
                     <TableCell>
                       <Link
                         to="/messages/$conversationId"
                         params={{ conversationId: c.id }}
-                        className="text-xs text-primary hover:underline"
+                        className="text-xs font-semibold transition-opacity hover:opacity-70"
+                        style={{ color: '#4382df' }}
                       >
                         Message
                       </Link>
@@ -125,6 +181,6 @@ function ContactsPage() {
           </Table>
         </div>
       </div>
-    </>
+    </div>
   )
 }

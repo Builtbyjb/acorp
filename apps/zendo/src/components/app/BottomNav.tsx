@@ -1,6 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { CalendarDays, Clock, Inbox, MoreHorizontal, Star } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useUIStore } from "@/stores/uiStore";
 
 const TABS = [
@@ -19,28 +18,32 @@ export function BottomNav() {
 
   return (
     <nav
-      className="flex md:hidden fixed bottom-0 inset-x-0 z-50 bg-background/95 backdrop-blur-xl border-t border-border"
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      className="flex md:hidden fixed bottom-0 inset-x-0 z-50 backdrop-blur-md"
+      style={{
+        backgroundColor: "#ebf0f0e8",
+        borderTop: "1px solid #7F8CAA22",
+        paddingBottom: "env(safe-area-inset-bottom)",
+      }}
     >
-      {TABS.map(({ to, label, icon: Icon }) => (
-        <Link
-          key={to}
-          to={to}
-          className={cn(
-            "flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] font-medium transition-colors",
-            isActive(to)
-              ? "text-primary"
-              : "text-muted-foreground"
-          )}
-        >
-          <Icon className={cn("h-5 w-5", isActive(to) && "text-primary")} />
-          {label}
-        </Link>
-      ))}
+      {TABS.map(({ to, label, icon: Icon }) => {
+        const active = isActive(to);
+        return (
+          <Link
+            key={to}
+            to={to}
+            className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] font-medium transition-opacity"
+            style={{ color: active ? "#4382df" : "#7F8CAA" }}
+          >
+            <Icon className="h-5 w-5" />
+            {label}
+          </Link>
+        );
+      })}
 
       {/* More */}
       <button
-        className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] font-medium text-muted-foreground"
+        className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] font-medium transition-opacity hover:opacity-60"
+        style={{ color: "#7F8CAA" }}
         onClick={() => setMoreSheetOpen(true)}
       >
         <MoreHorizontal className="h-5 w-5" />

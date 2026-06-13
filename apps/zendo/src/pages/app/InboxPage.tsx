@@ -10,10 +10,13 @@ export function InboxPage() {
   const [adding, setAdding] = useState(false);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 flex flex-col gap-6">
+    <div className="max-w-3xl mx-auto px-6 py-8 flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Inbox</h1>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="text-xs font-bold tracking-[0.25em] uppercase mb-2" style={{ color: "#7F8CAA" }}>
+          Uncategorised
+        </p>
+        <h1 className="text-3xl font-bold tracking-tight" style={{ color: "#0f172a" }}>Inbox</h1>
+        <p className="text-sm mt-1" style={{ color: "#7F8CAA" }}>
           Tasks not assigned to a project · {inboxTasks.length} task{inboxTasks.length !== 1 ? "s" : ""}
         </p>
       </div>
@@ -25,7 +28,8 @@ export function InboxPage() {
       />
 
       <button
-        className="hidden md:flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="hidden md:flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-60"
+        style={{ color: "#7F8CAA" }}
         onClick={() => setAdding(true)}
       >
         + Add to inbox

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Pause, Play, RotateCcw, SkipForward, Settings2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -18,12 +17,12 @@ const RING_R = 90;
 const RING_CIRC = 2 * Math.PI * RING_R;
 
 function TimerRing({ progress, mode }: { progress: number; mode: TimerMode }) {
-  const ringColor = mode === "focus" ? "hsl(var(--primary))" : "hsl(38 92% 60%)";
+  const ringColor = mode === "focus" ? "#4382df" : "#7F8CAA";
   const offset = RING_CIRC * (1 - progress);
 
   return (
     <svg width="220" height="220" viewBox="0 0 220 220" className="-rotate-90" aria-hidden="true">
-      <circle cx="110" cy="110" r={RING_R} fill="none" stroke="hsl(var(--border))" strokeWidth="10" />
+      <circle cx="110" cy="110" r={RING_R} fill="none" stroke="#7F8CAA18" strokeWidth="10" />
       <circle
         cx="110" cy="110" r={RING_R}
         fill="none"
@@ -34,7 +33,7 @@ function TimerRing({ progress, mode }: { progress: number; mode: TimerMode }) {
         strokeDashoffset={offset}
         style={{
           transition: "stroke-dashoffset 0.8s linear",
-          filter: `drop-shadow(0 0 10px ${ringColor})`,
+          filter: `drop-shadow(0 0 10px ${ringColor}60)`,
         }}
       />
     </svg>
@@ -98,7 +97,13 @@ function PomodoroSettings({ open, onClose }: { open: boolean; onClose: () => voi
           />
         </div>
 
-        <Button className="w-full rounded-xl" onClick={onClose}>Save</Button>
+        <button
+          className="w-full inline-flex items-center justify-center py-3 text-sm font-semibold text-white rounded-full transition-all hover:opacity-92 active:scale-95"
+          style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+          onClick={onClose}
+        >
+          Save settings
+        </button>
       </div>
     </ResponsiveModal>
   );
@@ -119,8 +124,11 @@ function TaskPicker() {
         Focusing on
       </p>
       {activeTask ? (
-        <div className="flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-3 py-2">
-          <span className="text-sm flex-1 truncate text-foreground">{activeTask.title}</span>
+        <div
+            className="flex items-center gap-2 rounded-xl px-3 py-2"
+            style={{ border: "1px solid #4382df2e", backgroundColor: "#4382df0e" }}
+          >
+            <span className="text-sm flex-1 truncate" style={{ color: "#0f172a" }}>{activeTask.title}</span>
           <button
             onClick={() => setActiveTask(undefined)}
             className="text-muted-foreground hover:text-foreground text-xs"
@@ -131,7 +139,8 @@ function TaskPicker() {
       ) : (
         <div className="relative">
           <select
-            className="w-full rounded-xl border border-border bg-card text-sm px-3 py-2 appearance-none text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary/40"
+            className="w-full rounded-xl text-sm px-3 py-2 appearance-none focus:outline-none"
+            style={{ border: "1px solid #7F8CAA45", backgroundColor: "#ffffff", color: "#7F8CAA" }}
             value=""
             onChange={(e) => setActiveTask(e.target.value || undefined)}
           >
@@ -176,7 +185,7 @@ function SessionHistory() {
               className={cn(
                 "h-5 w-5 rounded-md text-[9px] flex items-center justify-center font-bold",
                 s.interrupted ? "opacity-30" : "",
-                s.mode === "focus" ? "bg-primary/30 text-primary" : "bg-amber-500/30 text-amber-400"
+                s.mode === "focus" ? "bg-primary/30 text-primary" : "bg-secondary/30 text-secondary"
               )}
             >
               {s.mode === "focus" ? "F" : s.mode === "short" ? "S" : "L"}
@@ -233,7 +242,7 @@ export function PomodoroPage() {
   const cycle = (cycleCount % settings.longBreakAfter) + 1;
 
   return (
-    <div className="flex flex-col items-center justify-start gap-8 px-4 py-8 min-h-full">
+    <div className="flex flex-col items-center justify-start gap-8 px-6 py-8 min-h-full">
       {/* Mode tabs */}
       <Tabs value={mode} onValueChange={(v) => setMode(v as TimerMode)}>
         <TabsList className="rounded-full">
@@ -263,31 +272,41 @@ export function PomodoroPage() {
 
       {/* Controls */}
       <div className="flex items-center gap-3">
-        <Button variant="outline" size="icon" className="h-10 w-10 rounded-full" onClick={reset} title="Reset">
+        <button
+          className="h-10 w-10 rounded-full flex items-center justify-center transition-opacity hover:opacity-60 active:scale-95"
+          style={{ border: "1px solid #7F8CAA28", color: "#7F8CAA", backgroundColor: "#ffffff" }}
+          onClick={reset}
+          title="Reset"
+        >
           <RotateCcw className="h-4 w-4" />
-        </Button>
+        </button>
 
         {state === "running" ? (
-          <Button
-            size="icon"
-            className="h-14 w-14 rounded-full shadow-[0_0_24px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_36px_hsl(var(--primary)/0.65)]"
+          <button
+            className="h-14 w-14 rounded-full flex items-center justify-center text-white transition-all active:scale-95"
+            style={{ backgroundColor: "#4382df", boxShadow: "0 4px 24px #4382df50" }}
             onClick={pause}
           >
             <Pause className="h-6 w-6" />
-          </Button>
+          </button>
         ) : (
-          <Button
-            size="icon"
-            className="h-14 w-14 rounded-full shadow-[0_0_24px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_36px_hsl(var(--primary)/0.65)]"
+          <button
+            className="h-14 w-14 rounded-full flex items-center justify-center text-white transition-all active:scale-95"
+            style={{ backgroundColor: "#4382df", boxShadow: "0 4px 24px #4382df50" }}
             onClick={start}
           >
             <Play className="h-6 w-6 translate-x-0.5" />
-          </Button>
+          </button>
         )}
 
-        <Button variant="outline" size="icon" className="h-10 w-10 rounded-full" onClick={skipToNext} title="Skip">
+        <button
+          className="h-10 w-10 rounded-full flex items-center justify-center transition-opacity hover:opacity-60 active:scale-95"
+          style={{ border: "1px solid #7F8CAA28", color: "#7F8CAA", backgroundColor: "#ffffff" }}
+          onClick={skipToNext}
+          title="Skip"
+        >
           <SkipForward className="h-4 w-4" />
-        </Button>
+        </button>
       </div>
 
       {/* Task picker */}
@@ -297,15 +316,14 @@ export function PomodoroPage() {
       <SessionHistory />
 
       {/* Settings button */}
-      <Button
-        variant="ghost"
-        size="sm"
-        className="gap-2 text-muted-foreground mt-auto"
+      <button
+        className="inline-flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-60 mt-auto"
+        style={{ color: "#7F8CAA" }}
         onClick={() => setSettingsOpen(true)}
       >
         <Settings2 className="h-4 w-4" />
         Settings
-      </Button>
+      </button>
 
       <PomodoroSettings open={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>

@@ -46,46 +46,59 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ACorp Design Language — Precision Craft
+   Cloud #ebf0f0 | Slate #7F8CAA | Cobalt #4382df | Near-black #0f172a */
 :root {
-  --background: oklch(0.9793 0.0029 84.56);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(0.9793 0.0029 84.56);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(0.9793 0.0029 84.56);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.0766 0.0282 52.94);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.93 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.8196 0.0104 67.7);
-  --accent-foreground: oklch(0.205 0 0);
+  /* Background: Cloud #ebf0f0 */
+  --background: oklch(0.944 0.008 194.77);
+  /* Foreground: Near-black #0f172a */
+  --foreground: oklch(0.145 0.028 254.11);
+  /* Card: White #ffffff */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0.028 254.11);
+  /* Popover: White */
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0.028 254.11);
+  /* Primary: Cobalt #4382df */
+  --primary: oklch(0.567 0.175 254.62);
+  --primary-foreground: oklch(1 0 0);
+  /* Secondary: Slate #7F8CAA */
+  --secondary: oklch(0.604 0.046 236.44);
+  --secondary-foreground: oklch(1 0 0);
+  /* Muted: slightly darker cloud */
+  --muted: oklch(0.915 0.006 194.77);
+  --muted-foreground: oklch(0.604 0.046 236.44);
+  /* Accent: subtle cobalt tint */
+  --accent: oklch(0.93 0.012 254.62);
+  --accent-foreground: oklch(0.145 0.028 254.11);
+  /* Destructive */
   --destructive: oklch(0.6397 0.2453 27.325);
-  --border: oklch(0.68 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.508 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  /* Border: Slate at low opacity */
+  --border: oklch(0.604 0.046 236.44 / 0.22);
+  --input: oklch(0.915 0.006 194.77);
+  --ring: oklch(0.567 0.175 254.62 / 0.5);
+  /* Charts: cobalt-toned scale */
+  --chart-1: oklch(0.567 0.175 254.62);
+  --chart-2: oklch(0.604 0.046 236.44);
+  --chart-3: oklch(0.75 0.08 240);
+  --chart-4: oklch(0.45 0.12 254.62);
+  --chart-5: oklch(0.35 0.06 250);
   --radius: 0.5rem;
-  --sidebar: oklch(0.93 0.003 84.56);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.9793 0.0029 84.56);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.822 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Sidebar: slightly darker cloud */
+  --sidebar: oklch(0.93 0.007 194.77);
+  --sidebar-foreground: oklch(0.145 0.028 254.11);
+  --sidebar-primary: oklch(0.567 0.175 254.62);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.91 0.01 194.77);
+  --sidebar-accent-foreground: oklch(0.145 0.028 254.11);
+  --sidebar-border: oklch(0.604 0.046 236.44 / 0.18);
+  --sidebar-ring: oklch(0.567 0.175 254.62 / 0.4);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    /*overscroll-behavior: none;*/
-    font-size: 0.9rem /* 15px */;
+    font-size: 0.9rem;
     font-weight: 400;
     line-height: 1.8rem;
   }
@@ -110,6 +123,51 @@
   }
 }
 
+/* ── ACorp Animation System ────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease both;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── Print ─────────────────────────────────────────────── */
 @media print {
   @page {
     size: A4 portrait;

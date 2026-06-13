@@ -1,16 +1,14 @@
-import { Star } from "lucide-react";
-
 const testimonials = [
   {
     quote:
-      "It has completely transformed how I manage my freelance business. I used to spend hours on invoicing, now it takes minutes.",
+      "It completely transformed how I manage my freelance business. I used to spend hours on invoicing — now it takes minutes.",
     author: "Sarah Chen",
     role: "Freelance Designer",
     avatar: "SC",
   },
   {
     quote:
-      "The automatic reminders alone have saved me thousands in unpaid invoices. My clients actually pay on time now!",
+      "The automatic reminders alone have saved me thousands in unpaid invoices. My clients actually pay on time now.",
     author: "Marcus Johnson",
     role: "Web Developer",
     avatar: "MJ",
@@ -24,33 +22,86 @@ const testimonials = [
   },
 ];
 
+function StarRating() {
+  return (
+    <div className="flex items-center gap-1 mb-5">
+      {[...Array(5)].map((_, i) => (
+        <svg
+          key={i}
+          width="14"
+          height="14"
+          viewBox="0 0 14 14"
+          fill="#4382df"
+          stroke="#4382df"
+          strokeWidth="0.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M7 1l1.6 3.3 3.6.5-2.6 2.5.6 3.6L7 9.3l-3.2 1.7.6-3.6L1.8 4.8l3.6-.5z" />
+        </svg>
+      ))}
+    </div>
+  );
+}
+
 export default function Testimonials() {
   return (
-    <section id="testimonials" className="py-12 lg:py-16">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center mb-16">
-          <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Testimonials</p>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground text-balance">
-            Loved by freelancers and small businesses everywhere
+    <section id="testimonials" className="pb-24">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Section header */}
+        <div className="mb-12">
+          <p
+            className="animate-fade-up text-xs font-bold tracking-[0.25em] uppercase mb-2.5"
+            style={{ color: "#7F8CAA", animationDelay: "0.05s" }}
+          >
+            Testimonials
+          </p>
+          <h2
+            className="animate-fade-up text-4xl font-bold tracking-tight"
+            style={{ color: "#0f172a", animationDelay: "0.12s" }}
+          >
+            Loved by freelancers everywhere.
           </h2>
+          <p
+            className="animate-fade-up text-lg max-w-xl leading-relaxed mt-3"
+            style={{ color: "#7F8CAA", animationDelay: "0.18s" }}
+          >
+            Real businesses, real results. Here's what people say after switching.
+          </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3">
-          {testimonials.map((testimonial) => (
-            <div key={testimonial.author} className="bg-card rounded-2xl border border-border p-8">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 fill-primary text-primary" />
-                ))}
-              </div>
-              <blockquote className="text-foreground leading-relaxed mb-6">&quot;{testimonial.quote}&quot;</blockquote>
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {testimonials.map((t, i) => (
+            <div
+              key={t.author}
+              className="animate-fade-up bg-white rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
+              style={{
+                boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07",
+                animationDelay: `${0.1 + i * 0.1}s`,
+              }}
+            >
+              <StarRating />
+              <blockquote
+                className="text-sm leading-relaxed mb-6"
+                style={{ color: "#0f172a", lineHeight: "1.7" }}
+              >
+                "{t.quote}"
+              </blockquote>
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center text-sm font-semibold text-primary-foreground">
-                  {testimonial.avatar}
+                <div
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+                  style={{ backgroundColor: "#4382df" }}
+                >
+                  {t.avatar}
                 </div>
                 <div>
-                  <p className="font-semibold text-foreground">{testimonial.author}</p>
-                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                  <p className="text-sm font-semibold" style={{ color: "#0f172a" }}>
+                    {t.author}
+                  </p>
+                  <p className="text-xs" style={{ color: "#7F8CAA" }}>
+                    {t.role}
+                  </p>
                 </div>
               </div>
             </div>

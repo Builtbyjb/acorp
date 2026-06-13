@@ -1,11 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { cn } from '@/lib/utils'
 import { SmsIcon, WhatsAppIcon, SendIcon } from '../../-icons.tsx'
 
 export const Route = createFileRoute('/_auth/messages/$conversationId')({
@@ -61,42 +58,71 @@ function ConversationPage() {
   const conv = MOCK[conversationId] ?? getFallback(conversationId)
   const [draft, setDraft] = useState('')
 
-  const ChannelIcon = conv.channel === 'wa' ? WhatsAppIcon : SmsIcon
-  const channelLabel = conv.channel === 'wa' ? 'WhatsApp' : 'SMS'
-  const channelClass = conv.channel === 'wa' ? 'text-green-600 dark:text-green-400' : 'text-blue-600 dark:text-blue-400'
+  const isWA = conv.channel === 'wa'
+  const ChannelIcon = isWA ? WhatsAppIcon : SmsIcon
+  const channelLabel = isWA ? 'WhatsApp' : 'SMS'
 
   return (
-    <>
+    <div className="flex flex-col h-full overflow-hidden bg-white">
       {/* Header */}
-      <div className="flex items-center gap-3 border-b px-5 py-3 flex-shrink-0">
-        <Avatar className="size-8">
-          <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
+      <div
+        className="flex items-center gap-3 px-5 py-3 flex-shrink-0"
+        style={{ borderBottom: '1px solid #7F8CAA14' }}
+      >
+        <Avatar className="size-9">
+          <AvatarFallback
+            className="text-white text-xs font-bold"
+            style={{ backgroundColor: '#4382df' }}
+          >
             {initials(conv.name)}
           </AvatarFallback>
         </Avatar>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-foreground">{conv.name}</p>
-          <p className="text-xs text-muted-foreground">{conv.phone}</p>
+          <p className="text-sm font-bold" style={{ color: '#0f172a' }}>{conv.name}</p>
+          <p className="text-xs" style={{ color: '#7F8CAA' }}>{conv.phone}</p>
         </div>
-        <Badge variant="secondary" className={cn('gap-1.5 text-xs', channelClass)}>
+        <span
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold"
+          style={{
+            backgroundColor: isWA ? '#22c55e12' : '#4382df0e',
+            color: isWA ? '#16a34a' : '#4382df',
+          }}
+        >
           <ChannelIcon size={11} />
           {channelLabel}
-        </Badge>
+        </span>
       </div>
 
       {/* Thread */}
-      <ScrollArea className="flex-1 p-5">
+      <ScrollArea className="flex-1 p-5" style={{ backgroundColor: '#ebf0f0' }}>
         <div className="flex flex-col gap-3">
           {conv.messages.map((msg) => (
-            <div key={msg.id} className={cn('flex', msg.direction === 'outgoing' ? 'justify-end' : 'justify-start')}>
-              <div className={cn(
-                'max-w-[70%] space-y-1 rounded-2xl px-4 py-2.5 text-sm',
-                msg.direction === 'outgoing'
-                  ? 'rounded-br-sm bg-primary text-primary-foreground'
-                  : 'rounded-bl-sm bg-muted text-foreground',
-              )}>
+            <div
+              key={msg.id}
+              className={`flex ${msg.direction === 'outgoing' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className="max-w-[70%] space-y-1 rounded-2xl px-4 py-2.5 text-sm"
+                style={
+                  msg.direction === 'outgoing'
+                    ? {
+                        backgroundColor: '#4382df',
+                        color: '#ffffff',
+                        borderBottomRightRadius: '4px',
+                      }
+                    : {
+                        backgroundColor: '#ffffff',
+                        color: '#0f172a',
+                        borderBottomLeftRadius: '4px',
+                        boxShadow: '0 1px 2px #0f172a0a',
+                      }
+                }
+              >
                 <p className="leading-relaxed">{msg.text}</p>
-                <p className={cn('text-[10px]', msg.direction === 'outgoing' ? 'text-primary-foreground/60' : 'text-muted-foreground')}>
+                <p
+                  className="text-[10px]"
+                  style={{ color: msg.direction === 'outgoing' ? '#ffffff99' : '#7F8CAA' }}
+                >
                   {msg.time}
                 </p>
               </div>
@@ -105,24 +131,40 @@ function ConversationPage() {
         </div>
       </ScrollArea>
 
-      {/* Input */}
-      <div className="flex items-end gap-2 border-t p-3 flex-shrink-0">
-        <Badge variant="secondary" className={cn('mb-0.5 flex-shrink-0 gap-1.5 text-[11px]', channelClass)}>
-          <ChannelIcon size={10} />
+      {/* Input bar */}
+      <div
+        className="flex items-end gap-2 px-4 py-3 flex-shrink-0 bg-white"
+        style={{ borderTop: '1px solid #7F8CAA14' }}
+      >
+        <span
+          className="mb-0.5 flex-shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold"
+          style={{
+            backgroundColor: isWA ? '#22c55e12' : '#4382df0e',
+            color: isWA ? '#16a34a' : '#4382df',
+          }}
+        >
+          <ChannelIcon size={9} />
           {channelLabel}
-        </Badge>
+        </span>
         <Textarea
           placeholder="Type a message…"
           rows={1}
           value={draft}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDraft(e.target.value)}
-          onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); setDraft('') } }}
-          className="flex-1 min-h-0 resize-none text-sm"
+          onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); setDraft('') }
+          }}
+          className="flex-1 min-h-0 resize-none text-sm rounded-2xl border"
+          style={{ borderColor: '#c8d5e0' }}
         />
-        <Button size="sm" className="flex-shrink-0" onClick={() => setDraft('')}>
-          <SendIcon size={14} />
-        </Button>
+        <button
+          onClick={() => setDraft('')}
+          className="flex-shrink-0 flex size-8 items-center justify-center rounded-full text-white transition-all hover:opacity-90 active:scale-95"
+          style={{ backgroundColor: '#4382df', boxShadow: '0 2px 10px #4382df35' }}
+        >
+          <SendIcon size={13} />
+        </button>
       </div>
-    </>
+    </div>
   )
 }

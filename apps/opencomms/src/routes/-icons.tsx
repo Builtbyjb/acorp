@@ -6,6 +6,24 @@ interface IconProps {
   className?: string
 }
 
+export function ArrowRight({ size = 14 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 14 14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="transition-transform group-hover:translate-x-0.5"
+    >
+      <path d="M2 7h10M7 2l5 5-5 5" />
+    </svg>
+  )
+}
+
 export function DashboardIcon({ size = 18, className }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none"

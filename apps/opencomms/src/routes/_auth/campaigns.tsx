@@ -1,9 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { cn } from '@/lib/utils'
 import { PlusIcon, SmsIcon, WhatsAppIcon } from '../-icons.tsx'
 
 export const Route = createFileRoute('/_auth/campaigns')({
@@ -20,92 +16,143 @@ const CAMPAIGNS = [
   { id: '7', name: 'May Monthly Update',            channel: 'sms', status: 'sent',      recipients: 1102, delivered: 1088, failed: 14, sentAt: 'May 10 · 9:00 AM'  },
 ]
 
-const STATUS: Record<string, { label: string; className: string }> = {
-  sent:      { label: 'Sent',      className: 'text-green-600 dark:text-green-400' },
-  scheduled: { label: 'Scheduled', className: 'text-yellow-600 dark:text-yellow-400' },
-  draft:     { label: 'Draft',     className: 'text-muted-foreground' },
-  failed:    { label: 'Failed',    className: 'text-destructive' },
+const STATUS_STYLE: Record<string, { bg: string; color: string; dot: string }> = {
+  sent:      { bg: '#16a34a12', color: '#16a34a', dot: '#16a34a' },
+  scheduled: { bg: '#f59e0b12', color: '#b45309', dot: '#f59e0b' },
+  draft:     { bg: '#7F8CAA12', color: '#7F8CAA', dot: '#7F8CAA' },
+  failed:    { bg: '#dc262612', color: '#dc2626', dot: '#dc2626' },
 }
 
 const SUMMARY = [
-  { label: 'Total campaigns',       value: String(CAMPAIGNS.length)                                                  },
-  { label: 'Messages sent (all)',   value: CAMPAIGNS.reduce((a, c) => a + c.delivered, 0).toLocaleString()           },
-  { label: 'Avg delivery rate',     value: '98.3%'                                                                   },
-  { label: 'Scheduled',             value: String(CAMPAIGNS.filter((c) => c.status === 'scheduled').length)          },
+  { label: 'Total campaigns',       value: String(CAMPAIGNS.length)                                         },
+  { label: 'Messages sent',         value: CAMPAIGNS.reduce((a, c) => a + c.delivered, 0).toLocaleString()  },
+  { label: 'Avg delivery rate',     value: '98.3%'                                                          },
+  { label: 'Scheduled',             value: String(CAMPAIGNS.filter((c) => c.status === 'scheduled').length) },
 ]
 
 function CampaignsPage() {
   return (
-    <>
-      <header className="flex h-14 items-center justify-between border-b px-6 flex-shrink-0">
-        <h1 className="text-sm font-semibold text-foreground">Campaigns</h1>
-        <Button size="sm"><PlusIcon size={13} className="mr-1.5" />New campaign</Button>
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Header */}
+      <header
+        className="flex h-14 items-center justify-between px-6 flex-shrink-0 bg-white"
+        style={{ borderBottom: '1px solid #7F8CAA18' }}
+      >
+        <div>
+          <p className="text-xs font-bold tracking-[0.22em] uppercase" style={{ color: '#7F8CAA' }}>Broadcasting</p>
+          <h1 className="text-sm font-bold" style={{ color: '#0f172a' }}>Campaigns</h1>
+        </div>
+        <button
+          className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white rounded-full transition-all hover:opacity-90 active:scale-95"
+          style={{ backgroundColor: '#4382df', boxShadow: '0 2px 12px #4382df35' }}
+        >
+          <PlusIcon size={11} />New campaign
+        </button>
       </header>
 
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 overflow-y-auto p-6 space-y-5">
         {/* Summary strip */}
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {SUMMARY.map((s) => (
-            <Card key={s.label}>
-              <CardHeader className="pb-1 pt-4 px-4">
-                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{s.label}</p>
-              </CardHeader>
-              <CardContent className="px-4 pb-4">
-                <p className="text-2xl font-bold tracking-tight text-foreground">{s.value}</p>
-              </CardContent>
-            </Card>
+          {SUMMARY.map((s, i) => (
+            <div
+              key={s.label}
+              className="animate-fade-up bg-white rounded-3xl p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+              style={{
+                boxShadow: '0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07',
+                animationDelay: `${0.05 + i * 0.07}s`,
+              }}
+            >
+              <p
+                className="text-xs font-bold tracking-[0.18em] uppercase mb-2"
+                style={{ color: '#7F8CAA' }}
+              >
+                {s.label}
+              </p>
+              <p
+                className="text-2xl font-extrabold tracking-tight"
+                style={{ color: '#0f172a', letterSpacing: '-0.03em' }}
+              >
+                {s.value}
+              </p>
+            </div>
           ))}
         </div>
 
-        <div className="rounded-lg border">
-          <div className="flex items-center justify-between border-b px-5 py-3">
-            <CardTitle className="text-sm font-semibold">All campaigns</CardTitle>
+        {/* Table card */}
+        <div
+          className="animate-fade-up bg-white rounded-3xl overflow-hidden"
+          style={{
+            boxShadow: '0 1px 4px #0f172a0a, 0 0 0 1px #0f172a06',
+            animationDelay: '0.32s',
+          }}
+        >
+          <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid #7F8CAA14' }}>
+            <div>
+              <p className="text-xs font-bold tracking-[0.22em] uppercase mb-0.5" style={{ color: '#7F8CAA' }}>History</p>
+              <h2 className="text-sm font-bold" style={{ color: '#0f172a' }}>All Campaigns</h2>
+            </div>
           </div>
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Campaign</TableHead>
-                <TableHead>Channel</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Recipients</TableHead>
-                <TableHead className="text-right">Delivered</TableHead>
-                <TableHead className="text-right">Failed</TableHead>
-                <TableHead>Sent / Scheduled</TableHead>
+              <TableRow style={{ borderBottomColor: '#7F8CAA14' }}>
+                <TableHead className="text-xs font-bold tracking-[0.18em] uppercase" style={{ color: '#7F8CAA' }}>Campaign</TableHead>
+                <TableHead className="text-xs font-bold tracking-[0.18em] uppercase" style={{ color: '#7F8CAA' }}>Channel</TableHead>
+                <TableHead className="text-xs font-bold tracking-[0.18em] uppercase" style={{ color: '#7F8CAA' }}>Status</TableHead>
+                <TableHead className="text-xs font-bold tracking-[0.18em] uppercase text-right" style={{ color: '#7F8CAA' }}>Recipients</TableHead>
+                <TableHead className="text-xs font-bold tracking-[0.18em] uppercase text-right" style={{ color: '#7F8CAA' }}>Delivered</TableHead>
+                <TableHead className="text-xs font-bold tracking-[0.18em] uppercase text-right" style={{ color: '#7F8CAA' }}>Failed</TableHead>
+                <TableHead className="text-xs font-bold tracking-[0.18em] uppercase" style={{ color: '#7F8CAA' }}>Sent / Scheduled</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {CAMPAIGNS.map((c) => {
-                const ChannelIcon = c.channel === 'wa' ? WhatsAppIcon : SmsIcon
-                const channelClass = c.channel === 'wa' ? 'text-green-600 dark:text-green-400' : 'text-blue-600 dark:text-blue-400'
+                const isWA = c.channel === 'wa'
+                const ChannelIcon = isWA ? WhatsAppIcon : SmsIcon
                 const rate = c.recipients > 0 ? `${Math.round((c.delivered / c.recipients) * 100)}%` : null
-                const st = STATUS[c.status] ?? STATUS.draft
+                const st = STATUS_STYLE[c.status] ?? STATUS_STYLE.draft
                 return (
-                  <TableRow key={c.id}>
-                    <TableCell className="font-medium text-sm">{c.name}</TableCell>
+                  <TableRow
+                    key={c.id}
+                    className="hover:bg-[#7F8CAA04] transition-colors"
+                    style={{ borderBottomColor: '#7F8CAA10' }}
+                  >
+                    <TableCell className="font-semibold text-sm" style={{ color: '#0f172a' }}>{c.name}</TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className={cn('gap-1 text-xs', channelClass)}>
-                        <ChannelIcon size={10} />
-                        {c.channel === 'wa' ? 'WhatsApp' : 'SMS'}
-                      </Badge>
+                      <span
+                        className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold"
+                        style={{
+                          backgroundColor: isWA ? '#22c55e12' : '#4382df0e',
+                          color: isWA ? '#16a34a' : '#4382df',
+                        }}
+                      >
+                        <ChannelIcon size={9} />
+                        {isWA ? 'WhatsApp' : 'SMS'}
+                      </span>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className={cn('text-xs', st.className)}>{st.label}</Badge>
+                      <span
+                        className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold"
+                        style={{ backgroundColor: st.bg, color: st.color }}
+                      >
+                        <span className="size-1.5 rounded-full" style={{ backgroundColor: st.dot }} />
+                        {c.status.charAt(0).toUpperCase() + c.status.slice(1)}
+                      </span>
                     </TableCell>
-                    <TableCell className="text-right text-sm text-muted-foreground">
+                    <TableCell className="text-right text-sm" style={{ color: '#7F8CAA' }}>
                       {c.recipients > 0 ? c.recipients.toLocaleString() : '—'}
                     </TableCell>
                     <TableCell className="text-right">
                       {c.delivered > 0 ? (
-                        <span className="text-sm text-foreground">
+                        <span className="text-sm" style={{ color: '#0f172a' }}>
                           {c.delivered.toLocaleString()}
-                          {rate && <span className="ml-1.5 text-xs text-muted-foreground">{rate}</span>}
+                          {rate && <span className="ml-1.5 text-xs" style={{ color: '#7F8CAA' }}>{rate}</span>}
                         </span>
-                      ) : <span className="text-sm text-muted-foreground">—</span>}
+                      ) : <span className="text-sm" style={{ color: '#7F8CAA' }}>—</span>}
                     </TableCell>
-                    <TableCell className={cn('text-right text-sm', c.failed > 0 ? 'text-destructive' : 'text-muted-foreground')}>
+                    <TableCell className="text-right text-sm" style={{ color: c.failed > 0 ? '#dc2626' : '#7F8CAA' }}>
                       {c.delivered > 0 ? c.failed : '—'}
                     </TableCell>
-                    <TableCell className="text-xs text-muted-foreground">{c.sentAt}</TableCell>
+                    <TableCell className="text-xs" style={{ color: '#7F8CAA' }}>{c.sentAt}</TableCell>
                   </TableRow>
                 )
               })}
@@ -113,6 +160,6 @@ function CampaignsPage() {
           </Table>
         </div>
       </div>
-    </>
+    </div>
   )
 }

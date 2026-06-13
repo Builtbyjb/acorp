@@ -2,16 +2,48 @@ import { useState, useEffect } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { SubscriptionPlanSchema } from "@shared/lib/zod-schema";
 import { useSubscriptionPlan } from "@/hooks/useSubscriptionPlan";
-import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import * as z from "zod";
 
 type Plan = z.infer<typeof SubscriptionPlanSchema>;
 
+function ArrowRight({ size = 14 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 14 14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="transition-transform group-hover:translate-x-0.5"
+    >
+      <path d="M2 7h10M7 2l5 5-5 5" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg
+      width="10"
+      height="10"
+      viewBox="0 0 10 10"
+      fill="none"
+      stroke="#4382df"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M2 5l2.5 2.5L8 2.5" />
+    </svg>
+  );
+}
+
 function RouteComponent() {
   const [plans, setPlans] = useState<Plan[]>([]);
-
   const { fetchPlan } = useSubscriptionPlan();
   const navigate = useNavigate();
 
@@ -28,67 +60,297 @@ function RouteComponent() {
       navigate({ to: "/signup" });
       return;
     }
-
     navigate({ to: `/settings/billing/subscribe?plan=${plan.planCode}` });
   };
 
   return (
-    <section id="pricing" className="py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center mb-16">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl text-balance">
-            Simple, transparent pricing
-          </h2>
-          <p className="mt-4 text-lg text-muted-foreground text-pretty">
-            Start free, upgrade when you need to. No hidden fees, ever.
+    <div>
+      {/* Hero section */}
+      <section className="relative overflow-hidden pt-20 pb-16">
+        {/* Dot-grid */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: "radial-gradient(circle, #7F8CAA22 1.5px, transparent 1.5px)",
+            backgroundSize: "28px 28px",
+          }}
+        />
+        {/* Glow blob */}
+        <div
+          className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl pointer-events-none"
+          style={{ backgroundColor: "#4382df0e" }}
+        />
+
+        <div className="relative max-w-7xl mx-auto px-6">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 mb-8">
+            <span
+              className="text-xs font-bold tracking-[0.2em] uppercase cursor-pointer hover:opacity-60 transition-opacity"
+              style={{ color: "#7F8CAA" }}
+              onClick={() => navigate({ to: "/" })}
+            >
+              Home
+            </span>
+            <span style={{ color: "#7F8CAA28" }}>/</span>
+            <span
+              className="text-xs font-bold tracking-[0.2em] uppercase"
+              style={{ color: "#4382df" }}
+            >
+              Pricing
+            </span>
+          </div>
+
+          {/* Eyebrow pill */}
+          <div
+            className="animate-fade-up inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold tracking-[0.18em] uppercase mb-6"
+            style={{
+              backgroundColor: "#ffffff70",
+              borderColor: "#7F8CAA28",
+              color: "#7F8CAA",
+              animationDelay: "0.05s",
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#4382df" }} />
+            Pricing
+          </div>
+
+          <h1
+            className="animate-fade-up font-extrabold tracking-tight mb-4"
+            style={{
+              fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+              letterSpacing: "-0.03em",
+              color: "#0f172a",
+              lineHeight: "1",
+              animationDelay: "0.12s",
+            }}
+          >
+            Simple, transparent{" "}
+            <span style={{ WebkitTextStroke: "2px #4382df", WebkitTextFillColor: "transparent" }}>
+              pricing.
+            </span>
+          </h1>
+
+          <p
+            className="animate-fade-up text-lg max-w-xl leading-relaxed mt-4"
+            style={{ color: "#7F8CAA", animationDelay: "0.22s" }}
+          >
+            Start free, upgrade when you need to. No hidden fees, no lock-in, ever.
           </p>
         </div>
-        <div className="grid gap-8 lg:grid-cols-3">
-          {plans.map((plan) => (
-            <div
-              key={plan.id}
-              className={`relative rounded-2xl border p-8 ${
-                plan.featured ? "border-primary bg-card shadow-xl scale-105" : "border-border bg-card"
-              }`}
+      </section>
+
+      {/* Plans section */}
+      <section className="pb-24">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Section label */}
+          <div className="mb-12">
+            <p
+              className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5"
+              style={{ color: "#7F8CAA" }}
             >
-              {plan.featured && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center rounded-full bg-primary px-4 py-1 text-sm font-semibold text-primary-foreground">
-                    Most popular
-                  </span>
+              Plans
+            </p>
+            <h2
+              className="text-4xl font-bold tracking-tight"
+              style={{ color: "#0f172a" }}
+            >
+              Choose your plan.
+            </h2>
+          </div>
+
+          {plans.length === 0 ? (
+            /* Skeleton loading state */
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {[...Array(3)].map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-white rounded-3xl p-7 animate-pulse"
+                  style={{ boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07", minHeight: "360px" }}
+                >
+                  <div className="h-4 rounded-full mb-3" style={{ backgroundColor: "#7F8CAA14", width: "40%" }} />
+                  <div className="h-3 rounded-full mb-6" style={{ backgroundColor: "#7F8CAA0a", width: "70%" }} />
+                  <div className="h-8 rounded-full mb-6" style={{ backgroundColor: "#7F8CAA14", width: "55%" }} />
+                  {[...Array(4)].map((_, j) => (
+                    <div key={j} className="h-3 rounded-full mb-3" style={{ backgroundColor: "#7F8CAA0a" }} />
+                  ))}
                 </div>
-              )}
-              <div className="mb-6">
-                <h3 className="text-xl font-semibold text-foreground">{plan.name}</h3>
-                <p className="text-sm text-muted-foreground mt-1">{plan.description}</p>
-              </div>
-              <div className="mb-6">
-                <span className="text-3xl font-medium text-foreground">
-                  {formatCurrency(plan.amount, plan.currency)}
-                </span>
-                {plan.interval && <span className="text-muted-foreground">{plan.interval}</span>}
-              </div>
-              <ul className="space-y-3 mb-8">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                    <span className="text-muted-foreground">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <Button
-                className="w-full"
-                disabled={plan.disabled}
-                variant={plan.featured ? "default" : "outline"}
-                onClick={() => handleSubscribe(plan)}
-              >
-                {plan.cta}
-              </Button>
+              ))}
             </div>
-          ))}
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {plans.map((plan, i) => (
+                <div
+                  key={plan.id}
+                  className="animate-fade-up relative bg-white rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
+                  style={{
+                    boxShadow: plan.featured
+                      ? "0 4px 32px #4382df18, 0 0 0 2px #4382df40"
+                      : "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07",
+                    animationDelay: `${0.1 + i * 0.1}s`,
+                  }}
+                >
+                  {plan.featured && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <span
+                        className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold text-white"
+                        style={{ backgroundColor: "#4382df", boxShadow: "0 4px 12px #4382df35" }}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-white/70" />
+                        Most popular
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Plan name + description */}
+                  <div className="mb-5 mt-2">
+                    <h3
+                      className="text-xl font-bold tracking-tight mb-1"
+                      style={{ color: "#0f172a" }}
+                    >
+                      {plan.name}
+                    </h3>
+                    <p className="text-sm leading-relaxed" style={{ color: "#7F8CAA" }}>
+                      {plan.description}
+                    </p>
+                  </div>
+
+                  {/* Price */}
+                  <div className="mb-6 pb-6 border-b" style={{ borderColor: "#7F8CAA18" }}>
+                    <span
+                      className="text-3xl font-extrabold tracking-tight"
+                      style={{ color: "#0f172a", letterSpacing: "-0.03em" }}
+                    >
+                      {formatCurrency(plan.amount, plan.currency)}
+                    </span>
+                    {plan.interval && (
+                      <span className="text-sm ml-1" style={{ color: "#7F8CAA" }}>
+                        {plan.interval}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Features */}
+                  <ul className="space-y-3 mb-7">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-3">
+                        <span
+                          className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                          style={{ backgroundColor: "#4382df0e" }}
+                        >
+                          <CheckIcon />
+                        </span>
+                        <span className="text-sm leading-relaxed" style={{ color: "#7F8CAA" }}>
+                          {feature}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* CTA button */}
+                  {plan.featured ? (
+                    <button
+                      className="group w-full inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-90 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+                      style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+                      disabled={plan.disabled}
+                      onClick={() => handleSubscribe(plan)}
+                    >
+                      {plan.cta} <ArrowRight />
+                    </button>
+                  ) : (
+                    <button
+                      className="w-full inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/60 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+                      style={{ color: "#7F8CAA", borderColor: "#7F8CAA45" }}
+                      disabled={plan.disabled}
+                      onClick={() => handleSubscribe(plan)}
+                    >
+                      {plan.cta}
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* FAQ strip */}
+          <div
+            className="mt-12 rounded-3xl border-2 border-dashed px-7 py-6 text-center"
+            style={{ borderColor: "#7F8CAA2a" }}
+          >
+            <p className="text-sm" style={{ color: "#7F8CAA" }}>
+              Questions about pricing?{" "}
+              <span
+                className="font-semibold cursor-pointer transition-opacity hover:opacity-60"
+                style={{ color: "#4382df" }}
+                onClick={() => navigate({ to: "/settings/feedback" })}
+              >
+                Send us a message
+              </span>
+            </p>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Dark CTA block */}
+      <section className="pb-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div
+            className="relative rounded-3xl overflow-hidden px-10 py-16 text-center"
+            style={{ backgroundColor: "#0f172a" }}
+          >
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage:
+                  "radial-gradient(ellipse at 25% 60%, #4382df20 0%, transparent 55%), radial-gradient(ellipse at 80% 30%, #7F8CAA18 0%, transparent 50%)",
+              }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none opacity-20"
+              style={{
+                backgroundImage:
+                  "linear-gradient(#4382df0e 1px, transparent 1px), linear-gradient(90deg, #4382df0e 1px, transparent 1px)",
+                backgroundSize: "48px 48px",
+              }}
+            />
+            <div className="relative">
+              <p
+                className="text-xs font-bold tracking-[0.25em] uppercase mb-4"
+                style={{ color: "#4382df" }}
+              >
+                No risk
+              </p>
+              <h2
+                className="font-extrabold text-white tracking-tight mb-4"
+                style={{
+                  fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                  letterSpacing: "-0.03em",
+                  lineHeight: "1.05",
+                }}
+              >
+                Start free today.
+                <br />
+                <span style={{ WebkitTextStroke: "1.5px #4382df", WebkitTextFillColor: "transparent" }}>
+                  Upgrade when ready.
+                </span>
+              </h2>
+              <p
+                className="text-base mb-8 max-w-md mx-auto leading-relaxed"
+                style={{ color: "#7F8CAA" }}
+              >
+                Your first 5 invoices are completely free. No credit card required.
+              </p>
+              <button
+                onClick={() => navigate({ to: "/signup" })}
+                className="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-90 active:scale-95"
+                style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+              >
+                Create free account <ArrowRight />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
 

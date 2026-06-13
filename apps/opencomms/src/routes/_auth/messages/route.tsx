@@ -1,10 +1,7 @@
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { cn } from '@/lib/utils'
-import { PlusIcon, SearchIcon } from '../../-icons.tsx'
+import { PlusIcon, SearchIcon, SmsIcon, WhatsAppIcon } from '../../-icons.tsx'
 
 export const Route = createFileRoute('/_auth/messages')({
   component: MessagesLayout,
@@ -25,63 +22,107 @@ function initials(n: string) { return n.split(' ').map((w) => w[0]).join('') }
 
 function MessagesLayout() {
   return (
-    <>
-      <header className="flex h-14 items-center justify-between border-b px-6 flex-shrink-0">
-        <h1 className="text-sm font-semibold text-foreground">Messages</h1>
-        <Button size="sm"><PlusIcon size={13} className="mr-1.5" />New conversation</Button>
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Header */}
+      <header
+        className="flex h-14 items-center justify-between px-6 flex-shrink-0 bg-white"
+        style={{ borderBottom: '1px solid #7F8CAA18' }}
+      >
+        <div>
+          <p className="text-xs font-bold tracking-[0.22em] uppercase" style={{ color: '#7F8CAA' }}>Inbox</p>
+          <h1 className="text-sm font-bold" style={{ color: '#0f172a' }}>Messages</h1>
+        </div>
+        <button
+          className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white rounded-full transition-all hover:opacity-90 active:scale-95"
+          style={{ backgroundColor: '#4382df', boxShadow: '0 2px 12px #4382df35' }}
+        >
+          <PlusIcon size={11} />New conversation
+        </button>
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Conversation list */}
-        <aside className="flex w-72 flex-shrink-0 flex-col border-r">
-          <div className="p-3 border-b">
+        {/* Conversation list panel */}
+        <aside
+          className="flex w-72 flex-shrink-0 flex-col bg-white"
+          style={{ borderRight: '1px solid #7F8CAA18' }}
+        >
+          {/* Search */}
+          <div
+            className="p-3"
+            style={{ borderBottom: '1px solid #7F8CAA12' }}
+          >
             <div className="relative">
-              <SearchIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <SearchIcon size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7F8CAA]" />
               <input
                 type="search"
                 placeholder="Search conversations…"
-                className="w-full rounded-md border bg-muted/40 pl-8 pr-3 py-1.5 text-sm outline-none focus:ring-1 focus:ring-primary placeholder:text-muted-foreground"
+                className="w-full rounded-full border bg-[#ebf0f0] pl-8 pr-3 py-1.5 text-xs outline-none focus:ring-2 placeholder:text-xs"
+                style={{ borderColor: '#c8d5e0', color: '#0f172a' }}
               />
             </div>
           </div>
 
           <ScrollArea className="flex-1">
-            {CONVERSATIONS.map((c) => (
-              <Link
-                key={c.id}
-                to="/messages/$conversationId"
-                params={{ conversationId: c.id }}
-                className="flex items-start gap-3 border-b px-4 py-3 hover:bg-accent/40 transition-colors"
-                activeProps={{ className: 'flex items-start gap-3 border-b px-4 py-3 bg-primary/5 border-l-2 border-l-primary' }}
-              >
-                <Avatar className="mt-0.5 size-9 flex-shrink-0">
-                  <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
-                    {initials(c.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-1">
-                    <span className={cn('text-xs font-medium truncate', c.unread ? 'text-foreground' : 'text-muted-foreground')}>
-                      {c.name}
-                    </span>
-                    <span className="flex-shrink-0 text-[10px] text-muted-foreground">{c.time}</span>
-                  </div>
-                  <div className="mt-0.5 flex items-center justify-between gap-1">
-                    <span className="text-[11px] text-muted-foreground truncate">{c.preview}</span>
-                    <Badge
-                      variant="secondary"
-                      className={cn(
-                        'flex-shrink-0 text-[9px] px-1.5 h-4',
-                        c.channel === 'wa' ? 'text-green-600 dark:text-green-400' : 'text-blue-600 dark:text-blue-400',
-                      )}
+            {CONVERSATIONS.map((c) => {
+              const isWA = c.channel === 'wa'
+              const ChannelIcon = isWA ? WhatsAppIcon : SmsIcon
+              return (
+                <Link
+                  key={c.id}
+                  to="/messages/$conversationId"
+                  params={{ conversationId: c.id }}
+                  className="flex items-start gap-3 px-4 py-3.5 transition-colors hover:bg-[#7F8CAA06]"
+                  style={{ borderBottom: '1px solid #7F8CAA08' }}
+                  activeProps={{
+                    className: 'flex items-start gap-3 px-4 py-3.5 transition-colors',
+                    style: {
+                      backgroundColor: '#4382df08',
+                      borderBottom: '1px solid #7F8CAA08',
+                      borderLeft: '2px solid #4382df',
+                      paddingLeft: '14px',
+                    },
+                  }}
+                >
+                  <Avatar className="mt-0.5 size-9 flex-shrink-0">
+                    <AvatarFallback
+                      className="text-white text-xs font-bold"
+                      style={{ backgroundColor: '#4382df' }}
                     >
-                      {c.channel === 'wa' ? 'WA' : 'SMS'}
-                    </Badge>
+                      {initials(c.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-1 mb-0.5">
+                      <span
+                        className="text-xs font-semibold truncate"
+                        style={{ color: c.unread ? '#0f172a' : '#7F8CAA' }}
+                      >
+                        {c.name}
+                      </span>
+                      <span className="flex-shrink-0 text-[10px]" style={{ color: '#7F8CAA' }}>{c.time}</span>
+                    </div>
+                    <div className="flex items-center justify-between gap-1">
+                      <span className="text-[11px] truncate" style={{ color: '#7F8CAA' }}>{c.preview}</span>
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        <span
+                          className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-semibold"
+                          style={{
+                            backgroundColor: isWA ? '#22c55e12' : '#4382df0e',
+                            color: isWA ? '#16a34a' : '#4382df',
+                          }}
+                        >
+                          <ChannelIcon size={8} />
+                          {isWA ? 'WA' : 'SMS'}
+                        </span>
+                        {c.unread && (
+                          <span className="size-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: '#4382df' }} />
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-                {c.unread && <span className="mt-2 size-1.5 flex-shrink-0 rounded-full bg-primary" />}
-              </Link>
-            ))}
+                </Link>
+              )
+            })}
           </ScrollArea>
         </aside>
 
@@ -90,6 +131,6 @@ function MessagesLayout() {
           <Outlet />
         </div>
       </div>
-    </>
+    </div>
   )
 }

@@ -8,8 +8,6 @@ import {
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useUIStore } from "@/stores/uiStore";
 import { useAuthStore } from "@/stores/authStore";
 import { useTaskStore } from "@/stores/taskStore";
@@ -32,9 +30,7 @@ export function MoreSheet() {
 
   const handleAddProject = () => {
     const name = prompt("Project name:");
-    if (name?.trim()) {
-      addProject(name.trim());
-    }
+    if (name?.trim()) addProject(name.trim());
   };
 
   const initials = user?.email ? user.email[0].toUpperCase() : "?";
@@ -44,27 +40,28 @@ export function MoreSheet() {
       <SheetContent
         side="bottom"
         className="rounded-t-2xl max-h-[80svh] flex flex-col"
-        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        style={{ paddingBottom: "env(safe-area-inset-bottom)", backgroundColor: "#ffffff" }}
       >
         <SheetHeader className="text-left pb-2">
-          <SheetTitle>More</SheetTitle>
+          <SheetTitle style={{ color: "#0f172a" }}>More</SheetTitle>
         </SheetHeader>
 
         <ScrollArea className="flex-1 -mx-6 px-6">
           {/* User */}
           <div className="flex items-center gap-3 py-3">
-            <Avatar className="h-9 w-9">
-              <AvatarFallback className="bg-primary/20 text-primary text-sm font-bold">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
+            <div
+              className="h-9 w-9 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
+              style={{ backgroundColor: "#4382df" }}
+            >
+              {initials}
+            </div>
             <div>
-              <p className="text-sm font-medium text-foreground">My account</p>
-              <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+              <p className="text-sm font-medium" style={{ color: "#0f172a" }}>My account</p>
+              <p className="text-xs truncate" style={{ color: "#7F8CAA" }}>{user?.email}</p>
             </div>
           </div>
 
-          <Separator className="my-2" />
+          <div className="my-2" style={{ borderTop: "1px solid #7F8CAA18" }} />
 
           {/* Quick nav */}
           <nav className="flex flex-col gap-0.5 py-2">
@@ -76,7 +73,8 @@ export function MoreSheet() {
                 key={to}
                 to={to}
                 onClick={close}
-                className="flex items-center gap-3 px-2 py-2.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                className="flex items-center gap-3 px-2 py-2.5 rounded-xl text-sm transition-opacity hover:opacity-60"
+                style={{ color: "#7F8CAA" }}
               >
                 <Icon className="h-4 w-4" />
                 {label}
@@ -84,17 +82,21 @@ export function MoreSheet() {
             ))}
           </nav>
 
-          <Separator className="my-2" />
+          <div className="my-2" style={{ borderTop: "1px solid #7F8CAA18" }} />
 
           {/* Projects */}
           <div className="py-2">
             <div className="flex items-center justify-between px-2 mb-1">
-              <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+              <span
+                className="text-xs font-bold uppercase tracking-[0.25em] flex items-center gap-2"
+                style={{ color: "#7F8CAA" }}
+              >
                 <FolderOpen className="h-3.5 w-3.5" /> Projects
               </span>
               <button
                 onClick={handleAddProject}
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="transition-opacity hover:opacity-60"
+                style={{ color: "#7F8CAA" }}
               >
                 <Plus className="h-4 w-4" />
               </button>
@@ -105,22 +107,23 @@ export function MoreSheet() {
                 to="/app/projects/$projectId"
                 params={{ projectId: p.id }}
                 onClick={close}
-                className="flex items-center gap-3 px-2 py-2.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                className="flex items-center gap-3 px-2 py-2.5 rounded-xl text-sm transition-opacity hover:opacity-60"
+                style={{ color: "#7F8CAA" }}
               >
                 <span className="h-2.5 w-2.5 rounded-full" style={{ background: p.color }} />
                 {p.name}
               </Link>
             ))}
             {projects.length === 0 && (
-              <p className="text-xs text-muted-foreground px-2 py-2">No projects yet</p>
+              <p className="text-xs px-2 py-2" style={{ color: "#7F8CAA" }}>No projects yet</p>
             )}
           </div>
 
-          <Separator className="my-2" />
+          <div className="my-2" style={{ borderTop: "1px solid #7F8CAA18" }} />
 
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-2 py-2.5 w-full rounded-lg text-sm text-destructive hover:bg-destructive/10 transition-colors"
+            className="flex items-center gap-3 px-2 py-2.5 w-full rounded-xl text-sm text-destructive hover:bg-destructive/10 transition-colors"
           >
             <LogOut className="h-4 w-4" />
             Sign out

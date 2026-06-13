@@ -44,6 +44,12 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Brand colors */
+  --color-brand-bg: #ebf0f0;
+  --color-brand-secondary: #7F8CAA;
+  --color-brand-accent: #4382df;
+  --color-brand-ink: #0f172a;
 }
 
 .dark {
@@ -90,4 +96,44 @@
   html {
     @apply font-sans;
   }
+}
+
+/* Staggered entrance animations */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease both;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }

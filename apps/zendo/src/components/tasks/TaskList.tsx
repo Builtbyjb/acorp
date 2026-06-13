@@ -34,7 +34,7 @@ export function TaskList({ tasks, projectId, sectionId, emptyMessage = "No tasks
 
         {/* Inline add form */}
         {adding && (
-          <div className="p-3 rounded-xl border border-border bg-card mt-1">
+          <div className="p-3 rounded-xl mt-1" style={{ border: "1px solid #7F8CAA18", backgroundColor: "#ffffff" }}>
             <TaskForm
               projectId={projectId}
               sectionId={sectionId}

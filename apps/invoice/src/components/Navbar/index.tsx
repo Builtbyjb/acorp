@@ -1,109 +1,153 @@
-import { Link, useNavigate } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 import Logo from "@/components/Logo";
+
+function ArrowRight({ size = 14 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 14 14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="transition-transform group-hover:translate-x-0.5"
+    >
+      <path d="M2 7h10M7 2l5 5-5 5" />
+    </svg>
+  );
+}
+
+const navLinks = [
+  { label: "Pricing", to: "/pricing" },
+];
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const routerState = useRouterState();
+  const currentPath = routerState.location.pathname;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+    <header
+      className="sticky top-0 z-50 border-b backdrop-blur-md"
+      style={{ backgroundColor: "#ebf0f0e8", borderColor: "#7F8CAA22" }}
+    >
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        {/* Wordmark */}
         <Logo />
-        <div className="hidden md:flex md:items-center md:gap-8">
-          {/*<Link
-            to="/features"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Features
-          </Link>
-          <Link
-            to="/how-it-works"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            How it works
-          </Link>*/}
-          <Link
-            to="/pricing"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Pricing
-          </Link>
-          {/*<Link
-            to="/testimonials"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Testimonials
-          </Link>*/}
-        </div>
 
-        <div className="hidden md:flex md:items-center md:gap-4">
-          <Button variant="outline" onClick={() => navigate({ to: "/login" })}>
+        {/* Desktop nav links */}
+        <nav className="hidden md:flex items-center gap-1">
+          {navLinks.map((link) => {
+            const isActive = currentPath === link.to || currentPath.startsWith(link.to + "/");
+            return (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="relative px-3 py-1.5 text-sm font-medium rounded-full transition-all"
+                style={{ color: isActive ? "#0f172a" : "#7F8CAA" }}
+              >
+                {isActive && (
+                  <span
+                    className="absolute inset-0 rounded-full"
+                    style={{ backgroundColor: "#7F8CAA18" }}
+                  />
+                )}
+                <span className="relative">{link.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Desktop CTAs */}
+        <div className="hidden md:flex items-center gap-3">
+          <button
+            onClick={() => navigate({ to: "/login" })}
+            className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/60 active:scale-95"
+            style={{ color: "#7F8CAA", borderColor: "#7F8CAA45" }}
+          >
             Log in
-          </Button>
-          <Button onClick={() => navigate({ to: "/signup" })}>Start for free</Button>
+          </button>
+          <button
+            onClick={() => navigate({ to: "/signup" })}
+            className="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-90 active:scale-95"
+            style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+          >
+            Get started <ArrowRight />
+          </button>
         </div>
 
-        <button type="button" className="md:hidden p-2 -m-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        {/* Mobile toggle */}
+        <button
+          type="button"
+          className="md:hidden p-2 -m-2 transition-colors rounded-lg"
+          style={{ color: "#7F8CAA" }}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? (
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M4 4l12 12M16 4L4 16" />
+            </svg>
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M3 6h14M3 10h14M3 14h14" />
+            </svg>
+          )}
         </button>
-      </nav>
+      </div>
 
+      {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-border bg-background">
-          <div className="flex flex-col gap-4 px-6 py-6">
-            {/*<Link
-              to="/features"
-              className="text-sm font-medium text-muted-foreground"
-              onClick={() => setMobileMenuOpen(false)}
+        <div
+          className="md:hidden border-t"
+          style={{ backgroundColor: "#ebf0f0f5", borderColor: "#7F8CAA22" }}
+        >
+          <div className="flex flex-col gap-1 px-6 py-4">
+            {navLinks.map((link) => {
+              const isActive = currentPath === link.to;
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className="px-3 py-2 text-sm font-medium rounded-full transition-all"
+                  style={{
+                    color: isActive ? "#0f172a" : "#7F8CAA",
+                    backgroundColor: isActive ? "#7F8CAA18" : "transparent",
+                  }}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+            <div
+              className="flex flex-col gap-3 pt-4 mt-2 border-t"
+              style={{ borderColor: "#7F8CAA22" }}
             >
-              Features
-            </Link>*/}
-            {/*<Link
-              to="/how-it-works"
-              className="text-sm font-medium text-muted-foreground"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              How it works
-            </Link>*/}
-            <Link
-              to="/pricing"
-              className="text-sm font-medium text-muted-foreground"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                navigate({ to: "/pricing" });
-              }}
-            >
-              Pricing
-            </Link>
-            {/*<Link
-              to="/testimonials"
-              className="text-sm font-medium text-muted-foreground"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Testimonials
-            </Link>*/}
-            <div className="flex flex-col gap-3 pt-4 border-t border-border">
-              <Button
-                variant="outline"
-                className="justify-start"
+              <button
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/60 active:scale-95"
+                style={{ color: "#7F8CAA", borderColor: "#7F8CAA45" }}
                 onClick={() => {
                   setMobileMenuOpen(false);
                   navigate({ to: "/login" });
                 }}
               >
                 Log in
-              </Button>
-              <Button
+              </button>
+              <button
+                className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:opacity-90 active:scale-95"
+                style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
                 onClick={() => {
                   setMobileMenuOpen(false);
                   navigate({ to: "/signup" });
                 }}
               >
-                Start for free
-              </Button>
+                Get started
+              </button>
             </div>
           </div>
         </div>

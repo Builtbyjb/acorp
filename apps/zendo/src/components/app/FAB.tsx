@@ -13,13 +13,16 @@ export function FAB({ onClick, label = "Add", className }: Props) {
       onClick={onClick}
       aria-label={label}
       className={cn(
-        // Mobile only, sits above bottom nav
         "md:hidden fixed bottom-[calc(env(safe-area-inset-bottom)+72px)] right-4 z-40",
-        "w-14 h-14 rounded-full bg-primary text-primary-foreground",
+        "w-14 h-14 rounded-full text-white",
         "flex items-center justify-center",
-        "shadow-[0_0_24px_hsl(var(--primary)/0.5)] active:scale-95 transition-transform",
+        "active:scale-95 transition-transform",
         className
       )}
+      style={{
+        backgroundColor: "#4382df",
+        boxShadow: "0 4px 20px #4382df40",
+      }}
     >
       <Plus className="h-6 w-6" />
     </button>
