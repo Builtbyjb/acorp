@@ -1,3 +1,3 @@
-# ACORP Invoice
+# ACORP
 
-An invoice management application
+A digital tools company
