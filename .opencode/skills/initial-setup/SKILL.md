@@ -65,7 +65,7 @@ declare module "@tanstack/react-router" {
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
-export const Route = createRootRouteWithContext<Context>()({
+export const Route = createRootRouteWithContext()({
   component: RootComponent,
 });
 
@@ -116,8 +116,8 @@ function AuthenticatedLayout() {
  * Routes that require a user to be authenticated
  */
 export const Route = createFileRoute("/_authenticated")({
-  beforeLoad: async ({ context, location }) => {
-    const isAuthenticated = context.auth ? await context.auth.authenticate() : false;
+  beforeLoad: async ({ location }) => {
+    const isAuthenticated = true
     if (!isAuthenticated) {
       throw redirect({
         to: "/login",
@@ -132,6 +132,53 @@ export const Route = createFileRoute("/_authenticated")({
 });
 ```
 
+* Create a _guest folder and an _authenticated folder
+In the _guest folder create a index.tsx file. Add this code snippet
+```ts
+import { createFileRoute } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/_guest/")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
+  return (
+    <>
+      <div>Inside the guest route</div>
+    </>
+  );
+}
+```
+
+In the _authenticated folder create a home.tsx file. Add this code snippet
+```ts
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/_authenticated/home')({
+  component: RouteComponent,
+})
+
+function RouteComponent() {
+  return <div>Hello "/_authenticated/home"!</div>
+}
+```
+
+* Create a login folder in the routes folder. In the login folder create an index.tsx file. Add this code snippet
+```ts
+import { createFileRoute } from "@tanstack/react-router";
+
+function RouteComponent() {
+  return (
+    <div>
+      <h1>Login</h1>
+    </div>
+  );
+}
+export const Route = createFileRoute("/login/")({
+  component: RouteComponent,
+});
+```
+ 
 # Adding tailwind support
 
 * Configure tailwind: Add this configuration to the "vite.config.ts" file
@@ -177,6 +224,9 @@ export default defineConfig({
 ```sh
 npx shadcn@latest init
 ```
+* Create a components folder in the src directory
+
+* Add a path alias to tsconfig.app.json and resolve the path in vite.config.js
 
 * During setup ask for my input when answering the questions.
 
