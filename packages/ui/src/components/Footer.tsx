@@ -22,7 +22,7 @@ export default function Footer({ footerItems, logo, description }: Props) {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
           {logo}
-          <p className="text-xs mt-2 max-w-xs leading-relaxed text-muted-foreground">{description}</p>
+          <p className="text-sm mt-2 max-w-xs leading-relaxed text-muted-foreground">{description}</p>
         </div>
 
         <div className="flex items-start gap-12">

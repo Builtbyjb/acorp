@@ -31,7 +31,7 @@
   /* Destructive */
   --destructive: oklch(0.6397 0.2453 27.325);
   /* Border: Slate at low opacity */
-  --border: oklch(0.604 0.046 236.44);
+  --border: oklch(0.504 0.046 236.44);
   --input: oklch(0.915 0.006 194.77);
   --ring: oklch(0.567 0.175 254.62 / 0.5);
   /* Charts: cobalt-toned scale */
