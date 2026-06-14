@@ -13,9 +13,9 @@ import { Route as GuestRouteImport } from './routes/_guest'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as GuestIndexRouteImport } from './routes/_guest/index'
-import { Route as GuestTermsRouteImport } from './routes/_guest/terms'
+import { Route as GuestTermsOfServiceRouteImport } from './routes/_guest/terms-of-service'
 import { Route as GuestProductsRouteImport } from './routes/_guest/products'
-import { Route as GuestPrivacyRouteImport } from './routes/_guest/privacy'
+import { Route as GuestPrivacyPolicyRouteImport } from './routes/_guest/privacy-policy'
 import { Route as GuestCustomRouteImport } from './routes/_guest/custom'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 
@@ -37,9 +37,9 @@ const GuestIndexRoute = GuestIndexRouteImport.update({
   path: '/',
   getParentRoute: () => GuestRoute,
 } as any)
-const GuestTermsRoute = GuestTermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
+const GuestTermsOfServiceRoute = GuestTermsOfServiceRouteImport.update({
+  id: '/terms-of-service',
+  path: '/terms-of-service',
   getParentRoute: () => GuestRoute,
 } as any)
 const GuestProductsRoute = GuestProductsRouteImport.update({
@@ -47,9 +47,9 @@ const GuestProductsRoute = GuestProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => GuestRoute,
 } as any)
-const GuestPrivacyRoute = GuestPrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
+const GuestPrivacyPolicyRoute = GuestPrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
   getParentRoute: () => GuestRoute,
 } as any)
 const GuestCustomRoute = GuestCustomRouteImport.update({
@@ -67,18 +67,18 @@ export interface FileRoutesByFullPath {
   '/': typeof GuestIndexRoute
   '/home': typeof AuthenticatedHomeRoute
   '/custom': typeof GuestCustomRoute
-  '/privacy': typeof GuestPrivacyRoute
+  '/privacy-policy': typeof GuestPrivacyPolicyRoute
   '/products': typeof GuestProductsRoute
-  '/terms': typeof GuestTermsRoute
+  '/terms-of-service': typeof GuestTermsOfServiceRoute
   '/login/': typeof LoginIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof GuestIndexRoute
   '/home': typeof AuthenticatedHomeRoute
   '/custom': typeof GuestCustomRoute
-  '/privacy': typeof GuestPrivacyRoute
+  '/privacy-policy': typeof GuestPrivacyPolicyRoute
   '/products': typeof GuestProductsRoute
-  '/terms': typeof GuestTermsRoute
+  '/terms-of-service': typeof GuestTermsOfServiceRoute
   '/login': typeof LoginIndexRoute
 }
 export interface FileRoutesById {
@@ -87,9 +87,9 @@ export interface FileRoutesById {
   '/_guest': typeof GuestRouteWithChildren
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_guest/custom': typeof GuestCustomRoute
-  '/_guest/privacy': typeof GuestPrivacyRoute
+  '/_guest/privacy-policy': typeof GuestPrivacyPolicyRoute
   '/_guest/products': typeof GuestProductsRoute
-  '/_guest/terms': typeof GuestTermsRoute
+  '/_guest/terms-of-service': typeof GuestTermsOfServiceRoute
   '/_guest/': typeof GuestIndexRoute
   '/login/': typeof LoginIndexRoute
 }
@@ -99,21 +99,28 @@ export interface FileRouteTypes {
     | '/'
     | '/home'
     | '/custom'
-    | '/privacy'
+    | '/privacy-policy'
     | '/products'
-    | '/terms'
+    | '/terms-of-service'
     | '/login/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/custom' | '/privacy' | '/products' | '/terms' | '/login'
+  to:
+    | '/'
+    | '/home'
+    | '/custom'
+    | '/privacy-policy'
+    | '/products'
+    | '/terms-of-service'
+    | '/login'
   id:
     | '__root__'
     | '/_authenticated'
     | '/_guest'
     | '/_authenticated/home'
     | '/_guest/custom'
-    | '/_guest/privacy'
+    | '/_guest/privacy-policy'
     | '/_guest/products'
-    | '/_guest/terms'
+    | '/_guest/terms-of-service'
     | '/_guest/'
     | '/login/'
   fileRoutesById: FileRoutesById
@@ -154,11 +161,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuestIndexRouteImport
       parentRoute: typeof GuestRoute
     }
-    '/_guest/terms': {
-      id: '/_guest/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof GuestTermsRouteImport
+    '/_guest/terms-of-service': {
+      id: '/_guest/terms-of-service'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service'
+      preLoaderRoute: typeof GuestTermsOfServiceRouteImport
       parentRoute: typeof GuestRoute
     }
     '/_guest/products': {
@@ -168,11 +175,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuestProductsRouteImport
       parentRoute: typeof GuestRoute
     }
-    '/_guest/privacy': {
-      id: '/_guest/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof GuestPrivacyRouteImport
+    '/_guest/privacy-policy': {
+      id: '/_guest/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof GuestPrivacyPolicyRouteImport
       parentRoute: typeof GuestRoute
     }
     '/_guest/custom': {
@@ -206,17 +213,17 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 
 interface GuestRouteChildren {
   GuestCustomRoute: typeof GuestCustomRoute
-  GuestPrivacyRoute: typeof GuestPrivacyRoute
+  GuestPrivacyPolicyRoute: typeof GuestPrivacyPolicyRoute
   GuestProductsRoute: typeof GuestProductsRoute
-  GuestTermsRoute: typeof GuestTermsRoute
+  GuestTermsOfServiceRoute: typeof GuestTermsOfServiceRoute
   GuestIndexRoute: typeof GuestIndexRoute
 }
 
 const GuestRouteChildren: GuestRouteChildren = {
   GuestCustomRoute: GuestCustomRoute,
-  GuestPrivacyRoute: GuestPrivacyRoute,
+  GuestPrivacyPolicyRoute: GuestPrivacyPolicyRoute,
   GuestProductsRoute: GuestProductsRoute,
-  GuestTermsRoute: GuestTermsRoute,
+  GuestTermsOfServiceRoute: GuestTermsOfServiceRoute,
   GuestIndexRoute: GuestIndexRoute,
 }
 

@@ -576,6 +576,6 @@ function A({
 
 // ─── Route ─────────────────────────────────────────────────────────────────────
 
-export const Route = createFileRoute("/_guest/privacy")({
+export const Route = createFileRoute("/_guest/privacy-policy")({
   component: PrivacyPage,
 });

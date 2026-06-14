@@ -6,12 +6,12 @@ import CtaSection from "@/components/landing/CTA";
 
 function RouteComponent() {
   return (
-    <>
+    <div className="space-y-16">
       <HeroSection />
       <ProductsSection />
       <CustomBanner />
       <CtaSection />
-    </>
+    </div>
   );
 }
 
