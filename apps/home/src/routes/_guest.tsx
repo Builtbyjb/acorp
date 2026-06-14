@@ -31,10 +31,7 @@ function Nav() {
 
         {/* CTA */}
         <div className="flex items-center gap-3">
-          <button
-            className="text-sm font-medium transition-opacity hover:opacity-60"
-            style={{ color: "#7F8CAA" }}
-          >
+          <button className="text-sm font-medium transition-opacity hover:opacity-60" style={{ color: "#7F8CAA" }}>
             Sign In
           </button>
           <button
@@ -49,27 +46,14 @@ function Nav() {
   );
 }
 
-function NavLink({
-  to,
-  label,
-  active,
-}: {
-  to: string;
-  label: string;
-  active: boolean;
-}) {
+function NavLink({ to, label, active }: { to: string; label: string; active: boolean }) {
   return (
     <Link
       to={to}
       className="relative px-3 py-1.5 text-sm font-medium rounded-full transition-colors"
       style={{ color: active ? "#0f172a" : "#7F8CAA" }}
     >
-      {active && (
-        <span
-          className="absolute inset-0 rounded-full"
-          style={{ backgroundColor: "#7F8CAA18" }}
-        />
-      )}
+      {active && <span className="absolute inset-0 rounded-full" style={{ backgroundColor: "#7F8CAA18" }} />}
       <span className="relative">{label}</span>
     </Link>
   );
@@ -98,10 +82,7 @@ function Footer() {
 
         <div className="flex items-start gap-12">
           <div>
-            <p
-              className="text-xs font-bold uppercase tracking-widest mb-3"
-              style={{ color: "#0f172a" }}
-            >
+            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#0f172a" }}>
               Products
             </p>
             <ul className="flex flex-col gap-2">
@@ -111,11 +92,7 @@ function Footer() {
                 { label: "OpenComms", href: "#" },
               ].map((p) => (
                 <li key={p.label}>
-                  <a
-                    href={p.href}
-                    className="text-sm transition-opacity hover:opacity-60"
-                    style={{ color: "#7F8CAA" }}
-                  >
+                  <a href={p.href} className="text-sm transition-opacity hover:opacity-60" style={{ color: "#7F8CAA" }}>
                     {p.label}
                   </a>
                 </li>
@@ -123,10 +100,7 @@ function Footer() {
             </ul>
           </div>
           <div>
-            <p
-              className="text-xs font-bold uppercase tracking-widest mb-3"
-              style={{ color: "#0f172a" }}
-            >
+            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#0f172a" }}>
               Company
             </p>
             <ul className="flex flex-col gap-2">
@@ -168,18 +142,10 @@ function Footer() {
           © {new Date().getFullYear()} ACorp. All rights reserved.
         </p>
         <div className="flex items-center gap-4">
-          <Link
-            to="/privacy"
-            className="text-xs transition-opacity hover:opacity-60"
-            style={{ color: "#7F8CAA" }}
-          >
+          <Link to="/privacy" className="text-xs transition-opacity hover:opacity-60" style={{ color: "#7F8CAA" }}>
             Privacy
           </Link>
-          <Link
-            to="/terms"
-            className="text-xs transition-opacity hover:opacity-60"
-            style={{ color: "#7F8CAA" }}
-          >
+          <Link to="/terms" className="text-xs transition-opacity hover:opacity-60" style={{ color: "#7F8CAA" }}>
             Terms
           </Link>
         </div>
@@ -190,10 +156,7 @@ function Footer() {
 
 function GuestLayout() {
   return (
-    <div
-      className="min-h-screen flex flex-col"
-      style={{ backgroundColor: "#ebf0f0" }}
-    >
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#ebf0f0" }}>
       <Nav />
       <main className="flex-1">
         <Outlet />
