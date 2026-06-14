@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { PRODUCTS, type Product } from "~/lib/products";
+import { PRODUCTS, type Product } from "@/lib/products";
 
 // ─── Landing Page ─────────────────────────────────────────────────────────────
 
@@ -49,10 +49,7 @@ function HeroSection() {
               animationDelay: "0.05s",
             }}
           >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ backgroundColor: "#4382df" }}
-            />
+            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#4382df" }} />
             ACorp Suite
           </div>
 
@@ -81,16 +78,12 @@ function HeroSection() {
             className="animate-fade-up text-xl max-w-2xl leading-relaxed mb-12"
             style={{ color: "#7F8CAA", animationDelay: "0.22s" }}
           >
-            A carefully built collection of focused tools — each one crafted to
-            eliminate friction and let you, your team, and your community do
-            their best work.
+            A carefully built collection of focused tools — each one crafted to eliminate friction and let you, your
+            team, and your community do their best work.
           </p>
 
           {/* CTAs */}
-          <div
-            className="animate-fade-up flex flex-wrap gap-3"
-            style={{ animationDelay: "0.32s" }}
-          >
+          <div className="animate-fade-up flex flex-wrap gap-3" style={{ animationDelay: "0.32s" }}>
             <Link to="/products">
               <button
                 className="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-92 active:scale-95"
@@ -115,29 +108,21 @@ function HeroSection() {
         </div>
 
         {/* Chips */}
-        <div
-          className="animate-fade-in mt-16 flex flex-wrap gap-3"
-          style={{ animationDelay: "0.48s" }}
-        >
-          {["6 live products", "More in development", "Built for real workflows"].map(
-            (label) => (
-              <span
-                key={label}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold border"
-                style={{
-                  backgroundColor: "#ffffff90",
-                  borderColor: "#7F8CAA25",
-                  color: "#7F8CAA",
-                }}
-              >
-                <span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ backgroundColor: "#4382df" }}
-                />
-                {label}
-              </span>
-            )
-          )}
+        <div className="animate-fade-in mt-16 flex flex-wrap gap-3" style={{ animationDelay: "0.48s" }}>
+          {["6 live products", "More in development", "Built for real workflows"].map((label) => (
+            <span
+              key={label}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold border"
+              style={{
+                backgroundColor: "#ffffff90",
+                borderColor: "#7F8CAA25",
+                color: "#7F8CAA",
+              }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#4382df" }} />
+              {label}
+            </span>
+          ))}
         </div>
       </div>
     </section>
@@ -153,16 +138,10 @@ function ProductsSection() {
         {/* Section header */}
         <div className="flex items-end justify-between mb-12">
           <div>
-            <p
-              className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5"
-              style={{ color: "#7F8CAA" }}
-            >
+            <p className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5" style={{ color: "#7F8CAA" }}>
               Our Products
             </p>
-            <h2
-              className="text-4xl font-bold tracking-tight"
-              style={{ color: "#0f172a" }}
-            >
+            <h2 className="text-4xl font-bold tracking-tight" style={{ color: "#0f172a" }}>
               Built for what matters.
             </h2>
           </div>
@@ -235,18 +214,15 @@ function CustomBanner() {
           }}
         >
           <div>
-            <p
-              className="text-xs font-bold tracking-[0.22em] uppercase mb-2"
-              style={{ color: "#7F8CAA" }}
-            >
+            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-2" style={{ color: "#7F8CAA" }}>
               Custom Development
             </p>
             <h3 className="text-2xl font-bold tracking-tight mb-2" style={{ color: "#0f172a" }}>
               Need something built for you?
             </h3>
             <p className="text-sm leading-relaxed max-w-md" style={{ color: "#7F8CAA" }}>
-              We're also open to building fully custom applications — tailored to your
-              exact workflows, brand, and goals.
+              We're also open to building fully custom applications — tailored to your exact workflows, brand, and
+              goals.
             </p>
           </div>
           <Link to="/custom" className="shrink-0">
@@ -290,10 +266,7 @@ function CtaSection() {
             }}
           />
           <div className="relative">
-            <p
-              className="text-xs font-bold tracking-[0.25em] uppercase mb-4"
-              style={{ color: "#4382df" }}
-            >
+            <p className="text-xs font-bold tracking-[0.25em] uppercase mb-4" style={{ color: "#4382df" }}>
               Get started today
             </p>
             <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-5">
@@ -301,12 +274,9 @@ function CtaSection() {
               <br />
               <span style={{ color: "#7F8CAA" }}>Stay for the suite.</span>
             </h2>
-            <p
-              className="text-base mb-10 max-w-lg mx-auto leading-relaxed"
-              style={{ color: "#7F8CAA" }}
-            >
-              Each product is powerful on its own — but they're designed to work
-              together, so your tools grow as your needs do.
+            <p className="text-base mb-10 max-w-lg mx-auto leading-relaxed" style={{ color: "#7F8CAA" }}>
+              Each product is powerful on its own — but they're designed to work together, so your tools grow as your
+              needs do.
             </p>
             <Link to="/products">
               <button
@@ -329,13 +299,7 @@ function CtaSection() {
 
 // ─── Product Card ──────────────────────────────────────────────────────────────
 
-function ProductCard({
-  product,
-  index,
-}: {
-  product: Product;
-  index: number;
-}) {
+function ProductCard({ product, index }: { product: Product; index: number }) {
   return (
     <div
       className="animate-fade-up group bg-white rounded-3xl p-7 flex flex-col transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl cursor-default"
@@ -345,10 +309,7 @@ function ProductCard({
       }}
     >
       {/* Name + tagline */}
-      <h3
-        className="text-2xl font-bold mb-1.5 tracking-tight"
-        style={{ color: "#0f172a" }}
-      >
+      <h3 className="text-2xl font-bold mb-1.5 tracking-tight" style={{ color: "#0f172a" }}>
         {product.name}
       </h3>
       <p className="text-sm font-medium mb-4" style={{ color: "#7F8CAA" }}>
@@ -356,20 +317,14 @@ function ProductCard({
       </p>
 
       {/* Description */}
-      <p
-        className="text-sm leading-relaxed flex-1"
-        style={{ color: "#7F8CAA" }}
-      >
+      <p className="text-sm leading-relaxed flex-1" style={{ color: "#7F8CAA" }}>
         {product.description}
       </p>
 
       {/* Footer */}
       <div className="mt-8 flex items-center justify-between">
         <div className="flex items-center gap-1.5">
-          <span
-            className="w-2 h-2 rounded-full"
-            style={{ backgroundColor: "#7F8CAA50" }}
-          />
+          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "#7F8CAA50" }} />
           <span className="text-xs font-semibold" style={{ color: "#7F8CAA" }}>
             Available now
           </span>

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { PRODUCTS, type Product } from "~/lib/products";
+import { PRODUCTS, type Product } from "@/lib/products";
 
 // ─── Products Page ─────────────────────────────────────────────────────────────
 
@@ -52,8 +52,8 @@ function PageHeader() {
           className="animate-fade-up text-lg max-w-xl leading-relaxed"
           style={{ color: "#7F8CAA", animationDelay: "0.22s" }}
         >
-          Each tool is designed to be exceptional on its own — and even better
-          when used together as part of the ACorp suite.
+          Each tool is designed to be exceptional on its own — and even better when used together as part of the ACorp
+          suite.
         </p>
 
         {/* Status row */}
@@ -66,20 +66,14 @@ function PageHeader() {
           }}
         >
           <div className="flex items-center gap-2">
-            <span
-              className="w-2 h-2 rounded-full"
-              style={{ backgroundColor: "#4382df" }}
-            />
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "#4382df" }} />
             <span className="text-sm font-semibold" style={{ color: "#0f172a" }}>
               6 Live Products
             </span>
           </div>
           <div className="w-px h-4" style={{ backgroundColor: "#7F8CAA30" }} />
           <div className="flex items-center gap-2">
-            <span
-              className="w-2 h-2 rounded-full"
-              style={{ backgroundColor: "#7F8CAA" }}
-            />
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "#7F8CAA" }} />
             <span className="text-sm" style={{ color: "#7F8CAA" }}>
               More in development
             </span>
@@ -106,13 +100,7 @@ function ProductList() {
 
 // ─── Full Product Card ─────────────────────────────────────────────────────────
 
-function ProductFullCard({
-  product,
-  index,
-}: {
-  product: Product;
-  index: number;
-}) {
+function ProductFullCard({ product, index }: { product: Product; index: number }) {
   return (
     <div
       className="animate-fade-up group bg-white rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-xl"
@@ -127,20 +115,14 @@ function ProductFullCard({
           <div className="flex-1 min-w-0">
             {/* Status */}
             <div className="flex items-center gap-2 mb-6">
-              <span
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ backgroundColor: "#7F8CAA50" }}
-              />
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#7F8CAA50" }} />
               <span className="text-xs font-semibold" style={{ color: "#7F8CAA" }}>
                 Available now
               </span>
             </div>
 
             {/* Name */}
-            <h2
-              className="text-4xl font-extrabold tracking-tight mb-2"
-              style={{ color: "#0f172a" }}
-            >
+            <h2 className="text-4xl font-extrabold tracking-tight mb-2" style={{ color: "#0f172a" }}>
               {product.name}
             </h2>
 
@@ -150,10 +132,7 @@ function ProductFullCard({
             </p>
 
             {/* Description */}
-            <p
-              className="text-sm leading-relaxed mb-8 max-w-lg"
-              style={{ color: "#7F8CAA" }}
-            >
+            <p className="text-sm leading-relaxed mb-8 max-w-lg" style={{ color: "#7F8CAA" }}>
               {product.description}
             </p>
 
@@ -185,10 +164,7 @@ function ProductFullCard({
             className="md:w-68 shrink-0 rounded-2xl p-6"
             style={{ backgroundColor: "#f8fafa", border: "1px solid #7F8CAA14" }}
           >
-            <p
-              className="text-xs font-bold tracking-widest uppercase mb-5"
-              style={{ color: "#7F8CAA" }}
-            >
+            <p className="text-xs font-bold tracking-widest uppercase mb-5" style={{ color: "#7F8CAA" }}>
               Key Features
             </p>
             <ul className="flex flex-col gap-3.5">
@@ -198,10 +174,7 @@ function ProductFullCard({
                     className="w-1.5 h-1.5 rounded-full mt-[5px] shrink-0"
                     style={{ backgroundColor: "#7F8CAA70" }}
                   />
-                  <span
-                    className="text-sm leading-relaxed"
-                    style={{ color: "#0f172a" }}
-                  >
+                  <span className="text-sm leading-relaxed" style={{ color: "#0f172a" }}>
                     {feature}
                   </span>
                 </li>
@@ -248,19 +221,12 @@ function ComingSoonSection() {
                 ))}
               </div>
             </div>
-            <h3
-              className="text-2xl font-bold mb-3 tracking-tight"
-              style={{ color: "#0f172a" }}
-            >
+            <h3 className="text-2xl font-bold mb-3 tracking-tight" style={{ color: "#0f172a" }}>
               More products in the works
             </h3>
-            <p
-              className="text-sm max-w-md mx-auto leading-relaxed mb-6"
-              style={{ color: "#7F8CAA" }}
-            >
-              We're constantly building new tools to round out the suite. Each
-              one is carefully designed to solve a real problem — nothing shipped
-              before it's ready.
+            <p className="text-sm max-w-md mx-auto leading-relaxed mb-6" style={{ color: "#7F8CAA" }}>
+              We're constantly building new tools to round out the suite. Each one is carefully designed to solve a real
+              problem — nothing shipped before it's ready.
             </p>
             <span
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold border"
@@ -270,10 +236,7 @@ function ComingSoonSection() {
                 color: "#7F8CAA",
               }}
             >
-              <span
-                className="w-1.5 h-1.5 rounded-full animate-pulse"
-                style={{ backgroundColor: "#7F8CAA" }}
-              />
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: "#7F8CAA" }} />
               In development
             </span>
           </div>
@@ -294,24 +257,15 @@ function CustomDevBanner() {
           style={{ backgroundColor: "#ffffff80", borderColor: "#7F8CAA20" }}
         >
           <div>
-            <p
-              className="text-xs font-bold tracking-[0.22em] uppercase mb-2"
-              style={{ color: "#7F8CAA" }}
-            >
+            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-2" style={{ color: "#7F8CAA" }}>
               Custom Development
             </p>
-            <h3
-              className="text-2xl font-bold tracking-tight mb-2"
-              style={{ color: "#0f172a" }}
-            >
+            <h3 className="text-2xl font-bold tracking-tight mb-2" style={{ color: "#0f172a" }}>
               Need something built for you?
             </h3>
-            <p
-              className="text-sm leading-relaxed max-w-md"
-              style={{ color: "#7F8CAA" }}
-            >
-              We're also open to building fully custom applications — tailored
-              to your exact workflows, brand, and goals.
+            <p className="text-sm leading-relaxed max-w-md" style={{ color: "#7F8CAA" }}>
+              We're also open to building fully custom applications — tailored to your exact workflows, brand, and
+              goals.
             </p>
           </div>
           <Link to="/custom" className="shrink-0">
