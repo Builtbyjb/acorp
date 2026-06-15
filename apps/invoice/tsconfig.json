@@ -9,6 +9,7 @@
     "strictNullChecks": true,
     "paths": {
       "@/*": ["./src/*"],
+      "@shared/ui/*": ["../../packages/ui/src/*"],
       "@shared/*": ["../../packages/*/src"],
     },
   },

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { Button } from "@shared/ui/components/Button";
+import { Button } from "@shared/ui/components/button";
 import { Plus } from "lucide-react";
 import InvoicesTable from "@/components/InvoicesTable";
 import { useLayout } from "@/hooks/useLayout";
