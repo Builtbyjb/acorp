@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "../components/button";
 
@@ -10,7 +10,7 @@ type NavLink = {
 
 type Props = {
   navLinks: NavLink[];
-  logo: ReactNode;
+  logo: React.ReactNode;
   enableCTA?: boolean;
 };
 

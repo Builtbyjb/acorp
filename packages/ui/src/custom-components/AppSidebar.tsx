@@ -12,12 +12,11 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../components/collapsible";
 import { Separator } from "../components/separator";
 import { ChevronRight, LogOut } from "lucide-react";
-import { ReactNode } from "react";
 
 type NavItem = {
   title: string;
   url: string;
-  icon: ReactNode;
+  icon: React.ReactNode;
   badge?: React.ReactNode;
   items?: NavItem[];
 };
@@ -151,7 +150,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
             <SidebarMenuItem>
               <button
                 className="flex gap-3 items-center w-full rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:cursor-pointer hover:bg-[#ef4444]/10 text-[#ef4444]"
-                onClick={() => logout()}
+                // onClick={() => logout()}
               >
                 <LogOut className="h-4 w-4 shrink-0" />
                 Log out

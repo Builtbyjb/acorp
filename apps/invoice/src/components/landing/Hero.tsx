@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import Headline from "@shared/ui/components/Headline";
+import Headline from "@shared/ui/custom-components/Headline";
 import { Button } from "@shared/ui/components/Button";
 
 export default function Hero() {

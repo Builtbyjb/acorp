@@ -1,9 +1,10 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Button } from "@shared/ui/components/Button";
 import { Plus } from "lucide-react";
 import InvoicesTable from "@/components/InvoicesTable";
 import { useLayout } from "@/hooks/useLayout";
+import { type Invoice } from "@shared/lib/types";
 
 function RouteComponent() {
   const { setTitle } = useLayout();
@@ -12,7 +13,8 @@ function RouteComponent() {
     setTitle("Invoices");
   }, [setTitle]);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [meta, setMeta] = useState<null | { total: number; page: number; size: number; totalPages: number }>(null);
@@ -23,7 +25,14 @@ function RouteComponent() {
     console.log("Create invoice clicked");
   };
 
-  const handleInvoiceDelete = (id: string) => {};
+  const handleInvoiceDelete = (id: string) => {
+    void id;
+    setInvoices(invoices.filter((invoice) => invoice.id !== id));
+    setIsLoading(false);
+    setMeta(null);
+    console.log(page);
+    console.log(size);
+  };
 
   return (
     <div>

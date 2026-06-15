@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-
 type Item = {
   label: string;
   to: string;
@@ -12,7 +10,7 @@ type FooterItem = {
 
 type Props = {
   footerItems: FooterItem[];
-  logo: ReactNode;
+  logo: React.ReactNode;
   description: string;
 };
 

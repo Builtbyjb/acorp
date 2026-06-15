@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@shared/ui/components/input-otp";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@shared/ui/components/card";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/auth";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@shared/ui/components/button";
+import { Spinner } from "@shared/ui/components/spinner";
 
 export default function OTP() {
   const [value, setValue] = useState("");
@@ -43,7 +43,7 @@ export default function OTP() {
         <CardDescription>Please enter the OTP code sent to your email.</CardDescription>
       </CardHeader>
       <CardContent>
-        <InputOTP maxLength={8} value={value} onChange={(e) => handleChange(e)}>
+        <InputOTP maxLength={8} value={value} onChange={(e: any) => handleChange(e)}>
           <InputOTPGroup>
             <InputOTPSlot index={0} />
             <InputOTPSlot index={1} />

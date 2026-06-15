@@ -14,7 +14,7 @@ import {
   BreadcrumbSeparator,
 } from "@shared/ui/components/breadcrumb";
 // import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/components/Card";
-import HeadingTwo from "@shared/ui/components/HeadingTwo";
+import HeadingTwo from "@shared/ui/custom-components/HeadingTwo";
 
 type Plan = z.infer<typeof SubscriptionPlanSchema>;
 
