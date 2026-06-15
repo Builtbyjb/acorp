@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@shared/ui/components/button";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -7,16 +7,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@shared/ui/components/dialog";
 import type { Client } from "@/lib/types";
 import { useForm } from "@tanstack/react-form";
 import * as z from "zod";
-import { Field } from "@/components/ui/field";
+import { Field } from "@shared/ui/components/field";
 import { useEffect, useState } from "react";
 import { ClientSchema, ClientFormSchema } from "@shared/lib/zod-schema";
 import { useFetch } from "@/hooks/useFetch";
 import TextInputField from "../Form/TextInputField";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@shared/ui/components/spinner";
 
 type ClientFormProps = {
   open: boolean;

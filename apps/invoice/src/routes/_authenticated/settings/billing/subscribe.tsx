@@ -1,13 +1,13 @@
 import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { useLayout } from "@/hooks/useLayout";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@shared/ui/components/button";
 import { Check, ArrowLeft } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { z } from "zod";
 import { SubscriptionPlanSchema } from "@shared/lib/zod-schema";
 import { useSubscriptionPlan } from "@/hooks/useSubscriptionPlan";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@shared/ui/components/card";
 
 type Plan = z.infer<typeof SubscriptionPlanSchema>;
 

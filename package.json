@@ -53,6 +53,8 @@
     "@shared/utils": "^0.0.1",
     "@tailwindcss/vite": "^4.3.1",
     "@tanstack/react-form": "^1.29.0",
+    "@tanstack/react-router": "^1.170.15",
+    "@tanstack/react-router-devtools": "^1.167.0",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^1.18.0",
     "react-signature-canvas": "^1.1.0-alpha.2",

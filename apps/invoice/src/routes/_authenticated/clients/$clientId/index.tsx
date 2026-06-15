@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
+import { Button } from "@shared/ui/components/button";
 import { Mail, MapPin, Phone, Plus, UserCircle, ArrowLeft } from "lucide-react";
 import InvoicesTable from "@/components/InvoicesTable";
 import type { Client } from "@/lib/types";
@@ -8,7 +8,7 @@ import type { Invoice } from "@shared/lib/types";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { useLayout } from "@/hooks/useLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/components/card";
 import { useFetch } from "@/hooks/useFetch";
 import { InvoiceSchema, ClientSchema } from "@shared/lib/zod-schema";
 import { z } from "zod";

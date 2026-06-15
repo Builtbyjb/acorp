@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/components/card";
+import { Badge } from "@shared/ui/components/badge";
+import { Button } from "@shared/ui/components/button";
 import type { Invoice } from "@shared/lib/types";
 import { format } from "date-fns";
 import { formatCurrency, getBadgeVariant } from "@/lib/utils";

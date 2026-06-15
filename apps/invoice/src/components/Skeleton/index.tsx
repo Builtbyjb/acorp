@@ -1,6 +1,6 @@
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Card, CardContent, CardFooter, CardHeader } from "@shared/ui/components/card";
+import { Skeleton } from "@shared/ui/components/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@shared/ui/components/table";
 
 type SkeletonTableColumn = {
   className?: string;
@@ -244,7 +244,10 @@ export function SkeletonInvoicePage() {
                   {Array.from({ length: 4 }).map((_, index) => (
                     <TableRow key={`invoice-items-skeleton-row-${index}`}>
                       {invoiceTableColumns.map((column, columnIndex) => (
-                        <TableCell key={`invoice-items-skeleton-cell-${index}-${columnIndex}`} className={column.className}>
+                        <TableCell
+                          key={`invoice-items-skeleton-cell-${index}-${columnIndex}`}
+                          className={column.className}
+                        >
                           <div className="flex flex-col gap-2">
                             {(column.lines ?? ["h-3 w-24"]).map((lineClass, lineIndex) => (
                               <Skeleton

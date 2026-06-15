@@ -1,9 +1,9 @@
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@shared/ui/components/sonner";
 import { type Context } from "@/lib/types";
 import { LayoutProvider } from "@/hooks/useLayout";
-import { BadgeAlert, BadgeCheck } from "lucide-react";
+import { BadgeAlert, BadgeCheck, BadgeInfo } from "lucide-react";
 
 export const Route = createRootRouteWithContext<Context>()({
   component: RootComponent,
@@ -21,6 +21,7 @@ function RootComponent() {
             icons={{
               error: <BadgeAlert className="h-5 w-5 text-red-500" />,
               success: <BadgeCheck className="h-5 w-5 text-green-500" />,
+              info: <BadgeInfo className="h-5 w-5 text-blue-500" />,
             }}
             toastOptions={{
               classNames: {

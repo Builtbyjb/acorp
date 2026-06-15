@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@shared/ui/components/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@shared/ui/components/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,10 +16,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from "@shared/ui/components/alert-dialog";
 import { MoreHorizontal, Pencil, Trash2, Mail, Phone, Eye, ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Button } from "@shared/ui/components/button";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@shared/ui/components/select";
 import type { Client } from "@/lib/types";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -133,7 +133,10 @@ export default function ClientsTable({
                           )}
                         </div>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell cursor-pointer" onClick={() => handleNavigate(client.id)}>
+                      <TableCell
+                        className="hidden md:table-cell cursor-pointer"
+                        onClick={() => handleNavigate(client.id)}
+                      >
                         <div className="flex flex-col text-sm">
                           <span>{client.city}</span>
                           <span className="text-muted-foreground">{client.country}</span>

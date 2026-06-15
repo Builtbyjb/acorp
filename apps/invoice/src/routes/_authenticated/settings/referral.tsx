@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useLayout } from "@/hooks/useLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/components/card";
+import { Checkbox } from "@shared/ui/components/checkbox";
+import { Label } from "@shared/ui/components/label";
 import { Copy, Users } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@shared/ui/components/input";
 import { formatCurrency, handleError } from "@/lib/utils";
 import { APP_NAME } from "@/lib/constant";
 import { toast } from "sonner";
