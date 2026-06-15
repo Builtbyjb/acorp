@@ -21,7 +21,7 @@ import DateField from "../Form/DateField";
 import SignatureCanvas from "react-signature-canvas";
 import { InvoiceFormSchema } from "@shared/lib/zod-schema";
 import { useNavigate } from "@tanstack/react-router";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@shared/ui/components/spinner";
 
 interface InvoiceFormProps {
   clientInfo: Client | null;

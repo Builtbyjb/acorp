@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import HeadingTwo from "@shared/ui/components/HeadingTwo";
+import HeadingTwo from "@shared/ui/custom-components/HeadingTwo";
 import { Button } from "@shared/ui/components/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/components/Card";
 import { ArrowRight } from "lucide-react";

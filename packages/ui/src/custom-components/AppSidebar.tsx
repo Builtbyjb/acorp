@@ -66,25 +66,23 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
           >
             <div className="flex items-center gap-3 px-2 py-2 rounded-2xl transition-colors hover:bg-white/50">
               <div
-                className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0"
                 style={{ backgroundColor: "#4382df" }}
               >
-                {props.username?.charAt(0).toUpperCase() ?? "A"}
+                {props.username?.charAt(0).toUpperCase()}
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="truncate text-sm font-semibold leading-tight text-foreground">
-                  {props.businessname}
-                </span>
-                <span className="truncate text-xs  leading-tight text-foreground">{props.username}</span>
-                <span className="truncate text-xs leading-tight text-muted-foreground">{props.email}</span>
+                <span className="truncate font-semibold leading-tight text-foreground">{props.businessname}</span>
+                <span className="truncate text-sm  leading-tight text-foreground">{props.username}</span>
+                <span className="truncate text-sm leading-tight text-muted-foreground">{props.email}</span>
               </div>
-              <BetaBadge />
             </div>
+            <BetaBadge />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
 
-      <Separator className="my-2" style={{ backgroundColor: "#7F8CAA18" }} />
+      <Separator className="my-2 bg-secondary/40" />
 
       <SidebarContent>
         <SidebarGroup>
@@ -126,7 +124,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
                         {item.items.map((subItem) => (
                           <button
                             key={subItem.title}
-                            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 text-left w-full"
+                            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 text-left w-full cursor-pointer"
                             style={{
                               backgroundColor: isActive(subItem.url) ? "#7F8CAA14" : "transparent",
                               color: isActive(subItem.url) ? "#0f172a" : "#7F8CAA",
@@ -147,10 +145,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
               </Collapsible>
             ))}
 
-            {/* Divider before logout */}
-            <div className="my-2">
-              <Separator style={{ backgroundColor: "#7F8CAA14" }} />
-            </div>
+            <Separator className="my-2 bg-secondary/40" />
 
             {/* Logout */}
             <SidebarMenuItem>

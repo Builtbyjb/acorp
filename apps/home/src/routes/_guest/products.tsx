@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import CustomBanner from "@/components/landing/CustomBanner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@shared/ui/components/card";
 import { Button } from "@shared/ui/components/button";
-import HeadingTwo from "@shared/ui/components/HeadingTwo";
+import HeadingTwo from "@shared/ui/custom-components/HeadingTwo";
 import {
   Breadcrumb,
   BreadcrumbItem,

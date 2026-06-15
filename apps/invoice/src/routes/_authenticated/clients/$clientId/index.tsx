@@ -190,7 +190,6 @@ function RouteComponent() {
           Create Invoice
         </Button>
         <InvoicesTable
-          clientId={clientId}
           invoices={invoices}
           onDelete={handleInvoiceDelete}
           meta={meta}

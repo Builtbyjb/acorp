@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@shared/ui/components/button";
-import Headline from "@shared/ui/components/Headline";
+import Headline from "@shared/ui/custom-components/Headline";
 
 export default function HeroSection() {
   const navigate = useNavigate();

@@ -276,6 +276,6 @@ function RouteComponent() {
   );
 }
 
-export const Route = createFileRoute("/_authenticated/invoices/$invoiceId/")({
+export const Route = createFileRoute("/_authenticated/clients/$clientId/invoices/$invoiceId/")({
   component: RouteComponent,
 });

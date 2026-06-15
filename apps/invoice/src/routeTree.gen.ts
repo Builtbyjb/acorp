@@ -28,11 +28,12 @@ import { Route as AuthenticatedClientsIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedSettingsReferralRouteImport } from './routes/_authenticated/settings/referral'
 import { Route as AuthenticatedSettingsFeedbackRouteImport } from './routes/_authenticated/settings/feedback'
 import { Route as AuthenticatedSettingsBillingIndexRouteImport } from './routes/_authenticated/settings/billing/index'
-import { Route as AuthenticatedInvoicesNewIndexRouteImport } from './routes/_authenticated/invoices/new/index'
-import { Route as AuthenticatedInvoicesInvoiceIdIndexRouteImport } from './routes/_authenticated/invoices/$invoiceId/index'
 import { Route as AuthenticatedClientsClientIdIndexRouteImport } from './routes/_authenticated/clients/$clientId/index'
 import { Route as AuthenticatedSettingsBillingSubscribeRouteImport } from './routes/_authenticated/settings/billing/subscribe'
-import { Route as AuthenticatedInvoicesInvoiceIdEditIndexRouteImport } from './routes/_authenticated/invoices/$invoiceId/edit/index'
+import { Route as AuthenticatedClientsClientIdInvoicesIndexRouteImport } from './routes/_authenticated/clients/$clientId/invoices/index'
+import { Route as AuthenticatedClientsClientIdInvoicesNewIndexRouteImport } from './routes/_authenticated/clients/$clientId/invoices/new/index'
+import { Route as AuthenticatedClientsClientIdInvoicesInvoiceIdIndexRouteImport } from './routes/_authenticated/clients/$clientId/invoices/$invoiceId/index'
+import { Route as AuthenticatedClientsClientIdInvoicesInvoiceIdEditIndexRouteImport } from './routes/_authenticated/clients/$clientId/invoices/$invoiceId/edit/index'
 
 const GuestRoute = GuestRouteImport.update({
   id: '/_guest',
@@ -134,18 +135,6 @@ const AuthenticatedSettingsBillingIndexRoute =
     path: '/settings/billing/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedInvoicesNewIndexRoute =
-  AuthenticatedInvoicesNewIndexRouteImport.update({
-    id: '/invoices/new/',
-    path: '/invoices/new/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedInvoicesInvoiceIdIndexRoute =
-  AuthenticatedInvoicesInvoiceIdIndexRouteImport.update({
-    id: '/invoices/$invoiceId/',
-    path: '/invoices/$invoiceId/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 const AuthenticatedClientsClientIdIndexRoute =
   AuthenticatedClientsClientIdIndexRouteImport.update({
     id: '/clients/$clientId/',
@@ -158,10 +147,28 @@ const AuthenticatedSettingsBillingSubscribeRoute =
     path: '/settings/billing/subscribe',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedInvoicesInvoiceIdEditIndexRoute =
-  AuthenticatedInvoicesInvoiceIdEditIndexRouteImport.update({
-    id: '/invoices/$invoiceId/edit/',
-    path: '/invoices/$invoiceId/edit/',
+const AuthenticatedClientsClientIdInvoicesIndexRoute =
+  AuthenticatedClientsClientIdInvoicesIndexRouteImport.update({
+    id: '/clients/$clientId/invoices/',
+    path: '/clients/$clientId/invoices/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedClientsClientIdInvoicesNewIndexRoute =
+  AuthenticatedClientsClientIdInvoicesNewIndexRouteImport.update({
+    id: '/clients/$clientId/invoices/new/',
+    path: '/clients/$clientId/invoices/new/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedClientsClientIdInvoicesInvoiceIdIndexRoute =
+  AuthenticatedClientsClientIdInvoicesInvoiceIdIndexRouteImport.update({
+    id: '/clients/$clientId/invoices/$invoiceId/',
+    path: '/clients/$clientId/invoices/$invoiceId/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedClientsClientIdInvoicesInvoiceIdEditIndexRoute =
+  AuthenticatedClientsClientIdInvoicesInvoiceIdEditIndexRouteImport.update({
+    id: '/clients/$clientId/invoices/$invoiceId/edit/',
+    path: '/clients/$clientId/invoices/$invoiceId/edit/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -184,10 +191,11 @@ export interface FileRoutesByFullPath {
   '/terms-of-service/': typeof GuestTermsOfServiceIndexRoute
   '/settings/billing/subscribe': typeof AuthenticatedSettingsBillingSubscribeRoute
   '/clients/$clientId/': typeof AuthenticatedClientsClientIdIndexRoute
-  '/invoices/$invoiceId/': typeof AuthenticatedInvoicesInvoiceIdIndexRoute
-  '/invoices/new/': typeof AuthenticatedInvoicesNewIndexRoute
   '/settings/billing/': typeof AuthenticatedSettingsBillingIndexRoute
-  '/invoices/$invoiceId/edit/': typeof AuthenticatedInvoicesInvoiceIdEditIndexRoute
+  '/clients/$clientId/invoices/': typeof AuthenticatedClientsClientIdInvoicesIndexRoute
+  '/clients/$clientId/invoices/$invoiceId/': typeof AuthenticatedClientsClientIdInvoicesInvoiceIdIndexRoute
+  '/clients/$clientId/invoices/new/': typeof AuthenticatedClientsClientIdInvoicesNewIndexRoute
+  '/clients/$clientId/invoices/$invoiceId/edit/': typeof AuthenticatedClientsClientIdInvoicesInvoiceIdEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/$': typeof SplatRoute
@@ -208,10 +216,11 @@ export interface FileRoutesByTo {
   '/terms-of-service': typeof GuestTermsOfServiceIndexRoute
   '/settings/billing/subscribe': typeof AuthenticatedSettingsBillingSubscribeRoute
   '/clients/$clientId': typeof AuthenticatedClientsClientIdIndexRoute
-  '/invoices/$invoiceId': typeof AuthenticatedInvoicesInvoiceIdIndexRoute
-  '/invoices/new': typeof AuthenticatedInvoicesNewIndexRoute
   '/settings/billing': typeof AuthenticatedSettingsBillingIndexRoute
-  '/invoices/$invoiceId/edit': typeof AuthenticatedInvoicesInvoiceIdEditIndexRoute
+  '/clients/$clientId/invoices': typeof AuthenticatedClientsClientIdInvoicesIndexRoute
+  '/clients/$clientId/invoices/$invoiceId': typeof AuthenticatedClientsClientIdInvoicesInvoiceIdIndexRoute
+  '/clients/$clientId/invoices/new': typeof AuthenticatedClientsClientIdInvoicesNewIndexRoute
+  '/clients/$clientId/invoices/$invoiceId/edit': typeof AuthenticatedClientsClientIdInvoicesInvoiceIdEditIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -235,10 +244,11 @@ export interface FileRoutesById {
   '/_guest/terms-of-service/': typeof GuestTermsOfServiceIndexRoute
   '/_authenticated/settings/billing/subscribe': typeof AuthenticatedSettingsBillingSubscribeRoute
   '/_authenticated/clients/$clientId/': typeof AuthenticatedClientsClientIdIndexRoute
-  '/_authenticated/invoices/$invoiceId/': typeof AuthenticatedInvoicesInvoiceIdIndexRoute
-  '/_authenticated/invoices/new/': typeof AuthenticatedInvoicesNewIndexRoute
   '/_authenticated/settings/billing/': typeof AuthenticatedSettingsBillingIndexRoute
-  '/_authenticated/invoices/$invoiceId/edit/': typeof AuthenticatedInvoicesInvoiceIdEditIndexRoute
+  '/_authenticated/clients/$clientId/invoices/': typeof AuthenticatedClientsClientIdInvoicesIndexRoute
+  '/_authenticated/clients/$clientId/invoices/$invoiceId/': typeof AuthenticatedClientsClientIdInvoicesInvoiceIdIndexRoute
+  '/_authenticated/clients/$clientId/invoices/new/': typeof AuthenticatedClientsClientIdInvoicesNewIndexRoute
+  '/_authenticated/clients/$clientId/invoices/$invoiceId/edit/': typeof AuthenticatedClientsClientIdInvoicesInvoiceIdEditIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -261,10 +271,11 @@ export interface FileRouteTypes {
     | '/terms-of-service/'
     | '/settings/billing/subscribe'
     | '/clients/$clientId/'
-    | '/invoices/$invoiceId/'
-    | '/invoices/new/'
     | '/settings/billing/'
-    | '/invoices/$invoiceId/edit/'
+    | '/clients/$clientId/invoices/'
+    | '/clients/$clientId/invoices/$invoiceId/'
+    | '/clients/$clientId/invoices/new/'
+    | '/clients/$clientId/invoices/$invoiceId/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/$'
@@ -285,10 +296,11 @@ export interface FileRouteTypes {
     | '/terms-of-service'
     | '/settings/billing/subscribe'
     | '/clients/$clientId'
-    | '/invoices/$invoiceId'
-    | '/invoices/new'
     | '/settings/billing'
-    | '/invoices/$invoiceId/edit'
+    | '/clients/$clientId/invoices'
+    | '/clients/$clientId/invoices/$invoiceId'
+    | '/clients/$clientId/invoices/new'
+    | '/clients/$clientId/invoices/$invoiceId/edit'
   id:
     | '__root__'
     | '/$'
@@ -311,10 +323,11 @@ export interface FileRouteTypes {
     | '/_guest/terms-of-service/'
     | '/_authenticated/settings/billing/subscribe'
     | '/_authenticated/clients/$clientId/'
-    | '/_authenticated/invoices/$invoiceId/'
-    | '/_authenticated/invoices/new/'
     | '/_authenticated/settings/billing/'
-    | '/_authenticated/invoices/$invoiceId/edit/'
+    | '/_authenticated/clients/$clientId/invoices/'
+    | '/_authenticated/clients/$clientId/invoices/$invoiceId/'
+    | '/_authenticated/clients/$clientId/invoices/new/'
+    | '/_authenticated/clients/$clientId/invoices/$invoiceId/edit/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -460,20 +473,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsBillingIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/invoices/new/': {
-      id: '/_authenticated/invoices/new/'
-      path: '/invoices/new'
-      fullPath: '/invoices/new/'
-      preLoaderRoute: typeof AuthenticatedInvoicesNewIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/invoices/$invoiceId/': {
-      id: '/_authenticated/invoices/$invoiceId/'
-      path: '/invoices/$invoiceId'
-      fullPath: '/invoices/$invoiceId/'
-      preLoaderRoute: typeof AuthenticatedInvoicesInvoiceIdIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/clients/$clientId/': {
       id: '/_authenticated/clients/$clientId/'
       path: '/clients/$clientId'
@@ -488,11 +487,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsBillingSubscribeRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/invoices/$invoiceId/edit/': {
-      id: '/_authenticated/invoices/$invoiceId/edit/'
-      path: '/invoices/$invoiceId/edit'
-      fullPath: '/invoices/$invoiceId/edit/'
-      preLoaderRoute: typeof AuthenticatedInvoicesInvoiceIdEditIndexRouteImport
+    '/_authenticated/clients/$clientId/invoices/': {
+      id: '/_authenticated/clients/$clientId/invoices/'
+      path: '/clients/$clientId/invoices'
+      fullPath: '/clients/$clientId/invoices/'
+      preLoaderRoute: typeof AuthenticatedClientsClientIdInvoicesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/clients/$clientId/invoices/new/': {
+      id: '/_authenticated/clients/$clientId/invoices/new/'
+      path: '/clients/$clientId/invoices/new'
+      fullPath: '/clients/$clientId/invoices/new/'
+      preLoaderRoute: typeof AuthenticatedClientsClientIdInvoicesNewIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/clients/$clientId/invoices/$invoiceId/': {
+      id: '/_authenticated/clients/$clientId/invoices/$invoiceId/'
+      path: '/clients/$clientId/invoices/$invoiceId'
+      fullPath: '/clients/$clientId/invoices/$invoiceId/'
+      preLoaderRoute: typeof AuthenticatedClientsClientIdInvoicesInvoiceIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/clients/$clientId/invoices/$invoiceId/edit/': {
+      id: '/_authenticated/clients/$clientId/invoices/$invoiceId/edit/'
+      path: '/clients/$clientId/invoices/$invoiceId/edit'
+      fullPath: '/clients/$clientId/invoices/$invoiceId/edit/'
+      preLoaderRoute: typeof AuthenticatedClientsClientIdInvoicesInvoiceIdEditIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
   }
@@ -510,10 +530,11 @@ interface AuthenticatedRouteChildren {
   AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
   AuthenticatedSettingsBillingSubscribeRoute: typeof AuthenticatedSettingsBillingSubscribeRoute
   AuthenticatedClientsClientIdIndexRoute: typeof AuthenticatedClientsClientIdIndexRoute
-  AuthenticatedInvoicesInvoiceIdIndexRoute: typeof AuthenticatedInvoicesInvoiceIdIndexRoute
-  AuthenticatedInvoicesNewIndexRoute: typeof AuthenticatedInvoicesNewIndexRoute
   AuthenticatedSettingsBillingIndexRoute: typeof AuthenticatedSettingsBillingIndexRoute
-  AuthenticatedInvoicesInvoiceIdEditIndexRoute: typeof AuthenticatedInvoicesInvoiceIdEditIndexRoute
+  AuthenticatedClientsClientIdInvoicesIndexRoute: typeof AuthenticatedClientsClientIdInvoicesIndexRoute
+  AuthenticatedClientsClientIdInvoicesInvoiceIdIndexRoute: typeof AuthenticatedClientsClientIdInvoicesInvoiceIdIndexRoute
+  AuthenticatedClientsClientIdInvoicesNewIndexRoute: typeof AuthenticatedClientsClientIdInvoicesNewIndexRoute
+  AuthenticatedClientsClientIdInvoicesInvoiceIdEditIndexRoute: typeof AuthenticatedClientsClientIdInvoicesInvoiceIdEditIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -530,13 +551,16 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedSettingsBillingSubscribeRoute,
   AuthenticatedClientsClientIdIndexRoute:
     AuthenticatedClientsClientIdIndexRoute,
-  AuthenticatedInvoicesInvoiceIdIndexRoute:
-    AuthenticatedInvoicesInvoiceIdIndexRoute,
-  AuthenticatedInvoicesNewIndexRoute: AuthenticatedInvoicesNewIndexRoute,
   AuthenticatedSettingsBillingIndexRoute:
     AuthenticatedSettingsBillingIndexRoute,
-  AuthenticatedInvoicesInvoiceIdEditIndexRoute:
-    AuthenticatedInvoicesInvoiceIdEditIndexRoute,
+  AuthenticatedClientsClientIdInvoicesIndexRoute:
+    AuthenticatedClientsClientIdInvoicesIndexRoute,
+  AuthenticatedClientsClientIdInvoicesInvoiceIdIndexRoute:
+    AuthenticatedClientsClientIdInvoicesInvoiceIdIndexRoute,
+  AuthenticatedClientsClientIdInvoicesNewIndexRoute:
+    AuthenticatedClientsClientIdInvoicesNewIndexRoute,
+  AuthenticatedClientsClientIdInvoicesInvoiceIdEditIndexRoute:
+    AuthenticatedClientsClientIdInvoicesInvoiceIdEditIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

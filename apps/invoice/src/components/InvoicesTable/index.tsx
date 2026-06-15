@@ -31,7 +31,6 @@ import { useFetch } from "@/hooks/useFetch";
 import { SkeletonTable } from "@/components/Skeleton";
 
 interface InvoicesTableProps {
-  clientId: string;
   invoices: Invoice[];
   onDelete: (id: string) => Promise<void> | void;
   meta?: { total: number; page: number; size: number; totalPages: number } | null;
@@ -52,19 +51,19 @@ const invoiceSkeletonColumns = [
 export default function InvoicesTable({
   invoices,
   onDelete,
-  clientId,
   meta = null,
   onPageChange,
   onSizeChange,
   isLoading = false,
 }: InvoicesTableProps) {
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [clientId, setClientId] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const { doDELETE } = useFetch();
 
   const handleDelete = async () => {
-    if (deleteId) {
+    if (deleteId && clientId) {
       try {
         const response = await doDELETE(`/api/v1/clients/${clientId}/invoices/${deleteId}/delete`);
         if (response instanceof Error) throw response;
@@ -79,6 +78,7 @@ export default function InvoicesTable({
         console.log(error);
       } finally {
         setDeleteId(null);
+        setClientId(null);
       }
     }
   };
@@ -120,33 +120,39 @@ export default function InvoicesTable({
                     ) : (
                       invoices.map((invoice) => (
                         <TableRow key={invoice.id}>
-                          <TableCell className="cursor-pointer" onClick={() => handleNavigate(clientId, invoice.id)}>
+                          <TableCell
+                            className="cursor-pointer"
+                            onClick={() => handleNavigate(invoice.clientId, invoice.id)}
+                          >
                             <div className="flex flex-col">
                               <span className="font-medium">{invoice.invoiceNumber}</span>
                             </div>
                           </TableCell>
                           <TableCell
                             className="hidden md:table-cell text-sm cursor-pointer"
-                            onClick={() => handleNavigate(clientId, invoice.id)}
+                            onClick={() => handleNavigate(invoice.clientId, invoice.id)}
                           >
                             {format(new Date(invoice.issueDate), "MMM d, yyyy")}
                           </TableCell>
                           <TableCell
                             className="hidden lg:table-cell text-sm cursor-pointer"
-                            onClick={() => handleNavigate(clientId, invoice.id)}
+                            onClick={() => handleNavigate(invoice.clientId, invoice.id)}
                           >
                             {format(new Date(invoice.dueDate), "MMM d, yyyy")}
                           </TableCell>
                           <TableCell
                             className="font-semibold cursor-pointer"
-                            onClick={() => handleNavigate(clientId, invoice.id)}
+                            onClick={() => handleNavigate(invoice.clientId, invoice.id)}
                           >
                             {formatCurrency(
                               calculateTotalAmount(invoice.items, invoice.taxRate, invoice.discount),
                               invoice.currency,
                             )}
                           </TableCell>
-                          <TableCell className="cursor-pointer" onClick={() => handleNavigate(clientId, invoice.id)}>
+                          <TableCell
+                            className="cursor-pointer"
+                            onClick={() => handleNavigate(invoice.clientId, invoice.id)}
+                          >
                             <Badge className={`capitalize ${getBadgeVariant(invoice.status)}`}>{invoice.status}</Badge>
                           </TableCell>
                           <TableCell>
@@ -160,7 +166,7 @@ export default function InvoicesTable({
                                   onClick={() =>
                                     navigate({
                                       to: "/clients/$clientId/invoices/$invoiceId",
-                                      params: { invoiceId: invoice.id.toString(), clientId },
+                                      params: { invoiceId: invoice.id.toString(), clientId: invoice.clientId },
                                     })
                                   }
                                 >
@@ -171,7 +177,7 @@ export default function InvoicesTable({
                                   onClick={() =>
                                     navigate({
                                       to: "/clients/$clientId/invoices/$invoiceId/edit",
-                                      params: { invoiceId: invoice.id.toString(), clientId },
+                                      params: { invoiceId: invoice.id.toString(), clientId: invoice.clientId },
                                     })
                                   }
                                 >
@@ -179,7 +185,13 @@ export default function InvoicesTable({
                                   Edit
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={() => setDeleteId(invoice.id)} className="text-destructive">
+                                <DropdownMenuItem
+                                  onClick={() => {
+                                    setClientId(invoice.clientId);
+                                    setDeleteId(invoice.id);
+                                  }}
+                                  className="text-destructive"
+                                >
                                   <Trash2 className="mr-2 h-4 w-4" />
                                   Delete
                                 </DropdownMenuItem>
