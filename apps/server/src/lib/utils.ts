@@ -60,9 +60,9 @@ export async function signToken(c: Context, payload: TokenPayload): Promise<Erro
 export async function sendOTPEmail(c: Context, email: string): Promise<Error | string> {
     // Generate a OTP
     const otp = generateOTP();
-    const sender = c.env.EMAIL_DOMAIN;
+    const sender = c.env.OTP_EMAIL;
     if (!sender) {
-        console.error("EMAIL_DOMAIN not configured");
+        console.error("OTP_EMAIL not configured");
         return new Error("Sender not configured");
     }
     const htmlBody = fillTemplate(otpTemplate, { OTP_CODE: otp });

@@ -1,0 +1,59 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/components/card";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import type { MonthRevenue } from "@shared/lib/types";
+import { SkeletonBarChart } from "@/components/Skeleton";
+import { formatCurrency } from "@/lib/utils";
+import type { ValueType } from "recharts/types/component/DefaultTooltipContent";
+
+interface RevenueChartProps {
+  data: MonthRevenue[];
+  isLoading: boolean;
+}
+
+export default function RevenueChart({ data, isLoading }: RevenueChartProps) {
+  return (
+    <Card className="col-span-1 lg:col-span-2">
+      <CardHeader>
+        <CardTitle>Monthly Revenue</CardTitle>
+        <CardDescription>Revenue from paid invoices by month</CardDescription>
+      </CardHeader>
+      <CardContent>
+        {!isLoading ? (
+          <div className="h-80 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                <XAxis
+                  dataKey="month"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+                  // tickFormatter={formatCurrency}
+                />
+                <Tooltip
+                  formatter={(value: ValueType | undefined) => {
+                    if (!value) return;
+                    return [formatCurrency(Number(value)), "Revenue"];
+                  }}
+                  contentStyle={{
+                    backgroundColor: "var(--card)",
+                    border: "1px solid var(--border)",
+                    borderRadius: "8px",
+                  }}
+                />
+                <Bar dataKey="revenue" fill="var(--primary)" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        ) : (
+          <SkeletonBarChart />
+        )}
+      </CardContent>
+    </Card>
+  );
+}

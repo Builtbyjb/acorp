@@ -1,0 +1,48 @@
+@import "@shared/ui/globals.css";
+
+:root {
+  /* ── ACorp "Precision Craft" palette ── */
+  --background: #ebf0f0;          /* Cloud — dominant 60% */
+  --foreground: #0f172a;          /* Ink / Near-black */
+
+  --card: #ffffff;                /* Surface — white cards */
+  --card-foreground: #0f172a;
+
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+
+  --primary: #4382df;             /* Cobalt — accent 10% */
+  --primary-foreground: #ffffff;
+
+  --secondary: #e2eaf3;           /* Light slate tint — secondary surfaces */
+  --secondary-foreground: #0f172a;
+
+  --muted: #e2eaf3;               /* Muted surface areas */
+  --muted-foreground: #7F8CAA;    /* Slate — secondary text */
+
+  --accent: #dde4ed;              /* Hover state surface */
+  --accent-foreground: #0f172a;
+
+  --destructive: #dc2626;
+
+  --border: #c8d5e0;              /* Soft separator */
+  --input: #c8d5e0;
+  --ring: #4382df;                /* Focus ring — Cobalt */
+
+  --chart-1: #4382df;             /* Cobalt */
+  --chart-2: #7F8CAA;             /* Slate */
+  --chart-3: #34d399;             /* Teal */
+  --chart-4: #f59e0b;             /* Amber */
+  --chart-5: #ef4444;             /* Red */
+
+  --radius: 0.75rem;
+
+  --sidebar: #ffffff;             /* Sidebar — white surface */
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #4382df;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #dde4ed;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #c8d5e0;
+  --sidebar-ring: #4382df;
+}

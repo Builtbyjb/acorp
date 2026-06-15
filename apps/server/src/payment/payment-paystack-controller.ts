@@ -225,7 +225,7 @@ paymentRouteV1.get("/paystack-fn/callback", async (c) => {
     const parsedData = CallbackResponseSchema.parse(data);
     // console.log("Callback: ", data);
 
-    const url = c.env.FRONTEND_URL;
+    const url = c.env.INVOICE_URL;
     if (!url) {
         console.log("Frontend url not set");
         return c.json({ message: "Internal Server Error" }, 500);

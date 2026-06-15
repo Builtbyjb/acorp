@@ -1,5 +1,5 @@
 {
-  "name": "@invoice/server",
+  "name": "server",
   "type": "module",
   "scripts": {
     "dev": "npx wrangler dev --env=dev --local",
