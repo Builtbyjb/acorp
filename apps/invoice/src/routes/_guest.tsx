@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import NavBar from "@shared/ui/custom-components/NavBar";
+import NavBar from "@shared/ui/custom-components/Navbar";
 import Footer from "@shared/ui/custom-components/Footer";
 import Logo from "@/components/Logo";
 
