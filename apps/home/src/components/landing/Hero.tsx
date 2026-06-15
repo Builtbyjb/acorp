@@ -10,7 +10,6 @@ export default function HeroSection() {
     <section>
       <Headline start="One suite." end="Every need." />
 
-      {/* Sub-headline */}
       <p className="animate-fade-up  max-w-2xl leading-relaxed mb-12 text-muted-foreground">
         A carefully built collection of focused tools — each one crafted to eliminate friction and let you, your team,
         and your community do their best work.

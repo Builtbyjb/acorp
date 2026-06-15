@@ -32,7 +32,7 @@ function GuestLayout() {
   ];
 
   return (
-    <div>
+    <>
       <NavBar navLinks={navLinks} logo={<Logo />} enableCTA={false} />
       <main className="mt-12 mb-16 w-[90%] sm:w-[80%] md:w-[70%] mx-auto">
         <Outlet />
@@ -42,7 +42,7 @@ function GuestLayout() {
         logo={<Logo />}
         description=" A suite of purposeful tools built for how modern teams actually work."
       />
-    </div>
+    </>
   );
 }
 

@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_guest/")({
 function RouteComponent() {
   return (
     <>
-      <div>
+      <div className="space-y-16">
         <Hero />
         {/*<Logos />*/}
         <Features />

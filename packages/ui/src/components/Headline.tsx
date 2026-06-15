@@ -8,7 +8,7 @@ export default function Headline({ start, end }: Props) {
     <h1
       className="animate-fade-up font-bold leading-[0.87] tracking-[-0.04em] mb-7"
       style={{
-        fontSize: "clamp(3.5rem, 9vw, 6.5rem)",
+        fontSize: "clamp(3.5rem, 9vw, 5rem)",
         color: "#0f172a",
         animationDelay: "0.12s",
       }}

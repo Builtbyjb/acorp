@@ -8,7 +8,6 @@
     "dev:lumina": "npx turbo dev --filter=lumina --filter=server",
     "dev:traqr": "npx turbo dev --filter=traqr --filter=server",
     "dev:insights": "npx turbo dev --filter=insights --filter=server",
-    "dev": "npx turbo dev",
     "deploy:home": "npx turbo deploy --filter=acorp",
     "deploy:invoice": "npx turbo deploy --filter=invoice",
     "deploy:zendo": "npx turbo deploy --filter=zendo",

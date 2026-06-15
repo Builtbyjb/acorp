@@ -1,6 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { ReactNode, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { Button } from "./button";
 
 type NavLink = {
   label: string;
@@ -33,11 +34,11 @@ export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className="relative px-3 py-1.5 text-sm font-medium rounded-full transition-all"
+                  className="relative px-3 py-1.5 text-sm font-medium rounded-lg transition-all"
                   style={{ color: isActive ? "#0f172a" : "#7F8CAA" }}
                 >
                   {isActive && (
-                    <span className="absolute inset-0 rounded-full" style={{ backgroundColor: "#7F8CAA18" }} />
+                    <span className="absolute inset-0 rounded-lg" style={{ backgroundColor: "#7F8CAA18" }} />
                   )}
                   <span className="relative">{link.label}</span>
                 </Link>
@@ -49,28 +50,20 @@ export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
         {/* Desktop CTAs */}
         {enableCTA && (
           <div className="hidden md:flex items-center gap-3">
-            <button
-              onClick={() => navigate({ to: "/login" })}
-              className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/60 active:scale-95"
-              style={{ color: "#7F8CAA", borderColor: "#7F8CAA45" }}
-            >
+            <Button variant="outline" onClick={() => navigate({ to: "/login" })}>
               Log in
-            </button>
-            <button
-              onClick={() => navigate({ to: "/signup" })}
-              className="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-90 active:scale-95"
-              style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
-            >
+            </Button>
+            <Button onClick={() => navigate({ to: "/signup" })}>
               Get started <ArrowRight />
-            </button>
+            </Button>
           </div>
         )}
 
         {/* Mobile toggle */}
-        <button
+        <Button
           type="button"
-          className="md:hidden p-2 -m-2 transition-colors rounded-lg"
-          style={{ color: "#7F8CAA" }}
+          variant="outline"
+          className="md:hidden p-2 -m-2 transition-colors rounded-lg text-foreground"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -99,7 +92,7 @@ export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
               <path d="M3 6h14M3 10h14M3 14h14" />
             </svg>
           )}
-        </button>
+        </Button>
       </div>
 
       {/* Mobile menu */}
@@ -112,7 +105,7 @@ export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className="px-3 py-2 text-sm font-medium rounded-full transition-all"
+                  className="px-3 py-2 text-sm font-medium rounded-lg transition-all"
                   style={{
                     color: isActive ? "#0f172a" : "#7F8CAA",
                     backgroundColor: isActive ? "#7F8CAA18" : "transparent",
@@ -125,27 +118,24 @@ export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
             })}
 
             {enableCTA && (
-              <div className="flex flex-col gap-3 pt-4 mt-2 border-t" style={{ borderColor: "#7F8CAA22" }}>
-                <button
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/60 active:scale-95"
-                  style={{ color: "#7F8CAA", borderColor: "#7F8CAA45" }}
+              <div className="flex flex-col gap-3 pt-4 mt-2 border-t border-border">
+                <Button
+                  variant="outline"
                   onClick={() => {
                     setMobileMenuOpen(false);
                     navigate({ to: "/login" });
                   }}
                 >
                   Log in
-                </button>
-                <button
-                  className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:opacity-90 active:scale-95"
-                  style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+                </Button>
+                <Button
                   onClick={() => {
                     setMobileMenuOpen(false);
                     navigate({ to: "/signup" });
                   }}
                 >
                   Get started
-                </button>
+                </Button>
               </div>
             )}
           </div>

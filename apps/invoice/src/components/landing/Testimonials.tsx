@@ -1,3 +1,4 @@
+import { Card, CardContent, CardHeader } from "@shared/ui/components/card";
 const testimonials = [
   {
     quote:
@@ -46,51 +47,31 @@ function StarRating() {
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" className="pb-24">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Section header */}
-        <div className="mb-12">
-          <p
-            className="animate-fade-up text-xs font-bold tracking-[0.25em] uppercase mb-2.5"
-            style={{ color: "#7F8CAA", animationDelay: "0.05s" }}
-          >
-            Testimonials
-          </p>
-          <h2
-            className="animate-fade-up text-4xl font-bold tracking-tight"
-            style={{ color: "#0f172a", animationDelay: "0.12s" }}
-          >
-            Loved by freelancers everywhere.
-          </h2>
-          <p
-            className="animate-fade-up text-lg max-w-xl leading-relaxed mt-3"
-            style={{ color: "#7F8CAA", animationDelay: "0.18s" }}
-          >
-            Real businesses, real results. Here's what people say after switching.
-          </p>
-        </div>
+    <section id="testimonials">
+      <div className="mb-8">
+        <p className="animate-fade-up text-xs font-bold tracking-[0.25em] uppercase mb-2.5 text-muted-foreground">
+          Testimonials
+        </p>
+        <h2 className="animate-fade-up text-3xl font-bold tracking-tight">Loved by freelancers everywhere.</h2>
+        <p className="animate-fade-up  max-w-xl leading-relaxed mt-3 text-muted-foreground">
+          Real businesses, real results. Here's what people say after switching.
+        </p>
+      </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {testimonials.map((t, i) => (
-            <div
-              key={t.author}
-              className="animate-fade-up bg-white rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-              style={{
-                boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07",
-                animationDelay: `${0.1 + i * 0.1}s`,
-              }}
-            >
+      {/* Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {testimonials.map((t) => (
+          <Card key={t.author}>
+            <CardHeader>
               <StarRating />
-              <blockquote
-                className="text-sm leading-relaxed mb-6"
-                style={{ color: "#0f172a", lineHeight: "1.7" }}
-              >
+            </CardHeader>
+            <CardContent>
+              <blockquote className="text-sm leading-relaxed mb-6" style={{ color: "#0f172a", lineHeight: "1.7" }}>
                 "{t.quote}"
               </blockquote>
               <div className="flex items-center gap-3">
                 <div
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
                   style={{ backgroundColor: "#4382df" }}
                 >
                   {t.avatar}
@@ -104,9 +85,9 @@ export default function Testimonials() {
                   </p>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </section>
   );

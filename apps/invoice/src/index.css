@@ -1,12 +1,6 @@
 @import "@shared/ui/globals.css";
 
 @layer base {
-  * {
-    font-size: 0.9rem;
-    font-weight: 400;
-    line-height: 1.8rem;
-  }
-
   @media screen {
     .print-section {
       position: absolute;
