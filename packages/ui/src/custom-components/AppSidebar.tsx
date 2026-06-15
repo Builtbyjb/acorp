@@ -150,7 +150,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
             {/* Logout */}
             <SidebarMenuItem>
               <button
-                className="flex gap-3 items-center w-full rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:cursor-pointer bg-[#ef4444]/10 text-[#ef4444]"
+                className="flex gap-3 items-center w-full rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:cursor-pointer hover:bg-[#ef4444]/10 text-[#ef4444]"
                 onClick={() => logout()}
               >
                 <LogOut className="h-4 w-4 shrink-0" />

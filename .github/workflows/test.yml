@@ -22,4 +22,4 @@ jobs:
       - name: Build Frontend
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
-        run: npx turbo run build
+        run: npx turbo run build --filter=invoice

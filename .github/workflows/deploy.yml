@@ -27,7 +27,7 @@ jobs:
           command: d1 migrations apply acorp-invoice --remote --env=production
 
       - name: Build backend
-        run: npx turbo run build --filter=@invoice/server
+        run: npx turbo run build --filter=server
 
       # Deploy Backend (Cloudflare Worker)
       - name: Deploy Backend
@@ -39,17 +39,17 @@ jobs:
           packageManager: npm
           command: deploy --env=production
 
-      - name: Build Frontend
+      # Build and Deploy Frontends to Cloudflare Pages)
+      - name: Build Invoice
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
-        run: npx turbo run build --filter=@invoice/web
+        run: npx turbo run build --filter=invoice
 
-      # Deploy Frontend (Cloudflare Pages)
       - name: Deploy Frontend
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: "apps/web"
+          workingDirectory: "apps/invoice"
           packageManager: npm
-          command: pages deploy dist --branch=main --project-name=ihod-web
+          command: pages deploy dist --branch=main --project-name=invoice
