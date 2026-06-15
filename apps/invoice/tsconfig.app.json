@@ -55,5 +55,7 @@
     "../../packages/ui/src/custom-components/Header",
     "../../packages/ui/src/custom-components/Header.tsx",
     "../../packages/ui/src/hooks/use-mobile.ts",
+    "../../packages/ui/src/components/Button.tsx",
+    "../../packages/ui/src/custom-components/NavBar.tsx",
   ],
 }
