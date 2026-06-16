@@ -2,13 +2,80 @@ import { Hono } from "hono";
 import { Bindings, TokenPayload } from "@/lib/types";
 import { zValidator } from "@hono/zod-validator";
 import { drizzle } from "drizzle-orm/d1";
-import { eq, and, desc } from "drizzle-orm";
-import { clients, invoices, organizations } from "@/db/schema";
+import { eq, and, desc, sql } from "drizzle-orm";
+import { clients, invoices, members, organizations } from "@/db/schema";
 import { getNewInvoiceNumber, handleZodValidate } from "@/lib/utils";
 import { InvoiceFormSchema } from "@shared/lib/zod-schema";
 import { planAccessMiddleware } from "@/middleware/plan-access";
+import { authMiddleware } from "@/middleware/authentication";
 
 const invoiceRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/invoices");
+
+/* Returns all invoices for the user's organization (paginated) */
+export const invoiceListRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/invoices");
+invoiceListRouteV1.use("*", authMiddleware());
+
+invoiceListRouteV1.get("/", async (c) => {
+    const db = drizzle(c.env.DB);
+
+    const jwtPayload = c.get("jwtPayload") as TokenPayload;
+
+    const member = await db.select().from(members).where(eq(members.userId, jwtPayload.userId));
+    if (member.length == 0) return c.json("User is not part of an organization", 400);
+
+    const pageStr = c.req.query("page");
+    const sizeStr = c.req.query("size");
+
+    let page = parseInt(pageStr ?? "1", 10);
+    if (Number.isNaN(page) || page < 1) page = 1;
+
+    let size = parseInt(sizeStr ?? "10", 10);
+    if (Number.isNaN(size) || size < 1) size = 10;
+
+    const MAX_SIZE = 100;
+    size = Math.min(size, MAX_SIZE);
+
+    const baseWhere = and(
+        eq(clients.organizationId, member[0].organizationId),
+        eq(clients.deleted, false),
+        eq(invoices.deleted, false),
+    );
+
+    const countResult = await db
+        .select({ count: sql<number>`count(*)` })
+        .from(invoices)
+        .innerJoin(clients, eq(invoices.clientId, clients.id))
+        .where(baseWhere)
+        .get();
+    const total = countResult?.count ?? 0;
+
+    const offset = (page - 1) * size;
+
+    const result = await db
+        .select()
+        .from(invoices)
+        .innerJoin(clients, eq(invoices.clientId, clients.id))
+        .where(baseWhere)
+        .orderBy(desc(invoices.createdAt))
+        .limit(size)
+        .offset(offset);
+
+    const invoicesResult = result.map((r) => r.invoices);
+
+    return c.json(
+        {
+            message: "Invoices fetched",
+            invoices: invoicesResult,
+            meta: {
+                total,
+                page,
+                size,
+                totalPages: Math.ceil(total / size),
+            },
+        },
+        200,
+    );
+});
 
 /* Returns all the invoices created for a client */
 invoiceRouteV1.get("/", async (c) => {

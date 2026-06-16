@@ -18,9 +18,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@shared/ui/components/alert-dialog";
-import { MoreHorizontal, Eye, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@shared/ui/components/button";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@shared/ui/components/select";
+import { MoreHorizontal, Eye, Pencil, Trash2 } from "lucide-react";
+import { PaginationBar } from "@/components/PaginationBar";
 import type { Invoice } from "@shared/lib/types";
 import { format } from "date-fns";
 import { useNavigate } from "@tanstack/react-router";
@@ -86,9 +85,6 @@ export default function InvoicesTable({
   const handleNavigate = (clientId: string, invoiceId: string) => {
     navigate({ to: `/clients/${clientId}/invoices/${invoiceId}` });
   };
-
-  const start = meta && meta.total > 0 ? (meta.page - 1) * meta.size + 1 : 0;
-  const end = meta ? Math.min((meta.page || 1) * (meta.size || 10), meta.total || 0) : 0;
 
   return (
     <>
@@ -207,59 +203,7 @@ export default function InvoicesTable({
             </Table>
           </div>
 
-          {/* Pagination controls */}
-          <div className="flex items-center justify-between px-4 py-3">
-            <div className="text-sm text-muted-foreground">
-              {meta ? (meta.total === 0 ? "No invoices" : `Showing ${start} - ${end} of ${meta.total}`) : null}
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <Button
-                  size="sm"
-                  disabled={!meta || (meta && meta.page <= 1)}
-                  onClick={() => {
-                    if (onPageChange) onPageChange(Math.max(1, (meta?.page ?? 1) - 1));
-                  }}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <span className="text-sm text-muted-foreground">
-                  {meta ? `Page ${meta.page} of ${meta.totalPages}` : ""}
-                </span>
-                <Button
-                  size="sm"
-                  disabled={!meta || (meta && meta.page >= (meta.totalPages || 1))}
-                  onClick={() => {
-                    if (onPageChange) onPageChange(Math.min(meta?.totalPages ?? 1, (meta?.page ?? 1) + 1));
-                  }}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <label className="text-sm text-muted-foreground">Size</label>
-                <Select
-                  value={String(meta?.size ?? 10)}
-                  onValueChange={(val) => {
-                    if (val == null) return;
-                    if (onSizeChange) onSizeChange(parseInt(val, 10));
-                  }}
-                >
-                  <SelectTrigger size="sm" aria-label="Select page size">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="10">10</SelectItem>
-                    <SelectItem value="20">20</SelectItem>
-                    <SelectItem value="50">50</SelectItem>
-                    <SelectItem value="100">100</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
+          <PaginationBar meta={meta} onPageChange={onPageChange} onSizeChange={onSizeChange} label="invoices" />
         </>
       )}
 

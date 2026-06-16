@@ -1,10 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Button } from "@shared/ui/components/button";
 import { Plus } from "lucide-react";
 import InvoicesTable from "@/components/InvoicesTable";
 import { useLayout } from "@/hooks/useLayout";
+import { useFetch } from "@/hooks/useFetch";
+import { usePagination } from "@/hooks/usePagination";
 import { type Invoice } from "@shared/lib/types";
+import { InvoiceSchema } from "@shared/lib/zod-schema";
+import * as z from "zod";
+
+const invoicesResponseSchema = z.object({
+  invoices: z.array(InvoiceSchema),
+  meta: z.object({
+    total: z.number(),
+    page: z.number(),
+    size: z.number(),
+    totalPages: z.number(),
+  }),
+});
 
 function RouteComponent() {
   const { setTitle } = useLayout();
@@ -13,25 +27,25 @@ function RouteComponent() {
     setTitle("Invoices");
   }, [setTitle]);
 
-  // const navigate = useNavigate();
+  const { doGET } = useFetch();
 
-  const [invoices, setInvoices] = useState<Invoice[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [meta, setMeta] = useState<null | { total: number; page: number; size: number; totalPages: number }>(null);
-  const [page, setPage] = useState(1);
-  const [size, setSize] = useState(10);
+  const pagination = usePagination<Invoice>({
+    fetcher: async (pageToFetch, sizeToFetch) => {
+      const response = await doGET(`/api/v1/invoices?page=${pageToFetch}&size=${sizeToFetch}`);
+      if (response instanceof Error) throw response;
+      if (!response.ok) throw new Error("Failed to fetch invoices");
+      const result = await response.json();
+      const parsed = invoicesResponseSchema.parse(result);
+      return { data: parsed.invoices, meta: parsed.meta };
+    },
+  });
 
   const handleCreate = () => {
     console.log("Create invoice clicked");
   };
 
-  const handleInvoiceDelete = (id: string) => {
-    void id;
-    setInvoices(invoices.filter((invoice) => invoice.id !== id));
-    setIsLoading(false);
-    setMeta(null);
-    console.log(page);
-    console.log(size);
+  const handleInvoiceDelete = async () => {
+    await pagination.onItemDeleted();
   };
 
   return (
@@ -41,15 +55,12 @@ function RouteComponent() {
         Create Invoice
       </Button>
       <InvoicesTable
-        invoices={invoices}
+        invoices={pagination.data}
         onDelete={handleInvoiceDelete}
-        meta={meta}
-        onPageChange={(p) => setPage(p)}
-        onSizeChange={(s) => {
-          setSize(s);
-          setPage(1);
-        }}
-        isLoading={isLoading}
+        meta={pagination.meta}
+        onPageChange={(p) => pagination.setPage(p)}
+        onSizeChange={(s) => pagination.setSize(s)}
+        isLoading={pagination.isLoading}
       />
     </div>
   );
