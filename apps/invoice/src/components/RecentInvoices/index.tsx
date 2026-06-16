@@ -31,7 +31,7 @@ export default function RecentInvoices({ invoices, isLoading }: RecentInvoicesPr
           <CardTitle>Recent Invoices</CardTitle>
           <CardDescription>Latest invoice activity</CardDescription>
         </div>
-        <Button variant="outline" onClick={() => navigate({ to: "/clients" })}>
+        <Button variant="outline" onClick={() => navigate({ to: "/invoices" })}>
           View all
         </Button>
       </CardHeader>

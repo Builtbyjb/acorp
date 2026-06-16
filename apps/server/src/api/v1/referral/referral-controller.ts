@@ -7,7 +7,7 @@ import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { handleZodValidate } from "@/lib/utils";
-import { generateReferralCode, generateReferralLink } from "@/referral/referral-service";
+import { generateReferralCode, generateReferralLink } from "@/api/v1/referral/referral-service";
 
 const referralRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/referral");
 referralRouteV1.use("*", authMiddleware());
