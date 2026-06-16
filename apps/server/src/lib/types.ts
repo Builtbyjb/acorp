@@ -4,14 +4,14 @@ import { clients, invoices } from "@/db/schema";
 
 export type Bindings = {
     DB: D1Database;
-    EMAIL_DOMAIN: string;
+    OTP_EMAIL: string;
     JWT_SECRET: string;
     SEND_EMAIL: {
         send: (email: { to: string; from: string; subject: string; text: string; html?: string }) => Promise<any>;
     };
     ENV: string;
     PAYSTACK_SECRET: string;
-    FRONTEND_URL: string;
+    INVOICE_URL: string;
     SERVER_URL: string;
     R2: R2Bucket;
     RATE_LIMITER: RateLimit;

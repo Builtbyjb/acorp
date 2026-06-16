@@ -16,10 +16,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Build dependencies
+        run: npx turbo build --filter='./packages/**'
+
       - name: Run lint
-        run: npm run lint
+        run: npx turbo lint --filter=invoice
 
       - name: Build Frontend
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
-        run: npx turbo run build
+        run: npx turbo build --filter=invoice

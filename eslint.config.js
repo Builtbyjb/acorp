@@ -5,7 +5,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
-  globalIgnores(["node_modules/*", ".git/*", "apps/web/dist/*", "apps/web/node_modules/*"]),
+  globalIgnores(["node_modules/*", ".git/*", "apps/invoice/dist/*", "apps/invoice/node_modules/*"]),
   {
     ignores: ["dist/", "routeTree.gen.ts", "node_modules/"],
   },

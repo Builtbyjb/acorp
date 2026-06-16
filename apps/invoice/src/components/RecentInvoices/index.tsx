@@ -1,0 +1,74 @@
+import { useNavigate } from "@tanstack/react-router";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/components/card";
+import { Badge } from "@shared/ui/components/badge";
+import { Button } from "@shared/ui/components/button";
+import type { Invoice } from "@shared/lib/types";
+import { format } from "date-fns";
+import { formatCurrency, getBadgeVariant } from "@/lib/utils";
+import { calculateTotalAmount } from "@shared/utils/util";
+import { SkeletonBarChart } from "@/components/Skeleton";
+
+interface RecentInvoicesProps {
+  invoices: Invoice[];
+  isLoading: boolean;
+}
+
+export default function RecentInvoices({ invoices, isLoading }: RecentInvoicesProps) {
+  const navigate = useNavigate();
+
+  const recentInvoices = [...invoices]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 5);
+
+  const handleNavigate = (invoice: Invoice) => {
+    navigate({ to: `/clients/${invoice.clientId}/invoices/${invoice.id}` });
+  };
+
+  return (
+    <Card className="col-span-1 lg:col-span-2">
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div>
+          <CardTitle>Recent Invoices</CardTitle>
+          <CardDescription>Latest invoice activity</CardDescription>
+        </div>
+        <Button variant="outline" onClick={() => navigate({ to: "/invoices" })}>
+          View all
+        </Button>
+      </CardHeader>
+      <CardContent>
+        {!isLoading ? (
+          <div className="space-y-4">
+            {recentInvoices.map((invoice) => (
+              <div
+                key={invoice.id}
+                className="flex items-center justify-between p-3 rounded-lg border border-border"
+                onClick={() => handleNavigate(invoice)}
+              >
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">{invoice.invoiceNumber}</span>
+                    <Badge className={`${getBadgeVariant(invoice.status)} capitalize`}>{invoice.status}</Badge>
+                  </div>
+                  {/*<span className="text-sm text-muted-foreground">{invoice.client.name}</span>*/}
+                </div>
+                <div className="flex flex-col items-end gap-1">
+                  <span className="font-semibold">
+                    {formatCurrency(
+                      calculateTotalAmount(invoice.items, invoice.taxRate, invoice.discount),
+                      invoice.currency,
+                    )}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {format(new Date(invoice.issueDate), "MMM d, yyyy")}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <SkeletonBarChart />
+        )}
+      </CardContent>
+    </Card>
+  );
+}

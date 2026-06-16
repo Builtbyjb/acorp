@@ -1,0 +1,87 @@
+import { Field, FieldError, FieldLabel } from "@shared/ui/components/field";
+import { Input } from "@shared/ui/components/input";
+import type { SignupFormType } from "@/hooks/useSignupForm";
+
+type Props = {
+  form: SignupFormType;
+};
+
+/* Location Information */
+export default function Step3({ form }: Props) {
+  return (
+    <Field>
+      <form.Field
+        name="businessAddress"
+        children={(field) => {
+          const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor="business-address-input">
+                Business Address <span className="text-destructive">*</span>
+              </FieldLabel>
+              <Input
+                required
+                id="business-address-input"
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                aria-invalid={isInvalid}
+                placeholder="Street Address"
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+      <form.Field
+        name="city"
+        children={(field) => {
+          const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor="business-city-input">
+                City <span className="text-destructive">*</span>
+              </FieldLabel>
+              <Input
+                required
+                id="business-city-input"
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                aria-invalid={isInvalid}
+                placeholder="City, State ZIP"
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+      <form.Field
+        name="country"
+        children={(field) => {
+          const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor="business-address-input">
+                Country <span className="text-destructive">*</span>
+              </FieldLabel>
+              <Input
+                required
+                id="business-address-input"
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                aria-invalid={isInvalid}
+                placeholder="Country"
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+    </Field>
+  );
+}
