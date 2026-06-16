@@ -43,24 +43,21 @@ function XIcon() {
 
 export function SiteFooter() {
   return (
-    <footer style={{ borderTop: "1px solid #7F8CAA20" }}>
+    <footer className="border-t border-black/10">
       <div className="max-w-7xl mx-auto px-6 py-14">
         {/* Main row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-10">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1 flex flex-col gap-4">
             <Link to="/" className="flex items-center gap-2.5 no-underline">
-              <div
-                className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-black"
-                style={{ backgroundColor: "#4382df" }}
-              >
+              <div className="w-6 h-6 rounded-none flex items-center justify-center bg-black text-white text-xs font-black">
                 Z
               </div>
-              <span className="font-bold text-base tracking-tight" style={{ color: "#0f172a" }}>
+              <span className="font-bold text-base tracking-tight text-black">
                 Zendo
               </span>
             </Link>
-            <p className="text-sm leading-relaxed max-w-[200px]" style={{ color: "#7F8CAA" }}>
+            <p className="text-sm leading-relaxed max-w-[200px] text-neutral-500">
               Calm, focused productivity. Calendar, tasks, and Pomodoro in one place.
             </p>
             <div className="flex gap-2">
@@ -74,12 +71,7 @@ export function SiteFooter() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={s.label}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-opacity hover:opacity-60"
-                  style={{
-                    border: "1px solid #7F8CAA28",
-                    color: "#7F8CAA",
-                    backgroundColor: "#ffffff60",
-                  }}
+                  className="w-8 h-8 rounded-none flex items-center justify-center transition-opacity hover:opacity-60 border border-black/10 text-neutral-500 bg-white"
                 >
                   {s.icon}
                 </a>
@@ -90,10 +82,7 @@ export function SiteFooter() {
           {/* Link columns */}
           {FOOTER_COLS.map((col) => (
             <div key={col.title} className="flex flex-col gap-3">
-              <p
-                className="text-xs font-bold uppercase tracking-widest"
-                style={{ color: "#0f172a" }}
-              >
+              <p className="text-xs font-bold uppercase tracking-widest text-black">
                 {col.title}
               </p>
               {col.links.map((link) =>
@@ -101,8 +90,7 @@ export function SiteFooter() {
                   <Link
                     key={link.label}
                     to={link.to}
-                    className="text-sm transition-opacity hover:opacity-60"
-                    style={{ color: "#7F8CAA" }}
+                    className="text-sm transition-opacity hover:opacity-60 text-neutral-500"
                   >
                     {link.label}
                   </Link>
@@ -110,8 +98,7 @@ export function SiteFooter() {
                   <a
                     key={link.label}
                     href={link.href}
-                    className="text-sm transition-opacity hover:opacity-60"
-                    style={{ color: "#7F8CAA" }}
+                    className="text-sm transition-opacity hover:opacity-60 text-neutral-500"
                   >
                     {link.label}
                   </a>
@@ -122,10 +109,7 @@ export function SiteFooter() {
         </div>
 
         {/* Bottom bar */}
-        <div
-          className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-6 text-xs"
-          style={{ borderTop: "1px solid #7F8CAA18", color: "#7F8CAA" }}
-        >
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-6 text-xs border-t border-black/10 text-neutral-500">
           <span>© {new Date().getFullYear()} Zendo. All rights reserved.</span>
           <span>Designed for focus. Built for humans.</span>
         </div>

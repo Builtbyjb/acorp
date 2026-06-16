@@ -41,7 +41,7 @@ function RouteComponent() {
 
   const pagination = usePagination<Invoice>({
     fetcher: async (pageToFetch, sizeToFetch) => {
-      const response = await doGET(`/api/v1/clients/${clientId}?page=${pageToFetch}&size=${sizeToFetch}`);
+      const response = await doGET(`/api/v1/invoice/clients/${clientId}?page=${pageToFetch}&size=${sizeToFetch}`);
       if (response instanceof Error) throw response;
 
       const result = await response.json();

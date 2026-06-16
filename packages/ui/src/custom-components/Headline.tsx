@@ -9,17 +9,12 @@ export default function Headline({ start, end }: Props) {
       className="animate-fade-up font-bold leading-[0.87] tracking-[-0.04em] mb-7"
       style={{
         fontSize: "clamp(3.5rem, 9vw, 5rem)",
-        color: "#0f172a",
+        color: "#000000",
         animationDelay: "0.12s",
       }}
     >
       {start}{" "}
-      <span
-        style={{
-          WebkitTextStroke: "2.5px #4382df",
-          color: "transparent",
-        }}
-      >
+      <span className="text-outline" style={{ color: "#000000" }}>
         {end}
       </span>
     </h1>

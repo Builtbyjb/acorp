@@ -1,74 +1,218 @@
-@import "@fontsource-variable/geist";
+@import "@shared/ui/globals.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* ═══════════════════════════════════════════════════════════════════════════
+   ZENDO APP — RECEIPT BRUTALIST OVERRIDES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@theme inline {
+  --color-brand-bg: #ffffff;
+  --color-brand-secondary: #737373;
+  --color-brand-accent: #000000;
+  --color-brand-ink: #000000;
+}
 
 @layer base {
   :root {
-    /* ACorp Design Language — Precision Craft */
-    --background: 190 14% 93%;        /* #ebf0f0 Cloud */
-    --foreground: 222 74% 12%;        /* #0f172a Near-black */
-    --card: 0 0% 100%;                /* #ffffff White */
-    --card-foreground: 222 74% 12%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 74% 12%;
-    --primary: 217 70% 57%;           /* #4382df Cobalt */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 218 16% 57%;         /* #7F8CAA Slate */
-    --secondary-foreground: 0 0% 100%;
-    --muted: 190 10% 88%;
-    --muted-foreground: 218 16% 57%;  /* Slate */
-    --accent: 217 70% 57%;            /* Cobalt */
-    --accent-foreground: 0 0% 100%;
-    --destructive: 4 84% 58%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 218 16% 80%;
-    --input: 218 16% 80%;
-    --ring: 217 70% 57%;
-    --radius: 1rem;
-    /* App token: timer break color → Slate */
-    --timer: 218 16% 57%;
+    --background: #ffffff;
+    --foreground: #000000;
+    --card: #ffffff;
+    --card-foreground: #000000;
+    --popover: #ffffff;
+    --popover-foreground: #000000;
+    --primary: #000000;
+    --primary-foreground: #ffffff;
+    --secondary: #737373;
+    --secondary-foreground: #ffffff;
+    --muted: #f5f5f5;
+    --muted-foreground: #737373;
+    --accent: #f5f5f5;
+    --accent-foreground: #000000;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: rgba(0, 0, 0, 0.10);
+    --input: rgba(0, 0, 0, 0.10);
+    --ring: #000000;
+    --radius: 0px;
+
+    /* Sidebar: dark */
+    --sidebar: #171717;
+    --sidebar-foreground: #ffffff;
+    --sidebar-primary: #ffffff;
+    --sidebar-primary-foreground: #171717;
+    --sidebar-accent: rgba(255, 255, 255, 0.08);
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: rgba(255, 255, 255, 0.10);
+    --sidebar-ring: rgba(255, 255, 255, 0.20);
+  }
+
+  body {
+    @apply bg-white text-black;
+    font-family: "Geist Variable", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color-scheme: light;
   }
 
   * {
     @apply border-border;
   }
-
-  body {
-    @apply bg-background text-foreground;
-    font-family: "GeistVariable", "Geist Variable", system-ui, -apple-system, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color-scheme: light;
-  }
 }
 
-/* ── Animation keyframes ─────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ── Brutalist scrollbar ───────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(115, 115, 115, 0.3);
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(115, 115, 115, 0.5);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+/* ── Receipt card shell ─────────────────────────────────────────────────── */
+.receipt-card {
+  @apply bg-white border border-black/10 p-6;
 }
 
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-16px); }
-  to   { opacity: 1; transform: translateX(0); }
+/* ── Eyebrow label ──────────────────────────────────────────────────────── */
+.eyebrow {
+  @apply text-[10px] font-mono font-bold tracking-[0.25em] uppercase text-neutral-500;
 }
 
-/* ── Animation utilities ─────────────────────────────── */
-.animate-fade-up {
-  animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+/* ── Section heading ────────────────────────────────────────────────────── */
+.section-heading {
+  @apply text-4xl font-bold tracking-tight text-black;
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.5s ease both;
+/* ── Solid button (brutalist) ───────────────────────────────────────────── */
+.btn-solid {
+  @apply inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold text-white bg-black transition-all hover:bg-black/90 active:scale-95;
 }
 
-.animate-slide-left {
-  animation: slideInLeft 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+/* ── Outline button (brutalist) ───────────────────────────────────────── */
+.btn-outline {
+  @apply inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold border-2 border-black text-black transition-all hover:bg-black hover:text-white active:scale-95;
+}
+
+/* ── Ghost button (brutalist) ──────────────────────────────────────────── */
+.btn-ghost {
+  @apply inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-black transition-all hover:bg-black hover:text-white active:scale-95;
+}
+
+/* ── Active nav pill ────────────────────────────────────────────────────── */
+.nav-active {
+  @apply relative px-3 py-1.5 text-sm font-medium transition-all text-black;
+  background-color: #00000008;
+}
+
+.nav-inactive {
+  @apply relative px-3 py-1.5 text-sm font-medium transition-all text-neutral-500;
+}
+
+/* ── Dark sidebar nav items ─────────────────────────────────────────────── */
+.sidebar-nav-active {
+  @apply text-white;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-nav-inactive {
+  @apply text-white/50;
+}
+
+/* ── Monospace data labels ──────────────────────────────────────────────── */
+.data-label {
+  @apply text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500;
+}
+
+/* ── Status badge (monochrome) ──────────────────────────────────────────── */
+.status-badge {
+  @apply inline-flex items-center px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-black text-white;
+}
+
+/* ── Dashed placeholder ─────────────────────────────────────────────────── */
+.dashed-placeholder {
+  @apply border border-dashed border-black/10;
+}
+
+/* ── Ruler / measurement line ───────────────────────────────────────────── */
+.ruler {
+  border: none;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, #000000 0px, #000000 4px, transparent 4px, transparent 8px);
+  opacity: 0.3;
+}
+
+/* ── Calendar grayscale event colors (keep functional color coding) ─────── */
+.cal-color-1 {
+  @apply bg-black/10 text-black border-l-2 border-black;
+}
+.cal-color-2 {
+  @apply bg-neutral-800/10 text-neutral-800 border-l-2 border-neutral-800;
+}
+.cal-color-3 {
+  @apply bg-neutral-600/10 text-neutral-600 border-l-2 border-neutral-600;
+}
+.cal-color-4 {
+  @apply bg-neutral-400/10 text-neutral-400 border-l-2 border-neutral-400;
+}
+.cal-color-5 {
+  @apply bg-neutral-300/10 text-neutral-500 border-l-2 border-neutral-300;
+}
+.cal-color-6 {
+  @apply bg-neutral-200/10 text-neutral-500 border-l-2 border-neutral-200;
+}
+.cal-color-7 {
+  @apply bg-neutral-100 text-neutral-500 border-l-2 border-neutral-100;
+}
+.cal-color-8 {
+  @apply bg-neutral-50 text-neutral-500 border-l-2 border-neutral-50;
+}
+
+/* ── Priority dots (monochrome scale) ───────────────────────────────────── */
+.priority-high {
+  @apply bg-black;
+}
+.priority-medium {
+  @apply bg-neutral-600;
+}
+.priority-low {
+  @apply bg-neutral-400;
+}
+.priority-none {
+  @apply bg-transparent border border-black/10;
+}
+
+/* ── Tag colors (grayscale) ───────────────────────────────────────────── */
+.tag-gray-1 {
+  @apply border border-black/10 text-neutral-500;
+}
+.tag-gray-2 {
+  @apply border border-black/10 text-neutral-400;
+}
+.tag-gray-3 {
+  @apply border border-black/10 text-neutral-600;
+}
+
+/* ── Receipt unroll animation stagger helpers ───────────────────────────── */
+.stagger-1 {
+  animation-delay: 0.05s;
+}
+.stagger-2 {
+  animation-delay: 0.12s;
+}
+.stagger-3 {
+  animation-delay: 0.22s;
+}
+.stagger-4 {
+  animation-delay: 0.32s;
+}
+.stagger-5 {
+  animation-delay: 0.48s;
+}
+.stagger-6 {
+  animation-delay: 0.6s;
 }

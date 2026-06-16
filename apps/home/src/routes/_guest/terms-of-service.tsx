@@ -367,53 +367,49 @@ function PolicyHero({
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: "radial-gradient(circle, #7F8CAA22 1.5px, transparent 1.5px)",
-          backgroundSize: "28px 28px",
+          backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px)",
+          backgroundSize: "12px 12px",
         }}
-      />
-      <div
-        className="absolute top-0 right-0 w-80 h-80 rounded-full blur-3xl pointer-events-none"
-        style={{ backgroundColor: "#4382df0a" }}
       />
 
       <div className="relative max-w-4xl mx-auto">
         <div className="flex items-center gap-2 mb-8">
-          <Link to="/" className="text-xs font-medium transition-opacity hover:opacity-60" style={{ color: "#7F8CAA" }}>
+          <Link to="/" className="text-xs font-medium transition-opacity hover:opacity-60" style={{ color: "#737373" }}>
             ACorp
           </Link>
-          <span style={{ color: "#7F8CAA50" }}>/</span>
-          <span className="text-xs font-semibold" style={{ color: "#0f172a" }}>
+          <span style={{ color: "#73737350" }}>/</span>
+          <span className="text-xs font-semibold text-black">
             {title}
           </span>
         </div>
 
         <div
-          className="animate-fade-up inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold tracking-[0.18em] uppercase mb-8"
+          className="animate-fade-up inline-flex items-center gap-2 px-3 py-1.5 border text-[10px] font-bold tracking-[0.18em] uppercase mb-8"
           style={{
-            backgroundColor: "#ffffff70",
-            borderColor: "#7F8CAA28",
-            color: "#7F8CAA",
+            backgroundColor: "#00000008",
+            borderColor: "#00000015",
+            color: "#737373",
             animationDelay: "0.05s",
           }}
         >
-          <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#4382df" }} />
+          <span className="w-1.5 h-1.5 bg-neutral-500" />
           {eyebrow}
         </div>
 
         <h1
-          className="animate-fade-up text-5xl md:text-6xl font-extrabold tracking-tight mb-4"
-          style={{ color: "#0f172a", animationDelay: "0.12s" }}
+          className="animate-fade-up text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-black"
+          style={{ animationDelay: "0.12s" }}
         >
           {title}
         </h1>
 
-        <p className="animate-fade-up text-sm font-medium mb-6" style={{ color: "#7F8CAA", animationDelay: "0.18s" }}>
+        <p className="animate-fade-up text-sm font-medium mb-6" style={{ color: "#737373", animationDelay: "0.18s" }}>
           Effective date: {effectiveDate}
         </p>
 
         <p
           className="animate-fade-up text-lg max-w-2xl leading-relaxed"
-          style={{ color: "#7F8CAA", animationDelay: "0.24s" }}
+          style={{ color: "#737373", animationDelay: "0.24s" }}
         >
           {summary}
         </p>
@@ -428,14 +424,12 @@ function PolicyBody({ sections }: { sections: PolicySection[] }) {
       <div className="max-w-4xl mx-auto">
         {/* Table of Contents */}
         <div
-          className="animate-fade-up rounded-3xl p-7 mb-8 border"
+          className="animate-fade-up bg-white border border-black/10 p-6 mb-8"
           style={{
-            backgroundColor: "#ffffff80",
-            borderColor: "#7F8CAA18",
             animationDelay: "0.3s",
           }}
         >
-          <p className="text-xs font-bold tracking-[0.22em] uppercase mb-4" style={{ color: "#7F8CAA" }}>
+          <p className="text-[10px] font-mono font-bold tracking-[0.22em] uppercase mb-4" style={{ color: "#737373" }}>
             Contents
           </p>
           <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
@@ -443,8 +437,7 @@ function PolicyBody({ sections }: { sections: PolicySection[] }) {
               <li key={s.id}>
                 <a
                   href={`#${s.id}`}
-                  className="text-sm transition-opacity hover:opacity-60 leading-relaxed"
-                  style={{ color: "#4382df" }}
+                  className="text-sm transition-opacity hover:opacity-60 leading-relaxed text-black"
                 >
                   {s.title}
                 </a>
@@ -455,9 +448,8 @@ function PolicyBody({ sections }: { sections: PolicySection[] }) {
 
         {/* Sections */}
         <div
-          className="animate-fade-up bg-white rounded-3xl overflow-hidden"
+          className="animate-fade-up bg-white border border-black/10 overflow-hidden"
           style={{
-            boxShadow: "0 1px 4px #0f172a0a, 0 0 0 1px #0f172a06",
             animationDelay: "0.38s",
           }}
         >
@@ -467,10 +459,10 @@ function PolicyBody({ sections }: { sections: PolicySection[] }) {
               id={section.id}
               className="px-8 md:px-12 py-10"
               style={{
-                borderBottom: i < sections.length - 1 ? "1px solid #7F8CAA12" : undefined,
+                borderBottom: i < sections.length - 1 ? "1px solid #00000010" : undefined,
               }}
             >
-              <h2 className="text-xl font-bold mb-5 tracking-tight" style={{ color: "#0f172a" }}>
+              <h2 className="text-xl font-bold mb-5 tracking-tight text-black">
                 {section.title}
               </h2>
               <div>{section.content}</div>
@@ -482,17 +474,16 @@ function PolicyBody({ sections }: { sections: PolicySection[] }) {
         <div className="flex items-center justify-center gap-4 mt-8">
           <Link
             to="/privacy-policy"
-            className="text-sm font-medium transition-opacity hover:opacity-60"
-            style={{ color: "#4382df" }}
+            className="text-sm font-medium transition-opacity hover:opacity-60 text-black"
           >
             ← Privacy Policy
           </Link>
-          <span style={{ color: "#7F8CAA30" }}>|</span>
-          <p className="text-xs" style={{ color: "#7F8CAA" }}>
+          <span style={{ color: "#73737330" }}>|</span>
+          <p className="text-xs" style={{ color: "#737373" }}>
             Questions?{" "}
             <a
               href="mailto:legal@acorp.dev"
-              className="underline underline-offset-2 transition-opacity hover:opacity-60"
+              className="underline underline-offset-2 transition-opacity hover:opacity-60 text-black"
             >
               legal@acorp.dev
             </a>
@@ -507,7 +498,7 @@ function PolicyBody({ sections }: { sections: PolicySection[] }) {
 
 function P({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-sm leading-relaxed mb-4 last:mb-0" style={{ color: "#4a5568" }}>
+    <p className="text-sm leading-relaxed mb-4 last:mb-0" style={{ color: "#737373" }}>
       {children}
     </p>
   );
@@ -515,7 +506,7 @@ function P({ children }: { children: React.ReactNode }) {
 
 function H3({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-base font-semibold mt-6 mb-3" style={{ color: "#0f172a" }}>
+    <h3 className="text-base font-semibold mt-6 mb-3 text-black">
       {children}
     </h3>
   );
@@ -529,8 +520,7 @@ function A({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <a
       href={href}
-      className="underline underline-offset-2 transition-opacity hover:opacity-70"
-      style={{ color: "#4382df" }}
+      className="underline underline-offset-2 transition-opacity hover:opacity-70 text-black"
     >
       {children}
     </a>
@@ -547,8 +537,7 @@ function InternalLink({
   return (
     <Link
       to={to}
-      className="underline underline-offset-2 transition-opacity hover:opacity-70"
-      style={{ color: "#4382df" }}
+      className="underline underline-offset-2 transition-opacity hover:opacity-70 text-black"
     >
       {children}
     </Link>

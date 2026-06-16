@@ -1,10 +1,9 @@
 import { Hono } from "hono";
 import type { Bindings } from "@/lib/types";
-import { invoiceNotify } from "@/lib/utils";
+import { invoiceNotify } from "@/lib/crons";
 
 const helperRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/helper");
 
-/* To test the invoice due data notification cron job */
 helperRouteV1.get("/cron/notify", async (c) => {
     invoiceNotify(c.env);
 

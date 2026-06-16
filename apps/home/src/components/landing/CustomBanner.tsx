@@ -9,20 +9,15 @@ export default function CustomBanner() {
     <section>
       <Card>
         <CardHeader>
-          <CardTitle>
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-2 text-muted-foreground">
-              Custom Development
-            </p>
-            <h3 className="text-2xl font-bold tracking-tight mb-2 text-foreground">Need something built for you?</h3>
-          </CardTitle>
+          <p className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase mb-2.5" style={{ color: "#737373" }}>
+            Custom Development
+          </p>
+          <CardTitle>Need something built for you?</CardTitle>
         </CardHeader>
         <CardContent>
-          <div>
-            <p className="text-sm leading-relaxed max-w-md text-muted-foreground">
-              We're also open to building fully custom applications — tailored to your exact workflows, brand, and
-              goals.
-            </p>
-          </div>
+          <p className="text-sm leading-relaxed max-w-md" style={{ color: "#737373" }}>
+            We're also open to building fully custom applications — tailored to your exact workflows, brand, and goals.
+          </p>
         </CardContent>
         <CardFooter>
           <Button variant="default" onClick={() => navigate({ to: "/custom" })}>

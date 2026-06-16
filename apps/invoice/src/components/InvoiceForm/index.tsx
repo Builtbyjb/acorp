@@ -55,7 +55,7 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
 
       const payload = { ...value, clientId: clientInfo.id, signature };
 
-      const response = await doPOST(`/api/v1/clients/${clientInfo.id}/invoices/create`, payload);
+      const response = await doPOST(`/api/v1/invoice/clients/${clientInfo.id}/invoices/create`, payload);
       if (response instanceof Error) throw response;
 
       const result = await response.json();
@@ -84,7 +84,7 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
 
       const payload = { ...value, clientId: clientInfo.id, signature };
 
-      const response = await doPUT(`/api/v1/clients/${clientInfo.id}/invoices/${invoiceId}/edit`, payload);
+      const response = await doPUT(`/api/v1/invoice/clients/${clientInfo.id}/invoices/${invoiceId}/edit`, payload);
       if (response instanceof Error) throw response;
 
       const result = await response.json();

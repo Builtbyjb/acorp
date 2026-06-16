@@ -2,7 +2,8 @@ import { Hono } from "hono";
 import { Bindings, Client, Invoice, TokenPayload } from "@/lib/types";
 import { drizzle } from "drizzle-orm/d1";
 import { eq, and } from "drizzle-orm";
-import { clients, invoices, organizations, users } from "@/db/schema";
+import { clients, invoices } from "@/db/invoice-schema";
+import { organizations, users } from "@/db/schemas";
 import {
     countPaidInvoices,
     calculateRevenue,
@@ -34,7 +35,6 @@ userRouteV1.get("/dashboard", async (c) => {
 
     const allInvoices: Invoice[] = [];
 
-    // Get all invoices for all clients
     for (const client of allClients) {
         const clientInvoices = await db
             .select()
@@ -103,7 +103,6 @@ userRouteV1.put(
         const data = c.req.valid("form");
         const db = drizzle(c.env.DB);
 
-        // console.log(data);
         const jwtPayload = c.get("jwtPayload") as TokenPayload;
 
         let blobURL: string | null = null;
@@ -113,7 +112,6 @@ userRouteV1.put(
                     contentType: data.avatar.type,
                 },
             });
-            // console.log(value);
 
             blobURL = getBlobURL(c, value?.key);
         }
@@ -136,7 +134,6 @@ userRouteV1.put(
         const data = c.req.valid("form");
         const db = drizzle(c.env.DB);
 
-        // console.log(data);
         const jwtPayload = c.get("jwtPayload") as TokenPayload;
 
         let blobURL: string | null = null;
@@ -146,7 +143,6 @@ userRouteV1.put(
                     contentType: data.logo.type,
                 },
             });
-            // console.log(value);
 
             blobURL = getBlobURL(c, value?.key);
         }

@@ -33,7 +33,7 @@ function UserSettings({ settings }: { settings: UserSettingType }) {
       if (value.avatar) formData.append("avatar", value.avatar);
 
       try {
-        const response = await doPUT("/api/v1/user/settings/profile", formData);
+        const response = await doPUT("/api/v1/invoice/user/settings/profile", formData);
         if (response instanceof Error) throw response;
 
         const result = await response.json();
@@ -156,7 +156,7 @@ function BusinessSettings({ settings }: { settings: BusinessSettingsType }) {
       if (value.logo) formData.append("logo", value.logo);
 
       try {
-        const response = await doPUT("/api/v1/user/settings/business", formData);
+        const response = await doPUT("/api/v1/invoice/user/settings/business", formData);
         if (response instanceof Error) throw response;
 
         const result = await response.json();
@@ -363,7 +363,7 @@ function RouteComponent() {
   useEffect(() => {
     (async () => {
       try {
-        const response = await doGET("/api/v1/user/settings");
+        const response = await doGET("/api/v1/invoice/user/settings");
         if (response instanceof Error) throw response;
 
         const result = await response.json();

@@ -7,27 +7,18 @@ const STATS = [
 
 export function SocialProofBar() {
   return (
-    <section style={{ borderTop: "1px solid #7F8CAA20", borderBottom: "1px solid #7F8CAA20" }}>
+    <section className="border-y border-black/10">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-4">
-          {STATS.map((stat, i) => (
+          {STATS.map((stat) => (
             <div
               key={stat.label}
-              className="flex flex-col items-center justify-center gap-1.5 py-8 px-4 text-center"
-              style={{
-                borderLeft: i > 0 ? "1px solid #7F8CAA20" : "none",
-              }}
+              className="flex flex-col items-center justify-center gap-1.5 py-8 px-4 text-center border-l border-black/10 first:border-l-0"
             >
-              <p
-                className="text-3xl md:text-4xl font-extrabold tracking-tight leading-none"
-                style={{ color: "#4382df" }}
-              >
+              <p className="text-3xl md:text-4xl font-extrabold tracking-tight leading-none text-black">
                 {stat.number}
               </p>
-              <p
-                className="text-xs font-medium tracking-[0.18em] uppercase"
-                style={{ color: "#7F8CAA" }}
-              >
+              <p className="text-xs font-medium tracking-[0.18em] uppercase text-neutral-500">
                 {stat.label}
               </p>
             </div>

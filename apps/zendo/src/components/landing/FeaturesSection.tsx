@@ -2,11 +2,11 @@ function CalendarIcon() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <rect x="3" y="4" width="18" height="18" rx="0" />
       <line x1="16" y1="2" x2="16" y2="6" />
       <line x1="8" y1="2" x2="8" y2="6" />
       <line x1="3" y1="10" x2="21" y2="10" />
-      <rect x="7" y="14" width="3" height="3" rx="0.5" fill="currentColor" stroke="none" />
+      <rect x="7" y="14" width="3" height="3" rx="0" fill="currentColor" stroke="none" />
     </svg>
   );
 }
@@ -15,7 +15,7 @@ function CheckIcon() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="3" width="18" height="18" rx="3" />
+      <rect x="3" y="3" width="18" height="18" rx="0" />
       <path d="M8 12l3 3 5-6" />
     </svg>
   );
@@ -69,26 +69,17 @@ const FEATURES = [
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="pb-24 px-6">
+    <section id="features" className="pb-24 px-6 bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <div className="mb-12">
-          <p
-            className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5"
-            style={{ color: "#7F8CAA" }}
-          >
+          <p className="eyebrow mb-2.5">
             Everything you need
           </p>
-          <h2
-            className="text-4xl font-bold tracking-tight"
-            style={{ color: "#0f172a" }}
-          >
+          <h2 className="section-heading">
             Three tools. One calm workflow.
           </h2>
-          <p
-            className="text-lg max-w-xl leading-relaxed mt-3"
-            style={{ color: "#7F8CAA" }}
-          >
+          <p className="text-lg max-w-xl leading-relaxed mt-3 text-neutral-500">
             Zendo brings your calendar, task list, and focus timer into a single,
             distraction-free space.
           </p>
@@ -99,45 +90,31 @@ export function FeaturesSection() {
           {FEATURES.map((f, i) => (
             <div
               key={f.name}
-              className="animate-fade-up bg-white rounded-3xl p-7 flex flex-col gap-4 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-              style={{
-                boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07",
-                animationDelay: `${0.1 + i * 0.1}s`,
-              }}
+              className="animate-fade-up receipt-card flex flex-col gap-4 transition-all duration-300 hover:-translate-y-1.5"
+              style={{ animationDelay: `${0.1 + i * 0.1}s` }}
             >
               {/* Icon */}
-              <div
-                className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
-                style={{ backgroundColor: "#4382df0e", color: "#4382df" }}
-              >
+              <div className="w-11 h-11 rounded-none flex items-center justify-center flex-shrink-0 bg-neutral-100 text-black">
                 {f.icon}
               </div>
 
               {/* Content */}
               <div className="flex flex-col gap-2 flex-1">
-                <h3 className="text-xl font-bold tracking-tight" style={{ color: "#0f172a" }}>
+                <h3 className="text-xl font-bold tracking-tight text-black">
                   {f.name}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#7F8CAA" }}>
+                <p className="text-sm leading-relaxed text-neutral-500">
                   {f.description}
                 </p>
               </div>
 
               {/* Pill */}
-              <span
-                className="self-start inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold"
-                style={{
-                  backgroundColor: "#4382df0e",
-                  borderColor: "#4382df2e",
-                  color: "#4382df",
-                }}
-              >
+              <span className="self-start inline-flex items-center gap-2 px-4 py-2 text-xs font-bold border border-black/10 text-neutral-600 bg-white rounded-none">
                 {f.pill}
               </span>
 
               {/* Learn more link */}
-              <button className="group inline-flex items-center gap-1.5 text-xs font-semibold self-start transition-all hover:gap-2"
-                style={{ color: "#4382df" }}>
+              <button className="group inline-flex items-center gap-1.5 text-xs font-bold self-start transition-all hover:gap-2 text-black">
                 Learn more <ArrowRight size={12} />
               </button>
             </div>

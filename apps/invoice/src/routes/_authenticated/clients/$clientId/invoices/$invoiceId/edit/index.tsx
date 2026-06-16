@@ -18,7 +18,7 @@ function RouteComponent() {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch(`${API_URL}/api/v1/clients/${clientId}/invoices/${invoiceId}`, {
+        const response = await fetch(`${API_URL}/api/v1/invoice/clients/${clientId}/invoices/${invoiceId}`, {
           method: "GET",
           credentials: "include",
         });

@@ -23,9 +23,9 @@ export function TaskList({ tasks, projectId, sectionId, emptyMessage = "No tasks
 
   return (
     <>
-      <div className="flex flex-col gap-0.5">
+      <div className="flex flex-col gap-0">
         {rootTasks.length === 0 && !adding && (
-          <p className="text-sm text-muted-foreground text-center py-8">{emptyMessage}</p>
+          <p className="text-sm text-neutral-500 text-center py-8 font-mono">{emptyMessage}</p>
         )}
 
         {rootTasks.map((task) => (
@@ -34,7 +34,7 @@ export function TaskList({ tasks, projectId, sectionId, emptyMessage = "No tasks
 
         {/* Inline add form */}
         {adding && (
-          <div className="p-3 rounded-xl mt-1" style={{ border: "1px solid #7F8CAA18", backgroundColor: "#ffffff" }}>
+          <div className="p-3 border border-black/10 bg-white mt-0">
             <TaskForm
               projectId={projectId}
               sectionId={sectionId}
@@ -48,7 +48,7 @@ export function TaskList({ tasks, projectId, sectionId, emptyMessage = "No tasks
           <Button
             variant="ghost"
             size="sm"
-            className="justify-start gap-2 text-muted-foreground hover:text-foreground mt-1"
+            className="justify-start gap-2 text-neutral-500 hover:text-black hover:bg-black/5 mt-0 rounded-none"
             onClick={() => setAdding(true)}
           >
             <Plus className="h-4 w-4" />

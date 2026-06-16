@@ -63,6 +63,9 @@
     // Development Environment
     "dev": {
       "name": "ihod-server-dev",
+      "vars": {
+        "STRIPE_PUBLISHABLE_KEY": "pk_test_..."
+      },
       "d1_databases": [
         {
           "binding": "DB",

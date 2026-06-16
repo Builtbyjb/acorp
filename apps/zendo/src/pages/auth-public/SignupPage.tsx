@@ -40,12 +40,11 @@ export function SignupPage() {
         />
       )}
 
-      <p className="text-sm text-center" style={{ color: "#7F8CAA" }}>
+      <p className="text-sm text-center text-neutral-500">
         Already have an account?{" "}
         <Link
           to="/login"
-          className="font-semibold transition-opacity hover:opacity-70"
-          style={{ color: "#4382df" }}
+          className="font-semibold text-black transition-opacity hover:opacity-70"
         >
           Sign in
         </Link>

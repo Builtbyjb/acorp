@@ -69,7 +69,7 @@ function RouteComponent() {
     (async () => {
       setIsLoading(true);
       try {
-        const response = await doGET("/api/v1/user/dashboard");
+        const response = await doGET("/api/v1/invoice/user/dashboard");
         if (response instanceof Error) throw response;
 
         const result = await response.json();

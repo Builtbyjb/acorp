@@ -16,61 +16,39 @@ function ArrowRight({ size = 14 }: { size?: number }) {
 
 export function HeroSection() {
   return (
-    <section className="relative pt-20 pb-28 px-6 overflow-hidden">
-      {/* Dot-grid background */}
+    <section className="relative pt-20 pb-28 px-6 overflow-hidden bg-white">
+      {/* Dot-matrix background */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: "radial-gradient(circle, #7F8CAA22 1.5px, transparent 1.5px)",
-          backgroundSize: "28px 28px",
-        }}
-      />
-      {/* Ambient glow — cobalt top-right */}
-      <div
-        aria-hidden="true"
-        className="absolute -top-48 -right-48 w-[600px] h-[600px] rounded-full blur-3xl pointer-events-none"
-        style={{ backgroundColor: "#4382df10" }}
-      />
-      {/* Ambient glow — slate bottom-left */}
-      <div
-        aria-hidden="true"
-        className="absolute bottom-0 left-1/3 w-80 h-80 rounded-full blur-3xl pointer-events-none"
-        style={{ backgroundColor: "#7F8CAA14" }}
+        className="absolute inset-0 pointer-events-none bg-dot-matrix opacity-30"
       />
 
       <div className="relative max-w-7xl mx-auto">
         <div className="flex flex-col items-center text-center gap-6 max-w-4xl mx-auto">
-          {/* Eyebrow pill */}
+          {/* Eyebrow label */}
           <div
-            className="animate-fade-up inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold tracking-[0.18em] uppercase"
-            style={{
-              backgroundColor: "#ffffff70",
-              borderColor: "#7F8CAA28",
-              color: "#7F8CAA",
-              animationDelay: "0.05s",
-            }}
+            className="animate-fade-up eyebrow border border-black/10 px-3 py-2"
+            style={{ animationDelay: "0.05s" }}
           >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#4382df" }} />
             Calm productivity, finally
           </div>
 
           {/* Display headline */}
           <h1
-            className="animate-fade-up text-[clamp(3rem,8vw,6rem)] font-extrabold tracking-[-0.04em] leading-[0.92]"
-            style={{ color: "#0f172a", animationDelay: "0.12s" }}
+            className="animate-fade-up text-[clamp(3rem,8vw,6rem)] font-extrabold tracking-[-0.04em] leading-[0.92] text-black"
+            style={{ animationDelay: "0.12s" }}
           >
             Your day,{" "}
             <br className="hidden sm:block" />
-            <span style={{ WebkitTextStroke: "2px #4382df", color: "transparent" }}>
+            <span className="text-outline">
               designed for focus.
             </span>
           </h1>
 
           {/* Subtext */}
           <p
-            className="animate-fade-up text-lg max-w-xl leading-relaxed"
-            style={{ color: "#7F8CAA", animationDelay: "0.22s" }}
+            className="animate-fade-up text-lg max-w-xl leading-relaxed text-neutral-500"
+            style={{ animationDelay: "0.22s" }}
           >
             Drag tasks onto a beautiful calendar, chip away at them with a built-in
             Pomodoro timer, and actually get things done.
@@ -83,15 +61,13 @@ export function HeroSection() {
           >
             <Link
               to="/signup"
-              className="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-92 active:scale-95"
-              style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+              className="btn-solid group rounded-none"
             >
               Get started free <ArrowRight />
             </Link>
             <a
               href="#preview"
-              className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/60 active:scale-95"
-              style={{ color: "#7F8CAA", borderColor: "#7F8CAA45" }}
+              className="btn-outline rounded-none"
             >
               See it in action
             </a>
@@ -105,10 +81,8 @@ export function HeroSection() {
             {["No credit card required", "Free plan always available", "Cancel anytime"].map((chip) => (
               <span
                 key={chip}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold border"
-                style={{ backgroundColor: "#ffffff90", borderColor: "#7F8CAA25", color: "#7F8CAA" }}
+                className="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold border border-black/10 text-neutral-500 bg-white rounded-none"
               >
-                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#4382df" }} />
                 {chip}
               </span>
             ))}

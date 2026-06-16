@@ -8,7 +8,7 @@ export const Route = createRootRouteWithContext()({
 function RootComponent() {
   return (
     <>
-      <div className="bg-background">
+      <div>
         <Outlet />
         <TanStackRouterDevtools />
       </div>

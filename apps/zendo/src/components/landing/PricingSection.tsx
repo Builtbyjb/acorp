@@ -13,7 +13,7 @@ function ArrowRight({ size = 14 }: { size?: number }) {
 function Check() {
   return (
     <svg width="10" height="10" viewBox="0 0 10 10" fill="none"
-      stroke="#4382df" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      stroke="#000000" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M2 5l2.5 2.5L8 2.5" />
     </svg>
   );
@@ -22,7 +22,7 @@ function Check() {
 function CheckMuted() {
   return (
     <svg width="10" height="10" viewBox="0 0 10 10" fill="none"
-      stroke="#7F8CAA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      stroke="#737373" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M2 5l2.5 2.5L8 2.5" />
     </svg>
   );
@@ -48,26 +48,17 @@ const PRO_FEATURES = [
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="pb-24 px-6">
+    <section id="pricing" className="pb-24 px-6 bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <div className="mb-12">
-          <p
-            className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5"
-            style={{ color: "#7F8CAA" }}
-          >
+          <p className="eyebrow mb-2.5">
             Simple pricing
           </p>
-          <h2
-            className="text-4xl font-bold tracking-tight"
-            style={{ color: "#0f172a" }}
-          >
+          <h2 className="section-heading">
             Start free. Upgrade when ready.
           </h2>
-          <p
-            className="text-lg max-w-xl leading-relaxed mt-3"
-            style={{ color: "#7F8CAA" }}
-          >
+          <p className="text-lg max-w-xl leading-relaxed mt-3 text-neutral-500">
             No surprise fees. Cancel any time. Your data is always yours.
           </p>
         </div>
@@ -76,38 +67,29 @@ export function PricingSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl">
           {/* Free */}
           <div
-            className="animate-fade-up bg-white rounded-3xl p-10 flex flex-col gap-6"
-            style={{
-              boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07",
-              animationDelay: "0.1s",
-            }}
+            className="animate-fade-up receipt-card p-10 flex flex-col gap-6"
+            style={{ animationDelay: "0.1s" }}
           >
             <div>
-              <p
-                className="text-xs font-bold tracking-[0.25em] uppercase mb-4"
-                style={{ color: "#7F8CAA" }}
-              >
+              <p className="eyebrow mb-4">
                 Free
               </p>
               <div className="flex items-baseline gap-1">
-                <span className="text-5xl font-extrabold tracking-tight" style={{ color: "#0f172a" }}>
+                <span className="text-5xl font-extrabold tracking-tight text-black">
                   $0
                 </span>
-                <span className="text-sm" style={{ color: "#7F8CAA" }}>/month</span>
+                <span className="text-sm text-neutral-500">/month</span>
               </div>
-              <p className="text-sm mt-1" style={{ color: "#7F8CAA" }}>
+              <p className="text-sm mt-1 text-neutral-500">
                 Perfect for individuals getting started.
               </p>
             </div>
 
-            <div style={{ borderTop: "1px solid #7F8CAA18" }} className="pt-6">
+            <div className="pt-6 border-t border-black/10">
               <ul className="flex flex-col gap-3">
                 {FREE_FEATURES.map((f) => (
-                  <li key={f} className="flex items-center gap-2.5 text-sm" style={{ color: "#0f172a" }}>
-                    <span
-                      className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: "#7F8CAA14" }}
-                    >
+                  <li key={f} className="flex items-center gap-2.5 text-sm text-black">
+                    <span className="w-4 h-4 rounded-none flex items-center justify-center flex-shrink-0 bg-neutral-100">
                       <CheckMuted />
                     </span>
                     {f}
@@ -118,8 +100,7 @@ export function PricingSection() {
 
             <Link
               to="/signup"
-              className="mt-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/60 active:scale-95"
-              style={{ color: "#7F8CAA", borderColor: "#7F8CAA45" }}
+              className="btn-outline mt-auto justify-center rounded-none"
             >
               Get started free
             </Link>
@@ -127,49 +108,36 @@ export function PricingSection() {
 
           {/* Pro */}
           <div
-            className="animate-fade-up bg-white rounded-3xl p-10 flex flex-col gap-6 relative"
-            style={{
-              boxShadow: "0 1px 4px #0f172a0a, 0 0 0 2px #4382df50",
-              backgroundColor: "#ffffff",
-              animationDelay: "0.2s",
-            }}
+            className="animate-fade-up receipt-card p-10 flex flex-col gap-6 relative border-2 border-black"
+            style={{ animationDelay: "0.2s" }}
           >
             {/* Most popular badge */}
             <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-              <span
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold text-white"
-                style={{ backgroundColor: "#4382df", boxShadow: "0 4px 12px #4382df35" }}
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-white/60 animate-pulse" />
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 text-xs font-bold text-white bg-black rounded-none">
+                <span className="w-1.5 h-1.5 rounded-none bg-white/60 animate-pulse" />
                 Most popular
               </span>
             </div>
 
             <div className="pt-2">
-              <p
-                className="text-xs font-bold tracking-[0.25em] uppercase mb-4"
-                style={{ color: "#4382df" }}
-              >
+              <p className="eyebrow mb-4 text-black">
                 Pro
               </p>
               <div className="flex items-baseline gap-1">
-                <span className="text-lg self-start mt-2" style={{ color: "#7F8CAA" }}>$</span>
-                <span className="text-5xl font-extrabold tracking-tight" style={{ color: "#0f172a" }}>5</span>
-                <span className="text-sm" style={{ color: "#7F8CAA" }}>/month</span>
+                <span className="text-lg self-start mt-2 text-neutral-500">$</span>
+                <span className="text-5xl font-extrabold tracking-tight text-black">5</span>
+                <span className="text-sm text-neutral-500">/month</span>
               </div>
-              <p className="text-sm mt-1" style={{ color: "#7F8CAA" }}>
+              <p className="text-sm mt-1 text-neutral-500">
                 For serious makers who want every edge.
               </p>
             </div>
 
-            <div style={{ borderTop: "1px solid #4382df28" }} className="pt-6">
+            <div className="pt-6 border-t border-black/10">
               <ul className="flex flex-col gap-3">
                 {PRO_FEATURES.map((f) => (
-                  <li key={f} className="flex items-center gap-2.5 text-sm" style={{ color: "#0f172a" }}>
-                    <span
-                      className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: "#4382df14" }}
-                    >
+                  <li key={f} className="flex items-center gap-2.5 text-sm text-black">
+                    <span className="w-4 h-4 rounded-none flex items-center justify-center flex-shrink-0 bg-neutral-100">
                       {f === "Everything in Free" ? <CheckMuted /> : <Check />}
                     </span>
                     {f}
@@ -180,15 +148,14 @@ export function PricingSection() {
 
             <Link
               to="/signup"
-              className="group mt-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-92 active:scale-95"
-              style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+              className="btn-solid group mt-auto justify-center rounded-none"
             >
               Start Pro free for 14 days <ArrowRight />
             </Link>
           </div>
         </div>
 
-        <p className="text-xs mt-6" style={{ color: "#7F8CAA" }}>
+        <p className="text-xs mt-6 text-neutral-500">
           Pro trial requires no credit card. Billed monthly after trial ends. Cancel any time.
         </p>
       </div>

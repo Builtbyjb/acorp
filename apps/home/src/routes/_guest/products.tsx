@@ -41,7 +41,7 @@ function PageHeader() {
 
       <HeadingTwo title="All Products" />
 
-      <p className="animate-fade-up max-w-xl leading-relaxed text-muted-foreground">
+      <p className="animate-fade-up max-w-xl leading-relaxed" style={{ color: "#737373", animationDelay: "0.22s" }}>
         Each tool is designed to be exceptional on its own — and even better when used together as part of the ACorp
         suite.
       </p>
@@ -53,28 +53,44 @@ function ProductList() {
   const navigate = useNavigate();
   return (
     <section>
-      <div className="flex flex-col gap-8">
-        {PRODUCTS.map((product) => (
-          <Card key={product.id}>
+      <div className="flex flex-col gap-4">
+        {PRODUCTS.map((product, idx) => (
+          <Card
+            key={product.id}
+            className="animate-fade-up"
+            style={{ animationDelay: `${0.1 + idx * 0.1}s` }}
+          >
             <CardHeader>
               <div className="flex items-center gap-1.5 mb-4">
-                <span className={`w-2 h-2 rounded-full ${product.available ? "bg-green-500" : "bg-secondary"}`} />
-                <span className="text-xs font-semibold text-secondary">Available</span>
+                <span
+                  className="inline-flex items-center px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                  style={
+                    product.available
+                      ? { backgroundColor: "#000000", color: "#ffffff" }
+                      : { backgroundColor: "#f5f5f5", color: "#737373" }
+                  }
+                >
+                  {product.available ? "Available" : "Coming soon"}
+                </span>
               </div>
               <CardTitle>{product.name}</CardTitle>
               <CardDescription>{product.tagline}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm leading-relaxed mb-8 max-w-lg text-muted-foreground">{product.description}</p>
+              <p className="text-sm leading-relaxed mb-8 max-w-lg" style={{ color: "#737373" }}>
+                {product.description}
+              </p>
 
               {/* Features panel */}
-              <div className="rounded-2xl p-6 bg-secondary/10 border border-secondary">
-                <p className="text-xs font-bold tracking-widest uppercase mb-5 text-muted-foreground">Key Features</p>
+              <div className="bg-white border border-black/10 p-6">
+                <p className="text-[10px] font-mono font-bold tracking-widest uppercase mb-5" style={{ color: "#737373" }}>
+                  Key Features
+                </p>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {product.features.map((feature, fi) => (
                     <li key={fi} className="flex items-start gap-3">
-                      <span className="w-1.5 h-1.5 rounded-full mt-1.25 shrink-0 text-secondary" />
-                      <span className="text-sm leading-relaxed text-foreground">{feature}</span>
+                      <span className="w-1.5 h-1.5 mt-1.5 shrink-0 bg-neutral-500" />
+                      <span className="text-sm leading-relaxed text-black">{feature}</span>
                     </li>
                   ))}
                 </ul>

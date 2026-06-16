@@ -1,9 +1,10 @@
 import { MiddlewareHandler } from "hono";
 import type { TokenPayload, Bindings } from "@/lib/types";
 import { drizzle, type DrizzleD1Database } from "drizzle-orm/d1";
-import { clients, organizations, invoices } from "@/db/schema";
+import { clients, invoices } from "@/db/invoice-schema";
+import { organizations } from "@/db/schemas";
 import { eq, and, sql } from "drizzle-orm";
-import { hasActiveSubscription } from "@/lib/utils";
+import { getGateway } from "@/lib/payment";
 
 const MAX_INVOICE_COUNT = 5;
 
@@ -41,19 +42,37 @@ export function planAccessMiddleware(): MiddlewareHandler<{
             .get();
 
         if (!organization) return c.json({ message: "Organization not found" }, 404);
-        if (organization.paystackSubscriptionStatus !== "active") {
-            if (!jwtPayload.paystackCustomerId) return c.json({ message: "Customer ID not found" }, 400);
 
-            // Check for non renewing but still active subscriptions
-            const hasActiveOrNonRenewing = await hasActiveSubscription(
-                Number(jwtPayload.paystackCustomerId),
-                c.env.PAYSTACK_SECRET,
-            );
+        const provider = (organization.paymentProvider || "paystack") as "paystack" | "stripe";
+        const gateway = getGateway(provider, c.env);
 
-            if (!hasActiveOrNonRenewing) {
-                if (!(await verifyInvoiceCount(db, jwtPayload.currentOrgId)))
-                    return c.json({ message: "Subscription expired" }, 403);
-            }
+        // Check local subscription status first
+        const localStatus = provider === "paystack"
+            ? organization.paystackSubscriptionStatus
+            : organization.stripeSubscriptionStatus;
+
+        if (localStatus === "active") {
+            await next();
+            return;
+        }
+
+        // Check with the gateway for active or non-renewing subscriptions
+        const customerId = provider === "paystack"
+            ? jwtPayload.paystackCustomerId
+            : jwtPayload.stripeCustomerId;
+
+        if (!customerId) {
+            if (!(await verifyInvoiceCount(db, jwtPayload.currentOrgId)))
+                return c.json({ message: "Subscription expired" }, 403);
+            await next();
+            return;
+        }
+
+        const hasActiveOrNonRenewing = await gateway.hasActiveSubscription(customerId);
+
+        if (!hasActiveOrNonRenewing) {
+            if (!(await verifyInvoiceCount(db, jwtPayload.currentOrgId)))
+                return c.json({ message: "Subscription expired" }, 403);
         }
 
         await next();

@@ -2,36 +2,14 @@ import { Link, Outlet } from "@tanstack/react-router";
 
 export function AuthPublicLayout() {
   return (
-    <div className="min-h-svh flex flex-col relative overflow-hidden" style={{ backgroundColor: "#ebf0f0" }}>
-      {/* Dot-grid */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: "radial-gradient(circle, #7F8CAA22 1.5px, transparent 1.5px)",
-          backgroundSize: "28px 28px",
-        }}
-      />
-      {/* Ambient glow */}
-      <div
-        aria-hidden="true"
-        className="absolute -top-32 -right-32 w-96 h-96 rounded-full blur-3xl pointer-events-none"
-        style={{ backgroundColor: "#4382df0e" }}
-      />
-
+    <div className="min-h-svh flex flex-col relative overflow-hidden bg-white bg-dot-matrix">
       {/* Minimal header */}
-      <header
-        className="relative h-14 flex items-center px-6"
-        style={{ borderBottom: "1px solid #7F8CAA22" }}
-      >
+      <header className="relative h-14 flex items-center px-6 border-b border-black/10">
         <Link to="/" className="flex items-center gap-2.5 no-underline">
-          <div
-            className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-black"
-            style={{ backgroundColor: "#4382df" }}
-          >
+          <div className="w-6 h-6 flex items-center justify-center text-white text-xs font-black bg-black">
             Z
           </div>
-          <span className="font-bold text-base tracking-tight" style={{ color: "#0f172a" }}>
+          <span className="font-bold text-base tracking-tight text-black">
             Zendo
           </span>
         </Link>
@@ -44,8 +22,8 @@ export function AuthPublicLayout() {
         </div>
       </main>
 
-      <footer className="relative h-12 flex items-center justify-center">
-        <p className="text-xs" style={{ color: "#7F8CAA" }}>
+      <footer className="relative h-12 flex items-center justify-center border-t border-black/10">
+        <p className="text-xs text-black/40">
           © {new Date().getFullYear()} Zendo
         </p>
       </footer>

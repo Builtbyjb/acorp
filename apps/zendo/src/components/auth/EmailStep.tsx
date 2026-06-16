@@ -40,15 +40,12 @@ export function EmailStep({ heading, subheading, submitLabel, onSubmit, isLoadin
   });
 
   return (
-    <div
-      className="animate-fade-up bg-white rounded-3xl p-10 flex flex-col gap-6"
-      style={{ boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07" }}
-    >
+    <div className="animate-fade-up bg-white border-2 border-black p-10 flex flex-col gap-6">
       <div className="flex flex-col gap-1.5">
-        <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#0f172a" }}>
+        <h1 className="text-2xl font-bold tracking-tight text-black">
           {heading}
         </h1>
-        <p className="text-sm" style={{ color: "#7F8CAA" }}>{subheading}</p>
+        <p className="text-sm text-neutral-500">{subheading}</p>
       </div>
 
       <form
@@ -65,7 +62,7 @@ export function EmailStep({ heading, subheading, submitLabel, onSubmit, isLoadin
         >
           {(field) => (
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="email" style={{ color: "#0f172a" }} className="text-sm font-medium">
+              <Label htmlFor="email" className="text-sm font-medium text-black font-mono">
                 Email address
               </Label>
               <Input
@@ -76,8 +73,10 @@ export function EmailStep({ heading, subheading, submitLabel, onSubmit, isLoadin
                 value={field.state.value}
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
-                className={field.state.meta.errors.length > 0 ? "border-destructive" : ""}
-                style={{ borderColor: field.state.meta.errors.length > 0 ? undefined : "#7F8CAA45" }}
+                className={[
+                  "border border-black/10 bg-transparent rounded-none",
+                  field.state.meta.errors.length > 0 ? "border-destructive" : "",
+                ].join(" ")}
               />
               {field.state.meta.errors.length > 0 && (
                 <p className="text-xs text-destructive">
@@ -93,8 +92,7 @@ export function EmailStep({ heading, subheading, submitLabel, onSubmit, isLoadin
             <button
               type="submit"
               disabled={!canSubmit || isSubmitting || isLoading}
-              className="group inline-flex items-center justify-center gap-2 w-full px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-92 active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
-              style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+              className="group inline-flex items-center justify-center gap-2 w-full px-7 py-3.5 text-sm font-semibold bg-black text-white transition-all hover:gap-3 hover:opacity-90 active:opacity-70 disabled:opacity-50 disabled:pointer-events-none"
             >
               {isSubmitting || isLoading ? "Sending…" : submitLabel}
               {!isSubmitting && !isLoading && <ArrowRight />}

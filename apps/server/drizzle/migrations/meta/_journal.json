@@ -43,6 +43,13 @@
       "when": 1780938330334,
       "tag": "0005_blushing_deathstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1781700000000,
+      "tag": "0006_multi_currency",
+      "breakpoints": true
     }
   ]
 }

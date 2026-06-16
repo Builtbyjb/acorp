@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { Calendar, dateFnsLocalizer, Views } from "react-big-calendar";
-import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
+import * as dragAndDropModule from "react-big-calendar/lib/addons/dragAndDrop";
+const withDragAndDrop = (dragAndDropModule as any).default || dragAndDropModule;
 import { format, parse, startOfWeek, getDay, addDays, addWeeks, addMonths, addYears, isBefore, isAfter } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { ChevronLeft, ChevronRight, CalendarDays, List, LayoutGrid, Clock, Plus } from "lucide-react";
@@ -94,29 +95,29 @@ function CalendarToolbar({ date, view, onNavigate, onView, onAdd, showHolidays, 
   );
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-black/10">
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="icon" className="h-8 w-8 rounded-lg" onClick={() => onNavigate("PREV")}>
+        <Button variant="outline" size="icon" className="h-8 w-8 rounded-none border-black/10 text-black" onClick={() => onNavigate("PREV")}>
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <Button variant="outline" size="sm" className="rounded-lg text-xs" onClick={() => onNavigate("TODAY")}>
+        <Button size="sm" className="rounded-none text-xs bg-black text-white hover:bg-black/90" onClick={() => onNavigate("TODAY")}>
           Today
         </Button>
-        <Button variant="outline" size="icon" className="h-8 w-8 rounded-lg" onClick={() => onNavigate("NEXT")}>
+        <Button variant="outline" size="icon" className="h-8 w-8 rounded-none border-black/10 text-black" onClick={() => onNavigate("NEXT")}>
           <ChevronRight className="h-4 w-4" />
         </Button>
-        <span className="text-sm font-semibold ml-2">{label}</span>
+        <span className="text-sm font-semibold ml-2 font-mono uppercase tracking-wider">{label}</span>
       </div>
 
       <div className="flex items-center gap-2 flex-wrap">
         {/* Holiday toggle */}
         <div className="flex items-center gap-1.5">
-          <Switch id="holidays" checked={showHolidays} onCheckedChange={onToggleHolidays} className="scale-75" />
-          <Label htmlFor="holidays" className="text-xs text-muted-foreground cursor-pointer">Holidays</Label>
+          <Switch id="holidays" checked={showHolidays} onCheckedChange={onToggleHolidays} className="scale-75 rounded-none" />
+          <Label htmlFor="holidays" className="text-xs text-black/60 cursor-pointer font-mono uppercase tracking-wider">Holidays</Label>
         </div>
 
         {/* View switcher */}
-        <div className="flex rounded-lg border border-border overflow-hidden">
+        <div className="flex rounded-none border border-black/10 overflow-hidden">
           {([
             { v: "month", icon: LayoutGrid, label: "Month" },
             { v: "week",  icon: CalendarDays, label: "Week" },
@@ -129,7 +130,7 @@ function CalendarToolbar({ date, view, onNavigate, onView, onAdd, showHolidays, 
               title={label}
               className={cn(
                 "px-2.5 py-1.5 text-xs font-medium transition-colors",
-                view === v ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                view === v ? "bg-black text-white" : "text-black/60 hover:text-black hover:bg-black/5"
               )}
             >
               <Icon className="h-3.5 w-3.5" />
@@ -137,7 +138,7 @@ function CalendarToolbar({ date, view, onNavigate, onView, onAdd, showHolidays, 
           ))}
         </div>
 
-        <Button size="sm" className="rounded-xl gap-1 h-8" onClick={onAdd}>
+        <Button size="sm" className="rounded-none gap-1 h-8 bg-black text-white hover:bg-black/90" onClick={onAdd}>
           <Plus className="h-3.5 w-3.5" /> Event
         </Button>
       </div>
@@ -213,7 +214,7 @@ export function AppCalendar() {
         start: d,
         end: d,
         allDay: true,
-        resource: { color: "#6b7280" },
+        resource: { color: "#525252" },
       });
     }
 
@@ -228,7 +229,7 @@ export function AppCalendar() {
             start: d,
             end: d,
             allDay: true,
-            resource: { color: "#22c55e", isHoliday: true },
+            resource: { color: "#737373", isHoliday: true },
           });
         }
       }
@@ -239,14 +240,14 @@ export function AppCalendar() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const eventStyleGetter = useCallback((event: any) => {
-    const color = event.resource?.color ?? "hsl(var(--primary))";
+    const color = event.resource?.color ?? "#000000";
     const isHoliday = event.resource?.isHoliday;
     return {
       style: {
-        backgroundColor: color + (isHoliday ? "20" : "30"),
-        color: isHoliday ? "#22c55e" : color,
-        borderLeft: `3px solid ${color}`,
-        borderRadius: "6px",
+        backgroundColor: color + (isHoliday ? "15" : "20"),
+        color: isHoliday ? "#737373" : color,
+        borderLeft: `2px solid ${color}`,
+        borderRadius: "0px",
         fontSize: "11px",
         padding: "1px 4px",
         opacity: 0.95,
@@ -320,7 +321,7 @@ export function AppCalendar() {
       />
 
       <div
-        className="flex-1 min-h-0 [&_.rbc-calendar]:bg-transparent [&_.rbc-toolbar]:hidden [&_.rbc-header]:text-xs [&_.rbc-header]:text-muted-foreground [&_.rbc-header]:font-semibold [&_.rbc-header]:uppercase [&_.rbc-header]:tracking-wider [&_.rbc-header]:py-2 [&_.rbc-today]:bg-primary/5 [&_.rbc-off-range-bg]:bg-muted/20 [&_.rbc-event]:cursor-pointer [&_.rbc-time-content]:border-border [&_.rbc-time-gutter]:text-xs [&_.rbc-time-gutter]:text-muted-foreground [&_.rbc-current-time-indicator]:bg-primary [&_.rbc-show-more]:text-primary [&_.rbc-show-more]:text-xs [&_.rbc-month-view]:rounded-xl [&_.rbc-month-view]:border [&_.rbc-month-view]:border-border [&_.rbc-agenda-table]:w-full [&_.rbc-agenda-date-cell]:text-muted-foreground [&_.rbc-agenda-time-cell]:text-muted-foreground [&_.rbc-agenda-event-cell]:text-sm [&_.rbc-row-bg_.rbc-day-bg]:border-border [&_.rbc-row]:border-border [&_.rbc-day-slot_.rbc-time-slot]:border-border"
+        className="flex-1 min-h-0 [&_.rbc-calendar]:bg-transparent [&_.rbc-toolbar]:hidden [&_.rbc-header]:text-xs [&_.rbc-header]:text-black/60 [&_.rbc-header]:font-semibold [&_.rbc-header]:uppercase [&_.rbc-header]:tracking-wider [&_.rbc-header]:py-2 [&_.rbc-today]:bg-black/[0.02] [&_.rbc-off-range-bg]:bg-black/5 [&_.rbc-event]:cursor-pointer [&_.rbc-time-content]:border-black/10 [&_.rbc-time-gutter]:text-xs [&_.rbc-time-gutter]:text-black/60 [&_.rbc-current-time-indicator]:bg-black [&_.rbc-show-more]:text-black [&_.rbc-show-more]:text-xs [&_.rbc-month-view]:rounded-none [&_.rbc-month-view]:border [&_.rbc-month-view]:border-black/10 [&_.rbc-agenda-table]:w-full [&_.rbc-agenda-date-cell]:text-black/60 [&_.rbc-agenda-time-cell]:text-black/60 [&_.rbc-agenda-event-cell]:text-sm [&_.rbc-row-bg_.rbc-day-bg]:border-black/10 [&_.rbc-row]:border-black/10 [&_.rbc-day-slot_.rbc-time-slot]:border-black/10"
         style={{ height: "calc(100vh - 200px)" }}
       >
         <DragCalendar
@@ -329,7 +330,7 @@ export function AppCalendar() {
           view={view as RBCView}
           date={calDate}
           onNavigate={() => {}} // handled by toolbar
-          onView={(v) => setView(v as typeof view)}
+          onView={(v: string) => setView(v as typeof view)}
           selectable
           onSelectSlot={handleSelectSlot}
           onSelectEvent={handleSelectEvent}

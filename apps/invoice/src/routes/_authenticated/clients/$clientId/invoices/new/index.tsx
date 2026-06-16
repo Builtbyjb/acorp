@@ -16,7 +16,7 @@ function RouteComponent() {
   useEffect(() => {
     (async () => {
       try {
-        const response = await doGET(`/api/v1/clients/${clientId}`);
+        const response = await doGET(`/api/v1/invoice/clients/${clientId}`);
         if (response instanceof Error) throw response;
 
         const result = await response.json();
