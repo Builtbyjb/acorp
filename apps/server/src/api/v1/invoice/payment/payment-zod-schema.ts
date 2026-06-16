@@ -21,7 +21,6 @@ export const PaystackSubscribeSchema = z.object({
     planCode: z.string(),
 });
 
-/* Paystack callback response schema */
 const LogSchema = z.object({
     start_time: z.number(),
     time_spent: z.number(),

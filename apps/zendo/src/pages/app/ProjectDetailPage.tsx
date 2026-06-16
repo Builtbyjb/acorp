@@ -28,7 +28,7 @@ export function ProjectDetailPage() {
   if (!project) {
     return (
       <div className="flex items-center justify-center py-20">
-        <p className="text-sm" style={{ color: "#7F8CAA" }}>Project not found.</p>
+        <p className="text-sm text-neutral-500">Project not found.</p>
       </div>
     );
   }
@@ -49,15 +49,14 @@ export function ProjectDetailPage() {
             type="color"
             value={project.color}
             onChange={(e) => updateProject(projectId, { color: e.target.value })}
-            className="w-5 h-5 rounded-full border-0 cursor-pointer bg-transparent flex-shrink-0"
+            className="w-5 h-5 rounded-none border-0 cursor-pointer bg-transparent flex-shrink-0"
           />
-          <h1 className="text-3xl font-bold tracking-tight truncate" style={{ color: "#0f172a" }}>
+          <h1 className="text-2xl font-bold text-black truncate">
             {project.name}
           </h1>
         </div>
         <button
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/60 active:scale-95 flex-shrink-0"
-          style={{ color: "#7F8CAA", borderColor: "#7F8CAA45" }}
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold border border-black/10 hover:bg-neutral-50 active:scale-95 transition-all flex-shrink-0 text-neutral-500"
           onClick={() => setManageStages(true)}
         >
           <SlidersHorizontal className="h-3.5 w-3.5" />
@@ -65,14 +64,11 @@ export function ProjectDetailPage() {
         </button>
       </div>
 
-      <div style={{ borderTop: "1px solid #7F8CAA18" }} />
+      <div className="border-t border-black/10" />
 
       {/* Unsectioned tasks */}
       {(unsectionedTasks.length > 0 || projectSections.length === 0) && (
-        <div
-          className="bg-white rounded-3xl p-7"
-          style={{ boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07" }}
-        >
+        <div className="bg-white border border-black/10 p-6">
           <TaskList
             tasks={unsectionedTasks}
             projectId={projectId}
@@ -89,20 +85,14 @@ export function ProjectDetailPage() {
         );
         return (
           <div key={section.id} className="flex flex-col gap-3">
-            <div className="flex items-center gap-3">
-              <h2
-                className="text-xs font-bold uppercase tracking-[0.25em]"
-                style={{ color: "#7F8CAA" }}
-              >
+            <div className="flex items-center gap-3 border-b border-black/10 pb-2">
+              <h2 className="text-[10px] font-mono font-bold uppercase tracking-[0.25em] text-neutral-500">
                 {section.name}
               </h2>
-              <div className="flex-1 h-px" style={{ backgroundColor: "#7F8CAA18" }} />
-              <span className="text-xs" style={{ color: "#7F8CAA" }}>{sectionTasks.length}</span>
+              <div className="flex-1" />
+              <span className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase text-neutral-500">{sectionTasks.length}</span>
             </div>
-            <div
-              className="bg-white rounded-3xl p-7"
-              style={{ boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07" }}
-            >
+            <div className="bg-white border border-black/10 p-6">
               <TaskList
                 tasks={sectionTasks}
                 projectId={projectId}
@@ -127,18 +117,16 @@ export function ProjectDetailPage() {
               if (e.key === "Enter") handleAddSection();
               if (e.key === "Escape") setAddingSection(false);
             }}
-            className="h-8 text-sm"
+            className="h-8 text-sm border border-black/10 bg-transparent rounded-none"
           />
           <button
-            className="px-4 py-2 text-sm font-semibold text-white rounded-full transition-all hover:opacity-92 active:scale-95"
-            style={{ backgroundColor: "#4382df" }}
+            className="px-4 py-2 text-sm font-semibold bg-black text-white hover:opacity-90 active:scale-95 transition-all"
             onClick={handleAddSection}
           >
             Add
           </button>
           <button
-            className="px-4 py-2 text-sm font-medium rounded-full transition-opacity hover:opacity-60"
-            style={{ color: "#7F8CAA" }}
+            className="px-4 py-2 text-sm font-medium text-neutral-500 hover:opacity-60 transition-opacity"
             onClick={() => setAddingSection(false)}
           >
             Cancel
@@ -146,8 +134,7 @@ export function ProjectDetailPage() {
         </div>
       ) : (
         <button
-          className="self-start inline-flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-60"
-          style={{ color: "#7F8CAA" }}
+          className="self-start inline-flex items-center gap-2 text-sm font-medium text-neutral-500 hover:opacity-60 transition-opacity"
           onClick={() => setAddingSection(true)}
         >
           <Plus className="h-3.5 w-3.5" /> Add section

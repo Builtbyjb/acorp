@@ -1,71 +1,110 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/components/card";
+import { useInView } from "@/hooks/useInView";
 
 const steps = [
   {
     step: "01",
-    title: "Add your business",
-    description:
-      "Enter your business name, logo, and address once. We save it and pre-fill every future invoice automatically.",
+    title: "Configure your brand",
+    description: "Upload your logo, set your base currency, and define your default payment terms.",
   },
   {
     step: "02",
-    title: "Add your client",
-    description:
-      "Create a client profile with their billing details. All their invoices and payment history live here.",
+    title: "Add your clients",
+    description: "Input client details once. ACorp remembers their preferred currency and past invoices.",
   },
   {
     step: "03",
-    title: "Build your invoice",
-    description:
-      "Add line items, set your rates and quantities, apply taxes or discounts, and set a due date in seconds.",
+    title: "Draft the invoice",
+    description: "Add line items with a keystroke. Taxes, discounts, and totals are calculated instantly.",
   },
   {
     step: "04",
-    title: "Download & track",
-    description: "Export a pixel-perfect PDF, track payment status, and see all your revenue on the dashboard.",
+    title: "Send & get paid",
+    description: "Export a pixel-perfect PDF or share via link. Automated reminders ensure you never wait.",
   },
 ];
 
 export default function HowItWorks() {
-  return (
-    <section id="how-it-works">
-      {/* Section header */}
-      <div className="mb-8">
-        <p className="animate-fade-up text-xs font-bold tracking-[0.25em] uppercase mb-2.5 text-muted-foreground">
-          How it works
-        </p>
-        <h2 className="animate-fade-up text-3xl font-bold tracking-tight">Four steps to your first invoice.</h2>
-        <p className="animate-fade-up max-w-xl leading-relaxed mt-3 text-muted-foreground">
-          No complex setup. No steep learning curve. You'll send your first invoice in under five minutes.
-        </p>
-      </div>
+  const { ref, isVisible } = useInView<HTMLElement>({ threshold: 0.1 });
 
-      {/* Steps grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {steps.map((item) => (
-          <Card key={item.step}>
-            <CardHeader>
+  return (
+    <section ref={ref} className="relative py-24 md:py-32 bg-white overflow-hidden">
+      {/* Background texture */}
+      <div className="absolute inset-0 bg-dot-matrix opacity-30 pointer-events-none" />
+
+      <div className="container relative z-10 mx-auto px-6">
+        {/* Section Header */}
+        <div className="text-center mb-20 md:mb-24">
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1.5 border border-brand-secondary/20 text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-brand-secondary mb-6"
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? "translateY(0)" : "translateY(10px)",
+              transition: "all 0.5s ease-out",
+            }}
+          >
+            <span className="w-1.5 h-1.5 bg-brand-accent" />
+            PROCESS
+          </div>
+          <h2
+            className="text-3xl md:text-4xl lg:text-6xl font-bold tracking-tight text-brand-ink leading-tight"
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? "translateY(0)" : "translateY(10px)",
+              transition: "all 0.5s ease-out 0.1s",
+            }}
+          >
+            From zero to paid in{" "}
+            <span className="text-outline text-brand-ink">four</span>{" "}
+            steps.
+          </h2>
+        </div>
+
+        {/* Steps — Horizontal on desktop, vertical on mobile */}
+        <div className="relative max-w-6xl mx-auto">
+          {/* Connecting line (desktop) */}
+          <div className="hidden lg:block absolute top-20 left-0 right-0 h-px bg-brand-secondary/15">
+            <div
+              className="h-full bg-brand-ink"
+              style={{
+                width: isVisible ? "100%" : "0%",
+                transition: "width 1.5s ease-out 0.5s",
+              }}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
+            {steps.map((item, i) => (
               <div
-                className="text-4xl font-extrabold tracking-tight mb-5 leading-none"
-                style={{ color: "#4382df0e" /* very faint cobalt */ }}
+                key={item.step}
+                className="relative group"
+                style={{
+                  opacity: isVisible ? 1 : 0,
+                  transform: isVisible ? "translateY(0)" : "translateY(20px)",
+                  transition: `all 0.6s cubic-bezier(0.22, 1, 0.36, 1) ${200 + i * 150}ms`,
+                }}
               >
-                <span
-                  className="text-4xl font-extrabold"
-                  style={{
-                    WebkitTextStroke: "1.5px #4382df",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  {item.step}
-                </span>
+                {/* Step number */}
+                <div className="mb-6">
+                  <div className="w-16 h-16 border-2 border-brand-ink flex items-center justify-center bg-white transition-all duration-300 group-hover:scale-105 group-hover:border-brand-accent">
+                    <span className="text-xl font-bold font-mono text-brand-ink group-hover:text-brand-accent transition-colors duration-300 tabular-nums">
+                      {item.step}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div>
+                  <h3 className="text-lg font-bold text-brand-ink mb-2 group-hover:text-brand-accent transition-colors duration-300">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-brand-secondary leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
               </div>
-              <CardTitle>{item.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-            </CardContent>
-          </Card>
-        ))}
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

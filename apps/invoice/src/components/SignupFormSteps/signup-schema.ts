@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { COUNTRY_VALUES } from "@/lib/constant";
 
 export const signupSchema = z.object({
     firstname: z.string().min(2),
@@ -9,7 +10,7 @@ export const signupSchema = z.object({
     businessType: z.string().min(2),
     businessAddress: z.string().min(2),
     city: z.string().min(2),
-    country: z.string().min(2),
+    country: z.enum(COUNTRY_VALUES),
     website: z.string(),
 });
 

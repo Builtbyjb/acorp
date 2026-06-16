@@ -1,88 +1,108 @@
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { Button } from "@shared/ui/components/button";
+import { useInView } from "@/hooks/useInView";
+
+const trustMarkers = [
+  "No credit card required",
+  "Free up to 5 invoices/mo",
+  "Cancel anytime",
+];
 
 export default function CTA() {
   const navigate = useNavigate();
+  const { ref, isVisible } = useInView<HTMLElement>({ threshold: 0.2 });
 
   return (
-    <section>
-      {/* Dark CTA block */}
-      <div
-        className="relative rounded-3xl overflow-hidden px-10 py-20 text-center"
-        style={{ backgroundColor: "#0f172a" }}
-      >
-        {/* Radial glow layer */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage:
-              "radial-gradient(ellipse at 25% 60%, #4382df20 0%, transparent 55%), radial-gradient(ellipse at 80% 30%, #7F8CAA18 0%, transparent 50%)",
-          }}
-        />
-        {/* Grid overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-20"
-          style={{
-            backgroundImage:
-              "linear-gradient(#4382df0e 1px, transparent 1px), linear-gradient(90deg, #4382df0e 1px, transparent 1px)",
-            backgroundSize: "48px 48px",
-          }}
-        />
+    <section ref={ref} className="relative py-16 md:py-20 px-6 bg-brand-bg overflow-hidden">
+      <div className="container mx-auto">
+        <div className="relative bg-white border border-brand-secondary/20 px-8 md:px-16 py-20 md:py-28 text-center paper-texture receipt-shadow receipt-tear">
+          {/* Background texture */}
+          <div className="absolute inset-0 bg-dot-matrix opacity-30 pointer-events-none" />
 
-        <div className="relative">
-          {/* Eyebrow */}
-          <p
-            className="animate-fade-up text-xs font-bold tracking-[0.25em] uppercase mb-4"
-            style={{ color: "#4382df", animationDelay: "0.05s" }}
-          >
-            Get started today
-          </p>
+          {/* Decorative border frame */}
+          <div className="absolute inset-4 border border-brand-secondary/10 pointer-events-none" />
 
-          <h2 className="animate-fade-up font-bold text-white tracking-tight mb-5 text-3xl">
-            Ready to get paid faster?
-            <br />
-            <span className="text-2xl ">Start free, upgrade anytime.</span>
-          </h2>
+          <div className="relative z-10 max-w-2xl mx-auto">
+            {/* Eyebrow */}
+            <p
+              className="text-[10px] font-mono font-bold tracking-[0.3em] uppercase text-brand-secondary mb-6"
+              style={{
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? "translateY(0)" : "translateY(10px)",
+                transition: "all 0.5s ease-out",
+              }}
+            >
+              // START TODAY
+            </p>
 
-          {/* Subtext */}
-          <p
-            className="animate-fade-up text-base mb-10 max-w-lg mx-auto leading-relaxed"
-            style={{ color: "#7F8CAA", animationDelay: "0.22s" }}
-          >
-            No credit card required. Free forever for up to 5 invoices per month. Upgrade when your business grows.
-          </p>
+            {/* Main Headline */}
+            <h2
+              className="font-bold tracking-tighter mb-4 text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05]"
+              style={{
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? "translateY(0)" : "translateY(10px)",
+                transition: "all 0.5s ease-out 0.1s",
+              }}
+            >
+              <span className="text-brand-ink">Ready to get</span>
+              <br />
+              <span className="text-outline text-brand-ink">paid faster?</span>
+            </h2>
 
-          {/* CTA */}
-          <div className="animate-fade-up flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button onClick={() => navigate({ to: "/signup" })}>
-              Create your first invoice <ArrowRight />
-            </Button>
-            <Button variant="outline" onClick={() => navigate({ to: "/pricing" })}>
-              View pricing
-            </Button>
-          </div>
+            {/* Subtext */}
+            <p
+              className="text-base md:text-lg mb-10 text-brand-secondary max-w-xl mx-auto leading-relaxed"
+              style={{
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? "translateY(0)" : "translateY(10px)",
+                transition: "all 0.5s ease-out 0.2s",
+              }}
+            >
+              Join thousands of independent professionals who have upgraded their financial workflow.
+            </p>
 
-          {/* Supporting chips */}
-          <div
-            className="animate-fade-up flex flex-wrap items-center justify-center gap-3 mt-8"
-            style={{ animationDelay: "0.42s" }}
-          >
-            {["Setup in under 2 minutes", "PDF download", "Cancel anytime"].map((chip) => (
-              <span
-                key={chip}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold border"
-                style={{
-                  backgroundColor: "#ffffff08",
-                  borderColor: "#7F8CAA25",
-                  color: "#7F8CAA",
-                }}
+            {/* CTA Buttons */}
+            <div
+              className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10"
+              style={{
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? "translateY(0)" : "translateY(10px)",
+                transition: "all 0.5s ease-out 0.3s",
+              }}
+            >
+              <button
+                onClick={() => navigate({ to: "/signup" })}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold text-white bg-brand-ink transition-all duration-300 hover:bg-brand-ink/90 hover:shadow-lg active:scale-[0.97] group"
               >
-                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#4382df" }} />
-                {chip}
-              </span>
-            ))}
+                CREATE YOUR FIRST INVOICE
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </button>
+              <button
+                onClick={() => navigate({ to: "/pricing" })}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold text-brand-ink border-2 border-brand-ink bg-transparent transition-all duration-300 hover:bg-brand-ink hover:text-white active:scale-[0.97]"
+              >
+                VIEW PRICING
+              </button>
+            </div>
+
+            {/* Trust Markers */}
+            <div
+              className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs font-mono font-bold tracking-wider text-brand-secondary uppercase"
+              style={{
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? "translateY(0)" : "translateY(10px)",
+                transition: "all 0.5s ease-out 0.4s",
+              }}
+            >
+              {trustMarkers.map((text, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-brand-accent" />
+                  {text}
+                </div>
+              ))}
+            </div>
           </div>
+
         </div>
       </div>
     </section>

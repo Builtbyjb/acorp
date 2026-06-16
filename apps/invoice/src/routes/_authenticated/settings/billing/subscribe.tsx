@@ -13,12 +13,13 @@ type Plan = z.infer<typeof SubscriptionPlanSchema>;
 
 const SearchSchema = z.object({
   plan: z.string().optional(),
+  currency: z.string().optional(),
 });
 
 function RouteComponent() {
   const { setTitle } = useLayout();
   const navigate = useNavigate();
-  const { plan } = useSearch({ from: "/_authenticated/settings/billing/subscribe" });
+  const { plan, currency } = useSearch({ from: "/_authenticated/settings/billing/subscribe" });
 
   const [plans, setPlans] = useState<Plan[]>([]);
   const { fetchPlan, subscribe } = useSubscriptionPlan();
@@ -27,7 +28,7 @@ function RouteComponent() {
     setTitle("Subscribe");
 
     (async () => {
-      const result = await fetchPlan();
+      const result = await fetchPlan(currency);
       if (!result) return;
 
       if (plan) {
@@ -37,7 +38,7 @@ function RouteComponent() {
 
       setPlans(result);
     })();
-  }, [fetchPlan, setTitle, plan, subscribe]);
+  }, [fetchPlan, setTitle, plan, subscribe, currency]);
 
   const handleSubscribe = async (plan: Plan) => {
     const result = await subscribe(plan);

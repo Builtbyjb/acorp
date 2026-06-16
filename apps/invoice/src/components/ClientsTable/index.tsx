@@ -52,14 +52,13 @@ export default function ClientsTable({
   const handleDelete = async () => {
     if (deleteId) {
       try {
-        const response = await fetch(`${API_URL}/api/v1/clients/delete/${deleteId}`, {
+        const response = await fetch(`${API_URL}/api/v1/invoice/clients/delete/${deleteId}`, {
           method: "DELETE",
           credentials: "include",
         });
 
         if (!response.ok) throw new Error("Failed to delete client");
 
-        // Let parent decide how to refresh list (we call deleteClient which should re-fetch)
         deleteClient(deleteId);
         toast.success("Client deleted");
       } catch (error: unknown) {
@@ -85,31 +84,31 @@ export default function ClientsTable({
         <SkeletonTable />
       ) : (
         <>
-          <div className="rounded-lg border border-border">
+          <div className="border border-black/10">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead className="hidden sm:table-cell">Contact</TableHead>
-                  <TableHead className="hidden md:table-cell">Location</TableHead>
-                  <TableHead className="hidden lg:table-cell">Added</TableHead>
+                <TableRow className="border-b border-black/10 hover:bg-transparent">
+                  <TableHead className="text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">Name</TableHead>
+                  <TableHead className="hidden sm:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">Contact</TableHead>
+                  <TableHead className="hidden md:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">Location</TableHead>
+                  <TableHead className="hidden lg:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">Added</TableHead>
                   <TableHead className="w-12.5"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {clients.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="h-32 text-center text-muted-foreground">
+                    <TableCell colSpan={5} className="h-32 text-center text-neutral-500">
                       No clients found. Add your first client to get started.
                     </TableCell>
                   </TableRow>
                 ) : (
                   clients.map((client) => (
-                    <TableRow key={client.id}>
+                    <TableRow key={client.id} className="border-b border-black/5 hover:bg-black/[0.02]">
                       <TableCell onClick={() => handleNavigate(client.id)} className="cursor-pointer">
                         <div className="flex flex-col">
-                          <span className="font-medium">{client.name}</span>
-                          <span className="text-sm text-muted-foreground sm:hidden">{client.email}</span>
+                          <span className="font-bold text-black">{client.name}</span>
+                          <span className="text-sm text-neutral-500 sm:hidden">{client.email}</span>
                         </div>
                       </TableCell>
                       <TableCell
@@ -118,11 +117,11 @@ export default function ClientsTable({
                       >
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1.5 text-sm">
-                            <Mail className="h-3.5 w-3.5 text-muted-foreground" />
+                            <Mail className="h-3.5 w-3.5 text-neutral-500" />
                             {client.email}
                           </div>
                           {client.phone && (
-                            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1.5 text-sm text-neutral-500">
                               <Phone className="h-3.5 w-3.5" />
                               {client.phone}
                             </div>
@@ -134,12 +133,12 @@ export default function ClientsTable({
                         onClick={() => handleNavigate(client.id)}
                       >
                         <div className="flex flex-col text-sm">
-                          <span>{client.city}</span>
-                          <span className="text-muted-foreground">{client.country}</span>
+                          <span className="text-black">{client.city}</span>
+                          <span className="text-neutral-500">{client.country}</span>
                         </div>
                       </TableCell>
                       <TableCell
-                        className="hidden lg:table-cell text-sm text-muted-foreground cursor-pointer"
+                        className="hidden lg:table-cell text-sm text-neutral-500 cursor-pointer"
                         onClick={() => handleNavigate(client.id)}
                       >
                         {format(client.createdAt, "MMM d, yyyy")}
@@ -147,10 +146,10 @@ export default function ClientsTable({
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger className="cursor-pointer">
-                            <MoreHorizontal className="h-4 w-4" />
+                            <MoreHorizontal className="h-4 w-4 text-neutral-500" />
                             <span className="sr-only">Open menu</span>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
+                          <DropdownMenuContent align="end" className="border-black/10">
                             <Link to="/clients/$clientId" params={{ clientId: client.id }}>
                               <DropdownMenuItem>
                                 <Eye className="mr-2 h-4 w-4" />
@@ -161,8 +160,8 @@ export default function ClientsTable({
                               <Pencil className="mr-2 h-4 w-4" />
                               Edit
                             </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => setDeleteId(client.id)} className="text-destructive">
+                            <DropdownMenuSeparator className="bg-black/10" />
+                            <DropdownMenuItem onClick={() => setDeleteId(client.id)} className="text-black">
                               <Trash2 className="mr-2 h-4 w-4" />
                               Delete
                             </DropdownMenuItem>
@@ -181,16 +180,16 @@ export default function ClientsTable({
       )}
 
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
-        <AlertDialogContent>
+        <AlertDialogContent className="border-black/10 rounded-none">
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Client</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-black">Delete Client</AlertDialogTitle>
+            <AlertDialogDescription className="text-neutral-500">
               Are you sure you want to delete this client? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="bg-background">
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-white hover:bg-destructive/90">
+          <AlertDialogFooter className="bg-white border-t-0">
+            <AlertDialogCancel className="rounded-none">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-black text-white hover:bg-black/90 rounded-none">
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

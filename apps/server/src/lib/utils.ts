@@ -79,67 +79,14 @@ export async function sendOTPEmail(c: Context, email: string): Promise<Error | s
     return otp;
 }
 
-// Helper to verify Paystack HMAC-SHA512 signature
-export async function verifyPaystackSignature(secret: string, body: string, signature: string): Promise<boolean> {
-    const encoder = new TextEncoder();
-
-    // Import the secret key
-    const key = await crypto.subtle.importKey("raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-512" }, false, [
-        "sign",
-    ]);
-
-    // Sign the body
-    const signatureBuffer = await crypto.subtle.sign("HMAC", key, encoder.encode(body));
-
-    // Convert to hex string
-    const hash = Array.from(new Uint8Array(signatureBuffer))
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
-
-    return hash === signature;
-}
-
 export function getBlobURL(c: Context, key: string): string {
-    return `${c.env.SERVER_URL}/api/v1/blobs/${key}`;
+    return `${c.env.SERVER_URL}/api/v1/invoice/blobs/${key}`;
 }
 
 export function handleZodValidate(result: any, c: Context) {
     if (!result.success) {
         console.error(`Zod Validation Error: ${result.error}`);
         return c.json({ message: "Zod Validation Error" }, 400);
-    }
-}
-
-export async function fetchSubscriptions(customerId: number, paystackSecret: string): Promise<any> {
-    const response = await fetch(`https://api.paystack.co/subscription?customer=${customerId}`, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${paystackSecret}`,
-        },
-    });
-    if (!response.ok) return new Error("Failed to fetch subscriptions");
-
-    const result: any = await response.json();
-
-    return result;
-}
-
-export async function hasActiveSubscription(customerId: number, paystackSecret: string): Promise<boolean> {
-    try {
-        const subscriptions = await fetchSubscriptions(customerId, paystackSecret);
-        if (subscriptions.data && subscriptions.data.length > 0) {
-            const hasActiveOrNonRenewing = subscriptions.data.some(
-                (s: any) =>
-                    s.status === "active" ||
-                    (s.status === "non-renewing" && s.next_payment_date >= new Date().toISOString()),
-            );
-
-            return hasActiveOrNonRenewing;
-        }
-
-        return false;
-    } catch {
-        return false;
     }
 }
 

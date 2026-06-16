@@ -1,147 +1,184 @@
 import { useNavigate } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
-import Headline from "@shared/ui/custom-components/Headline";
+import { ArrowRight, FileText } from "lucide-react";
 import { Button } from "@shared/ui/components/button";
+import type { Invoice, InvoiceItem } from "@shared/lib/types";
+
+const mockInvoice: Omit<Invoice, "id" | "clientId" | "createdAt"> & { clientName: string; clientEmail: string } = {
+  invoiceNumber: "INV-2026-001",
+  clientName: "Meridian Studios",
+  clientEmail: "billing@meridian.co",
+  items: [
+    { description: "Brand Identity Design", quantity: 1, unitPrice: 4500 },
+    { description: "Frontend Development", quantity: 1, unitPrice: 4850 },
+  ],
+  taxRate: 0,
+  discount: 0,
+  status: "paid",
+  signature: null,
+  issueDate: "2026-05-01",
+  dueDate: "2026-05-17",
+  currency: "USD",
+  notes: "",
+};
+
+const calculateTotal = (items: InvoiceItem[]) => {
+  return items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
+};
 
 export default function Hero() {
   const navigate = useNavigate();
+  const total = calculateTotal(mockInvoice.items);
 
   return (
-    <section>
-      <Headline start="Create invoices." end="Get paid faster." />
+    <section className="relative min-h-screen flex items-center bg-brand-bg overflow-hidden">
+      {/* Background texture */}
+      <div className="absolute inset-0 bg-dot-matrix opacity-50 pointer-events-none" />
 
-      <p className="animate-fade-up max-w-xl leading-relaxed mt-6 mb-10 text-muted-foreground">
-        The simplest way to create professional invoices. Designed for freelancers and small businesses who want less
-        paperwork and more time for real work.
-      </p>
+      {/* Ruler lines */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-repeating-linear-gradient(90deg, #000000 0px, #000000 4px, transparent 4px, transparent 8px) opacity-20" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-repeating-linear-gradient(90deg, #000000 0px, #000000 4px, transparent 4px, transparent 8px) opacity-20" />
 
-      {/* CTAs */}
-      <div className="animate-fade-up flex flex-col sm:flex-row gap-4">
-        <Button onClick={() => navigate({ to: "/signup" })}>
-          Start for free <ArrowRight />
-        </Button>
-        <Button variant="outline" onClick={() => navigate({ to: "/pricing" })}>
-          View pricing
-        </Button>
-      </div>
-
-      {/* Supporting chips */}
-      <div className="animate-fade-up flex flex-wrap items-center gap-3 mt-8">
-        {["No credit card required", "Free up to 5 invoices/month", "PDF download"].map((chip) => (
-          <span
-            key={chip}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold border"
-            style={{
-              backgroundColor: "#ffffff90",
-              borderColor: "#7F8CAA25",
-              color: "#7F8CAA",
-            }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#4382df" }} />
-            {chip}
-          </span>
-        ))}
-      </div>
-
-      {/* Invoice preview mockup */}
-      <div className="animate-fade-up mt-20 max-w-4xl mx-auto">
-        <div className="rounded-3xl overflow-hidden border border-border/20">
-          {/* Browser chrome */}
-          <div
-            className="px-5 py-3 flex items-center gap-2 border-b"
-            style={{ backgroundColor: "#f4f7f7", borderColor: "#7F8CAA18" }}
-          >
-            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: "#7F8CAA30" }} />
-            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: "#7F8CAA20" }} />
-            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: "#7F8CAA18" }} />
-            <div
-              className="ml-3 flex-1 rounded-full px-3 py-1 text-xs max-w-xs"
-              style={{ backgroundColor: "#7F8CAA14", color: "#7F8CAA" }}
-            >
-              invoice.acorp.app/invoices/INV-2024-001
-            </div>
+      <div className="container relative z-10 mx-auto px-6 py-20 lg:py-24 grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        {/* Left Column — Typography */}
+        <div className="lg:col-span-6 space-y-8">
+          {/* Eyebrow */}
+          <div className="inline-flex items-center gap-2 text-xs font-mono font-bold tracking-[0.2em] uppercase text-brand-secondary tabular-nums animate-fade-up">
+            <span className="w-2 h-2 bg-brand-accent rounded-full" />
+            INVOICING FOR FREELANCERS
           </div>
-          <div className="relative mx-auto max-w-5xl">
-            <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent z-10 pointer-events-none" />
-            <div className="rounded-lg bg-card p-2 shadow-2xl shadow-primary/5">
-              <div className="bg-muted/40 p-4">
-                <InvoicePreview />
+
+          {/* Giant Headline */}
+          <div className="space-y-1">
+            <h1
+              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.85] text-brand-ink animate-fade-up"
+              style={{ animationDelay: "0.1s" }}
+            >
+              Print
+            </h1>
+            <h1
+              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.85] text-outline text-brand-ink animate-fade-up"
+              style={{ animationDelay: "0.2s" }}
+            >
+              Money.
+            </h1>
+          </div>
+
+          {/* Subtext */}
+          <p
+            className="text-lg md:text-xl text-brand-secondary max-w-md leading-relaxed font-medium animate-fade-up"
+            style={{ animationDelay: "0.3s" }}
+          >
+            Create, send, and track professional invoices in under a minute. The financial tool built for the creative class.
+          </p>
+
+          {/* CTAs */}
+          <div
+            className="flex flex-col sm:flex-row gap-4 animate-fade-up"
+            style={{ animationDelay: "0.4s" }}
+          >
+            <Button
+              size="lg"
+              className="bg-brand-ink text-white hover:bg-brand-ink/90 rounded-none px-8 h-14 text-base font-bold group transition-all duration-300 hover:shadow-lg"
+              onClick={() => navigate({ to: "/signup" })}
+            >
+              START FREE
+              <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="rounded-none px-8 h-14 text-base font-bold border-2 border-brand-ink text-brand-ink hover:bg-brand-ink hover:text-white transition-all duration-300"
+              onClick={() => navigate({ to: "/pricing" })}
+            >
+              VIEW PRICING
+            </Button>
+          </div>
+
+          {/* Dashed line */}
+          <div className="hr-dashed animate-print-line" style={{ animationDelay: "0.6s" }} />
+
+          {/* Trust markers */}
+          <div
+            className="flex flex-wrap items-center gap-6 text-xs font-mono font-bold tracking-wide text-brand-secondary tabular-nums animate-fade-up"
+            style={{ animationDelay: "0.7s" }}
+          >
+            <span>NO CC REQUIRED</span>
+            <span className="text-brand-secondary/30">|</span>
+            <span>5 FREE INVOICES/MO</span>
+          </div>
+        </div>
+
+        {/* Right Column — Receipt Card */}
+        <div className="lg:col-span-6 relative h-[500px] md:h-[600px] hidden md:flex items-center justify-center">
+          {/* The Receipt */}
+          <div className="relative receipt-3d receipt-shadow paper-texture bg-white p-8 w-[380px] receipt-top receipt-bottom receipt-tear animate-fade-in">
+            {/* Receipt Header */}
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <div className="w-8 h-8 bg-brand-ink flex items-center justify-center mb-3">
+                  <FileText className="text-white w-4 h-4" />
+                </div>
+                <p className="text-[10px] font-mono font-bold tracking-widest text-brand-secondary uppercase">ACORP INVOICE</p>
+                <p className="text-xs font-mono text-brand-secondary">{mockInvoice.invoiceNumber}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-[10px] font-mono font-bold tracking-widest text-brand-secondary uppercase">DUE</p>
+                <p className="text-xs font-mono text-brand-ink">{new Date(mockInvoice.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
               </div>
             </div>
+
+            {/* Dashed line */}
+            <div className="hr-dashed mb-6" />
+
+            {/* Client */}
+            <div className="mb-6">
+              <p className="text-[10px] font-mono font-bold tracking-widest text-brand-secondary uppercase mb-1">BILL TO</p>
+              <p className="text-sm font-bold text-brand-ink">{mockInvoice.clientName}</p>
+              <p className="text-xs font-mono text-brand-secondary">{mockInvoice.clientEmail}</p>
+            </div>
+
+            {/* Line Items */}
+            <div className="space-y-3 mb-6">
+              {mockInvoice.items.map((item, i) => (
+                <div key={i} className="flex justify-between items-start text-sm">
+                  <div>
+                    <p className="font-bold text-brand-ink">{item.description}</p>
+                    <p className="text-xs font-mono text-brand-secondary">{item.quantity}x @ ${item.unitPrice.toLocaleString()}</p>
+                  </div>
+                  <p className="font-mono font-bold text-brand-ink tabular-nums">
+                    ${(item.quantity * item.unitPrice).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Dashed line */}
+            <div className="hr-dashed mb-6" />
+
+            {/* Total */}
+            <div className="flex justify-between items-center">
+              <p className="text-[10px] font-mono font-bold tracking-widest text-brand-secondary uppercase">TOTAL</p>
+              <p className="text-2xl font-bold font-mono text-brand-ink tabular-nums">
+                ${total.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </p>
+            </div>
+
+            {/* Status Stamp */}
+            <div className="mt-8 flex justify-center">
+              <div className="stamp px-4 py-1 border-2 border-brand-accent text-brand-accent text-xs font-mono font-bold tracking-widest uppercase">
+                PAID
+              </div>
+            </div>
+
+            {/* Receipt texture overlay */}
+            <div className="absolute inset-0 receipt-texture pointer-events-none opacity-30" />
           </div>
+
+          {/* Decorative elements */}
+          <div className="absolute -top-8 -right-8 w-24 h-24 border border-brand-secondary/20 rounded-full animate-float pointer-events-none" />
+          <div className="absolute -bottom-8 -left-8 w-16 h-16 border border-brand-accent/20 rounded-full animate-float-delayed pointer-events-none" />
         </div>
       </div>
     </section>
-  );
-}
-
-function InvoicePreview() {
-  return (
-    <div className="bg-white/70 text-xs shadow-lg p-4 sm:p-8 max-w-2xl mx-auto">
-      <div className="flex justify-between items-start mb-8">
-        <div>
-          <h3 className="text-2xl font-bold text-foreground">INVOICE</h3>
-          <p className="text-sm text-muted-foreground mt-1">#INV-2024-001</p>
-        </div>
-        <div className="text-right">
-          <p className="font-semibold text-foreground">Your Company</p>
-          <p className="text-sm text-muted-foreground">hello@yourcompany.com</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-8 mb-8">
-        <div>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Bill to</p>
-          <p className="font-medium text-foreground">Acme Corporation</p>
-          <p className="text-sm text-muted-foreground">contact@acme.com</p>
-        </div>
-        <div className="text-right">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Invoice date</p>
-          <p className="font-medium text-foreground">April 17, 2026</p>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground mt-3 mb-1">Due date</p>
-          <p className="font-medium text-foreground">May 17, 2026</p>
-        </div>
-      </div>
-
-      <div className="border-t border-border">
-        <div className="grid grid-cols-12 gap-3 py-3 text-xs uppercase tracking-wide text-muted-foreground">
-          <div className="col-span-5">Description</div>
-          <div className="col-span-2 text-right">Qty</div>
-          <div className="col-span-2 text-right">Rate</div>
-          <div className="col-span-2 text-right">Amount</div>
-        </div>
-        <div className="grid grid-cols-12 gap-3 py-3 border-t border-border">
-          <div className="col-span-5 text-foreground">Website Design</div>
-          <div className="col-span-2 text-right text-muted-foreground">1</div>
-          <div className="col-span-2 text-right text-muted-foreground">$2,500</div>
-          <div className="col-span-2 text-right font-medium text-foreground ml-2">$2,500</div>
-        </div>
-        <div className="grid grid-cols-12 gap-3 py-3 border-t border-border">
-          <div className="col-span-5 text-foreground">Development</div>
-          <div className="col-span-2 text-right text-muted-foreground">40</div>
-          <div className="col-span-2 text-right text-muted-foreground">$150</div>
-          <div className="col-span-2 text-right font-medium text-foreground ml-2">$6,000</div>
-        </div>
-      </div>
-
-      <div className="border-t border-border mt-4 pt-4">
-        <div className="flex justify-end">
-          <div className="w-48">
-            <div className="flex justify-between py-1">
-              <span className="text-muted-foreground">Subtotal</span>
-              <span className="text-foreground">$8,500</span>
-            </div>
-            <div className="flex justify-between py-1">
-              <span className="text-muted-foreground">Tax (10%)</span>
-              <span className="text-foreground">$850</span>
-            </div>
-            <div className="flex justify-between py-2 border-t border-border mt-2 font-bold text-lg">
-              <span className="text-foreground">Total</span>
-              <span className="text-foreground">$9,350</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }

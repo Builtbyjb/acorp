@@ -35,7 +35,7 @@ export default function ClientForm({ open, onOpenChange, client, addClient, edit
   const handleClientCreate = async (value: ClientFormType) => {
     setIsSubmitting(true);
     try {
-      const response = await doPOST("/api/v1/clients/create", value);
+      const response = await doPOST("/api/v1/invoice/clients/create", value);
       if (response instanceof Error) throw response;
 
       const result = await response.json();
@@ -59,7 +59,7 @@ export default function ClientForm({ open, onOpenChange, client, addClient, edit
     try {
       if (!client) throw new Error("Client not found");
 
-      const response = await doPUT(`/api/v1/clients/edit/${id}`, value);
+      const response = await doPUT(`/api/v1/invoice/clients/edit/${id}`, value);
       if (response instanceof Error) throw response;
 
       const newValue: Client = {

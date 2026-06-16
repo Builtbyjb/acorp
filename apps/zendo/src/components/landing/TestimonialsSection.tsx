@@ -26,7 +26,7 @@ function StarRow() {
   return (
     <div className="flex gap-0.5" aria-label="5 stars">
       {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} width="13" height="13" viewBox="0 0 14 14" fill="#4382df">
+        <svg key={i} width="13" height="13" viewBox="0 0 14 14" fill="currentColor">
           <path d="M7 1l1.5 4h4.3l-3.5 2.5 1.3 4L7 9 3.4 11.5l1.3-4L1.2 5H5.5z" />
         </svg>
       ))}
@@ -36,20 +36,14 @@ function StarRow() {
 
 export function TestimonialsSection() {
   return (
-    <section className="pb-24 px-6">
+    <section className="pb-24 px-6 bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <div className="mb-12">
-          <p
-            className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5"
-            style={{ color: "#7F8CAA" }}
-          >
+          <p className="eyebrow mb-2.5">
             Real people, real focus
           </p>
-          <h2
-            className="text-4xl font-bold tracking-tight"
-            style={{ color: "#0f172a" }}
-          >
+          <h2 className="section-heading">
             Loved by focused builders.
           </h2>
         </div>
@@ -59,34 +53,22 @@ export function TestimonialsSection() {
           {TESTIMONIALS.map((t, i) => (
             <div
               key={t.name}
-              className="animate-fade-up bg-white rounded-3xl p-7 flex flex-col gap-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-              style={{
-                boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07",
-                animationDelay: `${0.1 + i * 0.1}s`,
-              }}
+              className="animate-fade-up receipt-card flex flex-col gap-5 transition-all duration-300 hover:-translate-y-1"
+              style={{ animationDelay: `${0.1 + i * 0.1}s` }}
             >
               <StarRow />
-              <p
-                className="text-sm leading-relaxed flex-1 italic"
-                style={{ color: "#0f172a" }}
-              >
+              <p className="text-sm leading-relaxed flex-1 italic text-black">
                 &ldquo;{t.quote}&rdquo;
               </p>
-              <div
-                className="flex items-center gap-3 pt-5"
-                style={{ borderTop: "1px solid #7F8CAA18" }}
-              >
-                <div
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-                  style={{ backgroundColor: "#4382df" }}
-                >
+              <div className="flex items-center gap-3 pt-5 border-t border-black/10">
+                <div className="w-9 h-9 rounded-none flex items-center justify-center text-xs font-bold text-white bg-black flex-shrink-0">
                   {t.initials}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold leading-tight" style={{ color: "#0f172a" }}>
+                  <p className="text-sm font-bold leading-tight text-black">
                     {t.name}
                   </p>
-                  <p className="text-xs" style={{ color: "#7F8CAA" }}>{t.role}</p>
+                  <p className="text-xs text-neutral-500">{t.role}</p>
                 </div>
               </div>
             </div>

@@ -112,14 +112,12 @@ export function getMonthlyRevenues(invoices: Invoice[]): { month: string; revenu
 }
 
 export function getRecentInvoices(invoices: Invoice[]): Invoice[] {
-    // Get invoices from the current month and the previous month
     const recentInvoices = invoices.filter(
         (invoice) =>
             invoice.issueDate.getMonth() === new Date().getMonth() ||
             invoice.issueDate.getMonth() === new Date().getMonth() - 1,
     );
 
-    // Sort the invoices by issue date and return the first 10
     const sortedInvoices = recentInvoices.sort((a, b) => a.issueDate.getMonth() - b.issueDate.getMonth());
 
     return sortedInvoices.slice(0, 10);

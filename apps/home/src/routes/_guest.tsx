@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import NavBar from "@shared/ui/components/Navbar";
+import NavBar from "@shared/ui/custom-components/Navbar";
 import Logo from "@/components/Logo";
-import Footer from "@shared/ui/components/Footer";
+import Footer from "@shared/ui/custom-components/Footer";
 
 function GuestLayout() {
   const navLinks = [
@@ -34,7 +34,7 @@ function GuestLayout() {
   return (
     <>
       <NavBar navLinks={navLinks} logo={<Logo />} enableCTA={false} />
-      <main className="mt-12 mb-16 w-[90%] sm:w-[80%] md:w-[70%] mx-auto">
+      <main className="max-w-7xl mx-auto px-6 pt-12 pb-16">
         <Outlet />
       </main>
       <Footer

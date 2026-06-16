@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   CalendarDays,
@@ -24,7 +25,8 @@ const MAIN_NAV = [
 export function Sidebar() {
   const routerState = useRouterState();
   const pathname = routerState.location.pathname;
-  const projects = useTaskStore((s) => s.projects.filter((p) => !p.archived));
+  const allProjects = useTaskStore((s) => s.projects);
+  const projects = useMemo(() => allProjects.filter((p) => !p.archived), [allProjects]);
   const addProject = useTaskStore((s) => s.addProject);
   const { setActiveProjectId } = useUIStore();
 
@@ -36,11 +38,8 @@ export function Sidebar() {
   };
 
   return (
-    <aside
-      className="w-60 flex-shrink-0 flex flex-col h-full"
-      style={{ backgroundColor: "#ffffff", borderRight: "1px solid #7F8CAA18" }}
-    >
-      <ScrollArea className="flex-1 py-4">
+    <aside className="w-60 flex-shrink-0 flex flex-col h-full bg-[#171717] text-white">
+      <ScrollArea className="flex-1 py-4 rounded-none">
         {/* Main nav */}
         <nav className="px-3 mb-6">
           {MAIN_NAV.map(({ to, label, icon: Icon }) => {
@@ -49,13 +48,17 @@ export function Sidebar() {
               <Link
                 key={to}
                 to={to}
-                className="relative flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all w-full"
+                className="relative flex items-center gap-3 px-3 py-2 rounded-none text-sm font-medium transition-colors w-full"
                 style={{
-                  color: active ? "#0f172a" : "#7F8CAA",
-                  backgroundColor: active ? "#7F8CAA18" : "transparent",
+                  color: active ? "#ffffff" : "#ffffff80",
+                  backgroundColor: active ? "#ffffff14" : "transparent",
                 }}
-                onMouseEnter={(e) => { if (!active) e.currentTarget.style.backgroundColor = "#7F8CAA0c"; }}
-                onMouseLeave={(e) => { if (!active) e.currentTarget.style.backgroundColor = "transparent"; }}
+                onMouseEnter={(e) => {
+                  if (!active) e.currentTarget.style.backgroundColor = "#ffffff0c";
+                }}
+                onMouseLeave={(e) => {
+                  if (!active) e.currentTarget.style.backgroundColor = "transparent";
+                }}
               >
                 <Icon className="h-4 w-4 flex-shrink-0" />
                 {label}
@@ -67,17 +70,13 @@ export function Sidebar() {
         {/* Projects */}
         <div className="px-3">
           <div className="flex items-center justify-between mb-1 px-3">
-            <span
-              className="text-xs font-bold uppercase tracking-[0.25em]"
-              style={{ color: "#7F8CAA" }}
-            >
+            <span className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase text-white/50">
               Projects
             </span>
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
-                  className="h-5 w-5 flex items-center justify-center rounded-full transition-opacity hover:opacity-60"
-                  style={{ color: "#7F8CAA" }}
+                  className="h-5 w-5 flex items-center justify-center rounded-none transition-opacity hover:opacity-60 text-white/50"
                   onClick={handleAddProject}
                 >
                   <Plus className="h-3.5 w-3.5" />
@@ -88,7 +87,7 @@ export function Sidebar() {
           </div>
 
           {projects.length === 0 && (
-            <p className="text-xs px-3 py-2" style={{ color: "#7F8CAA" }}>No projects yet</p>
+            <p className="text-xs px-3 py-2 text-white/50">No projects yet</p>
           )}
 
           {projects.map((project) => {
@@ -100,18 +99,19 @@ export function Sidebar() {
                 to="/app/projects/$projectId"
                 params={{ projectId: project.id }}
                 onClick={() => setActiveProjectId(project.id)}
-                className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all w-full"
+                className="flex items-center gap-3 px-3 py-2 rounded-none text-sm transition-colors w-full"
                 style={{
-                  color: active ? "#0f172a" : "#7F8CAA",
-                  backgroundColor: active ? "#7F8CAA18" : "transparent",
+                  color: active ? "#ffffff" : "#ffffff80",
+                  backgroundColor: active ? "#ffffff14" : "transparent",
                 }}
-                onMouseEnter={(e) => { if (!active) e.currentTarget.style.backgroundColor = "#7F8CAA0c"; }}
-                onMouseLeave={(e) => { if (!active) e.currentTarget.style.backgroundColor = "transparent"; }}
+                onMouseEnter={(e) => {
+                  if (!active) e.currentTarget.style.backgroundColor = "#ffffff0c";
+                }}
+                onMouseLeave={(e) => {
+                  if (!active) e.currentTarget.style.backgroundColor = "transparent";
+                }}
               >
-                <span
-                  className="h-2.5 w-2.5 rounded-full flex-shrink-0"
-                  style={{ background: project.color }}
-                />
+                <span className="h-2.5 w-2.5 flex-shrink-0 bg-white/50" />
                 <span className="truncate">{project.name}</span>
               </Link>
             );
@@ -120,13 +120,13 @@ export function Sidebar() {
       </ScrollArea>
 
       {/* Settings at bottom */}
-      <div className="p-3" style={{ borderTop: "1px solid #7F8CAA18" }}>
+      <div className="p-3 border-t border-white/10">
         <Link
           to="/app/settings"
-          className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all w-full"
+          className="flex items-center gap-3 px-3 py-2 rounded-none text-sm font-medium transition-colors w-full"
           style={{
-            color: isActive("/app/settings") ? "#0f172a" : "#7F8CAA",
-            backgroundColor: isActive("/app/settings") ? "#7F8CAA18" : "transparent",
+            color: isActive("/app/settings") ? "#ffffff" : "#ffffff80",
+            backgroundColor: isActive("/app/settings") ? "#ffffff14" : "transparent",
           }}
         >
           <Settings className="h-4 w-4" />

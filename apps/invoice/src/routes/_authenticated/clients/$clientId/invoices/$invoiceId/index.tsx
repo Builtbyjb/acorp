@@ -58,7 +58,7 @@ function RouteComponent() {
       setClient(null);
       setLogoURL(null);
       try {
-        const response = await doGET(`/api/v1/clients/${clientId}/invoices/${invoiceId}`);
+        const response = await doGET(`/api/v1/invoice/clients/${clientId}/invoices/${invoiceId}`);
         if (response instanceof Error) throw response;
 
         const result = await response.json();
@@ -99,9 +99,15 @@ function RouteComponent() {
 
   const handlePreview = async () => {
     if (!invoice) return;
+
+    const previewWindow = window.open("", "_blank");
+    if (!previewWindow) return;
+
     const blob = await getBlob(invoice);
     const url = URL.createObjectURL(blob);
-    if (url) window.open(url, "_blank");
+    previewWindow.location.href = url;
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   return (

@@ -9,14 +9,14 @@ interface StatusChartProps {
   isLoading: boolean;
 }
 
-const COLORS = ["#10b981", "#3b82f6", "#6b7280", "#f59e0b"];
+const COLORS = ["#000000", "#737373", "#a3a3a3", "#d4d4d4"];
 
 export default function StatusChart({ data, isLoading }: StatusChartProps) {
   return (
-    <Card>
+    <Card className="border-black/10 rounded-none">
       <CardHeader>
-        <CardTitle>Invoice Status</CardTitle>
-        <CardDescription>Distribution by current status</CardDescription>
+        <CardTitle className="text-lg font-bold">Invoice Status</CardTitle>
+        <CardDescription className="text-neutral-500">Distribution by current status</CardDescription>
       </CardHeader>
       <CardContent>
         {!isLoading ? (
@@ -44,15 +44,15 @@ export default function StatusChart({ data, isLoading }: StatusChartProps) {
                     return [value, name];
                   }}
                   contentStyle={{
-                    backgroundColor: "var(--card)",
-                    border: "1px solid var(--border)",
-                    borderRadius: "8px",
+                    backgroundColor: "#ffffff",
+                    border: "1px solid #00000020",
+                    borderRadius: "0",
                   }}
                 />
                 <Legend
                   verticalAlign="bottom"
                   height={36}
-                  formatter={(value) => <span style={{ color: "var(--foreground)", fontSize: "12px" }}>{value}</span>}
+                  formatter={(value) => <span style={{ color: "#000000", fontSize: "12px" }}>{value}</span>}
                 />
               </PieChart>
             </ResponsiveContainer>

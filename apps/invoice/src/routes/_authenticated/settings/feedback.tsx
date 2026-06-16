@@ -32,7 +32,7 @@ function RouteComponent() {
     },
     onSubmit: async ({ value }) => {
       try {
-        const response = await doPOST("/api/v1/user/settings/feedback", value);
+        const response = await doPOST("/api/v1/invoice/user/settings/feedback", value);
         if (response instanceof Error) throw response;
 
         const result = await response.json();

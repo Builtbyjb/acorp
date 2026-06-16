@@ -1,3 +1,6 @@
+import { Link } from "@tanstack/react-router";
+import { Separator } from "../components/separator";
+
 type Item = {
   label: string;
   to: string;
@@ -16,23 +19,26 @@ type Props = {
 
 export default function Footer({ footerItems, logo, description }: Props) {
   return (
-    <footer className="border-t px-6 py-10 bg-background">
+    <footer className="border-t border-black/10 px-6 py-10 bg-white">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
           {logo}
-          <p className="text-sm mt-2 max-w-xs leading-relaxed text-muted-foreground">{description}</p>
+          <p className="text-sm mt-2 max-w-xs leading-relaxed text-neutral-500">{description}</p>
         </div>
 
         <div className="flex items-start gap-12">
           {footerItems.map((footerItem, idx) => (
             <div key={idx}>
-              <p className="text-xs font-bold uppercase tracking-widest mb-3 text-foreground">{footerItem.title}</p>
+              <p className="text-xs font-bold uppercase tracking-widest mb-3 text-black">{footerItem.title}</p>
               <ul className="flex flex-col gap-2">
                 {footerItem.items.map((item, idx) => (
                   <li key={idx}>
-                    <a href={item.to} className="text-sm transition-opacity hover:opacity-60 text-muted-foreground">
+                    <Link
+                      to={item.to}
+                      className="text-sm transition-opacity hover:opacity-60 text-neutral-500"
+                    >
                       {item.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -41,15 +47,17 @@ export default function Footer({ footerItems, logo, description }: Props) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto mt-8 pt-6 border-t flex items-center justify-between text-foreground">
-        <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} ACorp. All rights reserved.</p>
+      <Separator className="max-w-7xl mx-auto mt-8 bg-black/10" />
+
+      <div className="max-w-7xl mx-auto mt-6 flex items-center justify-between text-black">
+        <p className="text-xs text-neutral-500">© {new Date().getFullYear()} ACorp. All rights reserved.</p>
         <div className="flex items-center gap-4">
-          <a href="/privacy-policy" className="text-xs transition-opacity hover:opacity-60 text-muted-foreground">
+          <Link to="/privacy-policy" className="text-xs transition-opacity hover:opacity-60 text-neutral-500">
             Privacy
-          </a>
-          <a href="/terms-of-service" className="text-xs transition-opacity hover:opacity-60 text-muted-foreground">
+          </Link>
+          <Link to="/terms-of-service" className="text-xs transition-opacity hover:opacity-60 text-neutral-500">
             Terms
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

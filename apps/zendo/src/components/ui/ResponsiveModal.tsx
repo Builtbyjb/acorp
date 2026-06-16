@@ -40,10 +40,10 @@ export function ResponsiveModal({ open, onOpenChange, title, description, childr
   if (isMobile) {
     return (
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent side="bottom" className="max-h-[92svh] overflow-y-auto rounded-t-2xl pb-safe-b">
+        <SheetContent side="bottom" className="max-h-[92svh] overflow-y-auto rounded-none pb-safe-b bg-white border-t border-black/10 shadow-none">
           {(title || description) && (
             <SheetHeader className="mb-4 text-left">
-              {title && <SheetTitle>{title}</SheetTitle>}
+              {title && <SheetTitle className="font-mono uppercase text-xs tracking-wider">{title}</SheetTitle>}
               {description && <SheetDescription>{description}</SheetDescription>}
             </SheetHeader>
           )}
@@ -55,10 +55,10 @@ export function ResponsiveModal({ open, onOpenChange, title, description, childr
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-none bg-white border border-black/10 shadow-none">
         {(title || description) && (
           <DialogHeader>
-            {title && <DialogTitle>{title}</DialogTitle>}
+            {title && <DialogTitle className="font-mono uppercase text-xs tracking-wider">{title}</DialogTitle>}
             {description && <DialogDescription>{description}</DialogDescription>}
           </DialogHeader>
         )}

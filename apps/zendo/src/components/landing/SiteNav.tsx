@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 
 const NAV_LINKS = [
@@ -21,32 +20,17 @@ function ArrowRight({ size = 14 }: { size?: number }) {
 }
 
 export function SiteNav() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
     <header
-      className="sticky top-0 z-50 border-b backdrop-blur-md transition-all duration-200"
-      style={{
-        backgroundColor: scrolled ? "#ebf0f0e8" : "#ebf0f0cc",
-        borderColor: "#7F8CAA22",
-      }}
+      className="sticky top-0 z-50 border-b border-black/10 backdrop-blur-md transition-all duration-200 bg-white/90"
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Wordmark */}
         <Link to="/" className="flex items-center gap-2.5 no-underline group">
-          <div
-            className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-black transition-transform group-hover:scale-95"
-            style={{ backgroundColor: "#4382df" }}
-          >
+          <div className="w-7 h-7 rounded-none flex items-center justify-center bg-black text-white text-xs font-black transition-transform group-hover:scale-95">
             Z
           </div>
-          <span className="font-bold text-lg tracking-tight" style={{ color: "#0f172a" }}>
+          <span className="font-bold text-lg tracking-tight text-black">
             Zendo
           </span>
         </Link>
@@ -57,10 +41,7 @@ export function SiteNav() {
             <a
               key={link.label}
               href={link.href}
-              className="relative px-3 py-1.5 text-sm font-medium rounded-full transition-colors"
-              style={{ color: "#7F8CAA" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#0f172a")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#7F8CAA")}
+              className="relative px-3 py-1.5 text-sm font-medium transition-colors text-neutral-500 hover:text-black"
             >
               {link.label}
             </a>
@@ -71,15 +52,13 @@ export function SiteNav() {
         <div className="flex items-center gap-3">
           <Link
             to="/login"
-            className="hidden sm:block text-sm font-medium transition-opacity hover:opacity-60"
-            style={{ color: "#7F8CAA" }}
+            className="hidden sm:block text-sm font-medium transition-opacity hover:opacity-60 text-neutral-500"
           >
             Sign in
           </Link>
           <Link
             to="/signup"
-            className="group inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-92 active:scale-95"
-            style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+            className="group inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-black transition-all hover:bg-black/90 hover:gap-3 active:scale-95 rounded-none"
           >
             Get started free <ArrowRight />
           </Link>

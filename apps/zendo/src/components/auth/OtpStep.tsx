@@ -44,23 +44,17 @@ export function OtpStep({ email, onSubmit, onBack, isLoading }: Props) {
   });
 
   return (
-    <div
-      className="animate-fade-up bg-white rounded-3xl p-10 flex flex-col gap-6"
-      style={{ boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07" }}
-    >
+    <div className="animate-fade-up bg-white border-2 border-black p-10 flex flex-col gap-6">
       <div className="flex flex-col gap-1.5">
-        <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#0f172a" }}>
+        <h1 className="text-2xl font-bold tracking-tight text-black">
           Check your inbox
         </h1>
-        <p className="text-sm" style={{ color: "#7F8CAA" }}>
+        <p className="text-sm text-neutral-500">
           We sent a 6-digit code to{" "}
-          <span className="font-medium" style={{ color: "#0f172a" }}>{email}</span>.
+          <span className="font-medium text-black">{email}</span>.
         </p>
-        <span
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border self-start mt-1"
-          style={{ backgroundColor: "#4382df0e", borderColor: "#4382df2e", color: "#4382df" }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: "#4382df" }} />
+        <span className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold border self-start mt-1 border-black text-black">
+          <span className="w-1.5 h-1.5 rounded-none animate-pulse bg-black" />
           Demo mode: code is always{" "}
           <span className="font-mono">123456</span>
         </span>
@@ -80,7 +74,7 @@ export function OtpStep({ email, onSubmit, onBack, isLoading }: Props) {
         >
           {(field) => (
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="otp" style={{ color: "#0f172a" }} className="text-sm font-medium">
+              <Label htmlFor="otp" className="text-sm font-medium text-black font-mono">
                 Verification code
               </Label>
               <Input
@@ -94,10 +88,9 @@ export function OtpStep({ email, onSubmit, onBack, isLoading }: Props) {
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value.replace(/\D/g, ""))}
                 className={[
-                  "text-center tracking-[0.5em] font-mono text-lg",
+                  "text-center tracking-[0.5em] font-mono text-lg border border-black/10 bg-transparent rounded-none",
                   field.state.meta.errors.length > 0 ? "border-destructive" : "",
                 ].join(" ")}
-                style={{ borderColor: field.state.meta.errors.length > 0 ? undefined : "#7F8CAA45" }}
               />
               {field.state.meta.errors.length > 0 && (
                 <p className="text-xs text-destructive text-center">
@@ -113,8 +106,7 @@ export function OtpStep({ email, onSubmit, onBack, isLoading }: Props) {
             <button
               type="submit"
               disabled={!canSubmit || isSubmitting || isLoading}
-              className="group inline-flex items-center justify-center gap-2 w-full px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-92 active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
-              style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+              className="group inline-flex items-center justify-center gap-2 w-full px-7 py-3.5 text-sm font-semibold bg-black text-white transition-all hover:gap-3 hover:opacity-90 active:opacity-70 disabled:opacity-50 disabled:pointer-events-none"
             >
               {isSubmitting || isLoading ? "Verifying…" : "Verify & continue"}
               {!isSubmitting && !isLoading && <ArrowRight />}
@@ -126,8 +118,7 @@ export function OtpStep({ email, onSubmit, onBack, isLoading }: Props) {
       <button
         type="button"
         onClick={onBack}
-        className="text-sm text-center transition-opacity hover:opacity-60"
-        style={{ color: "#7F8CAA" }}
+        className="text-sm text-center text-neutral-500 transition-opacity hover:opacity-60"
       >
         ← Use a different email
       </button>

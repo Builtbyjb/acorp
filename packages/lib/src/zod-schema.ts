@@ -129,7 +129,7 @@ export const FeedbackSchema = z.object({
 
 /* Subscription Plan Zod Schemas */
 export const SubscriptionPlanSchema = z.object({
-    id: z.number(),
+    id: z.union([z.number(), z.string()]),
     planCode: z.string(),
     name: z.string(),
     description: z.string(),

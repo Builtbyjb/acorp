@@ -70,13 +70,13 @@ function RouteComponent() {
     <main className="flex flex-col items-center justify-center min-h-screen mx-auto w-[90%]">
       <Logo />
       <br />
-      <Card className="w-full max-w-sm">
+      <Card className="w-full max-w-sm border-black/10 rounded-none">
         <CardHeader>
           <div className="flex items-center gap-6 mb-2">
-            <ArrowLeft className="w-8 h-8 hover:scale-110" onClick={() => navigate({ to: "/" })} />
-            <CardTitle className="text-xl">Sign Up</CardTitle>
+            <ArrowLeft className="w-8 h-8 hover:scale-110 cursor-pointer" onClick={() => navigate({ to: "/" })} />
+            <CardTitle className="text-xl font-bold">Sign Up</CardTitle>
           </div>
-          <CardDescription>Tell us about yourself and your business</CardDescription>
+          <CardDescription className="text-neutral-500">Tell us about yourself and your business</CardDescription>
           <Progress value={progress} className="h-1" />
         </CardHeader>
         <CardContent>
@@ -98,7 +98,7 @@ function RouteComponent() {
             </FieldGroup>
           </form>
         </CardContent>
-        <CardFooter className="bg-background">
+        <CardFooter className="bg-white border-t border-black/5">
           <Field orientation="horizontal">
             <Button type="button" variant="outline" onClick={back} disabled={stepIndex === 0 || isSubmitting}>
               Back
@@ -110,7 +110,7 @@ function RouteComponent() {
           </Field>
         </CardFooter>
       </Card>
-      <div className="text-center text-xs mt-4 text-muted-foreground">
+      <div className="text-center text-xs mt-4 text-neutral-500">
         By clicking Submit, you agree to our{" "}
         <Link to="/terms-of-service" className="hover:font-bold underline">
           Terms of Service

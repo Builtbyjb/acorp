@@ -1,278 +1,150 @@
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@shared/ui/components/card";
+import { useInView } from "@/hooks/useInView";
+import { FileText, Clock, DollarSign, Users, BarChart3, Receipt } from "lucide-react";
 
-const liveFeatures = [
+const features = [
   {
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M13 2H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7z" />
-        <path d="M13 2v5h5" />
-        <path d="M7 13h6M7 9h3" />
-      </svg>
-    ),
+    icon: FileText,
     title: "Lightning-fast invoicing",
-    description:
-      "Create professional invoices in under 60 seconds. Add line items, set due dates, and download PDF — all in one flow.",
+    description: "Create professional invoices in under 60 seconds. Add line items, set due dates, download PDFs.",
+    tag: "CORE",
   },
   {
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="10" cy="10" r="8" />
-        <path d="M10 6v4l3 3" />
-      </svg>
-    ),
+    icon: Clock,
     title: "Automatic reminders",
-    description:
-      "Set it and forget it. Automatic payment reminders reduce late payments without awkward follow-up emails.",
+    description: "Reduce late payments without awkward follow-up emails. Set it and forget it.",
+    tag: "AUTO",
   },
   {
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M2 10h16M10 2l8 8-8 8" />
-      </svg>
-    ),
-    title: "Multi-currency support",
-    description:
-      "Bill clients in NGN, USD, CAD, and more. Currency symbols render correctly on every PDF you generate.",
+    icon: DollarSign,
+    title: "Multi-currency",
+    description: "Bill clients globally in USD, CAD, NGN and more. Currency symbols render perfectly.",
+    tag: "GLOBAL",
   },
   {
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="2" y="4" width="16" height="12" rx="2" />
-        <path d="M2 8h16" />
-        <path d="M6 12h2M10 12h4" />
-      </svg>
-    ),
+    icon: Users,
     title: "Client management",
-    description:
-      "Keep all your clients and their invoice history in one place. View balances, payment status, and activity at a glance.",
+    description: "Keep all your clients, contact details, and invoice history in one clean view.",
+    tag: "CRM",
   },
   {
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M3 3h14v14H3z" />
-        <path d="M3 7h14M7 3v14" />
-      </svg>
-    ),
-    title: "Insights & dashboard",
-    description:
-      "Track total revenue, paid and pending invoices, and monthly trends — all from a single, clean dashboard.",
+    icon: BarChart3,
+    title: "Insights & analytics",
+    description: "Track revenue trends and payment patterns from a single dashboard.",
+    tag: "DATA",
   },
   {
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M10 2a6 6 0 100 12A6 6 0 0010 2z" />
-        <path d="M10 8v4M10 8l2-2M10 8l-2-2" />
-        <path d="M4 18a8 8 0 0112 0" />
-      </svg>
-    ),
-    title: "Referral program",
-    description: "Earn rewards for every business you refer. Your referral link is ready in the Settings dashboard.",
-  },
-];
-
-const comingSoonFeatures = [
-  {
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="2" y="2" width="7" height="9" rx="1" />
-        <rect x="11" y="2" width="7" height="5" rx="1" />
-        <rect x="11" y="9" width="7" height="9" rx="1" />
-        <rect x="2" y="13" width="7" height="5" rx="1" />
-      </svg>
-    ),
-    title: "Invoice templates",
-    description:
-      "Choose from a library of professionally designed templates. Match your brand with custom colors, fonts, and layouts.",
-  },
-  {
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M4 4h12a1 1 0 011 1v8a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1z" />
-        <path d="M3 9l4-3 4 4 2-2 4 3" />
-      </svg>
-    ),
-    title: "Recurring invoices",
-    description:
-      "Set up auto-repeating invoices for retainer clients. Weekly, monthly, or custom intervals — fully automated.",
-  },
-  {
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M2 5h16M2 10h10M2 15h7" />
-        <circle cx="16" cy="14" r="3" />
-        <path d="M16 12.5v1.5l1 1" />
-      </svg>
-    ),
-    title: "Expense tracking",
-    description:
-      "Log business expenses, attach receipts, and generate profit & loss summaries. Know your numbers at any time.",
-  },
-  {
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M3 3h14v14H3z" />
-        <circle cx="10" cy="10" r="3" />
-        <path d="M10 2v2M10 16v2M2 10h2M16 10h2" />
-      </svg>
-    ),
-    title: "Client portal",
-    description:
-      "Give clients a dedicated portal to view, download, and pay their invoices online without logging into your account.",
+    icon: Receipt,
+    title: "Receipt tracking",
+    description: "Automatically match payments to invoices and keep your books clean.",
+    tag: "TRACK",
   },
 ];
 
 export default function Features() {
+  const { ref, isVisible } = useInView<HTMLElement>({ threshold: 0.1 });
+
   return (
-    <section id="features">
-      <div className="mb-8">
-        <p className="animate-fade-up text-xs font-bold tracking-[0.25em] uppercase mb-2.5 text-muted-foreground">
-          Features
-        </p>
-        <h2 className="animate-fade-up text-3xl font-bold tracking-tight">Everything to invoice like a pro.</h2>
-        <p className="animate-fade-up max-w-xl leading-relaxed mt-3 text-muted-foreground">
-          Powerful, focused tools that help you create, send, and track invoices without the bloat.
-        </p>
-      </div>
+    <section ref={ref} className="py-24 md:py-32 bg-brand-bg relative overflow-hidden">
+      {/* Background texture */}
+      <div className="absolute inset-0 bg-dot-matrix opacity-20 pointer-events-none" />
 
-      {/* Live feature cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-        {liveFeatures.map((feature) => (
-          <Card key={feature.title}>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                {feature.icon}
-                {feature.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm leading-relaxed text-muted-foreground">{feature.description}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <div className="container relative z-10 mx-auto px-6">
+        {/* Section Header */}
+        <div className="mb-20 max-w-2xl">
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1.5 border border-brand-secondary/20 text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-brand-secondary mb-6"
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? "translateY(0)" : "translateY(10px)",
+              transition: "all 0.5s ease-out",
+            }}
+          >
+            <span className="w-1.5 h-1.5 bg-brand-accent" />
+            ITEMIZED
+          </div>
+          <h2
+            className="text-3xl md:text-4xl lg:text-6xl font-bold tracking-tight text-brand-ink leading-tight mb-6"
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? "translateY(0)" : "translateY(10px)",
+              transition: "all 0.5s ease-out 0.1s",
+            }}
+          >
+            Everything you need,{" "}
+            <span className="text-outline text-brand-ink">nothing you don't.</span>
+          </h2>
+          <p
+            className="text-lg text-brand-secondary leading-relaxed"
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? "translateY(0)" : "translateY(10px)",
+              transition: "all 0.5s ease-out 0.2s",
+            }}
+          >
+            A focused toolkit for creating, sending, and tracking invoices. No bloat, no noise.
+          </p>
+        </div>
 
-      {/* Coming-soon section */}
-      <div className="mt-16 mb-8">
-        <p className="text-xs font-bold tracking-[0.25em] uppercase text-muted-foreground">Coming soon</p>
-        <p className="text-sm">Roadmap features in active development.</p>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {comingSoonFeatures.map((feature) => (
-          <Card key={feature.title}>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                {feature.icon}
-                {feature.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm leading-relaxed text-muted-foreground">{feature.description}</p>
-            </CardContent>
-            <CardFooter>
-              <span
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border"
+        {/* Features as a receipt list */}
+        <div className="space-y-0">
+          {/* Table header */}
+          <div className="hidden md:grid grid-cols-12 gap-4 pb-4 border-b border-brand-secondary/20">
+            <div className="col-span-1 text-[10px] font-mono font-bold tracking-widest uppercase text-brand-secondary">#</div>
+            <div className="col-span-5 text-[10px] font-mono font-bold tracking-widest uppercase text-brand-secondary">Feature</div>
+            <div className="col-span-5 text-[10px] font-mono font-bold tracking-widest uppercase text-brand-secondary">Description</div>
+            <div className="col-span-1 text-right text-[10px] font-mono font-bold tracking-widest uppercase text-brand-secondary">Tag</div>
+          </div>
+
+          {/* Feature rows */}
+          {features.map((feature, i) => {
+            const Icon = feature.icon;
+            return (
+              <div
+                key={feature.title}
+                className="group grid grid-cols-1 md:grid-cols-12 gap-4 py-6 border-b border-brand-secondary/10 hover:bg-white/60 transition-colors duration-300 cursor-default"
                 style={{
-                  backgroundColor: "#7F8CAA10",
-                  borderColor: "#7F8CAA28",
-                  color: "#7F8CAA",
+                  opacity: isVisible ? 1 : 0,
+                  transform: isVisible ? "translateY(0)" : "translateY(20px)",
+                  transition: `all 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${300 + i * 80}ms`,
                 }}
               >
-                <span className="w-1 h-1 rounded-full animate-pulse bg-secondary" />
-                Soon
-              </span>
-            </CardFooter>
-          </Card>
-        ))}
+                {/* Number */}
+                <div className="md:col-span-1 flex items-center gap-3">
+                  <span className="text-2xl font-bold font-mono text-brand-secondary/30 group-hover:text-brand-accent transition-colors duration-300 tabular-nums">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
+
+                {/* Title */}
+                <div className="md:col-span-5 flex items-center gap-3">
+                  <div className="w-10 h-10 border border-brand-secondary/20 flex items-center justify-center shrink-0 group-hover:border-brand-accent/40 transition-colors duration-300">
+                    <Icon className="w-5 h-5 text-brand-ink group-hover:text-brand-accent transition-colors duration-300" />
+                  </div>
+                  <span className="text-lg font-bold text-brand-ink group-hover:text-brand-accent transition-colors duration-300">
+                    {feature.title}
+                  </span>
+                </div>
+
+                {/* Description */}
+                <div className="md:col-span-5 flex items-center">
+                  <p className="text-sm text-brand-secondary leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+
+                {/* Tag */}
+                <div className="md:col-span-1 flex items-center justify-end">
+                  <span className="text-[10px] font-mono font-bold tracking-widest text-brand-accent bg-brand-accent/10 px-2 py-1">
+                    {feature.tag}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Bottom line */}
+        <div className="hr-dashed mt-8" />
       </div>
     </section>
   );

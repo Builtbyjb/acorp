@@ -49,7 +49,7 @@ function RouteComponent() {
     (async () => {
       setIsLoading(true);
       try {
-        const response = await doGET("/api/v1/payments/paystack/subscriptions");
+        const response = await doGET("/api/v1/invoice/payments/subscriptions");
         if (response instanceof Error) throw response;
 
         const result = await response.json();
@@ -73,7 +73,7 @@ function RouteComponent() {
 
   const handleDisable = async (subscription: Subscription) => {
     try {
-      const response = await doPOST("/api/v1/payments/paystack/subscription/disable", {
+      const response = await doPOST("/api/v1/invoice/payments/subscription/disable", {
         subscriptionCode: subscription.subscriptionCode,
         emailToken: subscription.emailToken,
       });
@@ -94,7 +94,7 @@ function RouteComponent() {
 
   // const handleEnable = async (subscription: Subscription) => {
   //   try {
-  //     const response = await doPOST("/api/v1/payments/paystack/subscription/enable", {
+  //     const response = await doPOST("/api/v1/invoice/payments/paystack/subscription/enable", {
   //       subscriptionCode: subscription.subscriptionCode,
   //       emailToken: subscription.emailToken,
   //     });
@@ -115,7 +115,7 @@ function RouteComponent() {
 
   const handleUpdate = async (subscription: Subscription) => {
     try {
-      const response = await doPOST("/api/v1/payments/paystack/subscription/update", {
+      const response = await doPOST("/api/v1/invoice/payments/subscription/update", {
         subscriptionCode: subscription.subscriptionCode,
         emailToken: subscription.emailToken,
       });

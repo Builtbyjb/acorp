@@ -7,7 +7,7 @@ export default function Header({ title }: HeaderProps) {
     <div className="flex items-center">
       <h1
         className="text-lg font-bold tracking-tight"
-        style={{ color: "#0f172a", letterSpacing: "-0.01em" }}
+        style={{ color: "#000000", letterSpacing: "-0.01em" }}
       >
         {title}
       </h1>

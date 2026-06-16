@@ -37,6 +37,7 @@
     "lint": "npx turbo lint"
   },
   "devDependencies": {
+    "better-sqlite3": "^12.11.1",
     "drizzle-kit": "^0.31.10",
     "turbo": "^2.9.8",
     "wrangler": "^4.83.0"

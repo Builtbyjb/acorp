@@ -35,7 +35,7 @@ function RouteComponent() {
 
   const pagination = usePagination<Client>({
     fetcher: async (pageToFetch, sizeToFetch) => {
-      const response = await doGET(`/api/v1/clients?page=${pageToFetch}&size=${sizeToFetch}`);
+      const response = await doGET(`/api/v1/invoice/clients?page=${pageToFetch}&size=${sizeToFetch}`);
       if (response instanceof Error) throw response;
       if (!response.ok) throw new Error("Failed to fetch clients");
       const result = await response.json();

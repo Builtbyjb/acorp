@@ -6,16 +6,17 @@ This document defines the design language used across all ACorp products and sur
 
 ## 1. Philosophy
 
-**Name:** Precision Craft
+**Name:** Receipt Brutalism
 
-**What it means:** Clean, architectural, editorial. Every element earns its place. Nothing decorative for decoration's sake — but nothing sterile or cold either. The aesthetic signals that the people who built this care deeply about the work.
+**What it means:** Raw, functional, paper-like. Every interface is treated as a printed document — an invoice, a receipt, a ledger. No decorative gradients, no rounded corners, no soft shadows. The aesthetic signals that the people who built this care about precision and getting the job done.
 
-**How it should feel:** Opening an ACorp product should feel like picking up a well-made tool. Immediate confidence. No learning curve to appreciate the quality. Calm, not exciting.
+**How it should feel:** Opening an ACorp product should feel like holding a freshly printed invoice. Sharp edges, clear hierarchy, monospace numbers, and no wasted ink. Direct, not playful.
 
 **What to avoid:**
 - Purple-gradient-on-white "AI startup" aesthetics
-- Excessive drop shadows or heavy skeuomorphism
-- Cluttered layouts or dense information hierarchies
+- Rounded corners on cards, buttons, or badges
+- Colored status badges (green, blue, red) — use black/white/gray only
+- Drop shadows, glows, or soft skeuomorphism
 - Animations that call attention to themselves rather than the content
 - Color used for decoration rather than communication
 
@@ -27,20 +28,21 @@ This document defines the design language used across all ACorp products and sur
 
 | Role | Name | Hex | Usage |
 |---|---|---|---|
-| Dominant | Cloud | `#ebf0f0` | Page backgrounds, section fills |
-| Secondary | Slate | `#7F8CAA` | Secondary text, borders, muted UI chrome |
-| Accent | Cobalt | `#4382df` | CTAs, links, active states, key highlights |
-| Ink | Near-black | `#0f172a` | Primary headings, body text on light backgrounds |
+| Dominant | White | `#ffffff` | Page backgrounds, card fills, section spacers |
+| Secondary | Neutral | `#737373` | Secondary text, borders, muted UI chrome, captions |
+| Accent | Black | `#000000` | CTAs, primary buttons, active states, headings, borders |
+| Ink | Near-black | `#000000` | Primary headings, body text on light backgrounds |
 | Surface | White | `#ffffff` | Card backgrounds |
-| Dark surface | Deep ink | `#0f172a` | Dark CTA sections, inverted blocks |
+| Dark surface | Dark | `#171717` | Sidebar background, dark sections, inverted blocks |
+| Destructive | Red | `#ef4444` | Logout actions, delete confirmations, critical alerts |
 
 ### 60 / 30 / 10 Rule
 
 | Proportion | Color | Where |
 |---|---|---|
-| 60% | Cloud `#ebf0f0` | Page background, hero fills, section spacers |
-| 30% | Slate `#7F8CAA` | Body copy, labels, borders, nav chrome, footer text |
-| 10% | Cobalt `#4382df` | Buttons, active indicators, links, accent dots, key icons |
+| 60% | White `#ffffff` | Page background, content areas, card fills |
+| 30% | Neutral `#737373` | Body copy, labels, borders, nav chrome, footer text, secondary text |
+| 10% | Black `#000000` | Buttons, active indicators, links, headings, borders, key icons |
 
 ### Opacity Variants
 
@@ -48,22 +50,23 @@ These are the standard opacity suffixes used throughout the codebase via hex alp
 
 | Purpose | Value |
 |---|---|
-| Subtle border | `#7F8CAA20` – `#7F8CAA28` |
-| Light background tint | `#7F8CAA14` – `#7F8CAA18` |
-| Active nav pill fill | `#7F8CAA18` |
-| Accent tint background | `#4382df0e` – `#4382df14` |
-| Accent border | `#4382df2e` – `#4382df50` |
-| Ambient glow | `#4382df10` – `#4382df35` |
-| Card ring shadow | `#0f172a06` – `#0f172a0c` |
+| Subtle border | `#00000010` – `#00000020` |
+| Light background tint | `#00000005` – `#00000008` |
+| Active nav pill fill | `#00000008` |
+| Hover background | `#00000002` |
+| Card ring shadow | `0 1px 3px rgba(0,0,0,0.08)` |
+| Dark sidebar border | `rgba(255,255,255,0.10)` |
+| Dark sidebar text muted | `rgba(255,255,255,0.50)` |
 
 ### Dark Surfaces
 
-When a section needs high visual contrast (e.g. a CTA at the bottom of a page), use `#0f172a` as the background. Layer two transparency effects on top:
+When a section needs high visual contrast (e.g. a CTA at the bottom of a page or the sidebar), use `#171717` as the background. Layer a subtle dot matrix pattern on top:
 
-1. **Radial glow** — `#4382df20` at ~25% horizontal, `#7F8CAA18` at ~80% horizontal
-2. **Grid overlay** — `1px` lines at `48px` spacing using `#4382df0e`, opacity `0.20`
+```tsx
+<div className="absolute inset-0 bg-dot-matrix opacity-20 pointer-events-none" />
+```
 
-This creates depth without introducing additional colors.
+This creates texture without introducing additional colors.
 
 ---
 
@@ -77,9 +80,18 @@ This creates depth without introducing additional colors.
 @import "@fontsource-variable/geist";
 ```
 
-### Heading Scale
+### Monospace Labels
 
-Use fluid `clamp()` values for page-level headings so they respond to viewport without breakpoint hacks:
+For numbers, financial data, and technical labels, use monospace styling with tabular numbers:
+
+```css
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+```
+
+### Heading Scale
 
 | Level | Size | Weight | Tracking | Usage |
 |---|---|---|---|---|
@@ -93,19 +105,20 @@ Use fluid `clamp()` values for page-level headings so they respond to viewport w
 
 | Level | Size | Weight | Color | Usage |
 |---|---|---|---|---|
-| Body / description | `0.875rem` / `text-sm` | 400 | `#7F8CAA` or `#4a5568` | Card descriptions, prose |
-| Label / tagline | `0.875rem` / `text-sm` | 500 (`medium`) | `#7F8CAA` | Card taglines, secondary labels |
-| Eyebrow | `0.75rem` / `text-xs` | 700 (`bold`) | `#7F8CAA` | Section labels above headings |
+| Body / description | `0.875rem` / `text-sm` | 400 | `#737373` | Card descriptions, prose |
+| Label / tagline | `0.875rem` / `text-sm` | 500 (`medium`) | `#737373` | Card taglines, secondary labels |
+| Eyebrow | `0.75rem` / `text-xs` | 700 (`bold`) | `#737373` | Section labels above headings |
+| Monospace label | `0.625rem` / `text-[10px]` | 700 (`bold`) | `#737373` | Receipt-style labels, column headers |
 | Button | `0.875rem` / `text-sm` | 600 (`semibold`) | varies | All buttons |
-| Caption / meta | `0.75rem` / `text-xs` | 400–500 | `#7F8CAA` | Footer copy, timestamps, legal notes |
+| Caption / meta | `0.75rem` / `text-xs` | 400–500 | `#737373` | Footer copy, timestamps, legal notes |
 
 ### Eyebrow Pattern
 
-Every major section begins with a small, uppercase eyebrow label to orient the reader:
+Every major section begins with a small, uppercase eyebrow label in monospace:
 
 ```tsx
-<p className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5"
-   style={{ color: "#7F8CAA" }}>
+<p className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase mb-2.5"
+   style={{ color: "#737373" }}>
   Section Label
 </p>
 ```
@@ -144,15 +157,15 @@ All content is constrained with a single max-width class:
 | Hero top | `pt-20` (5rem) |
 | Hero bottom | `pb-28` (7rem) |
 | Interior section bottom | `pb-24` (6rem) or `pb-16` (4rem) |
-| Card internal padding | `p-7` (1.75rem) or `p-10` (2.5rem) for full-width cards |
+| Card internal padding | `p-6` (1.5rem) |
 | Legal section padding | `px-8 md:px-12 py-10` |
 
 ### Grid
 
-Product cards: `grid grid-cols-1 md:grid-cols-3 gap-5`
+Product cards: `grid grid-cols-1 md:grid-cols-3 gap-4`
 Feature/capability cards: `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4`
 Process steps: `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4`
-Full-width stacked cards: `flex flex-col gap-5`
+Full-width stacked cards: `flex flex-col gap-4`
 
 ---
 
@@ -160,77 +173,57 @@ Full-width stacked cards: `flex flex-col gap-5`
 
 ### 5a. Buttons
 
-All buttons use `rounded-full`. There are three variants:
+All buttons are **square** (`rounded-none`). There are three variants:
 
 **Solid (primary CTA)**
 ```tsx
-<button
-  className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:opacity-92 active:scale-95"
-  style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
->
+<button className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold text-white bg-black transition-all hover:bg-black/90 active:scale-95">
   Label <ArrowRight />
 </button>
 ```
 
 **Outline (secondary CTA)**
 ```tsx
-<button
-  className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/60 active:scale-95"
-  style={{ color: "#7F8CAA", borderColor: "#7F8CAA45" }}
->
+<button className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold border-2 border-black text-black transition-all hover:bg-black hover:text-white active:scale-95">
   Label
 </button>
 ```
 
-**Outline accent (tertiary, used on cards or banners)**
+**Ghost (tertiary, used in nav or minimal contexts)**
 ```tsx
-<button
-  className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white active:scale-95"
-  style={{ color: "#4382df", borderColor: "#4382df50" }}
->
-  Label <ArrowRight />
+<button className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-black transition-all hover:bg-black hover:text-white active:scale-95">
+  Label
 </button>
 ```
 
 **Rules:**
-- Hover state: reduce opacity (`hover:opacity-92`) or increase gap (`hover:gap-3`) — never change background color
+- All buttons are square — never `rounded-lg`, `rounded-xl`, or `rounded-full`
+- Hover state: fill with black and invert text for outline/ghost, reduce opacity for solid
 - Active state: always `active:scale-95` — provides tactile press feedback
-- Solid buttons always carry a colored box-shadow matching the button color at 30–35% opacity
-- Never use `rounded-xl` or `rounded-lg` for buttons — always `rounded-full`
+- No colored shadows on buttons
+- `destructive` variant uses `bg-red-500 text-white` for delete/logout actions
 
 ### 5b. Cards
 
 **Standard white card**
 ```tsx
-<div
-  className="bg-white rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-  style={{ boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07" }}
->
+<div className="bg-white border border-black/10 p-6">
+  {/* content */}
+</div>
 ```
 
 - Background: always white (`#ffffff`)
-- Radius: always `rounded-3xl`
-- Shadow: two-layer — a soft drop shadow + a hairline ring (`0 0 0 1px`)
-- Hover: lift `-translate-y-1.5` + `shadow-xl`
+- Border: `1px solid rgba(0,0,0,0.10)` — hairline black border
+- Radius: always square (`rounded-none`)
+- Shadow: none — borders carry the visual weight
+- Hover: subtle background tint (`hover:bg-black/[0.02]`) for list items, no lift for cards
 - **No color hints**: do not add colored borders, accent bars, or colored text to signal which product a card belongs to. Typography hierarchy carries the identity.
 
 **Coming-soon / placeholder card**
 ```tsx
-<div
-  className="rounded-3xl border-2 border-dashed px-7 py-5"
-  style={{ borderColor: "#7F8CAA2a" }}
->
-```
-
-**Feature / capability card (lighter variant)**
-Same as standard but with `hover:-translate-y-1 hover:shadow-lg` (smaller lift).
-
-**Full-width detail card (products page)**
-```tsx
-<div
-  className="bg-white rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-xl"
-  style={{ boxShadow: "0 1px 4px #0f172a0a, 0 0 0 1px #0f172a06" }}
->
+<div className="border border-dashed border-black/10 p-6">
+  {/* content */}
+</div>
 ```
 
 ### 5c. Navigation
@@ -238,216 +231,191 @@ Same as standard but with `hover:-translate-y-1 hover:shadow-lg` (smaller lift).
 The global nav is a sticky frosted-glass header:
 
 ```tsx
-<header
-  className="sticky top-0 z-50 border-b backdrop-blur-md"
-  style={{ backgroundColor: "#ebf0f0e8", borderColor: "#7F8CAA22" }}
->
+<header className="sticky top-0 z-50 border-b border-black/10 bg-white/80 backdrop-blur-md">
   <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 ```
 
 - Height: `h-16` (4rem)
-- Background: `#ebf0f0e8` — dominant color at ~91% opacity with `backdrop-blur-md`
-- Border: `#7F8CAA22` — very subtle separator
+- Background: white at 80% opacity with `backdrop-blur-md`
+- Border: `rgba(0,0,0,0.10)` — very subtle separator
 
-**Wordmark:**
+**Active nav link:**
 ```tsx
-<div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-black"
-     style={{ backgroundColor: "#4382df" }}>
-  A
-</div>
-<span className="font-bold text-lg tracking-tight" style={{ color: "#0f172a" }}>Corp</span>
-```
-
-**Active nav link pill:**
-```tsx
-<Link className="relative px-3 py-1.5 text-sm font-medium rounded-full">
-  {active && <span className="absolute inset-0 rounded-full" style={{ backgroundColor: "#7F8CAA18" }} />}
+<Link className="relative px-3 py-1.5 text-sm font-medium transition-all"
+      style={{ color: isActive ? "#000000" : "#737373" }}>
+  {active && <span className="absolute inset-0" style={{ backgroundColor: "#00000008" }} />}
   <span className="relative">{label}</span>
 </Link>
 ```
 
-Active links use `color: #0f172a`; inactive use `color: #7F8CAA`.
+Active links use `color: #000000`; inactive use `color: #737373`.
+
+**Sidebar (dark):**
+```tsx
+<aside className="bg-[#171717] text-white border-r border-white/10">
+```
+
+- Background: `#171717` (lighter black)
+- Text: white, muted at 50% opacity for inactive items
+- Active items: full white text with `rgba(255,255,255,0.08)` background
+- Separators: `rgba(255,255,255,0.10)`
+- Logout button: `text-red-400 hover:text-red-300`
 
 ### 5d. Footer
 
 Two-row structure:
 1. **Main row** — brand block (wordmark + tagline) on the left; link columns on the right
-2. **Bottom bar** — copyright on the left; legal links on the right, separated by a `#7F8CAA18` border-top
+2. **Bottom bar** — copyright on the left; legal links on the right, separated by a `border-black/10` border-top
 
-Footer border-top: `borderColor: "#7F8CAA20"`
-Link color: `#7F8CAA`, hover: `hover:opacity-60`
-Column heading: `text-xs font-bold uppercase tracking-widest`, color `#0f172a`
+Footer border-top: `border-black/10`
+Link color: `#737373`, hover: `hover:opacity-60`
+Column heading: `text-xs font-bold uppercase tracking-widest`, color `#000000`
 
 ### 5e. Section Header Pattern
 
 Every section that introduces a grid or list uses this three-element header:
 
 ```tsx
-<p className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5" style={{ color: "#7F8CAA" }}>
+<p className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase mb-2.5"
+   style={{ color: "#737373" }}>
   Eyebrow Label
 </p>
-<h2 className="text-4xl font-bold tracking-tight" style={{ color: "#0f172a" }}>
+<h2 className="text-4xl font-bold tracking-tight text-black">
   Primary Heading.
 </h2>
 // optional:
-<p className="text-lg max-w-xl leading-relaxed mt-3" style={{ color: "#7F8CAA" }}>
+<p className="text-lg max-w-xl leading-relaxed mt-3 text-neutral-500">
   Supporting subtext.
 </p>
 ```
 
 ### 5f. Status Chips & Badges
 
-**Pill chip (used in hero / status rows)**
+**Status badge (monochrome)**
 ```tsx
-<span
-  className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold border"
-  style={{ backgroundColor: "#ffffff90", borderColor: "#7F8CAA25", color: "#7F8CAA" }}
->
-  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#4382df" }} />
-  Label text
+<span className="inline-flex items-center px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-black text-white">
+  Paid
 </span>
 ```
+
+Badge variants:
+- `paid`: `bg-black text-white`
+- `sent`: `bg-neutral-800 text-white`
+- `draft`: `bg-neutral-100 text-neutral-700`
+- `overdue`: `bg-neutral-800 text-white`
+- `active`: `bg-black text-white`
+- `disabled`: `bg-neutral-800 text-white`
+
+All badges are square (`rounded-none`). No green, blue, or red color coding.
 
 **In-development badge**
 ```tsx
-<span
-  className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold border"
-  style={{ backgroundColor: "#7F8CAA10", borderColor: "#7F8CAA28", color: "#7F8CAA" }}
->
-  <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: "#7F8CAA" }} />
+<span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold border"
+      style={{ backgroundColor: "#00000008", borderColor: "#00000015", color: "#737373" }}>
+  <span className="w-1 h-1 animate-pulse bg-neutral-500" />
   In development
 </span>
-```
-
-**Eyebrow pill (hero sections)**
-```tsx
-<div
-  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold tracking-[0.18em] uppercase"
-  style={{ backgroundColor: "#ffffff70", borderColor: "#7F8CAA28", color: "#7F8CAA" }}
->
-  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#4382df" }} />
-  Label
-</div>
 ```
 
 ---
 
 ## 6. Backgrounds & Texture
 
-Three layered background techniques are used to create depth without photos or illustrations.
-
 ### Dot-Grid Pattern
 
-Applied to hero sections and legal page headers. Creates a subtle spatial rhythm.
+Applied to sections and cards. Creates a subtle spatial rhythm.
 
 ```tsx
-<div
-  className="absolute inset-0 pointer-events-none"
-  style={{
-    backgroundImage: "radial-gradient(circle, #7F8CAA22 1.5px, transparent 1.5px)",
-    backgroundSize: "28px 28px",
-  }}
-/>
+<div className="absolute inset-0 bg-dot-matrix opacity-30 pointer-events-none" />
 ```
 
-- Dot color: `#7F8CAA22` (Slate at ~13% opacity)
-- Dot size: `1.5px`
-- Grid size: `28px × 28px`
+Defined in CSS:
+```css
+.bg-dot-matrix {
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+```
+
+- Dot color: `rgba(0,0,0,0.08)` (black at 8% opacity)
+- Dot size: `1px`
+- Grid size: `12px × 12px`
 - Always `pointer-events-none` and `absolute inset-0`
 
-### Ambient Glow Blobs
+### Receipt Textures
 
-Large blurred circles that create soft color warmth in the background. Use one or two per hero:
+```css
+.receipt-texture {
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 8px 8px;
+}
 
-```tsx
-// Cobalt glow — top right
-<div
-  className="absolute -top-48 -right-48 w-[600px] h-[600px] rounded-full blur-3xl pointer-events-none"
-  style={{ backgroundColor: "#4382df10" }}
-/>
-
-// Slate glow — bottom left
-<div
-  className="absolute bottom-0 left-1/3 w-80 h-80 rounded-full blur-3xl pointer-events-none"
-  style={{ backgroundColor: "#7F8CAA14" }}
-/>
+.paper-texture {
+  position: relative;
+}
+.paper-texture::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,...");
+  mix-blend-mode: multiply;
+  opacity: 0.025;
+  pointer-events: none;
+}
 ```
 
-- Primary glow (Cobalt): opacity `0e` – `14` (hex)
-- Secondary glow (Slate): opacity `12` – `18`
-- Size: 400–600px, always `rounded-full` + `blur-3xl`
-- Position: top-right for primary, bottom-left or bottom-center for secondary
+### Dashed Lines
 
-### Dark Section Grid Overlay
+Used as horizontal rules in receipt-style layouts:
 
-Used exclusively inside dark (`#0f172a`) CTA blocks:
-
-```tsx
-<div
-  className="absolute inset-0 pointer-events-none opacity-20"
-  style={{
-    backgroundImage:
-      "linear-gradient(#4382df0e 1px, transparent 1px), linear-gradient(90deg, #4382df0e 1px, transparent 1px)",
-    backgroundSize: "48px 48px",
-  }}
-/>
+```css
+.hr-dashed {
+  border: none;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, #000000 0px, #000000 4px, transparent 4px, transparent 8px);
+  opacity: 0.3;
+}
 ```
-
-Always stack this above the radial glow layer, both `absolute inset-0 pointer-events-none`.
 
 ---
 
 ## 7. Dark CTA Blocks
 
-The standard full-width CTA section used at the bottom of most pages:
+The standard full-width CTA section used at the bottom of pages:
 
 ```tsx
-<div
-  className="relative rounded-3xl overflow-hidden px-10 py-20 text-center"
-  style={{ backgroundColor: "#0f172a" }}
->
-  {/* Glow layer */}
-  <div className="absolute inset-0 pointer-events-none" style={{
-    backgroundImage:
-      "radial-gradient(ellipse at 25% 60%, #4382df20 0%, transparent 55%), radial-gradient(ellipse at 80% 30%, #7F8CAA18 0%, transparent 50%)",
-  }} />
-  {/* Grid layer */}
-  <div className="absolute inset-0 pointer-events-none opacity-20" style={{
-    backgroundImage:
-      "linear-gradient(#4382df0e 1px, transparent 1px), linear-gradient(90deg, #4382df0e 1px, transparent 1px)",
-    backgroundSize: "48px 48px",
-  }} />
-
+<div className="relative border border-black overflow-hidden px-10 py-16 text-center bg-black">
+  <div className="absolute inset-0 bg-dot-matrix opacity-20 pointer-events-none" />
   <div className="relative">
-    <p className="text-xs font-bold tracking-[0.25em] uppercase mb-4" style={{ color: "#4382df" }}>
+    <p className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase mb-4 text-neutral-500">
       Eyebrow
     </p>
     <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-5">
       Main headline.
       <br />
-      <span style={{ color: "#7F8CAA" }}>Secondary line.</span>
+      <span className="text-outline text-white">Outlined line.</span>
     </h2>
-    <p className="text-base mb-10 max-w-lg mx-auto leading-relaxed" style={{ color: "#7F8CAA" }}>
+    <p className="text-base mb-10 max-w-lg mx-auto leading-relaxed text-neutral-500">
       Supporting copy.
     </p>
-    {/* CTA button — same solid style but on dark bg */}
+    {/* CTA button — white on dark bg */}
   </div>
 </div>
 ```
 
-**Outlined / stroke headline technique** — used for the display heading on hero sections to create visual tension between a solid and an outlined word:
+**Outlined / stroke headline technique** — used for display headings to create visual tension:
 
 ```tsx
 <h1>
   Solid line.{" "}
-  <span style={{ WebkitTextStroke: "2.5px #4382df", color: "transparent" }}>
+  <span className="text-outline text-black">
     Outlined line.
   </span>
 </h1>
 ```
 
-- Stroke width: `2.5px` for display sizes (`7rem+`), `2px` for page title sizes (`4–5rem`)
-- Stroke color: always Cobalt `#4382df`
+- Stroke width: `2px` for all sizes
+- Stroke color: `currentColor` (inherits from text color)
 - The outlined span is always the second or third line, never the first
 
 ---
@@ -473,6 +441,16 @@ Animations are defined in `src/index.css` and applied via utility classes. All a
   from { opacity: 0; transform: translateX(-16px); }
   to   { opacity: 1; transform: translateX(0); }
 }
+
+@keyframes printLine {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes receiptUnroll {
+  from { opacity: 0; transform: translateY(-20px) scaleY(0.95); }
+  to { opacity: 1; transform: translateY(0) scaleY(1); }
+}
 ```
 
 ### Utility Classes
@@ -482,10 +460,12 @@ Animations are defined in `src/index.css` and applied via utility classes. All a
 | `.animate-fade-up` | `fadeUp` | `0.65s` | `cubic-bezier(0.22, 1, 0.36, 1)` (ease-out spring) |
 | `.animate-fade-in` | `fadeIn` | `0.5s` | `ease` |
 | `.animate-slide-left` | `slideInLeft` | `0.55s` | `cubic-bezier(0.22, 1, 0.36, 1)` |
+| `.animate-print-line` | `printLine` | `1s` | `cubic-bezier(0.22, 1, 0.36, 1)` |
+| `.animate-receipt-unroll` | `receiptUnroll` | `0.6s` | `cubic-bezier(0.22, 1, 0.36, 1)` |
 
 ### Stagger Pattern
 
-Apply staggered `animation-delay` via inline styles. Standard delay increments:
+Apply staggered `animation-delay` via inline styles:
 
 ```tsx
 // Hero elements — tight stagger
@@ -493,24 +473,21 @@ style={{ animationDelay: "0.05s" }}  // eyebrow
 style={{ animationDelay: "0.12s" }}  // headline
 style={{ animationDelay: "0.22s" }}  // subtext
 style={{ animationDelay: "0.32s" }}  // CTAs
-style={{ animationDelay: "0.48s" }}  // supporting chips/details
 
 // Grid cards — sequential reveal
-style={{ animationDelay: `${0.1 + index * 0.1}s` }}   // tight (cards)
-style={{ animationDelay: `${0.05 + index * 0.07}s` }}  // faster (small cards)
-style={{ animationDelay: `${0.08 + index * 0.1}s` }}   // process steps
+style={{ animationDelay: `${0.1 + index * 0.1}s` }}
 ```
 
 ### Hover Micro-Interactions
 
 | Element | Hover effect |
 |---|---|
-| Card | `hover:-translate-y-1.5 hover:shadow-xl duration-300` |
-| Small card | `hover:-translate-y-1 hover:shadow-lg duration-300` |
-| Solid button | `hover:opacity-92` + widening icon gap `hover:gap-3` |
-| Outline button | `hover:bg-white/60` |
+| Card | `hover:shadow-lg` (subtle shadow, no lift) |
+| List row | `hover:bg-black/[0.02]` (barely perceptible tint) |
+| Solid button | `hover:bg-black/90` |
+| Outline button | `hover:bg-black hover:text-white` |
+| Ghost button | `hover:bg-black hover:text-white` |
 | Text link with arrow | Arrow translates `+0.5px` on `group-hover` |
-| Wordmark icon | `group-hover:scale-95` |
 | Nav links | `hover:opacity-60` (text) or pill highlight (active) |
 
 All card transitions use `transition-all duration-300`.
@@ -519,48 +496,14 @@ All card transitions use `transition-all duration-300`.
 
 ## 9. Icons
 
-We use inline SVG icons drawn with stroke (no fill). This keeps them consistent with the typographic style and scalable to any size.
-
-### Arrow Icon (standard)
-
-The most common icon in the codebase — used on all directional CTAs:
-
-```tsx
-function ArrowRight({ size = 14 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 14 14"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="transition-transform group-hover:translate-x-0.5"
-    >
-      <path d="M2 7h10M7 2l5 5-5 5" />
-    </svg>
-  );
-}
-```
-
-### Checkmark Icon (used in "why us" lists)
-
-```tsx
-<svg width="10" height="10" viewBox="0 0 10 10"
-     fill="none" stroke="#4382df" strokeWidth="1.8"
-     strokeLinecap="round" strokeLinejoin="round">
-  <path d="M2 5l2.5 2.5L8 2.5" />
-</svg>
-```
+We use **Lucide React** icons throughout. All icons are stroke-based (no fill), consistent with the typographic style.
 
 ### Rules
 
-- Default icon size: `14px`
+- Default icon size: `16px` (w-4 h-4)
 - Always `stroke="currentColor"` unless a specific brand color is required
-- `strokeWidth` ranges: `1.8` (small, 10px), `2` (standard, 14px)
-- Always `strokeLinecap="round" strokeLinejoin="round"`
+- `strokeWidth` ranges: `1.5` (small), `2` (standard)
+- Use `strokeLinecap="round" strokeLinejoin="round"` for inline SVGs
 - Never use icon libraries that render with fill — maintain stroke consistency
 
 ---
@@ -576,27 +519,26 @@ Every public page follows this anatomy:
 
 <section>  ← Hero
   dot-grid background
-  ambient glow blobs
   max-w-7xl container
     breadcrumb (interior pages only)
-    eyebrow pill
+    eyebrow pill (monospace)
     H1 display headline (with optional stroke span)
     subtext paragraph
-    CTA button row
+    CTA button row (square buttons)
     supporting chips (landing page only)
 </section>
 
 <section>  ← Primary content
   max-w-7xl container
-    section header (eyebrow + H2)
+    section header (monospace eyebrow + H2)
     grid of cards / list of items
     coming-soon strip (if applicable)
 </section>
 
 <section>  ← Dark CTA block
   max-w-7xl container
-    rounded-3xl dark card
-      glow + grid layers
+    border border-black bg-black
+      dot-grid texture
       eyebrow + headline + subtext + button
 </section>
 
@@ -620,8 +562,8 @@ Used for Privacy Policy and Terms of Service:
 </section>
 
 <section>  ← Body (max-w-4xl)
-  Table of contents card (rounded-3xl, white/80)
-  Main content card (rounded-3xl, white, single card with dividers)
+  Table of contents card (border border-black/10, white)
+  Main content card (border border-black/10, white)
     per section: H2 + prose (P, H3, Ul)
   Bottom note / related links
 </section>
@@ -629,19 +571,29 @@ Used for Privacy Policy and Terms of Service:
 [Footer]
 ```
 
+### 10c. Authenticated Dashboard
+
+```
+[Sidebar — dark #171717, white text]
+
+<main>
+  header (sticky, breadcrumb + title)
+  content area
+    stats cards (square, black border, monochrome icons)
+    charts (monochrome: black bars, grayscale pie)
+    tables (square headers, black borders, monospace labels)
+    forms (square cards, black borders, monospace inputs)
+</main>
+```
+
 ---
 
 ## 11. Reusable Code Snippets
 
-Copy-paste building blocks for new pages and products.
-
 ### Card Shell
 
 ```tsx
-<div
-  className="bg-white rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-  style={{ boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07" }}
->
+<div className="bg-white border border-black/10 p-6">
   {/* content */}
 </div>
 ```
@@ -650,33 +602,27 @@ Copy-paste building blocks for new pages and products.
 
 ```tsx
 <div className="mb-12">
-  <p className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5" style={{ color: "#7F8CAA" }}>
+  <p className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase mb-2.5 text-neutral-500">
     Eyebrow
   </p>
-  <h2 className="text-4xl font-bold tracking-tight" style={{ color: "#0f172a" }}>
+  <h2 className="text-4xl font-bold tracking-tight text-black">
     Section heading.
   </h2>
 </div>
 ```
 
-### Solid Button (Pill)
+### Solid Button (Square)
 
 ```tsx
-<button
-  className="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-92 active:scale-95"
-  style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
->
+<button className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold text-white bg-black transition-all hover:bg-black/90 active:scale-95">
   Label <ArrowRight />
 </button>
 ```
 
-### Outline Button (Pill)
+### Outline Button (Square)
 
 ```tsx
-<button
-  className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/60 active:scale-95"
-  style={{ color: "#7F8CAA", borderColor: "#7F8CAA45" }}
->
+<button className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold border-2 border-black text-black transition-all hover:bg-black hover:text-white active:scale-95">
   Label
 </button>
 ```
@@ -684,74 +630,45 @@ Copy-paste building blocks for new pages and products.
 ### Dot-Grid Background
 
 ```tsx
-<div
-  className="absolute inset-0 pointer-events-none"
-  style={{
-    backgroundImage: "radial-gradient(circle, #7F8CAA22 1.5px, transparent 1.5px)",
-    backgroundSize: "28px 28px",
-  }}
-/>
+<div className="absolute inset-0 bg-dot-matrix opacity-30 pointer-events-none" />
 ```
 
-### Ambient Glow Blob
+### Receipt Card
 
 ```tsx
-<div
-  className="absolute -top-48 -right-48 w-[560px] h-[560px] rounded-full blur-3xl pointer-events-none"
-  style={{ backgroundColor: "#4382df10" }}
-/>
+<div className="relative bg-white border border-black/10 p-6 receipt-top receipt-bottom receipt-tear paper-texture">
+  {/* content */}
+</div>
+```
+
+### Status Badge
+
+```tsx
+<span className="inline-flex items-center px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-black text-white">
+  Paid
+</span>
+```
+
+### Table Header Row
+
+```tsx
+<div className="hidden md:grid grid-cols-12 gap-4 pb-3 border-b border-black/10 text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+  <div className="col-span-3">Column</div>
+  <div className="col-span-2">Column</div>
+  <div className="col-span-3">Column</div>
+  <div className="col-span-2">Column</div>
+  <div className="col-span-2 text-right"></div>
+</div>
 ```
 
 ### Dark CTA Block
 
 ```tsx
-<div
-  className="relative rounded-3xl overflow-hidden px-10 py-20 text-center"
-  style={{ backgroundColor: "#0f172a" }}
->
-  <div className="absolute inset-0 pointer-events-none" style={{
-    backgroundImage:
-      "radial-gradient(ellipse at 25% 60%, #4382df20 0%, transparent 55%), radial-gradient(ellipse at 80% 30%, #7F8CAA18 0%, transparent 50%)",
-  }} />
-  <div className="absolute inset-0 pointer-events-none opacity-20" style={{
-    backgroundImage:
-      "linear-gradient(#4382df0e 1px, transparent 1px), linear-gradient(90deg, #4382df0e 1px, transparent 1px)",
-    backgroundSize: "48px 48px",
-  }} />
+<div className="relative border border-black overflow-hidden px-10 py-16 text-center bg-black">
+  <div className="absolute inset-0 bg-dot-matrix opacity-20 pointer-events-none" />
   <div className="relative">
     {/* eyebrow, headline, subtext, button */}
   </div>
-</div>
-```
-
-### Staggered Card Grid (3-column)
-
-```tsx
-<div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-  {items.map((item, i) => (
-    <div
-      key={item.id}
-      className="animate-fade-up bg-white rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-      style={{
-        boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07",
-        animationDelay: `${0.1 + i * 0.1}s`,
-      }}
-    >
-      {/* card content */}
-    </div>
-  ))}
-</div>
-```
-
-### Eyebrow Pill
-
-```tsx
-<div
-  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold tracking-[0.18em] uppercase"
-  style={{ backgroundColor: "#ffffff70", borderColor: "#7F8CAA28", color: "#7F8CAA" }}
->
-  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#4382df" }} />
-  Label
 </div>
 ```
 

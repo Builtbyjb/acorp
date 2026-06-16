@@ -1,7 +1,8 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { Button } from "../components/button";
+import { Separator } from "../components/separator";
 
 type NavLink = {
   label: string;
@@ -21,7 +22,7 @@ export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
   const currentPath = routerState.location.pathname;
 
   return (
-    <header className="sticky top-0 z-50 border-b backdrop-blur-md border-border bg-background">
+    <header className="sticky top-0 z-50 border-b border-black/10 bg-white/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <div className="flex gap-8">
           {logo}
@@ -34,11 +35,11 @@ export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className="relative px-3 py-1.5 text-sm font-medium rounded-lg transition-all"
-                  style={{ color: isActive ? "#0f172a" : "#7F8CAA" }}
+                  className="relative px-3 py-1.5 text-sm font-medium transition-all"
+                  style={{ color: isActive ? "#000000" : "#737373" }}
                 >
                   {isActive && (
-                    <span className="absolute inset-0 rounded-lg" style={{ backgroundColor: "#7F8CAA18" }} />
+                    <span className="absolute inset-0" style={{ backgroundColor: "#00000008" }} />
                   )}
                   <span className="relative">{link.label}</span>
                 </Link>
@@ -53,9 +54,11 @@ export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
             <Button variant="outline" onClick={() => navigate({ to: "/login" })}>
               Log in
             </Button>
-            <Button onClick={() => navigate({ to: "/signup" })}>
-              Get started <ArrowRight />
-            </Button>
+            <a href="mailto:hello@acorp.dev">
+              <Button>
+                Get started <ArrowRight />
+              </Button>
+            </a>
           </div>
         )}
 
@@ -63,41 +66,17 @@ export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
         <Button
           type="button"
           variant="outline"
-          className="md:hidden p-2 -m-2 transition-colors rounded-lg text-foreground"
+          className="md:hidden p-2 -m-2 transition-colors text-foreground"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
-          {mobileMenuOpen ? (
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            >
-              <path d="M4 4l12 12M16 4L4 16" />
-            </svg>
-          ) : (
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            >
-              <path d="M3 6h14M3 10h14M3 14h14" />
-            </svg>
-          )}
+          {mobileMenuOpen ? <X /> : <Menu />}
         </Button>
       </div>
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-border bg-background">
+        <div className="md:hidden border-t border-black/10 bg-white">
           <div className="flex flex-col gap-1 px-6 py-4">
             {navLinks.map((link) => {
               const isActive = currentPath === link.to;
@@ -105,10 +84,10 @@ export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className="px-3 py-2 text-sm font-medium rounded-lg transition-all"
+                  className="px-3 py-2 text-sm font-medium transition-all"
                   style={{
-                    color: isActive ? "#0f172a" : "#7F8CAA",
-                    backgroundColor: isActive ? "#7F8CAA18" : "transparent",
+                    color: isActive ? "#000000" : "#737373",
+                    backgroundColor: isActive ? "#00000008" : "transparent",
                   }}
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -118,25 +97,25 @@ export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
             })}
 
             {enableCTA && (
-              <div className="flex flex-col gap-3 pt-4 mt-2 border-t border-border">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    navigate({ to: "/login" });
-                  }}
-                >
-                  Log in
-                </Button>
-                <Button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    navigate({ to: "/signup" });
-                  }}
-                >
-                  Get started
-                </Button>
-              </div>
+              <>
+                <Separator className="my-2 bg-black/10" />
+                <div className="flex flex-col gap-3 pt-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      navigate({ to: "/login" });
+                    }}
+                  >
+                    Log in
+                  </Button>
+                  <a href="mailto:hello@acorp.dev">
+                    <Button>
+                      Get started
+                    </Button>
+                  </a>
+                </div>
+              </>
             )}
           </div>
         </div>

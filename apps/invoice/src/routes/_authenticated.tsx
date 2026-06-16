@@ -24,14 +24,14 @@ import {
 function ComingSoonBadge() {
   return (
     <span
-      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border ml-auto"
+      className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold border ml-auto"
       style={{
-        backgroundColor: "#7F8CAA10",
-        borderColor: "#7F8CAA28",
-        color: "#7F8CAA",
+        backgroundColor: "rgba(255,255,255,0.08)",
+        borderColor: "rgba(255,255,255,0.15)",
+        color: "rgba(255,255,255,0.60)",
       }}
     >
-      <span className="w-1 h-1 rounded-full animate-pulse" style={{ backgroundColor: "#7F8CAA" }} />
+      <span className="w-1 h-1 animate-pulse" style={{ backgroundColor: "rgba(255,255,255,0.60)" }} />
       Soon
     </span>
   );
@@ -85,7 +85,7 @@ const navItems = [
 ];
 
 function AuthenticatedLayout() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { title } = useLayout();
   return (
     <SidebarProvider>
@@ -94,6 +94,7 @@ function AuthenticatedLayout() {
         username={user?.username}
         email={user?.email}
         navItems={navItems}
+        logout={logout}
       />
       <SidebarInset>
         <header className="flex items-center gap-2 ml-4 mt-4">
