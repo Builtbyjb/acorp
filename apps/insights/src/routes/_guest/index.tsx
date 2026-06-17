@@ -1,147 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  Database,
-  BarChart2,
-  FileText,
-  Download,
-  Users,
-  Zap,
-  Link2,
-  SlidersHorizontal,
-  Activity,
-  Share2,
-  ArrowRight,
-  Check,
-  Globe2,
-  Shield,
-  Radio,
-  Play,
-  Sparkles,
-} from "lucide-react";
-
+import { Users, Zap, ArrowRight, Check, Globe2, Shield, Radio, Play, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
-// ── Data ──────────────────────────────────────────────
-
-const capabilities = [
-  {
-    icon: Database,
-    title: "Data Collection",
-    description:
-      "Gather structured data from forms, surveys, and direct imports. Standardize inputs across all your programs.",
-    className: "md:col-span-1",
-  },
-  {
-    icon: BarChart2,
-    title: "Live Dashboards",
-    description:
-      "Monitor your KPIs in real time with configurable visual dashboards that surface what matters most.",
-    className: "md:col-span-1",
-  },
-  {
-    icon: FileText,
-    title: "Evaluation Frameworks",
-    description:
-      "Build logical frameworks, theories of change, and indicator matrices — all linked to your live data.",
-    className: "md:col-span-1",
-  },
-  {
-    icon: Download,
-    title: "Custom Reports",
-    description:
-      "Generate formatted evaluation reports with a single click. Export to PDF, Excel, or share via link.",
-    className: "md:col-span-1",
-  },
-  {
-    icon: Users,
-    title: "Team Collaboration",
-    description:
-      "Assign roles, share dashboards, comment on findings, and manage approval workflows across your team.",
-    className: "md:col-span-1",
-  },
-  {
-    icon: Zap,
-    title: "API & Integrations",
-    description:
-      "Connect Insights to your existing data infrastructure via REST API or pre-built integrations.",
-    className: "md:col-span-1",
-  },
-];
-
-const steps = [
-  {
-    icon: Link2,
-    title: "Connect",
-    description: "Link your data sources or import structured data via CSV, API, or integrations.",
-  },
-  {
-    icon: SlidersHorizontal,
-    title: "Configure",
-    description: "Define indicators, targets, and evaluation frameworks tailored to your programs.",
-  },
-  {
-    icon: Activity,
-    title: "Monitor",
-    description: "Track metrics in real time across all your projects on a single unified dashboard.",
-  },
-  {
-    icon: Share2,
-    title: "Share",
-    description: "Export reports and share live dashboards with stakeholders and donors.",
-  },
-];
-
-const stats = [
-  { value: "12,400+", label: "Organizations worldwide" },
-  { value: "2.4B", label: "Data points processed" },
-  { value: "98.7%", label: "Customer retention" },
-  { value: "40+", label: "Countries served" },
-];
-
-const whyPoints = [
-  "Built for M&E practitioners, not just data engineers",
-  "No-code dashboard builder with 30+ visualization types",
-  "Compliant with GDPR, HIPAA, and donor data requirements",
-  "Offline-capable data collection for field teams",
-];
-
-const logos = [
-  "UNICEF",
-  "Save the Children",
-  "World Vision",
-  "Oxfam",
-  "Mercy Corps",
-  "CARE International",
-  "International Rescue Committee",
-  "Catholic Relief Services",
-];
-
-// ── Components ────────────────────────────────────────
-
-function AnimatedTicker({ items }: { items: string[] }) {
-  const doubled = [...items, ...items];
-  return (
-    <div className="relative overflow-hidden marquee-mask py-6">
-      <div className="animate-marquee-h flex w-max items-center gap-12">
-        {doubled.map((item, i) => (
-          <span
-            key={`${item}-${i}`}
-            className="text-sm font-semibold tracking-tight text-slate-400 whitespace-nowrap"
-          >
-            {item}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { STATS, STEPS, WHY_POINTS, CAPABILITIES } from "@/lib/store/home";
+import LogoTicker from "@/components/LogoTicker";
 
 function DashboardPreview() {
   return (
@@ -180,20 +42,11 @@ function DashboardPreview() {
                 { label: "Indicators", value: "186", trend: "+4%" },
                 { label: "Data Points", value: "1.2M", trend: "+28%" },
               ].map((kpi) => (
-                <div
-                  key={kpi.label}
-                  className="rounded-xl border border-slate-100 bg-white p-3 shadow-sm"
-                >
-                  <p className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
-                    {kpi.label}
-                  </p>
+                <div key={kpi.label} className="rounded-xl border border-slate-100 bg-white p-3 shadow-sm">
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-slate-400">{kpi.label}</p>
                   <div className="mt-1 flex items-end justify-between">
-                    <span className="text-xl font-bold tracking-tight text-slate-900">
-                      {kpi.value}
-                    </span>
-                    <span className="text-[10px] font-semibold text-emerald-600">
-                      {kpi.trend}
-                    </span>
+                    <span className="text-xl font-bold tracking-tight text-slate-900">{kpi.value}</span>
+                    <span className="text-[10px] font-semibold text-emerald-600">{kpi.trend}</span>
                   </div>
                 </div>
               ))}
@@ -266,185 +119,123 @@ function CapabilityCard({
       className={`spotlight-card group border-slate-200/60 bg-white/70 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:bg-white hover:shadow-xl hover:shadow-slate-900/5 ${className}`}
     >
       <CardHeader className="pb-2">
-        <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl border border-primary/10 bg-primary/[0.04] text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+        <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl border border-primary/10 bg-primary/4 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
           <Icon className="h-5 w-5" strokeWidth={1.8} />
         </div>
-        <CardTitle className="text-base font-semibold tracking-tight text-slate-900">
-          {title}
-        </CardTitle>
+        <CardTitle className="text-base font-semibold tracking-tight text-slate-900">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <CardDescription className="text-sm leading-relaxed text-slate-500">
-          {description}
-        </CardDescription>
+        <CardDescription className="text-sm leading-relaxed text-slate-500">{description}</CardDescription>
       </CardContent>
     </Card>
   );
 }
 
-// ── Page ──────────────────────────────────────────────
-
-function LandingPage() {
+function RouteComponent() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#f8f9fb]">
-      {/* ── Hero ─────────────────────────────────────── */}
-      <section className="relative isolate pt-16 pb-24 lg:pt-24 lg:pb-32">
-        {/* Background decorations */}
-        <div className="absolute inset-0 -z-10 pointer-events-none">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(67,130,223,0.08),transparent_50%)]" />
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-          <div
-            className="absolute inset-0 opacity-[0.35]"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle, rgba(127,140,170,0.18) 1.5px, transparent 1.5px)",
-              backgroundSize: "32px 32px",
-            }}
-          />
-        </div>
+    <section className="space-y-12">
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        {/* Left column */}
+        <div className="max-w-2xl">
+          <h1 className="text-balance text-5xl font-bold tracking-tight text-slate-900">
+            Monitor what matters.
+            <br className="mb-4" />
+            <span className="bg-linear-to-r from-primary via-primary to-sky-500 bg-clip-text text-transparent text-5xl">
+              Measure
+            </span>{" "}
+            what works.
+          </h1>
 
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            {/* Left column */}
-            <div className="max-w-2xl">
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3.5 py-1.5 shadow-sm backdrop-blur-sm">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/70 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-                </span>
-                <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-                  Monitoring & Evaluation Platform
-                </span>
-              </div>
+          <p className="mt-6 max-w-lg leading-relaxed text-slate-500">
+            Insights brings structure to your monitoring and evaluation workflows — from data collection to impact
+            reporting — so your team can focus on what drives results.
+          </p>
 
-              <h1 className="text-balance text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl lg:text-7xl">
-                Monitor what
-                <br />
-                matters.{" "}
-                <span className="bg-gradient-to-r from-primary via-primary to-sky-500 bg-clip-text text-transparent">
-                  Measure
-                </span>
-                <br />
-                what works.
-              </h1>
-
-              <p className="mt-6 max-w-lg text-lg leading-relaxed text-slate-500">
-                Insights brings structure to your monitoring and evaluation workflows — from data
-                collection to impact reporting — so your team can focus on what drives results.
-              </p>
-
-              <div className="mt-8 flex flex-wrap items-center gap-4">
-                <Link
-                  to="/signup"
-                  className="group inline-flex h-11 items-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-primary/30 active:scale-95"
-                >
-                  Start for free
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="group h-11 gap-2 rounded-full border-slate-200 bg-white/70 px-6 text-sm font-semibold text-slate-600 backdrop-blur-sm transition-all hover:border-slate-300 hover:bg-white hover:text-slate-900 active:scale-95"
-                >
-                  <Play className="h-4 w-4 fill-current" />
-                  See a demo
-                </Button>
-              </div>
-
-              <div className="mt-10 flex flex-wrap items-center gap-4">
-                {stats.slice(0, 3).map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="flex items-center gap-2 rounded-full border border-slate-200 bg-white/60 px-4 py-2 backdrop-blur-sm"
-                  >
-                    <span className="text-sm font-bold text-slate-900">{stat.value}</span>
-                    <span className="text-xs font-medium text-slate-500">{stat.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right column - dashboard preview */}
-            <div className="relative">
-              <div className="absolute -inset-4 -z-10 rounded-full bg-primary/5 blur-3xl" />
-              <DashboardPreview />
-            </div>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <Link
+              to="/signup"
+              className="group inline-flex h-11 items-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-primary/30 active:scale-95"
+            >
+              Start for free
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+            <Button
+              variant="outline"
+              size="lg"
+              className="group h-11 gap-2 rounded-full border-slate-200 bg-white/70 px-6 text-sm font-semibold text-slate-600 backdrop-blur-sm transition-all hover:border-slate-300 hover:bg-white hover:text-slate-900 active:scale-95"
+            >
+              <Play className="h-4 w-4 fill-current" />
+              See a demo
+            </Button>
           </div>
         </div>
-      </section>
 
-      {/* ── Logo Ticker ──────────────────────────────── */}
-      <section className="border-y border-slate-200/60 bg-white/50">
-        <div className="mx-auto max-w-7xl px-6">
-          <p className="pt-6 text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-            Trusted by leading impact organizations
-          </p>
-          <AnimatedTicker items={logos} />
+        {/* Right column - dashboard preview */}
+        <div className="relative">
+          <div className="absolute -inset-4 -z-10 rounded-full bg-primary/5 blur-3xl" />
+          <DashboardPreview />
         </div>
-      </section>
+      </div>
+
+      <div className="mt-12">
+        <LogoTicker />
+      </div>
 
       {/* ── Capabilities ─────────────────────────────── */}
-      <section id="features" className="py-24 lg:py-32">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 shadow-sm">
-              <Sparkles className="h-3 w-3 text-primary" />
-              Capabilities
-            </span>
-            <h2 className="mt-5 text-balance text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
-              Everything you need to evaluate with confidence.
-            </h2>
-            <p className="mt-4 text-lg leading-relaxed text-slate-500">
-              A complete toolkit for M&E teams — from data collection in the field to
-              boardroom-ready reports.
-            </p>
-          </div>
-
-          <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {capabilities.map((cap) => (
-              <CapabilityCard key={cap.title} {...cap} />
-            ))}
-          </div>
+      <div id="features">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 shadow-sm">
+            <Sparkles className="h-3 w-3 text-primary" />
+            Capabilities
+          </span>
+          <h2 className="mt-5 text-balance text-3xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+            Everything you need to evaluate with confidence.
+          </h2>
+          <p className="mt-4 leading-relaxed text-slate-500">
+            A complete toolkit for M&E teams — from data collection in the field to boardroom-ready reports.
+          </p>
         </div>
-      </section>
+
+        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {CAPABILITIES.map((cap) => (
+            <CapabilityCard key={cap.title} {...cap} />
+          ))}
+        </div>
+      </div>
 
       {/* ── How It Works ─────────────────────────────── */}
-      <section className="relative overflow-hidden py-24 lg:py-32">
+      <section className="relative overflow-hidden py-24 lg:py-32 rounded-xl">
         <div className="absolute inset-0 -z-10 bg-slate-900" />
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,rgba(67,130,223,0.18),transparent_50%),radial-gradient(ellipse_at_bottom_left,rgba(127,140,170,0.12),transparent_50%)]" />
         <div className="absolute inset-0 -z-10 opacity-[0.08] bg-[linear-gradient(rgba(67,130,223,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(67,130,223,0.5)_1px,transparent_1px)] [background-size:48px_48px]" />
 
         <div className="mx-auto max-w-7xl px-6">
           <div className="mx-auto max-w-2xl text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/80">
-              How It Works
-            </span>
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/80">How It Works</span>
             <h2 className="mt-4 text-balance text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
               From data to decisions in four steps.
             </h2>
           </div>
 
           <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {steps.map((step, i) => {
+            {STEPS.map((step, i) => {
               const Icon = step.icon;
               return (
                 <div
                   key={step.title}
-                  className="group relative rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:bg-white/[0.06]"
+                  className="group relative rounded-2xl border border-white/10 bg-white/3 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:bg-white/[0.06]"
                 >
                   <div className="mb-5 flex items-center justify-between">
                     <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
                       <Icon className="h-5 w-5" strokeWidth={1.8} />
                     </div>
-                    <span className="text-xs font-bold tabular-nums tracking-widest text-white/20">
-                      0{i + 1}
-                    </span>
+                    <span className="text-xs font-bold tabular-nums tracking-widest text-white/20">0{i + 1}</span>
                   </div>
                   <h3 className="text-lg font-semibold tracking-tight text-white">{step.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-slate-400">{step.description}</p>
 
-                  {i < steps.length - 1 && (
-                    <div className="absolute top-10 -right-3 hidden h-px w-6 bg-gradient-to-r from-white/20 to-transparent lg:block" />
+                  {i < STEPS.length - 1 && (
+                    <div className="absolute top-10 -right-3 hidden h-px w-6 bg-linear-to-r from-white/20 to-transparent lg:block" />
                   )}
                 </div>
               );
@@ -454,26 +245,22 @@ function LandingPage() {
       </section>
 
       {/* ── Stats + Why Us ───────────────────────────── */}
-      <section className="py-24 lg:py-32">
+      <section className="py-12">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {/* Stats card */}
             <Card className="overflow-hidden border-slate-200/60 bg-white/70 shadow-sm backdrop-blur-sm">
               <CardHeader className="pb-2">
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-                  By the numbers
-                </span>
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">By the numbers</span>
                 <CardTitle className="text-2xl font-extrabold tracking-tight text-slate-900">
                   Trusted at scale.
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-6">
-                  {stats.map((stat) => (
+                  {STATS.map((stat) => (
                     <div key={stat.label} className="space-y-1">
-                      <div className="text-4xl font-extrabold tracking-tight text-slate-900">
-                        {stat.value}
-                      </div>
+                      <div className="text-4xl font-extrabold tracking-tight text-slate-900">{stat.value}</div>
                       <div className="text-sm font-medium text-slate-500">{stat.label}</div>
                     </div>
                   ))}
@@ -482,17 +269,15 @@ function LandingPage() {
             </Card>
 
             {/* Why us card */}
-            <Card className="border-slate-200/60 bg-gradient-to-br from-white/80 to-slate-50/80 shadow-sm backdrop-blur-sm">
+            <Card className="border-slate-200/60 bg-linear-to-br from-white/80 to-slate-50/80 shadow-sm backdrop-blur-sm">
               <CardHeader className="pb-2">
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-                  Why Insights
-                </span>
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Why Insights</span>
                 <CardTitle className="text-2xl font-extrabold tracking-tight text-slate-900">
                   Built for the people doing the work.
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {whyPoints.map((point) => (
+                {WHY_POINTS.map((point) => (
                   <div key={point} className="flex items-start gap-3">
                     <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/10">
                       <Check className="h-3 w-3 text-primary" />
@@ -514,10 +299,10 @@ function LandingPage() {
       </section>
 
       {/* ── Feature Highlight ────────────────────────── */}
-      <section className="relative overflow-hidden py-24 lg:py-32">
+      <section className="relative overflow-hidden py-16 rounded-xl">
         <div className="absolute inset-0 -z-10 bg-slate-50" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-slate-200 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-slate-200 to-transparent" />
 
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
@@ -553,7 +338,7 @@ function LandingPage() {
                     {[35, 48, 42, 60, 55, 72, 68, 80, 74, 88, 82, 95].map((h, i) => (
                       <div
                         key={i}
-                        className="flex-1 rounded-t bg-gradient-to-t from-primary/30 to-primary transition-all hover:from-primary/50 hover:to-primary/80"
+                        className="flex-1 rounded-t bg-linear-to-t from-primary/30 to-primary transition-all hover:from-primary/50 hover:to-primary/80"
                         style={{ height: `${h * 0.7}px` }}
                       />
                     ))}
@@ -620,9 +405,9 @@ function LandingPage() {
               <h2 className="mt-5 text-balance text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
                 Data you can trust, everywhere you work.
               </h2>
-              <p className="mt-4 text-lg leading-relaxed text-slate-500">
-                Collect data offline in remote locations, validate it automatically, and sync
-                securely when connectivity returns. Built for the realities of field work.
+              <p className="mt-4 leading-relaxed text-slate-500">
+                Collect data offline in remote locations, validate it automatically, and sync securely when connectivity
+                returns. Built for the realities of field work.
               </p>
 
               <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -649,54 +434,49 @@ function LandingPage() {
       </section>
 
       {/* ── Dark CTA ─────────────────────────────────── */}
-      <section className="pb-24 lg:pb-32">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="relative overflow-hidden rounded-3xl bg-slate-900 px-8 py-16 text-center md:px-16 md:py-24">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_25%_60%,rgba(67,130,223,0.22),transparent_55%),radial-gradient(ellipse_at_80%_30%,rgba(127,140,170,0.14),transparent_50%)]" />
-            <div
-              className="absolute inset-0 opacity-[0.1]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(rgba(67,130,223,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(67,130,223,0.5)_1px,transparent_1px)",
-                backgroundSize: "48px 48px",
-              }}
-            />
+      <section className="pb-16">
+        <div className="relative overflow-hidden rounded-3xl bg-slate-900 px-8 py-16 text-center md:px-16 md:py-24">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_25%_60%,rgba(67,130,223,0.22),transparent_55%),radial-gradient(ellipse_at_80%_30%,rgba(127,140,170,0.14),transparent_50%)]" />
+          <div
+            className="absolute inset-0 opacity-[0.1]"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(67,130,223,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(67,130,223,0.5)_1px,transparent_1px)",
+              backgroundSize: "48px 48px",
+            }}
+          />
 
-            <div className="relative">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/80">
-                Get Started Today
-              </span>
-              <h2 className="mx-auto mt-4 max-w-2xl text-balance text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
-                Turn your data into{" "}
-                <span className="text-outline text-primary">decisions.</span>
-              </h2>
-              <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-slate-400">
-                Join thousands of organizations using Insights to monitor, evaluate, and improve
-                their programs. Free to start, no credit card required.
-              </p>
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-                <Link
-                  to="/signup"
-                  className="group inline-flex h-11 items-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 active:scale-95"
-                >
-                  Start for free
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
-                <Link
-                  to="/pricing"
-                  className="inline-flex h-11 items-center justify-center rounded-full border border-slate-600 bg-transparent px-6 text-sm font-semibold text-slate-300 transition-all hover:border-slate-500 hover:bg-white/5 hover:text-white"
-                >
-                  View pricing
-                </Link>
-              </div>
+          <div className="relative">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/80">Get Started Today</span>
+            <h2 className="mx-auto mt-4 max-w-2xl text-balance text-4xl font-bold tracking-tight text-white">
+              Turn your data into decisions.
+            </h2>
+            <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-slate-400">
+              Join thousands of organizations using Insights to monitor, evaluate, and improve their programs. Free to
+              start, no credit card required.
+            </p>
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                to="/signup"
+                className="group inline-flex h-11 items-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 active:scale-95"
+              >
+                Start for free
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+              <Link
+                to="/pricing"
+                className="inline-flex h-11 items-center justify-center rounded-full border border-slate-600 bg-transparent px-6 text-sm font-semibold text-slate-300 transition-all hover:border-slate-500 hover:bg-white/5 hover:text-white"
+              >
+                View pricing
+              </Link>
             </div>
           </div>
         </div>
       </section>
-    </div>
+    </section>
   );
 }
 
 export const Route = createFileRoute("/_guest/")({
-  component: LandingPage,
+  component: RouteComponent,
 });
