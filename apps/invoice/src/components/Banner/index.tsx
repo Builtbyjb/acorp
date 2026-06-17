@@ -1,4 +1,4 @@
-import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from "@shared/ui/components/item";
+import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { Button } from "@shared/ui/components/button";
 import type { ReactNode } from "react";
 

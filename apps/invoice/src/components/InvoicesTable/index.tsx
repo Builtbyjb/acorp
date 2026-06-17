@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@shared/ui/components/table";
-import { Badge } from "@shared/ui/components/badge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -95,11 +95,21 @@ export default function InvoicesTable({
             <Table>
               <TableHeader>
                 <TableRow className="border-b border-black/10 hover:bg-transparent">
-                  <TableHead className="text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">Invoice</TableHead>
-                  <TableHead className="hidden md:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">Date</TableHead>
-                  <TableHead className="hidden lg:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">Due Date</TableHead>
-                  <TableHead className="text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">Amount</TableHead>
-                  <TableHead className="text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">Status</TableHead>
+                  <TableHead className="text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Invoice
+                  </TableHead>
+                  <TableHead className="hidden md:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Date
+                  </TableHead>
+                  <TableHead className="hidden lg:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Due Date
+                  </TableHead>
+                  <TableHead className="text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Amount
+                  </TableHead>
+                  <TableHead className="text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Status
+                  </TableHead>
                   <TableHead className="w-12.5"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -148,7 +158,9 @@ export default function InvoicesTable({
                             className="cursor-pointer"
                             onClick={() => handleNavigate(invoice.clientId, invoice.id)}
                           >
-                            <Badge className={`capitalize ${getBadgeVariant(invoice.status)} rounded-none border-0`}>{invoice.status}</Badge>
+                            <Badge className={`capitalize ${getBadgeVariant(invoice.status)} rounded-none border-0`}>
+                              {invoice.status}
+                            </Badge>
                           </TableCell>
                           <TableCell>
                             <DropdownMenu>

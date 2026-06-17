@@ -11,7 +11,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@shared/ui/components/breadcrumb";
+} from "@/components/ui/breadcrumb";
 import HeadingTwo from "@shared/ui/custom-components/HeadingTwo";
 
 type Plan = z.infer<typeof SubscriptionPlanSchema>;
@@ -92,9 +92,7 @@ function RouteComponent() {
             <button
               key={c}
               className={`px-4 py-2 text-sm font-bold border-2 transition-all ${
-                currency === c
-                  ? "bg-black text-white border-black"
-                  : "border-black text-black hover:bg-black/5"
+                currency === c ? "bg-black text-white border-black" : "border-black text-black hover:bg-black/5"
               }`}
               onClick={() => handleCurrencyChange(c)}
             >
@@ -107,11 +105,7 @@ function RouteComponent() {
           /* Skeleton loading state */
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[...Array(3)].map((_, i) => (
-              <div
-                key={i}
-                className="bg-white border border-black/10 p-6 animate-pulse"
-                style={{ minHeight: "360px" }}
-              >
+              <div key={i} className="bg-white border border-black/10 p-6 animate-pulse" style={{ minHeight: "360px" }}>
                 <div className="h-4 mb-3 bg-black/10" style={{ width: "40%" }} />
                 <div className="h-3 mb-6 bg-black/5" style={{ width: "70%" }} />
                 <div className="h-8 mb-6 bg-black/10" style={{ width: "55%" }} />
@@ -144,12 +138,8 @@ function RouteComponent() {
 
                 {/* Plan name + description */}
                 <div className="mb-5 mt-2">
-                  <h3 className="text-xl font-bold tracking-tight mb-1 text-black">
-                    {plan.name}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-neutral-500">
-                    {plan.description}
-                  </p>
+                  <h3 className="text-xl font-bold tracking-tight mb-1 text-black">{plan.name}</h3>
+                  <p className="text-sm leading-relaxed text-neutral-500">{plan.description}</p>
                 </div>
 
                 {/* Price */}
@@ -157,11 +147,7 @@ function RouteComponent() {
                   <span className="text-3xl font-extrabold tracking-tight text-black tabular-nums">
                     {formatCurrency(plan.amount, plan.currency)}
                   </span>
-                  {plan.interval && (
-                    <span className="text-sm ml-1 text-neutral-500">
-                      {plan.interval}
-                    </span>
-                  )}
+                  {plan.interval && <span className="text-sm ml-1 text-neutral-500">{plan.interval}</span>}
                 </div>
 
                 {/* Features */}
@@ -171,9 +157,7 @@ function RouteComponent() {
                       <span className="w-5 h-5 border border-black/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                         <CheckIcon className="w-3 h-3" />
                       </span>
-                      <span className="text-sm leading-relaxed text-neutral-500">
-                        {feature}
-                      </span>
+                      <span className="text-sm leading-relaxed text-neutral-500">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -219,10 +203,11 @@ function RouteComponent() {
         <div className="relative border border-black overflow-hidden px-10 py-16 text-center bg-black">
           <div className="absolute inset-0 bg-dot-matrix opacity-20 pointer-events-none" />
           <div className="relative">
-            <p className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase mb-4 text-neutral-500">
-              No risk
-            </p>
-            <h2 className="font-extrabold text-white tracking-tight mb-4" style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", letterSpacing: "-0.03em", lineHeight: "1.05" }}>
+            <p className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase mb-4 text-neutral-500">No risk</p>
+            <h2
+              className="font-extrabold text-white tracking-tight mb-4"
+              style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", letterSpacing: "-0.03em", lineHeight: "1.05" }}
+            >
               Start free today.
               <br />
               Upgrade when ready.

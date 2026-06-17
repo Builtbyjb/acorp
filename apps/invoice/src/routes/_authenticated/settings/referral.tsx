@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useLayout } from "@/hooks/useLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/components/card";
-import { Checkbox } from "@shared/ui/components/checkbox";
-import { Label } from "@shared/ui/components/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { Copy, Users, Building } from "lucide-react";
-import { Input } from "@shared/ui/components/input";
-import { Button } from "@shared/ui/components/button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { formatCurrency, handleError } from "@/lib/utils";
 import { APP_NAME } from "@/lib/constant";
 import { toast } from "sonner";
@@ -211,9 +211,7 @@ function RouteComponent() {
                 <Building className="w-5 h-5" />
                 Payout Method
               </CardTitle>
-              <CardDescription>
-                Add your bank account details to receive referral payouts.
-              </CardDescription>
+              <CardDescription>Add your bank account details to receive referral payouts.</CardDescription>
             </CardHeader>
             <CardContent>
               {showPayoutForm ? (
@@ -256,24 +254,38 @@ function RouteComponent() {
                   </div>
                   <div className="flex gap-2">
                     <Button onClick={handleSavePayoutMethod}>Save</Button>
-                    <Button variant="outline" onClick={() => setShowPayoutForm(false)}>Cancel</Button>
+                    <Button variant="outline" onClick={() => setShowPayoutForm(false)}>
+                      Cancel
+                    </Button>
                   </div>
                 </div>
               ) : (
                 <div>
                   {referral.payoutMethod ? (
                     <div className="space-y-2">
-                      <p><strong>Bank:</strong> {referral.payoutMethod.bankName}</p>
-                      <p><strong>Account Holder:</strong> {referral.payoutMethod.accountHolderName}</p>
-                      <p><strong>Account Number:</strong> {referral.payoutMethod.accountNumber}</p>
+                      <p>
+                        <strong>Bank:</strong> {referral.payoutMethod.bankName}
+                      </p>
+                      <p>
+                        <strong>Account Holder:</strong> {referral.payoutMethod.accountHolderName}
+                      </p>
+                      <p>
+                        <strong>Account Number:</strong> {referral.payoutMethod.accountNumber}
+                      </p>
                       {referral.payoutMethod.routingNumber && (
-                        <p><strong>Routing Number:</strong> {referral.payoutMethod.routingNumber}</p>
+                        <p>
+                          <strong>Routing Number:</strong> {referral.payoutMethod.routingNumber}
+                        </p>
                       )}
-                      <Button variant="outline" onClick={() => setShowPayoutForm(true)}>Edit</Button>
+                      <Button variant="outline" onClick={() => setShowPayoutForm(true)}>
+                        Edit
+                      </Button>
                     </div>
                   ) : (
                     <div>
-                      <p className="text-muted-foreground mb-4">No payout method set. Please add your bank details to receive payouts.</p>
+                      <p className="text-muted-foreground mb-4">
+                        No payout method set. Please add your bank details to receive payouts.
+                      </p>
                       <Button onClick={() => setShowPayoutForm(true)}>Add Bank Details</Button>
                     </div>
                   )}

@@ -1,5 +1,5 @@
 import { Field, FieldError, FieldLabel } from "@shared/ui/components/field";
-import { Input } from "@shared/ui/components/input";
+import { Input } from "@/components/ui/input";
 import type { SignupFormType } from "@/hooks/useSignupForm";
 
 type Props = {

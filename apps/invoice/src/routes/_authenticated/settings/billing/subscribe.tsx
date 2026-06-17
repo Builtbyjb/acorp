@@ -2,9 +2,9 @@ import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router"
 import { useLayout } from "@/hooks/useLayout";
 import { useState, useEffect, useMemo } from "react";
 import { Button } from "@shared/ui/components/button";
-import { Badge } from "@shared/ui/components/badge";
-import { Skeleton } from "@shared/ui/components/skeleton";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@shared/ui/components/card";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, ArrowLeft, ShieldCheck, Lock, Sparkles, HelpCircle } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { z } from "zod";
@@ -66,7 +66,8 @@ const TESTIMONIALS = [
     role: "Agency Owner, Toronto",
   },
   {
-    quote: "I tried five invoice tools before this. ACorp is the only one that feels like it was built for real business owners.",
+    quote:
+      "I tried five invoice tools before this. ACorp is the only one that feels like it was built for real business owners.",
     author: "Sarah Miller",
     role: "SaaS Founder, Austin",
   },
@@ -75,11 +76,13 @@ const TESTIMONIALS = [
 const FAQS = [
   {
     question: "Can I cancel anytime?",
-    answer: "Yes. There are no contracts or cancellation fees. You keep access until the end of your current billing period.",
+    answer:
+      "Yes. There are no contracts or cancellation fees. You keep access until the end of your current billing period.",
   },
   {
     question: "What payment methods are accepted?",
-    answer: "We accept card payments through Paystack or Stripe, depending on your region. All transactions are PCI-compliant.",
+    answer:
+      "We accept card payments through Paystack or Stripe, depending on your region. All transactions are PCI-compliant.",
   },
   {
     question: "Can I switch plans later?",
@@ -87,7 +90,8 @@ const FAQS = [
   },
   {
     question: "Is my data secure?",
-    answer: "Yes. We use industry-standard encryption for data in transit and at rest, and never store your card details.",
+    answer:
+      "Yes. We use industry-standard encryption for data in transit and at rest, and never store your card details.",
   },
 ];
 
@@ -137,7 +141,11 @@ function PlansSkeleton() {
 function RouteComponent() {
   const { setTitle } = useLayout();
   const navigate = useNavigate();
-  const { plan, currency: queryCurrency, country: queryCountry } = useSearch({
+  const {
+    plan,
+    currency: queryCurrency,
+    country: queryCountry,
+  } = useSearch({
     from: "/_authenticated/settings/billing/subscribe",
   });
   const { doGET } = useFetch();
@@ -285,8 +293,7 @@ function RouteComponent() {
     [activeSubscriptions],
   );
 
-  const isPlanActive = (plan: Plan) =>
-    plan.planCode !== "PLN_free" && activePlanNames.has(plan.name.toLowerCase());
+  const isPlanActive = (plan: Plan) => plan.planCode !== "PLN_free" && activePlanNames.has(plan.name.toLowerCase());
 
   const visiblePlans = plans.filter((p) => p.planCode !== "PLN_free");
   const featuredPlan = visiblePlans.find((p) => p.featured);
@@ -312,9 +319,7 @@ function RouteComponent() {
           <Sparkles className="h-3 w-3 mr-1.5" />
           Upgrade in seconds
         </Badge>
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
-          Choose the plan that fits your business
-        </h1>
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">Choose the plan that fits your business</h1>
         <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
           Prices are shown in your local currency. Switch currency anytime if you need to bill internationally.
         </p>
@@ -324,8 +329,7 @@ function RouteComponent() {
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
         {detectionState === "detected" && country && (
           <p className="text-sm text-muted-foreground">
-            Showing prices for{" "}
-            <span className="font-medium text-foreground">{country}</span>
+            Showing prices for <span className="font-medium text-foreground">{country}</span>
           </p>
         )}
         {detectionState === "manual" && (
@@ -381,11 +385,7 @@ function RouteComponent() {
                 }`}
               >
                 <div className="absolute -top-3 inset-x-0 flex justify-center gap-2 px-4 flex-wrap">
-                  {isFeatured && (
-                    <Badge className="px-3 py-1 text-xs font-semibold shadow-sm">
-                      Most popular
-                    </Badge>
-                  )}
+                  {isFeatured && <Badge className="px-3 py-1 text-xs font-semibold shadow-sm">Most popular</Badge>}
                   {isActive && (
                     <Badge variant="outline" className="bg-background px-3 py-1 text-xs font-semibold shadow-sm">
                       Current plan
@@ -403,9 +403,7 @@ function RouteComponent() {
                     <span className="text-4xl font-bold tracking-tight text-foreground">
                       {formatCurrency(plan.amount, plan.currency)}
                     </span>
-                    {plan.interval && (
-                      <span className="text-muted-foreground ml-1.5 text-base">/{plan.interval}</span>
-                    )}
+                    {plan.interval && <span className="text-muted-foreground ml-1.5 text-base">/{plan.interval}</span>}
                   </div>
                   <ul className="space-y-3">
                     {plan.features.map((feature) => (

@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@shared/ui/components/button";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@shared/ui/components/select";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import type { PaginationMeta } from "@/hooks/usePagination";
 
 interface PaginationBarProps {
@@ -30,7 +30,9 @@ export function PaginationBar({ meta, onPageChange, onSizeChange, label }: Pagin
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <span className="text-sm text-neutral-500 font-mono">{meta ? `Page ${meta.page} of ${meta.totalPages}` : ""}</span>
+          <span className="text-sm text-neutral-500 font-mono">
+            {meta ? `Page ${meta.page} of ${meta.totalPages}` : ""}
+          </span>
           <Button
             size="sm"
             variant="outline"

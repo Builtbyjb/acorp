@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@shared/ui/components/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -88,10 +88,18 @@ export default function ClientsTable({
             <Table>
               <TableHeader>
                 <TableRow className="border-b border-black/10 hover:bg-transparent">
-                  <TableHead className="text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">Name</TableHead>
-                  <TableHead className="hidden sm:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">Contact</TableHead>
-                  <TableHead className="hidden md:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">Location</TableHead>
-                  <TableHead className="hidden lg:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">Added</TableHead>
+                  <TableHead className="text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Name
+                  </TableHead>
+                  <TableHead className="hidden sm:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Contact
+                  </TableHead>
+                  <TableHead className="hidden md:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Location
+                  </TableHead>
+                  <TableHead className="hidden lg:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Added
+                  </TableHead>
                   <TableHead className="w-12.5"></TableHead>
                 </TableRow>
               </TableHeader>

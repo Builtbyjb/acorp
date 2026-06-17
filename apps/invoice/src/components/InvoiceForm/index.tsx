@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@shared/ui/components/button";
-import { Input } from "@shared/ui/components/input";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@shared/ui/components/textarea";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@shared/ui/components/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Plus, Trash2, Mail, Phone } from "lucide-react";
 import type { Client, SelectData } from "@/lib/types";
 import type { Invoice, InvoiceStatus } from "@shared/lib/types";

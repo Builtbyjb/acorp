@@ -1,9 +1,9 @@
 import { createFileRoute, redirect, Outlet } from "@tanstack/react-router";
-import Sidebar from "@shared/ui/custom-components/AppSidebar";
+import Sidebar from "@/components/Sidebar";
 import { useAuth } from "@/hooks/auth";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@shared/ui/components/sidebar";
-import { Separator } from "@shared/ui/components/separator";
-import Header from "@shared/ui/custom-components/Header";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import Header from "@/components/Header";
 import { useLayout } from "@/hooks/useLayout";
 
 import {

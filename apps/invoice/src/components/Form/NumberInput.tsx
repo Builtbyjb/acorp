@@ -1,5 +1,5 @@
 import { Field, FieldLabel, FieldError } from "@shared/ui/components/field";
-import { Input } from "@shared/ui/components/input";
+import { Input } from "@/components/ui/input";
 
 type NumberInputProps = {
   field: any;

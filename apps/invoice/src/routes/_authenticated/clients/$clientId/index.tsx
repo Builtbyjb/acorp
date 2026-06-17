@@ -7,7 +7,7 @@ import type { Client } from "@/lib/types";
 import type { Invoice } from "@shared/lib/types";
 import { useNavigate } from "@tanstack/react-router";
 import { useLayout } from "@/hooks/useLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/components/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFetch } from "@/hooks/useFetch";
 import { usePagination } from "@/hooks/usePagination";
 import { InvoiceSchema, ClientSchema } from "@shared/lib/zod-schema";

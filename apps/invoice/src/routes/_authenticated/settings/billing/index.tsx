@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useLayout } from "@/hooks/useLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@shared/ui/components/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@shared/ui/components/button";
-import { Badge } from "@shared/ui/components/badge";
+import { Badge } from "@/components/ui/badge";
 import { getBadgeVariant, formatCurrency } from "@/lib/utils";
 import { formatDate } from "@shared/utils/util";
 import { BadgeInfo, Calendar } from "lucide-react";

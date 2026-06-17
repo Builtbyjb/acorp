@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
-import NavBar from "@shared/ui/custom-components/Navbar";
-import Footer from "@shared/ui/custom-components/Footer";
+import NavBar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import Logo from "@/components/Logo";
 
 function GuestLayout() {
@@ -11,9 +11,7 @@ function GuestLayout() {
   const footerItems = [
     {
       title: "Product",
-      items: [
-        { label: "Pricing", to: "/pricing" },
-      ],
+      items: [{ label: "Pricing", to: "/pricing" }],
     },
     {
       title: "Company",

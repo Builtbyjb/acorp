@@ -7,7 +7,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@shared/ui/components/dialog";
+} from "@/components/ui/dialog";
 import type { Client } from "@/lib/types";
 import { useForm } from "@tanstack/react-form";
 import * as z from "zod";

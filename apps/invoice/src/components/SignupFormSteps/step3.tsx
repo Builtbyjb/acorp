@@ -1,5 +1,5 @@
 import { Field, FieldError, FieldLabel } from "@shared/ui/components/field";
-import { Input } from "@shared/ui/components/input";
+import { Input } from "@/components/ui/input";
 import SelectField from "@/components/Form/SelectField";
 import { COUNTRIES } from "@/lib/constant";
 import type { SignupFormType } from "@/hooks/useSignupForm";

@@ -3,7 +3,7 @@ import { useLayout } from "@/hooks/useLayout";
 import { useEffect } from "react";
 import { useForm } from "@tanstack/react-form";
 import * as z from "zod";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@shared/ui/components/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldLabel, FieldError } from "@shared/ui/components/field";
 import { Textarea } from "@shared/ui/components/textarea";
 import { Button } from "@shared/ui/components/button";

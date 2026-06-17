@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/components/card";
-import { Badge } from "@shared/ui/components/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@shared/ui/components/button";
 import type { Invoice } from "@shared/lib/types";
 import { format } from "date-fns";
@@ -49,7 +49,7 @@ export default function RecentInvoices({ invoices, isLoading }: RecentInvoicesPr
             {recentInvoices.map((invoice, i) => (
               <div
                 key={invoice.id}
-                className={`grid grid-cols-1 md:grid-cols-12 gap-4 py-4 items-center transition-colors duration-200 hover:bg-black/[0.02] cursor-pointer ${i < recentInvoices.length - 1 ? 'border-b border-black/5' : ''}`}
+                className={`grid grid-cols-1 md:grid-cols-12 gap-4 py-4 items-center transition-colors duration-200 hover:bg-black/[0.02] cursor-pointer ${i < recentInvoices.length - 1 ? "border-b border-black/5" : ""}`}
                 onClick={() => handleNavigate(invoice)}
               >
                 <div className="md:col-span-3">
@@ -67,7 +67,9 @@ export default function RecentInvoices({ invoices, isLoading }: RecentInvoicesPr
                   </span>
                 </div>
                 <div className="md:col-span-2">
-                  <Badge className={`${getBadgeVariant(invoice.status)} capitalize rounded-none border-0`}>{invoice.status}</Badge>
+                  <Badge className={`${getBadgeVariant(invoice.status)} capitalize rounded-none border-0`}>
+                    {invoice.status}
+                  </Badge>
                 </div>
                 <div className="md:col-span-2 text-right">
                   <span className="text-xs text-neutral-400 font-mono">

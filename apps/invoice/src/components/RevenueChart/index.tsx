@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/components/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import type { MonthRevenue } from "@shared/lib/types";
 import { SkeletonBarChart } from "@/components/Skeleton";
@@ -23,17 +23,8 @@ export default function RevenueChart({ data, isLoading }: RevenueChartProps) {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#00000015" />
-                <XAxis
-                  dataKey="month"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: "#737373", fontSize: 12 }}
-                />
-                <YAxis
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: "#737373", fontSize: 12 }}
-                />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: "#737373", fontSize: 12 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: "#737373", fontSize: 12 }} />
                 <Tooltip
                   formatter={(value: ValueType | undefined) => {
                     if (!value) return;

@@ -1,7 +1,7 @@
 import { Field, FieldLabel, FieldError } from "@shared/ui/components/field";
 import { Popover, PopoverContent, PopoverTrigger } from "@shared/ui/components/popover";
 import { format } from "date-fns";
-import { Calendar } from "@shared/ui/components/calendar";
+import { Calendar } from "@/components/ui/calendar";
 import { ChevronDownIcon } from "lucide-react";
 
 type DateFieldProps = {

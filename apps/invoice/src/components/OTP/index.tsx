@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@shared/ui/components/input-otp";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@shared/ui/components/card";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/auth";
-import { Button } from "@shared/ui/components/button";
-import { Spinner } from "@shared/ui/components/spinner";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function OTP() {
   const [value, setValue] = useState("");
