@@ -18,6 +18,10 @@ export type Bindings = {
     SERVER_URL: string;
     R2: R2Bucket;
     RATE_LIMITER: RateLimit;
+    ESMS_API_KEY: string;
+    WHATSAPP_PHONE_NUMBER_ID: string;
+    WHATSAPP_ACCESS_TOKEN: string;
+    META_GRAPH_API_VERSION: string;
 };
 
 export type TokenPayload = JWTPayload & {

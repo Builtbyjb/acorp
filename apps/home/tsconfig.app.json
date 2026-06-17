@@ -22,11 +22,8 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
 
-    /* Path aliases */
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
     },
   },
-  "include": ["src", "../../packages/ui/src/lib/utils.ts"],
 }

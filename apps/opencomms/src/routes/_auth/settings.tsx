@@ -1,10 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { SmsIcon, WhatsAppIcon } from '../-icons.tsx'
+import { useLayout } from '@/hooks/useLayout'
 
 export const Route = createFileRoute('/_auth/settings')({
   component: SettingsPage,
@@ -336,6 +337,11 @@ function BillingTab() {
 }
 
 function SettingsPage() {
+  const { setTitle } = useLayout()
+  useEffect(() => {
+    setTitle('Settings')
+  }, [setTitle])
+
   const [tab, setTab] = useState<Tab>('Organisation')
 
   return (

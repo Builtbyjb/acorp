@@ -1,130 +1,82 @@
-import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import AppSidebar from '@shared/ui/custom-components/AppSidebar'
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '@shared/ui/components/sidebar'
+import { Separator } from '@shared/ui/components/separator'
+import Header from '@shared/ui/custom-components/Header'
+import { useAuth } from '@/hooks/auth'
+import { useLayout } from '@/hooks/useLayout'
 import {
-  DashboardIcon, MessagesIcon, ContactsIcon, CampaignsIcon, SettingsIcon,
-} from '../-icons.tsx'
+  LayoutDashboard,
+  MessageCircle,
+  Users,
+  Megaphone,
+  Settings,
+} from 'lucide-react'
 
 export const Route = createFileRoute('/_auth')({
-  beforeLoad: () => {
-    const isAuthenticated = localStorage.getItem('oc_session') !== null
-    if (!isAuthenticated) throw redirect({ to: '/login' })
+  beforeLoad: async ({ context, location }) => {
+    const isAuthenticated = context.auth ? await context.auth.authenticate() : false
+    if (!isAuthenticated) {
+      throw redirect({
+        to: '/login',
+        search: { redirect: location.href },
+      })
+    }
   },
   component: AuthLayout,
 })
 
-const NAV = [
-  { to: '/dashboard', label: 'Dashboard', Icon: DashboardIcon, exact: true },
-  { to: '/messages',  label: 'Messages',  Icon: MessagesIcon,  exact: false },
-  { to: '/contacts',  label: 'Contacts',  Icon: ContactsIcon,  exact: false },
-  { to: '/campaigns', label: 'Campaigns', Icon: CampaignsIcon, exact: false },
-] as const
+const navItems = [
+  {
+    title: 'Dashboard',
+    url: '/dashboard',
+    icon: <LayoutDashboard />,
+  },
+  {
+    title: 'Messages',
+    url: '/messages',
+    icon: <MessageCircle />,
+  },
+  {
+    title: 'Contacts',
+    url: '/contacts',
+    icon: <Users />,
+  },
+  {
+    title: 'Campaigns',
+    url: '/campaigns',
+    icon: <Megaphone />,
+  },
+  {
+    title: 'Settings',
+    url: '/settings',
+    icon: <Settings />,
+  },
+]
 
 function AuthLayout() {
+  const { user, logout } = useAuth()
+  const { title } = useLayout()
+
   return (
-    <div className="flex h-screen overflow-hidden" style={{ backgroundColor: '#ebf0f0' }}>
-      {/* ── Sidebar ── */}
-      <aside
-        className="flex w-56 flex-shrink-0 flex-col bg-white"
-        style={{ borderRight: '1px solid #7F8CAA22' }}
-      >
-        {/* Wordmark */}
-        <div
-          className="flex h-14 items-center px-4"
-          style={{ borderBottom: '1px solid #7F8CAA18' }}
-        >
-          <Link to="/dashboard" className="group flex items-center gap-2">
-            <div
-              className="flex h-6 w-6 items-center justify-center rounded-full text-white text-[10px] font-black transition-transform group-hover:scale-95"
-              style={{ backgroundColor: '#4382df' }}
-            >
-              O
-            </div>
-            <span className="font-bold text-base tracking-tight" style={{ color: '#0f172a' }}>
-              OpenComms
-            </span>
-          </Link>
+    <SidebarProvider>
+      <AppSidebar
+        businessname={user?.organizationName}
+        username={user?.username}
+        email={user?.email}
+        navItems={navItems}
+        logout={logout}
+      />
+      <SidebarInset>
+        <header className="flex items-center gap-2 ml-4 mt-4">
+          <SidebarTrigger className="h-9 w-9 bg-accent hover:bg-accent" size="icon-lg" />
+          <Separator orientation="vertical" className="h-6" />
+          <Header title={title} />
+        </header>
+        <div className="mt-8 mx-auto w-[90%]">
+          <Outlet />
         </div>
-
-        {/* Nav */}
-        <nav className="flex flex-1 flex-col gap-0.5 p-2 pt-3">
-          <p
-            className="mb-1.5 px-3 text-[10px] font-bold uppercase tracking-[0.22em]"
-            style={{ color: '#7F8CAA' }}
-          >
-            Workspace
-          </p>
-
-          {NAV.map(({ to, label, Icon, exact }) => (
-            <Link
-              key={to}
-              to={to}
-              activeOptions={{ exact }}
-              className="relative flex items-center gap-2.5 rounded-full px-3 py-2 text-sm font-medium transition-colors"
-              style={{ color: '#7F8CAA' }}
-              activeProps={{
-                className: 'relative flex items-center gap-2.5 rounded-full px-3 py-2 text-sm font-medium',
-                style: { color: '#0f172a', backgroundColor: '#7F8CAA18' },
-              }}
-            >
-              <Icon size={16} />
-              {label}
-            </Link>
-          ))}
-
-          <div className="mt-auto">
-            <div
-              className="my-2 mx-3"
-              style={{ height: 1, backgroundColor: '#7F8CAA14' }}
-            />
-            <p
-              className="mb-1.5 px-3 text-[10px] font-bold uppercase tracking-[0.22em]"
-              style={{ color: '#7F8CAA' }}
-            >
-              Account
-            </p>
-            <Link
-              to="/settings"
-              className="flex items-center gap-2.5 rounded-full px-3 py-2 text-sm font-medium transition-colors"
-              style={{ color: '#7F8CAA' }}
-              activeProps={{
-                className: 'flex items-center gap-2.5 rounded-full px-3 py-2 text-sm font-medium',
-                style: { color: '#0f172a', backgroundColor: '#7F8CAA18' },
-              }}
-            >
-              <SettingsIcon size={16} />
-              Settings
-            </Link>
-          </div>
-        </nav>
-
-        {/* User chip */}
-        <div
-          className="p-3"
-          style={{ borderTop: '1px solid #7F8CAA14' }}
-        >
-          <div
-            className="flex items-center gap-2.5 rounded-full px-2.5 py-2 cursor-pointer transition-colors hover:bg-[#7F8CAA0e]"
-          >
-            <Avatar className="size-7 flex-shrink-0">
-              <AvatarFallback
-                className="text-white text-[10px] font-bold"
-                style={{ backgroundColor: '#4382df' }}
-              >
-                JS
-              </AvatarFallback>
-            </Avatar>
-            <div className="min-w-0">
-              <p className="truncate text-xs font-semibold" style={{ color: '#0f172a' }}>Jane Smith</p>
-              <p className="text-[10px]" style={{ color: '#7F8CAA' }}>Admin</p>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      {/* ── Main ── */}
-      <div className="flex flex-1 flex-col overflow-hidden min-w-0">
-        <Outlet />
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }

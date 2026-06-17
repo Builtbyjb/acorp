@@ -5,9 +5,15 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
-  globalIgnores(["node_modules/*", ".git/*", "apps/invoice/dist/*", "apps/invoice/node_modules/*"]),
+  globalIgnores([
+    "node_modules/*",
+    ".git/*",
+    "apps/invoice/dist/*",
+    "apps/invoice/node_modules/*",
+    "apps/server/.wrangler/tmp/*",
+  ]),
   {
-    ignores: ["dist/", "routeTree.gen.ts", "node_modules/"],
+    ignores: ["dist/", "routeTree.gen.ts", "node_modules/", ".wrangler/"],
   },
   ...tseslint.configs.recommended,
   reactHooks.configs.flat.recommended,

@@ -1,52 +1,72 @@
 @import "@shared/ui/globals.css";
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   ZENDO APP — RECEIPT BRUTALIST OVERRIDES
+   ZENDO APP — WARM, CALM, BRIGHT PRODUCTIVITY PALETTE
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme inline {
-  --color-brand-bg: #ffffff;
-  --color-brand-secondary: #737373;
-  --color-brand-accent: #000000;
-  --color-brand-ink: #000000;
+  /* Zendo brand: warm, inviting, calm */
+  --color-zendo-cream: #fffbf5;
+  --color-zendo-cream-2: #fff5e9;
+  --color-zendo-ink: #2d2a26;
+  --color-zendo-ink-light: #6b6560;
+  --color-zendo-coral: #f27a5d;
+  --color-zendo-coral-light: #fff0eb;
+  --color-zendo-sage: #8fb996;
+  --color-zendo-sage-light: #eef6ef;
+  --color-zendo-sky: #7ec8e3;
+  --color-zendo-sky-light: #e9f7fc;
+  --color-zendo-butter: #ffe07a;
+  --color-zendo-butter-light: #fff8df;
+  --color-zendo-lavender: #c9b8e8;
+  --color-zendo-lavender-light: #f4effc;
+  --color-zendo-mint: #9fe2c4;
+  --color-zendo-mint-light: #e9f9f1;
+  --color-zendo-sand: #f7f1ea;
+  --color-zendo-blush: #ffd6d6;
+
+  --color-brand-bg: var(--color-zendo-cream);
+  --color-brand-secondary: var(--color-zendo-ink-light);
+  --color-brand-accent: var(--color-zendo-coral);
+  --color-brand-ink: var(--color-zendo-ink);
 }
 
 @layer base {
   :root {
-    --background: #ffffff;
-    --foreground: #000000;
+    --background: #fffbf5;
+    --foreground: #2d2a26;
     --card: #ffffff;
-    --card-foreground: #000000;
+    --card-foreground: #2d2a26;
     --popover: #ffffff;
-    --popover-foreground: #000000;
-    --primary: #000000;
+    --popover-foreground: #2d2a26;
+    --primary: #f27a5d;
     --primary-foreground: #ffffff;
-    --secondary: #737373;
+    --secondary: #8fb996;
     --secondary-foreground: #ffffff;
-    --muted: #f5f5f5;
-    --muted-foreground: #737373;
-    --accent: #f5f5f5;
-    --accent-foreground: #000000;
+    --muted: #f7f1ea;
+    --muted-foreground: #6b6560;
+    --accent: #fff0eb;
+    --accent-foreground: #2d2a26;
     --destructive: #ef4444;
     --destructive-foreground: #ffffff;
-    --border: rgba(0, 0, 0, 0.10);
-    --input: rgba(0, 0, 0, 0.10);
-    --ring: #000000;
-    --radius: 0px;
+    --border: rgba(45, 42, 38, 0.10);
+    --input: rgba(45, 42, 38, 0.10);
+    --ring: #f27a5d;
+    --radius: 0.75rem;
 
-    /* Sidebar: dark */
-    --sidebar: #171717;
-    --sidebar-foreground: #ffffff;
-    --sidebar-primary: #ffffff;
-    --sidebar-primary-foreground: #171717;
+    /* Sidebar: warm dark ink */
+    --sidebar: #2d2a26;
+    --sidebar-foreground: #fffbf5;
+    --sidebar-primary: #f27a5d;
+    --sidebar-primary-foreground: #ffffff;
     --sidebar-accent: rgba(255, 255, 255, 0.08);
-    --sidebar-accent-foreground: #ffffff;
+    --sidebar-accent-foreground: #fffbf5;
     --sidebar-border: rgba(255, 255, 255, 0.10);
     --sidebar-ring: rgba(255, 255, 255, 0.20);
   }
 
   body {
-    @apply bg-white text-black;
+    @apply bg-zendo-cream text-zendo-ink;
     font-family: "Geist Variable", system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -56,163 +76,154 @@
   * {
     @apply border-border;
   }
+
+  ::selection {
+    background-color: rgba(242, 122, 93, 0.2);
+    color: #2d2a26;
+  }
 }
 
-/* ── Brutalist scrollbar ───────────────────────────────────────────────── */
+/* ── Warm, friendly scrollbar ───────────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(115, 115, 115, 0.3);
-  border-radius: 0px;
+  background: rgba(107, 101, 96, 0.25);
+  border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(115, 115, 115, 0.5);
+  background: rgba(107, 101, 96, 0.4);
 }
 
-/* ── Receipt card shell ─────────────────────────────────────────────────── */
+/* ── Soft card shell ────────────────────────────────────────────────────── */
 .receipt-card {
-  @apply bg-white border border-black/10 p-6;
+  @apply bg-white border border-zendo-ink/10 p-6 rounded-2xl shadow-sm;
 }
 
 /* ── Eyebrow label ──────────────────────────────────────────────────────── */
 .eyebrow {
-  @apply text-[10px] font-mono font-bold tracking-[0.25em] uppercase text-neutral-500;
+  @apply inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-bold tracking-wider uppercase text-zendo-coral bg-zendo-coral-light rounded-full;
 }
 
 /* ── Section heading ────────────────────────────────────────────────────── */
 .section-heading {
-  @apply text-4xl font-bold tracking-tight text-black;
+  @apply text-4xl md:text-5xl font-bold tracking-tight text-zendo-ink;
 }
 
-/* ── Solid button (brutalist) ───────────────────────────────────────────── */
+/* ── Solid button (warm) ────────────────────────────────────────────────── */
 .btn-solid {
-  @apply inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold text-white bg-black transition-all hover:bg-black/90 active:scale-95;
+  @apply inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold text-white bg-zendo-coral transition-all hover:bg-zendo-coral/90 hover:shadow-lg hover:shadow-zendo-coral/20 active:scale-95 rounded-full;
 }
 
-/* ── Outline button (brutalist) ───────────────────────────────────────── */
+/* ── Outline button (warm) ──────────────────────────────────────────────── */
 .btn-outline {
-  @apply inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold border-2 border-black text-black transition-all hover:bg-black hover:text-white active:scale-95;
+  @apply inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold border-2 border-zendo-ink/15 text-zendo-ink transition-all hover:bg-zendo-ink hover:text-white active:scale-95 rounded-full;
 }
 
-/* ── Ghost button (brutalist) ──────────────────────────────────────────── */
+/* ── Ghost button (warm) ────────────────────────────────────────────────── */
 .btn-ghost {
-  @apply inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-black transition-all hover:bg-black hover:text-white active:scale-95;
+  @apply inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-zendo-ink transition-all hover:bg-zendo-coral/10 hover:text-zendo-coral active:scale-95 rounded-full;
 }
 
 /* ── Active nav pill ────────────────────────────────────────────────────── */
 .nav-active {
-  @apply relative px-3 py-1.5 text-sm font-medium transition-all text-black;
-  background-color: #00000008;
+  @apply relative px-3 py-1.5 text-sm font-medium transition-all text-zendo-ink bg-zendo-coral/10 rounded-full;
 }
 
 .nav-inactive {
-  @apply relative px-3 py-1.5 text-sm font-medium transition-all text-neutral-500;
+  @apply relative px-3 py-1.5 text-sm font-medium transition-all text-zendo-ink-light hover:text-zendo-ink hover:bg-zendo-ink/5 rounded-full;
 }
 
-/* ── Dark sidebar nav items ─────────────────────────────────────────────── */
+/* ── Warm sidebar nav items ─────────────────────────────────────────────── */
 .sidebar-nav-active {
-  @apply text-white;
-  background-color: rgba(255, 255, 255, 0.08);
+  @apply text-white bg-zendo-coral/20 rounded-lg;
 }
 
 .sidebar-nav-inactive {
-  @apply text-white/50;
+  @apply text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors;
 }
 
 /* ── Monospace data labels ──────────────────────────────────────────────── */
 .data-label {
-  @apply text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500;
+  @apply text-[10px] font-mono font-bold tracking-widest uppercase text-zendo-ink-light;
 }
 
-/* ── Status badge (monochrome) ──────────────────────────────────────────── */
+/* ── Status badge (warm) ────────────────────────────────────────────────── */
 .status-badge {
-  @apply inline-flex items-center px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-black text-white;
+  @apply inline-flex items-center px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-zendo-coral text-white rounded-full;
 }
 
 /* ── Dashed placeholder ─────────────────────────────────────────────────── */
 .dashed-placeholder {
-  @apply border border-dashed border-black/10;
+  @apply border border-dashed border-zendo-ink/15 rounded-xl;
 }
 
 /* ── Ruler / measurement line ───────────────────────────────────────────── */
 .ruler {
   border: none;
   height: 1px;
-  background: repeating-linear-gradient(90deg, #000000 0px, #000000 4px, transparent 4px, transparent 8px);
-  opacity: 0.3;
+  background: repeating-linear-gradient(90deg, #2d2a26 0px, #2d2a26 4px, transparent 4px, transparent 8px);
+  opacity: 0.2;
 }
 
-/* ── Calendar grayscale event colors (keep functional color coding) ─────── */
+/* ── Calendar warm event colors ─────────────────────────────────────────── */
 .cal-color-1 {
-  @apply bg-black/10 text-black border-l-2 border-black;
+  @apply bg-zendo-coral/12 text-zendo-ink border-l-4 border-zendo-coral rounded-r-lg;
 }
 .cal-color-2 {
-  @apply bg-neutral-800/10 text-neutral-800 border-l-2 border-neutral-800;
+  @apply bg-zendo-sage/12 text-zendo-ink border-l-4 border-zendo-sage rounded-r-lg;
 }
 .cal-color-3 {
-  @apply bg-neutral-600/10 text-neutral-600 border-l-2 border-neutral-600;
+  @apply bg-zendo-sky/12 text-zendo-ink border-l-4 border-zendo-sky rounded-r-lg;
 }
 .cal-color-4 {
-  @apply bg-neutral-400/10 text-neutral-400 border-l-2 border-neutral-400;
+  @apply bg-zendo-butter/25 text-zendo-ink border-l-4 border-zendo-butter rounded-r-lg;
 }
 .cal-color-5 {
-  @apply bg-neutral-300/10 text-neutral-500 border-l-2 border-neutral-300;
+  @apply bg-zendo-lavender/15 text-zendo-ink border-l-4 border-zendo-lavender rounded-r-lg;
 }
 .cal-color-6 {
-  @apply bg-neutral-200/10 text-neutral-500 border-l-2 border-neutral-200;
+  @apply bg-zendo-mint/15 text-zendo-ink border-l-4 border-zendo-mint rounded-r-lg;
 }
 .cal-color-7 {
-  @apply bg-neutral-100 text-neutral-500 border-l-2 border-neutral-100;
+  @apply bg-zendo-sand text-zendo-ink-light border-l-4 border-zendo-sand rounded-r-lg;
 }
 .cal-color-8 {
-  @apply bg-neutral-50 text-neutral-500 border-l-2 border-neutral-50;
+  @apply bg-white text-zendo-ink-light border-l-4 border-zendo-ink/10 rounded-r-lg;
 }
 
-/* ── Priority dots (monochrome scale) ───────────────────────────────────── */
+/* ── Priority dots (warm scale) ─────────────────────────────────────────── */
 .priority-high {
-  @apply bg-black;
+  @apply bg-zendo-coral;
 }
 .priority-medium {
-  @apply bg-neutral-600;
+  @apply bg-zendo-butter;
 }
 .priority-low {
-  @apply bg-neutral-400;
+  @apply bg-zendo-sage;
 }
 .priority-none {
-  @apply bg-transparent border border-black/10;
+  @apply bg-transparent border border-zendo-ink/15;
 }
 
-/* ── Tag colors (grayscale) ───────────────────────────────────────────── */
+/* ── Tag colors (warm) ──────────────────────────────────────────────────── */
 .tag-gray-1 {
-  @apply border border-black/10 text-neutral-500;
+  @apply border border-zendo-ink/10 text-zendo-ink-light;
 }
 .tag-gray-2 {
-  @apply border border-black/10 text-neutral-400;
+  @apply border border-zendo-ink/10 text-zendo-ink-light/70;
 }
 .tag-gray-3 {
-  @apply border border-black/10 text-neutral-600;
+  @apply border border-zendo-ink/10 text-zendo-ink;
 }
 
-/* ── Receipt unroll animation stagger helpers ───────────────────────────── */
-.stagger-1 {
-  animation-delay: 0.05s;
-}
-.stagger-2 {
-  animation-delay: 0.12s;
-}
-.stagger-3 {
-  animation-delay: 0.22s;
-}
-.stagger-4 {
-  animation-delay: 0.32s;
-}
-.stagger-5 {
-  animation-delay: 0.48s;
-}
-.stagger-6 {
-  animation-delay: 0.6s;
-}
+/* ── Stagger helpers ────────────────────────────────────────────────────── */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.12s; }
+.stagger-3 { animation-delay: 0.22s; }
+.stagger-4 { animation-delay: 0.32s; }
+.stagger-5 { animation-delay: 0.48s; }
+.stagger-6 { animation-delay: 0.6s; }

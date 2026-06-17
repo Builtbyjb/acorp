@@ -225,7 +225,7 @@ function RouteComponent() {
             <h2 className="font-extrabold text-white tracking-tight mb-4" style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", letterSpacing: "-0.03em", lineHeight: "1.05" }}>
               Start free today.
               <br />
-              <span className="text-outline text-white">Upgrade when ready.</span>
+              Upgrade when ready.
             </h2>
             <p className="text-base mb-8 max-w-md mx-auto leading-relaxed text-neutral-500">
               Your first 5 invoices are completely free. No credit card required.

@@ -56,7 +56,7 @@ export default function Hero() {
               Print
             </h1>
             <h1
-              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.85] text-outline text-brand-ink animate-fade-up"
+              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.85] text-brand-ink animate-fade-up"
               style={{ animationDelay: "0.2s" }}
             >
               Money.

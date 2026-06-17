@@ -1,119 +1,168 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { ArrowRight } from '../-icons.tsx'
+import { useState } from 'react'
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router'
+import { Button } from '@shared/ui/components/button'
+import { Input } from '@shared/ui/components/input'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@shared/ui/components/card'
+import { Field, FieldError, FieldGroup, FieldLabel } from '@shared/ui/components/field'
+import { Spinner } from '@shared/ui/components/spinner'
+import { toast } from 'sonner'
+import { ArrowLeft } from 'lucide-react'
+import Logo from '@/components/Logo'
+import { useAuth } from '@/hooks/auth'
 
 export const Route = createFileRoute('/_guest/login')({
+  beforeLoad: async ({ context }) => {
+    const isAuthenticated = context.auth ? await context.auth.authenticate() : false
+    if (isAuthenticated) {
+      throw redirect({ to: '/dashboard' })
+    }
+  },
   component: LoginPage,
 })
 
 function LoginPage() {
+  const navigate = useNavigate()
+  const { login } = useAuth()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
+
+  const validate = () => {
+    const next: typeof errors = {}
+    if (!email.trim() || !email.includes('@')) next.email = 'Enter a valid email address'
+    if (!password.trim()) next.password = 'Password is required'
+    setErrors(next)
+    return Object.keys(next).length === 0
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!validate()) return
+
+    setIsSubmitting(true)
+    try {
+      const ok = await login(email)
+      if (ok) {
+        toast.success('Welcome back!')
+        navigate({ to: '/dashboard' })
+      } else {
+        toast.error('No demo account found. Please sign up first.')
+      }
+    } catch (error) {
+      toast.error('Something went wrong')
+      console.error(error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleDemoLogin = async () => {
+    setEmail('demo@opencomms.dev')
+    setPassword('password')
+    setIsSubmitting(true)
+    try {
+      const ok = await login('demo@opencomms.dev')
+      if (ok) {
+        toast.success('Welcome back!')
+        navigate({ to: '/dashboard' })
+      } else {
+        toast.error('Demo account not found. Sign up to create it.')
+      }
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
-    <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-6 py-16 overflow-hidden">
-      {/* Dot-grid */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: 'radial-gradient(circle, #7F8CAA22 1.5px, transparent 1.5px)',
-          backgroundSize: '28px 28px',
-        }}
-      />
-      {/* Ambient glow */}
-      <div
-        className="absolute -top-32 -right-32 w-96 h-96 rounded-full blur-3xl pointer-events-none"
-        style={{ backgroundColor: '#4382df0e' }}
-      />
-
-      <div className="relative animate-fade-up w-full max-w-sm">
-        {/* Eyebrow */}
-        <div className="text-center mb-8">
-          <Link to="/" className="group inline-flex items-center gap-2 mb-6">
-            <div
-              className="flex h-7 w-7 items-center justify-center rounded-full text-white text-xs font-black transition-transform group-hover:scale-95"
-              style={{ backgroundColor: '#4382df' }}
-            >
-              O
-            </div>
-            <span className="font-bold text-lg tracking-tight" style={{ color: '#0f172a' }}>
-              OpenComms
-            </span>
-          </Link>
-          <p
-            className="text-xs font-bold tracking-[0.25em] uppercase mb-2"
-            style={{ color: '#7F8CAA' }}
-          >
-            Welcome back
-          </p>
-          <h1
-            className="text-3xl font-extrabold tracking-tight"
-            style={{ color: '#0f172a', letterSpacing: '-0.03em' }}
-          >
-            Log in to your workspace
-          </h1>
+    <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16 bg-background">
+      <div className="w-full max-w-sm animate-fade-up">
+        <div className="mb-8 flex justify-center">
+          <Logo />
         </div>
 
-        {/* Card */}
-        <div
-          className="bg-white rounded-3xl p-8"
-          style={{ boxShadow: '0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07' }}
-        >
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-5">
-            <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-xs font-semibold" style={{ color: '#0f172a' }}>
-                Email address
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@company.com"
-                autoComplete="email"
-                className="h-9 rounded-xl"
+        <Card className="w-full border-black/10 rounded-none">
+          <CardHeader>
+            <div className="flex items-center gap-4 mb-2">
+              <ArrowLeft
+                className="h-6 w-6 cursor-pointer hover:scale-110 transition-transform"
+                onClick={() => navigate({ to: '/' })}
               />
+              <CardTitle className="text-xl font-bold">Log in</CardTitle>
             </div>
+            <CardDescription className="text-neutral-500">
+              Log in to your OpenComms workspace
+            </CardDescription>
+          </CardHeader>
 
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-xs font-semibold" style={{ color: '#0f172a' }}>
-                  Password
-                </Label>
-                <a
-                  href="#"
-                  className="text-xs transition-opacity hover:opacity-70"
-                  style={{ color: '#4382df' }}
-                >
-                  Forgot password?
-                </a>
-              </div>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                autoComplete="current-password"
-                className="h-9 rounded-xl"
-              />
+          <CardContent>
+            <form id="login-form" onSubmit={handleSubmit}>
+              <FieldGroup>
+                <Field data-invalid={!!errors.email}>
+                  <FieldLabel htmlFor="email-input">
+                    Email <span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <Input
+                    id="email-input"
+                    type="email"
+                    placeholder="you@company.com"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    aria-invalid={!!errors.email}
+                  />
+                  {errors.email && <FieldError errors={[errors.email]} />}
+                </Field>
+
+                <Field data-invalid={!!errors.password}>
+                  <FieldLabel htmlFor="password-input">
+                    Password <span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <Input
+                    id="password-input"
+                    type="password"
+                    placeholder="••••••••"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    aria-invalid={!!errors.password}
+                  />
+                  {errors.password && <FieldError errors={[errors.password]} />}
+                </Field>
+              </FieldGroup>
+            </form>
+          </CardContent>
+
+          <CardFooter className="bg-white border-t border-black/5 flex-col gap-3">
+            <div className="flex w-full gap-2">
+              <Button type="button" variant="outline" className="flex-1" onClick={() => { setEmail(''); setPassword(''); setErrors({}) }} disabled={isSubmitting}>
+                Reset
+              </Button>
+              <Button type="submit" form="login-form" className="flex-1" disabled={isSubmitting}>
+                {isSubmitting && <Spinner className="mr-2" aria-hidden="true" />}
+                {isSubmitting ? 'Submitting...' : 'Log in'}
+              </Button>
             </div>
+            <Button type="button" variant="ghost" className="w-full" onClick={handleDemoLogin} disabled={isSubmitting}>
+              Demo login
+            </Button>
+          </CardFooter>
+        </Card>
 
-            <button
-              type="submit"
-              className="group w-full inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-90 active:scale-95"
-              style={{ backgroundColor: '#4382df', boxShadow: '0 4px 20px #4382df35' }}
-            >
-              Log in <ArrowRight size={14} />
-            </button>
-          </form>
-        </div>
-
-        <p className="text-center text-sm mt-6" style={{ color: '#7F8CAA' }}>
+        <p className="text-center text-sm mt-6 text-muted-foreground">
           Don&apos;t have an account?{' '}
-          <Link
-            to="/signup"
-            className="font-semibold transition-opacity hover:opacity-70"
-            style={{ color: '#4382df' }}
-          >
+          <Link to="/signup" className="font-semibold text-primary hover:opacity-70">
             Sign up free
           </Link>
         </p>
+
+        <p className="text-center text-xs text-neutral-400 mt-4">
+          By logging in, you agree to our{' '}
+          <Link to="/terms" className="underline hover:text-foreground">Terms of Service</Link>
+          {' '}and{' '}
+          <Link to="/privacy" className="underline hover:text-foreground">Privacy Policy</Link>.
+        </p>
       </div>
-    </div>
+    </main>
   )
 }

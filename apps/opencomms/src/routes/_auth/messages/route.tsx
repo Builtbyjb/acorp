@@ -1,7 +1,9 @@
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { PlusIcon, SearchIcon, SmsIcon, WhatsAppIcon } from '../../-icons.tsx'
+import { useLayout } from '@/hooks/useLayout'
 
 export const Route = createFileRoute('/_auth/messages')({
   component: MessagesLayout,
@@ -21,6 +23,11 @@ const CONVERSATIONS = [
 function initials(n: string) { return n.split(' ').map((w) => w[0]).join('') }
 
 function MessagesLayout() {
+  const { setTitle } = useLayout()
+  useEffect(() => {
+    setTitle('Messages')
+  }, [setTitle])
+
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}

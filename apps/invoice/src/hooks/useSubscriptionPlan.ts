@@ -10,9 +10,12 @@ type Plan = z.infer<typeof SubscriptionPlanSchema>;
 export function useSubscriptionPlan() {
     const { doGET, doPOST } = useFetch();
 
-    const fetchPlan = useCallback(async (currency?: string): Promise<Plan[] | undefined> => {
+    const fetchPlan = useCallback(async (currency?: string, country?: string): Promise<Plan[] | undefined> => {
         try {
-            const queryParams = currency ? `?currency=${encodeURIComponent(currency)}` : "";
+            const params = new URLSearchParams();
+            if (currency) params.set("currency", currency);
+            if (country) params.set("country", country);
+            const queryParams = params.toString() ? `?${params.toString()}` : "";
             const response = await doGET(`/api/v1/invoice/payments/plans/me${queryParams}`);
             if (response instanceof Error) throw response;
 

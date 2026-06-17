@@ -1,9 +1,14 @@
 import { createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
+import type { AuthState } from '@/hooks/auth'
 
-export const router = createRouter({ routeTree })
+export const router = createRouter({
+  routeTree,
+  context: {
+    auth: undefined! as AuthState,
+  },
+})
 
-// Register the router type globally for full type safety across the app.
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router

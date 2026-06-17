@@ -1,8 +1,4 @@
-// ─── Shared Product Data ───────────────────────────────────────────────────────
-// Single source of truth for all ACorp suite products.
-// Consumed by: routes/_guest/index.tsx (landing grid) and routes/_guest/products.tsx (full list).
-
-export interface Product {
+export type Product = {
     id: string;
     name: string;
     tagline: string;
@@ -10,7 +6,7 @@ export interface Product {
     href: string;
     available: boolean;
     features: string[];
-}
+};
 
 export const PRODUCTS: Product[] = [
     {
@@ -32,11 +28,11 @@ export const PRODUCTS: Product[] = [
     {
         id: "zendo",
         name: "Zendo",
-        tagline: "Time & task planning, reimagined",
+        tagline: "Time & task planning, re-imagined",
         available: true,
         description:
             "A focused productivity companion designed to help you structure your day, prioritize ruthlessly, and protect deep work time. Built on the principle that clarity beats complexity — every time.",
-        href: "#",
+        href: "https://zendo.acorp.app",
         features: [
             "Drag-and-drop task scheduling",
             "Time-blocking with focus sessions",
@@ -52,7 +48,7 @@ export const PRODUCTS: Product[] = [
         available: true,
         description:
             "Build genuine, lasting connections with your audience. OpenComms gives businesses and organizations the tools to engage their communities — through structured channels, direct messaging, and thoughtful moderation features.",
-        href: "#",
+        href: "https://opencomms.acorp.app",
         features: [
             "Organized community channels and threads",
             "Announcement broadcasting with engagement metrics",
@@ -68,7 +64,7 @@ export const PRODUCTS: Product[] = [
         available: false,
         description:
             "Lumina turns your ideas into scroll-stopping short-form video in seconds. No crew, no timeline — describe your idea and walk away with a finished, platform-ready video.",
-        href: "#",
+        href: "https://lumina.acorp.app",
         features: [
             "Script to screen in one pass — no editing required",
             "AI voice & music matched to your content's tone",
@@ -85,7 +81,7 @@ export const PRODUCTS: Product[] = [
         available: false,
         description:
             "Insights brings structure to your monitoring and evaluation workflows — from data collection to impact reporting — so your team can focus on what drives results, not spreadsheet wrangling.",
-        href: "#",
+        href: "https://insights.acorp.app",
         features: [
             "Structured data collection from forms, surveys, and imports",
             "Live KPI dashboards with 30+ visualization types",
@@ -102,7 +98,7 @@ export const PRODUCTS: Product[] = [
         available: false,
         description:
             "Create QR codes in seconds, print them, attach to shipments — then scan anywhere to see exactly where every package stands. No app install required, no per-scan fees, ever.",
-        href: "#",
+        href: "https://traqr.acorp.app",
         features: [
             "Instant QR generation for any package or asset",
             "Bulk creation via custom naming patterns and CSV imports",

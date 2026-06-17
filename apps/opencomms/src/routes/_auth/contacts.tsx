@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { PlusIcon, SearchIcon, SmsIcon, WhatsAppIcon } from '../-icons.tsx'
+import { useLayout } from '@/hooks/useLayout'
 
 export const Route = createFileRoute('/_auth/contacts')({
   component: ContactsPage,
@@ -23,6 +25,11 @@ const CONTACTS = [
 function initials(n: string) { return n.split(' ').map((w) => w[0]).join('') }
 
 function ContactsPage() {
+  const { setTitle } = useLayout()
+  useEffect(() => {
+    setTitle('Contacts')
+  }, [setTitle])
+
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}

@@ -44,9 +44,9 @@ export default function CTA() {
                 transition: "all 0.5s ease-out 0.1s",
               }}
             >
-              <span className="text-brand-ink">Ready to get</span>
+              Ready to get
               <br />
-              <span className="text-outline text-brand-ink">paid faster?</span>
+              paid faster?
             </h2>
 
             {/* Subtext */}

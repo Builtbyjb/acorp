@@ -29,14 +29,14 @@ export interface CalEvent {
 }
 
 export const EVENT_COLORS = [
-  "#000000",  // black
-  "#171717",  // neutral-900
-  "#262626",  // neutral-800
-  "#525252",  // neutral-600
-  "#737373",  // neutral-500
-  "#a3a3a3",  // neutral-400
-  "#d4d4d4",  // neutral-300
-  "#e5e5e5",  // neutral-200
+  "#f27a5d",  // coral
+  "#8fb996",  // sage
+  "#7ec8e3",  // sky
+  "#c9b8e8",  // lavender
+  "#9fe2c4",  // mint
+  "#f59e0b",  // amber
+  "#ec4899",  // pink
+  "#6b6560",  // warm ink
 ];
 
 // ─── Store ────────────────────────────────────────────────────

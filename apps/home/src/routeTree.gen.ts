@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as GuestRouteImport } from './routes/_guest'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as SplatRouteImport } from './routes/$'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as GuestIndexRouteImport } from './routes/_guest/index'
 import { Route as GuestTermsOfServiceRouteImport } from './routes/_guest/terms-of-service'
@@ -25,6 +26,11 @@ const GuestRoute = GuestRouteImport.update({
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginIndexRoute = LoginIndexRouteImport.update({
@@ -64,6 +70,7 @@ const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/$': typeof SplatRoute
   '/': typeof GuestIndexRoute
   '/home': typeof AuthenticatedHomeRoute
   '/custom': typeof GuestCustomRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/login/': typeof LoginIndexRoute
 }
 export interface FileRoutesByTo {
+  '/$': typeof SplatRoute
   '/': typeof GuestIndexRoute
   '/home': typeof AuthenticatedHomeRoute
   '/custom': typeof GuestCustomRoute
@@ -83,6 +91,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/$': typeof SplatRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_guest': typeof GuestRouteWithChildren
   '/_authenticated/home': typeof AuthenticatedHomeRoute
@@ -96,6 +105,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/$'
     | '/'
     | '/home'
     | '/custom'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
     | '/login/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/$'
     | '/'
     | '/home'
     | '/custom'
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
     | '/login'
   id:
     | '__root__'
+    | '/$'
     | '/_authenticated'
     | '/_guest'
     | '/_authenticated/home'
@@ -126,6 +138,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  SplatRoute: typeof SplatRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   GuestRoute: typeof GuestRouteWithChildren
   LoginIndexRoute: typeof LoginIndexRoute
@@ -145,6 +158,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login/': {
@@ -230,6 +250,7 @@ const GuestRouteChildren: GuestRouteChildren = {
 const GuestRouteWithChildren = GuestRoute._addFileChildren(GuestRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  SplatRoute: SplatRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   GuestRoute: GuestRouteWithChildren,
   LoginIndexRoute: LoginIndexRoute,

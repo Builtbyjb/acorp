@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { PlusIcon, SmsIcon, WhatsAppIcon } from '../-icons.tsx'
+import { useLayout } from '@/hooks/useLayout'
 
 export const Route = createFileRoute('/_auth/campaigns')({
   component: CampaignsPage,
@@ -31,6 +33,11 @@ const SUMMARY = [
 ]
 
 function CampaignsPage() {
+  const { setTitle } = useLayout()
+  useEffect(() => {
+    setTitle('Campaigns')
+  }, [setTitle])
+
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}

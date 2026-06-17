@@ -12,7 +12,6 @@ function createMockContext(options: {
     headers?: Record<string, string>;
 } = {}) {
     const env = options.env || createMockEnv();
-    const cookies = options.cookies || {};
     const headers = options.headers || {};
 
     return {

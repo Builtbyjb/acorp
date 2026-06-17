@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { PRODUCTS } from "@/lib/products";
-import { Button } from "@shared/ui/components/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@shared/ui/components/card";
+import { PRODUCTS } from "@/lib/store/products";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default function ProductsSection() {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ export default function ProductsSection() {
     <section id="products">
       <div className="flex items-end justify-between mb-12">
         <div>
-          <p className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase mb-2.5" style={{ color: "#737373" }}>
+          <p className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase mb-2.5 text-muted-foreground">
             Our Products
           </p>
           <h2 className="text-4xl font-bold tracking-tight text-black">Built for what matters.</h2>
@@ -24,32 +25,25 @@ export default function ProductsSection() {
       {/* Product cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {PRODUCTS.map((product, idx) => (
-          <Card
-            key={idx}
-            className="animate-fade-up"
-            style={{ animationDelay: `${0.1 + idx * 0.1}s` }}
-          >
+          <Card key={idx} className={`animate-fade-up animate-[${0.32 + idx * 0.1}s]`}>
             <CardHeader>
               <CardTitle>{product.name}</CardTitle>
               <CardDescription>{product.tagline}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="leading-relaxed" style={{ color: "#737373" }}>{product.description}</p>
+              <p className="leading-relaxed text-muted-foreground">{product.description}</p>
             </CardContent>
             <CardFooter>
               <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-1.5">
-                  <span
-                    className="inline-flex items-center px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-                    style={
-                      product.available
-                        ? { backgroundColor: "#000000", color: "#ffffff" }
-                        : { backgroundColor: "#f5f5f5", color: "#737373" }
-                    }
-                  >
-                    {product.available ? "Available" : "Coming soon"}
-                  </span>
-                </div>
+                <span>
+                  {product.available ? (
+                    <Badge className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300">
+                      Available
+                    </Badge>
+                  ) : (
+                    <Badge className="bg-neutral-600">Coming soon</Badge>
+                  )}
+                </span>
                 <div>
                   <Link
                     to={product.href}

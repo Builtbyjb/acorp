@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { PlusIcon, CampaignsIcon, ContactsIcon, MessagesIcon, SmsIcon, WhatsAppIcon } from '../-icons.tsx'
+import { useLayout } from '@/hooks/useLayout'
 
 export const Route = createFileRoute('/_auth/dashboard')({
   component: DashboardPage,
@@ -47,6 +49,11 @@ function ChannelPill({ channel }: { channel: 'SMS' | 'WhatsApp' }) {
 }
 
 function DashboardPage() {
+  const { setTitle } = useLayout()
+  useEffect(() => {
+    setTitle('Dashboard')
+  }, [setTitle])
+
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}

@@ -38,17 +38,17 @@ export function PomodoroMiniWidget() {
     };
   }, [state, tick]);
 
-  // Black for focus, neutral for break
-  const ringColor = mode === "focus" ? "#000000" : "#737373";
+  // Coral for focus, sage for break
+  const ringColor = mode === "focus" ? "#f27a5d" : "#8fb996";
 
   return (
     <button
       onClick={() => navigate({ to: "/app/pomodoro" })}
-      className="flex items-center gap-1.5 px-2 py-1 border border-black/10 transition-all"
+      className="flex items-center gap-1.5 px-2 py-1 rounded-full border border-zendo-ink/10 bg-white transition-all hover:border-zendo-coral/30"
       title="Go to Pomodoro timer"
     >
       <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`} className="-rotate-90">
-        <circle cx={SIZE / 2} cy={SIZE / 2} r={R} fill="none" stroke="#e5e5e5" strokeWidth="2.5" />
+        <circle cx={SIZE / 2} cy={SIZE / 2} r={R} fill="none" stroke="#f7f1ea" strokeWidth="2.5" />
         <circle
           cx={SIZE / 2} cy={SIZE / 2} r={R}
           fill="none"
@@ -59,7 +59,7 @@ export function PomodoroMiniWidget() {
           style={{ transition: "stroke-dashoffset 0.5s linear" }}
         />
       </svg>
-      <span className="text-xs font-mono text-black tabular-nums min-w-[36px]">
+      <span className="text-xs font-mono text-zendo-ink tabular-nums min-w-[36px]">
         {formatTime(secondsLeft)}
       </span>
     </button>

@@ -1,10 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { PRODUCTS } from "@/lib/products";
+import { PRODUCTS } from "@/lib/store/products";
 import { ArrowRight } from "lucide-react";
 import CustomBanner from "@/components/landing/CustomBanner";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@shared/ui/components/card";
-import { Button } from "@shared/ui/components/button";
-import HeadingTwo from "@shared/ui/custom-components/HeadingTwo";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,9 +12,9 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@shared/ui/components/breadcrumb";
+} from "@/components/ui/breadcrumb";
 
-function ProductsPage() {
+function RouteComponent() {
   return (
     <div className="space-y-16">
       <PageHeader />
@@ -39,9 +39,9 @@ function PageHeader() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <HeadingTwo title="All Products" />
+      <h2 className="animate-fade-up font-bold tracking-tight mb-5 text-6xl animate-[0.12s] ">All Products</h2>
 
-      <p className="animate-fade-up max-w-xl leading-relaxed" style={{ color: "#737373", animationDelay: "0.22s" }}>
+      <p className="animate-fade-up max-w-xl leading-relaxed text-muted-foreground animate-[0.22s]">
         Each tool is designed to be exceptional on its own — and even better when used together as part of the ACorp
         suite.
       </p>
@@ -55,35 +55,28 @@ function ProductList() {
     <section>
       <div className="flex flex-col gap-4">
         {PRODUCTS.map((product, idx) => (
-          <Card
-            key={product.id}
-            className="animate-fade-up"
-            style={{ animationDelay: `${0.1 + idx * 0.1}s` }}
-          >
+          <Card key={product.id} className={`animate-fade-up animate-[${0.1 + idx * 0.1}s]`}>
             <CardHeader>
               <div className="flex items-center gap-1.5 mb-4">
-                <span
-                  className="inline-flex items-center px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-                  style={
-                    product.available
-                      ? { backgroundColor: "#000000", color: "#ffffff" }
-                      : { backgroundColor: "#f5f5f5", color: "#737373" }
-                  }
-                >
-                  {product.available ? "Available" : "Coming soon"}
+                <span>
+                  {product.available ? (
+                    <Badge className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300">
+                      Available
+                    </Badge>
+                  ) : (
+                    <Badge className="bg-neutral-600">Coming soon</Badge>
+                  )}
                 </span>
               </div>
               <CardTitle>{product.name}</CardTitle>
               <CardDescription>{product.tagline}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm leading-relaxed mb-8 max-w-lg" style={{ color: "#737373" }}>
-                {product.description}
-              </p>
+              <p className="text-sm leading-relaxed mb-8 max-w-lg text-muted-foreground">{product.description}</p>
 
               {/* Features panel */}
               <div className="bg-white border border-black/10 p-6">
-                <p className="text-[10px] font-mono font-bold tracking-widest uppercase mb-5" style={{ color: "#737373" }}>
+                <p className="text-[10px] font-mono font-bold tracking-widest uppercase mb-5 text-muted-foreground">
                   Key Features
                 </p>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -112,9 +105,5 @@ function ProductList() {
 }
 
 export const Route = createFileRoute("/_guest/products")({
-  component: () => (
-    <>
-      <ProductsPage />
-    </>
-  ),
+  component: RouteComponent,
 });

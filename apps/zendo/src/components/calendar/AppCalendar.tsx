@@ -1,11 +1,9 @@
 import { useState, useCallback, useMemo } from "react";
 import { Calendar, dateFnsLocalizer, Views } from "react-big-calendar";
-import * as dragAndDropModule from "react-big-calendar/lib/addons/dragAndDrop";
-const withDragAndDrop = (dragAndDropModule as any).default || dragAndDropModule;
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import { format, parse, startOfWeek, getDay, addDays, addWeeks, addMonths, addYears, isBefore, isAfter } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { ChevronLeft, ChevronRight, CalendarDays, List, LayoutGrid, Clock, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ResponsiveModal } from "@/components/ui/ResponsiveModal";
@@ -95,29 +93,29 @@ function CalendarToolbar({ date, view, onNavigate, onView, onAdd, showHolidays, 
   );
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-black/10">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-zendo-ink/10">
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="icon" className="h-8 w-8 rounded-none border-black/10 text-black" onClick={() => onNavigate("PREV")}>
+        <button onClick={() => onNavigate("PREV")} className="h-8 w-8 rounded-lg flex items-center justify-center border border-zendo-ink/10 bg-white text-zendo-ink-light hover:text-zendo-ink transition-colors">
           <ChevronLeft className="h-4 w-4" />
-        </Button>
-        <Button size="sm" className="rounded-none text-xs bg-black text-white hover:bg-black/90" onClick={() => onNavigate("TODAY")}>
+        </button>
+        <button onClick={() => onNavigate("TODAY")} className="px-3 py-1.5 text-xs font-bold bg-zendo-ink text-white rounded-lg hover:bg-zendo-ink/90 transition-colors">
           Today
-        </Button>
-        <Button variant="outline" size="icon" className="h-8 w-8 rounded-none border-black/10 text-black" onClick={() => onNavigate("NEXT")}>
+        </button>
+        <button onClick={() => onNavigate("NEXT")} className="h-8 w-8 rounded-lg flex items-center justify-center border border-zendo-ink/10 bg-white text-zendo-ink-light hover:text-zendo-ink transition-colors">
           <ChevronRight className="h-4 w-4" />
-        </Button>
-        <span className="text-sm font-semibold ml-2 font-mono uppercase tracking-wider">{label}</span>
+        </button>
+        <span className="text-sm font-semibold ml-2 text-zendo-ink">{label}</span>
       </div>
 
       <div className="flex items-center gap-2 flex-wrap">
         {/* Holiday toggle */}
         <div className="flex items-center gap-1.5">
-          <Switch id="holidays" checked={showHolidays} onCheckedChange={onToggleHolidays} className="scale-75 rounded-none" />
-          <Label htmlFor="holidays" className="text-xs text-black/60 cursor-pointer font-mono uppercase tracking-wider">Holidays</Label>
+          <Switch id="holidays" checked={showHolidays} onCheckedChange={onToggleHolidays} className="scale-75" />
+          <Label htmlFor="holidays" className="text-xs text-zendo-ink-light cursor-pointer">Holidays</Label>
         </div>
 
         {/* View switcher */}
-        <div className="flex rounded-none border border-black/10 overflow-hidden">
+        <div className="flex rounded-xl border border-zendo-ink/10 overflow-hidden bg-white p-0.5">
           {([
             { v: "month", icon: LayoutGrid, label: "Month" },
             { v: "week",  icon: CalendarDays, label: "Week" },
@@ -129,8 +127,8 @@ function CalendarToolbar({ date, view, onNavigate, onView, onAdd, showHolidays, 
               onClick={() => onView(v)}
               title={label}
               className={cn(
-                "px-2.5 py-1.5 text-xs font-medium transition-colors",
-                view === v ? "bg-black text-white" : "text-black/60 hover:text-black hover:bg-black/5"
+                "p-1.5 rounded-lg text-xs font-medium transition-colors",
+                view === v ? "bg-zendo-coral text-white" : "text-zendo-ink-light hover:text-zendo-ink hover:bg-zendo-ink/5"
               )}
             >
               <Icon className="h-3.5 w-3.5" />
@@ -138,9 +136,9 @@ function CalendarToolbar({ date, view, onNavigate, onView, onAdd, showHolidays, 
           ))}
         </div>
 
-        <Button size="sm" className="rounded-none gap-1 h-8 bg-black text-white hover:bg-black/90" onClick={onAdd}>
+        <button onClick={onAdd} className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-bold bg-zendo-coral text-white rounded-lg hover:bg-zendo-coral/90 transition-colors shadow-sm shadow-zendo-coral/20">
           <Plus className="h-3.5 w-3.5" /> Event
-        </Button>
+        </button>
       </div>
     </div>
   );
@@ -214,7 +212,7 @@ export function AppCalendar() {
         start: d,
         end: d,
         allDay: true,
-        resource: { color: "#525252" },
+        resource: { color: "#6b6560" },
       });
     }
 
@@ -229,7 +227,7 @@ export function AppCalendar() {
             start: d,
             end: d,
             allDay: true,
-            resource: { color: "#737373", isHoliday: true },
+            resource: { color: "#6b6560", isHoliday: true },
           });
         }
       }
@@ -240,16 +238,16 @@ export function AppCalendar() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const eventStyleGetter = useCallback((event: any) => {
-    const color = event.resource?.color ?? "#000000";
+    const color = event.resource?.color ?? "#f27a5d";
     const isHoliday = event.resource?.isHoliday;
     return {
       style: {
-        backgroundColor: color + (isHoliday ? "15" : "20"),
-        color: isHoliday ? "#737373" : color,
-        borderLeft: `2px solid ${color}`,
-        borderRadius: "0px",
+        backgroundColor: color + (isHoliday ? "15" : "18"),
+        color: isHoliday ? "#6b6560" : color,
+        borderLeft: `3px solid ${color}`,
+        borderRadius: "6px",
         fontSize: "11px",
-        padding: "1px 4px",
+        padding: "2px 6px",
         opacity: 0.95,
       },
     };
@@ -301,7 +299,7 @@ export function AppCalendar() {
   }, [editingEvent, deleteEvent]);
 
   return (
-    <div className="flex flex-col h-full px-4 py-6">
+    <div className="flex flex-col h-full">
       <CalendarToolbar
         date={calDate}
         view={view as RBCView}
@@ -321,8 +319,8 @@ export function AppCalendar() {
       />
 
       <div
-        className="flex-1 min-h-0 [&_.rbc-calendar]:bg-transparent [&_.rbc-toolbar]:hidden [&_.rbc-header]:text-xs [&_.rbc-header]:text-black/60 [&_.rbc-header]:font-semibold [&_.rbc-header]:uppercase [&_.rbc-header]:tracking-wider [&_.rbc-header]:py-2 [&_.rbc-today]:bg-black/[0.02] [&_.rbc-off-range-bg]:bg-black/5 [&_.rbc-event]:cursor-pointer [&_.rbc-time-content]:border-black/10 [&_.rbc-time-gutter]:text-xs [&_.rbc-time-gutter]:text-black/60 [&_.rbc-current-time-indicator]:bg-black [&_.rbc-show-more]:text-black [&_.rbc-show-more]:text-xs [&_.rbc-month-view]:rounded-none [&_.rbc-month-view]:border [&_.rbc-month-view]:border-black/10 [&_.rbc-agenda-table]:w-full [&_.rbc-agenda-date-cell]:text-black/60 [&_.rbc-agenda-time-cell]:text-black/60 [&_.rbc-agenda-event-cell]:text-sm [&_.rbc-row-bg_.rbc-day-bg]:border-black/10 [&_.rbc-row]:border-black/10 [&_.rbc-day-slot_.rbc-time-slot]:border-black/10"
-        style={{ height: "calc(100vh - 200px)" }}
+        className="flex-1 min-h-0 bg-white border border-zendo-ink/10 rounded-2xl p-4 shadow-sm [&_.rbc-calendar]:bg-transparent [&_.rbc-toolbar]:hidden [&_.rbc-header]:text-xs [&_.rbc-header]:text-zendo-ink-light [&_.rbc-header]:font-semibold [&_.rbc-header]:uppercase [&_.rbc-header]:tracking-wider [&_.rbc-header]:py-2 [&_.rbc-today]:bg-zendo-coral/[0.03] [&_.rbc-off-range-bg]:bg-zendo-ink/5 [&_.rbc-event]:cursor-pointer [&_.rbc-time-content]:border-zendo-ink/10 [&_.rbc-time-gutter]:text-xs [&_.rbc-time-gutter]:text-zendo-ink-light [&_.rbc-current-time-indicator]:bg-zendo-coral [&_.rbc-show-more]:text-zendo-coral [&_.rbc-show-more]:text-xs [&_.rbc-month-view]:rounded-xl [&_.rbc-month-view]:border [&_.rbc-month-view]:border-zendo-ink/10 [&_.rbc-agenda-table]:w-full [&_.rbc-agenda-date-cell]:text-zendo-ink-light [&_.rbc-agenda-time-cell]:text-zendo-ink-light [&_.rbc-agenda-event-cell]:text-sm [&_.rbc-row-bg_.rbc-day-bg]:border-zendo-ink/10 [&_.rbc-row]:border-zendo-ink/10 [&_.rbc-day-slot_.rbc-time-slot]:border-zendo-ink/10"
+        style={{ height: "calc(100vh - 220px)" }}
       >
         <DragCalendar
           localizer={localizer}

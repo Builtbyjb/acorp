@@ -1,131 +1,193 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { ArrowRight } from '../-icons.tsx'
+import { useState } from 'react'
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router'
+import { Button } from '@shared/ui/components/button'
+import { Input } from '@shared/ui/components/input'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@shared/ui/components/card'
+import { Field, FieldError, FieldGroup, FieldLabel } from '@shared/ui/components/field'
+import { Spinner } from '@shared/ui/components/spinner'
+import { toast } from 'sonner'
+import { ArrowLeft } from 'lucide-react'
+import Logo from '@/components/Logo'
+import { useAuth } from '@/hooks/auth'
 
 export const Route = createFileRoute('/_guest/signup')({
+  beforeLoad: async ({ context }) => {
+    const isAuthenticated = context.auth ? await context.auth.authenticate() : false
+    if (isAuthenticated) {
+      throw redirect({ to: '/dashboard' })
+    }
+  },
   component: SignupPage,
 })
 
 function SignupPage() {
+  const navigate = useNavigate()
+  const { signup } = useAuth()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [form, setForm] = useState({
+    firstname: '',
+    lastname: '',
+    organizationName: '',
+    email: '',
+    password: '',
+  })
+  const [errors, setErrors] = useState<Partial<Record<keyof typeof form, string>>>({})
+
+  const validate = () => {
+    const next: Partial<typeof errors> = {}
+    if (form.firstname.trim().length < 2) next.firstname = 'First name is too short'
+    if (form.lastname.trim().length < 2) next.lastname = 'Last name is too short'
+    if (form.organizationName.trim().length < 2) next.organizationName = 'Organization name is too short'
+    if (!form.email.trim() || !form.email.includes('@')) next.email = 'Enter a valid email address'
+    if (form.password.length < 6) next.password = 'Password must be at least 6 characters'
+    setErrors(next)
+    return Object.keys(next).length === 0
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!validate()) return
+
+    setIsSubmitting(true)
+    try {
+      const ok = await signup(form)
+      if (ok) {
+        toast.success('Account created!')
+        navigate({ to: '/dashboard' })
+      } else {
+        toast.error('An account with this email already exists.')
+      }
+    } catch (error) {
+      toast.error('Something went wrong')
+      console.error(error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
-    <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-6 py-16 overflow-hidden">
-      {/* Dot-grid */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: 'radial-gradient(circle, #7F8CAA22 1.5px, transparent 1.5px)',
-          backgroundSize: '28px 28px',
-        }}
-      />
-      {/* Ambient glow */}
-      <div
-        className="absolute -top-32 -right-32 w-96 h-96 rounded-full blur-3xl pointer-events-none"
-        style={{ backgroundColor: '#4382df0e' }}
-      />
-
-      <div className="relative animate-fade-up w-full max-w-sm">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link to="/" className="group inline-flex items-center gap-2 mb-6">
-            <div
-              className="flex h-7 w-7 items-center justify-center rounded-full text-white text-xs font-black transition-transform group-hover:scale-95"
-              style={{ backgroundColor: '#4382df' }}
-            >
-              O
-            </div>
-            <span className="font-bold text-lg tracking-tight" style={{ color: '#0f172a' }}>
-              OpenComms
-            </span>
-          </Link>
-          <p
-            className="text-xs font-bold tracking-[0.25em] uppercase mb-2"
-            style={{ color: '#7F8CAA' }}
-          >
-            Free 14-day trial · No card required
-          </p>
-          <h1
-            className="text-3xl font-extrabold tracking-tight"
-            style={{ color: '#0f172a', letterSpacing: '-0.03em' }}
-          >
-            Create your account
-          </h1>
+    <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16 bg-background">
+      <div className="w-full max-w-sm animate-fade-up">
+        <div className="mb-8 flex justify-center">
+          <Logo />
         </div>
 
-        {/* Card */}
-        <div
-          className="bg-white rounded-3xl p-8"
-          style={{ boxShadow: '0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07' }}
-        >
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="first-name" className="text-xs font-semibold" style={{ color: '#0f172a' }}>
-                  First name
-                </Label>
-                <Input id="first-name" placeholder="Jane" autoComplete="given-name" className="h-9 rounded-xl" />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="last-name" className="text-xs font-semibold" style={{ color: '#0f172a' }}>
-                  Last name
-                </Label>
-                <Input id="last-name" placeholder="Smith" autoComplete="family-name" className="h-9 rounded-xl" />
-              </div>
+        <Card className="w-full border-black/10 rounded-none">
+          <CardHeader>
+            <div className="flex items-center gap-4 mb-2">
+              <ArrowLeft
+                className="h-6 w-6 cursor-pointer hover:scale-110 transition-transform"
+                onClick={() => navigate({ to: '/' })}
+              />
+              <CardTitle className="text-xl font-bold">Sign up</CardTitle>
             </div>
+            <CardDescription className="text-neutral-500">
+              Create your OpenComms workspace
+            </CardDescription>
+          </CardHeader>
 
-            <div className="space-y-1.5">
-              <Label htmlFor="org-name" className="text-xs font-semibold" style={{ color: '#0f172a' }}>
-                Organisation name
-              </Label>
-              <Input id="org-name" placeholder="Acme Corp" autoComplete="organization" className="h-9 rounded-xl" />
-            </div>
+          <CardContent>
+            <form id="signup-form" onSubmit={handleSubmit}>
+              <FieldGroup>
+                <div className="grid grid-cols-2 gap-3">
+                  <Field data-invalid={!!errors.firstname}>
+                    <FieldLabel htmlFor="firstname-input">
+                      First name <span className="text-destructive">*</span>
+                    </FieldLabel>
+                    <Input
+                      id="firstname-input"
+                      placeholder="Jane"
+                      autoComplete="given-name"
+                      value={form.firstname}
+                      onChange={(e) => setForm((f) => ({ ...f, firstname: e.target.value }))}
+                    />
+                    {errors.firstname && <FieldError errors={[errors.firstname]} />}
+                  </Field>
 
-            <div className="space-y-1.5">
-              <Label htmlFor="signup-email" className="text-xs font-semibold" style={{ color: '#0f172a' }}>
-                Work email
-              </Label>
-              <Input id="signup-email" type="email" placeholder="you@company.com" autoComplete="email" className="h-9 rounded-xl" />
-            </div>
+                  <Field data-invalid={!!errors.lastname}>
+                    <FieldLabel htmlFor="lastname-input">
+                      Last name <span className="text-destructive">*</span>
+                    </FieldLabel>
+                    <Input
+                      id="lastname-input"
+                      placeholder="Smith"
+                      autoComplete="family-name"
+                      value={form.lastname}
+                      onChange={(e) => setForm((f) => ({ ...f, lastname: e.target.value }))}
+                    />
+                    {errors.lastname && <FieldError errors={[errors.lastname]} />}
+                  </Field>
+                </div>
 
-            <div className="space-y-1.5">
-              <Label htmlFor="signup-password" className="text-xs font-semibold" style={{ color: '#0f172a' }}>
-                Password
-              </Label>
-              <Input id="signup-password" type="password" placeholder="At least 8 characters" autoComplete="new-password" className="h-9 rounded-xl" />
-            </div>
+                <Field data-invalid={!!errors.organizationName}>
+                  <FieldLabel htmlFor="org-input">
+                    Organisation name <span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <Input
+                    id="org-input"
+                    placeholder="Acme Corp"
+                    autoComplete="organization"
+                    value={form.organizationName}
+                    onChange={(e) => setForm((f) => ({ ...f, organizationName: e.target.value }))}
+                  />
+                  {errors.organizationName && <FieldError errors={[errors.organizationName]} />}
+                </Field>
 
-            <p className="text-xs leading-relaxed" style={{ color: '#7F8CAA' }}>
-              By signing up you agree to our{' '}
-              <Link to="/terms" className="font-medium transition-opacity hover:opacity-70" style={{ color: '#4382df' }}>
-                Terms of Service
-              </Link>
-              {' '}and{' '}
-              <Link to="/privacy" className="font-medium transition-opacity hover:opacity-70" style={{ color: '#4382df' }}>
-                Privacy Policy
-              </Link>.
-            </p>
+                <Field data-invalid={!!errors.email}>
+                  <FieldLabel htmlFor="email-input">
+                    Work email <span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <Input
+                    id="email-input"
+                    type="email"
+                    placeholder="you@company.com"
+                    autoComplete="email"
+                    value={form.email}
+                    onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                  />
+                  {errors.email && <FieldError errors={[errors.email]} />}
+                </Field>
 
-            <button
-              type="submit"
-              className="group w-full inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-90 active:scale-95"
-              style={{ backgroundColor: '#4382df', boxShadow: '0 4px 20px #4382df35' }}
-            >
-              Create account <ArrowRight size={14} />
-            </button>
-          </form>
-        </div>
+                <Field data-invalid={!!errors.password}>
+                  <FieldLabel htmlFor="password-input">
+                    Password <span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <Input
+                    id="password-input"
+                    type="password"
+                    placeholder="At least 6 characters"
+                    autoComplete="new-password"
+                    value={form.password}
+                    onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+                  />
+                  {errors.password && <FieldError errors={[errors.password]} />}
+                </Field>
+              </FieldGroup>
+            </form>
+          </CardContent>
 
-        <p className="text-center text-sm mt-6" style={{ color: '#7F8CAA' }}>
+          <CardFooter className="bg-white border-t border-black/5 flex-col gap-3">
+            <Button type="submit" form="signup-form" className="w-full" disabled={isSubmitting}>
+              {isSubmitting && <Spinner className="mr-2" aria-hidden="true" />}
+              {isSubmitting ? 'Creating account...' : 'Create account'}
+            </Button>
+          </CardFooter>
+        </Card>
+
+        <p className="text-center text-sm mt-6 text-muted-foreground">
           Already have an account?{' '}
-          <Link
-            to="/login"
-            className="font-semibold transition-opacity hover:opacity-70"
-            style={{ color: '#4382df' }}
-          >
+          <Link to="/login" className="font-semibold text-primary hover:opacity-70">
             Log in
           </Link>
         </p>
+
+        <p className="text-center text-xs text-neutral-400 mt-4">
+          By signing up, you agree to our{' '}
+          <Link to="/terms" className="underline hover:text-foreground">Terms of Service</Link>
+          {' '}and{' '}
+          <Link to="/privacy" className="underline hover:text-foreground">Privacy Policy</Link>.
+        </p>
       </div>
-    </div>
+    </main>
   )
 }

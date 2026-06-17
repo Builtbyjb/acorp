@@ -1,9 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { SmsIcon, WhatsAppIcon, SendIcon } from '../../-icons.tsx'
+import { useLayout } from '@/hooks/useLayout'
 
 export const Route = createFileRoute('/_auth/messages/$conversationId')({
   component: ConversationPage,
@@ -54,9 +55,14 @@ function getFallback(id: string) {
 function initials(n: string) { return n.split(' ').map((w) => w[0]).join('') }
 
 function ConversationPage() {
+  const { setTitle } = useLayout()
   const { conversationId } = Route.useParams()
   const conv = MOCK[conversationId] ?? getFallback(conversationId)
   const [draft, setDraft] = useState('')
+
+  useEffect(() => {
+    setTitle(conv.name)
+  }, [setTitle, conv.name])
 
   const isWA = conv.channel === 'wa'
   const ChannelIcon = isWA ? WhatsAppIcon : SmsIcon

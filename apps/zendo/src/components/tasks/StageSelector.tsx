@@ -23,21 +23,22 @@ export function StageSelector({ stageId, onChange }: Props) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-bold uppercase tracking-wider border border-black/10 text-neutral-500 hover:text-black hover:border-black/30 transition-colors bg-white">
+        <button className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider border border-zendo-ink/10 text-zendo-ink-light hover:text-zendo-ink hover:border-zendo-coral/30 transition-colors bg-white rounded-full">
+          <span className="h-2 w-2 rounded-full flex-shrink-0" style={{ backgroundColor: current.color }} />
           {current.name}
           <ChevronDown className="h-3 w-3" />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="rounded-none border border-black/10">
+      <DropdownMenuContent align="start" className="rounded-xl border border-zendo-ink/10 bg-white">
         {stages.map((stage) => (
           <DropdownMenuItem
             key={stage.id}
             onClick={() => onChange(stage.id)}
-            className="gap-2 rounded-none"
+            className="gap-2 rounded-lg cursor-pointer"
           >
-            <span className="h-2 w-2 flex-shrink-0 bg-neutral-500" />
+            <span className="h-2 w-2 rounded-full flex-shrink-0" style={{ backgroundColor: stage.color }} />
             {stage.name}
-            {stage.id === stageId && <span className="ml-auto text-xs text-neutral-500">✓</span>}
+            {stage.id === stageId && <span className="ml-auto text-xs text-zendo-ink-light">✓</span>}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
@@ -49,7 +50,8 @@ export function StageBadge({ stageId }: { stageId: string }) {
   const stage = useTaskStore((s) => s.stages.find((st) => st.id === stageId));
   if (!stage) return null;
   return (
-    <span className="inline-flex items-center px-2 py-0 text-[10px] font-bold uppercase tracking-wider border border-black/10 text-neutral-500 bg-white">
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider border border-zendo-ink/10 text-zendo-ink-light bg-white rounded-full">
+      <span className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: stage.color }} />
       {stage.name}
     </span>
   );

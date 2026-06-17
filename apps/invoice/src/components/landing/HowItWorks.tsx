@@ -53,9 +53,7 @@ export default function HowItWorks() {
               transition: "all 0.5s ease-out 0.1s",
             }}
           >
-            From zero to paid in{" "}
-            <span className="text-outline text-brand-ink">four</span>{" "}
-            steps.
+            From zero to paid in four steps.
           </h2>
         </div>
 

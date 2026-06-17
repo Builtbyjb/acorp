@@ -40,11 +40,11 @@ export function LoginPage() {
         />
       )}
 
-      <p className="text-sm text-center text-neutral-500">
+      <p className="text-sm text-center text-zendo-ink-light">
         Don't have an account?{" "}
         <Link
           to="/signup"
-          className="font-semibold text-black transition-opacity hover:opacity-70"
+          className="font-semibold text-zendo-ink hover:text-zendo-coral transition-colors"
         >
           Sign up
         </Link>
