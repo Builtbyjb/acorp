@@ -98,7 +98,7 @@ function AuthenticatedLayout() {
       />
       <SidebarInset>
         <header className="flex items-center gap-2 ml-4 mt-4">
-          <SidebarTrigger className="h-12 w-12 bg-accent hover:bg-accent" size={"icon-lg"} />
+          <SidebarTrigger className="h-12 w-12 bg-accent" size={"icon-lg"} />
           <Separator orientation="vertical" />
           <Header title={title} />
         </header>

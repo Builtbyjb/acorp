@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { pdf } from "@react-pdf/renderer";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,6 +27,7 @@ function RouteComponent() {
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
+  const router = useRouter();
   const { user } = useAuth();
   const { doGET } = useFetch();
   const { setTitle } = useLayout();
@@ -127,7 +128,7 @@ function RouteComponent() {
             />
           )}
           <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-            <Button variant="ghost" onClick={() => navigate({ to: `/clients/${clientId}` })} className="w-fit">
+            <Button variant="ghost" onClick={() => router.history.back()} className="w-fit">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back
             </Button>

@@ -54,7 +54,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
   const isActive = (url: string) => currentPath === url || (url !== "/dashboard" && currentPath.startsWith(url));
 
   return (
-    <Sidebar variant="inset" className="bg-[#171717] border-r border-white/10" {...props}>
+    <Sidebar variant="inset" className="bg-black border-r border-white/10" {...props}>
       <SidebarHeader className="pb-0">
         <SidebarMenu>
           <SidebarMenuItem
