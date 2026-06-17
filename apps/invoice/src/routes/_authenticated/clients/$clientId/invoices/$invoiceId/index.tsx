@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { pdf } from "@react-pdf/renderer";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Button } from "@shared/ui/components//button";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";

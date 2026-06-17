@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "@shared/ui/components/button";
+import { Button } from "@/components/ui/button";
 import { Mail, MapPin, Phone, Plus, UserCircle, ArrowLeft } from "lucide-react";
 import InvoicesTable from "@/components/InvoicesTable";
 import type { Client } from "@/lib/types";

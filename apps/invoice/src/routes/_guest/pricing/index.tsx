@@ -12,7 +12,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import HeadingTwo from "@shared/ui/custom-components/HeadingTwo";
 
 type Plan = z.infer<typeof SubscriptionPlanSchema>;
 
@@ -74,7 +73,9 @@ function RouteComponent() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <HeadingTwo title="Simple, transparent pricing." />
+        <h2 className="animate-fade-up font-bold tracking-tight mb-5 text-6xl animate-[0.12]">
+          Simple, transparent pricing.
+        </h2>
 
         <p className="animate-fade-up max-w-xl leading-relaxed mt-4 text-neutral-500">
           Start free, upgrade when you need to. No hidden fees, no lock-in, ever.

@@ -1,4 +1,4 @@
-import { Field, FieldError, FieldLabel, FieldDescription } from "@shared/ui/components/field";
+import { Field, FieldError, FieldLabel, FieldDescription } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
 type ImageUploadFieldProps = {

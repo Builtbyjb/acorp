@@ -1,4 +1,4 @@
-import { Field, FieldLabel, FieldError } from "@shared/ui/components/field";
+import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { SelectData } from "@/lib/types";
 

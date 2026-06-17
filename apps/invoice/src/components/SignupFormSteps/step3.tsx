@@ -1,4 +1,4 @@
-import { Field, FieldError, FieldLabel } from "@shared/ui/components/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import SelectField from "@/components/Form/SelectField";
 import { COUNTRIES } from "@/lib/constant";

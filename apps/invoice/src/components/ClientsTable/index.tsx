@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@shared/ui/components/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,7 +16,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@shared/ui/components/alert-dialog";
+} from "@/components/ui/alert-dialog";
 import { MoreHorizontal, Pencil, Trash2, Mail, Phone, Eye } from "lucide-react";
 import { PaginationBar } from "@/components/PaginationBar";
 import type { Client } from "@/lib/types";

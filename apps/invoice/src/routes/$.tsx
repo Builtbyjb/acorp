@@ -1,5 +1,5 @@
 import { createFileRoute, useRouter, useNavigate } from "@tanstack/react-router";
-import { Button } from "@shared/ui/components/button";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft, Home } from "lucide-react";
 
 function RouteComponent() {

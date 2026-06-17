@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "@shared/ui/components/button";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Field } from "@shared/ui/components/field";
+import { Field } from "@/components/ui/field";
 import { useLayout } from "@/hooks/useLayout";
 import { useForm } from "@tanstack/react-form";
 import * as z from "zod";

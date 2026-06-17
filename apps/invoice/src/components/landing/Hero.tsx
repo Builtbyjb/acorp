@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight, FileText } from "lucide-react";
-import { Button } from "@shared/ui/components/button";
+import { Button } from "@/components/ui/button";
 import type { Invoice, InvoiceItem } from "@shared/lib/types";
 
 const mockInvoice: Omit<Invoice, "id" | "clientId" | "createdAt"> & { clientName: string; clientEmail: string } = {

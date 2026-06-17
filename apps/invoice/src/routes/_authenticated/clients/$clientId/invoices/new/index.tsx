@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import InvoiceForm from "@/components/InvoiceForm";
 import type { Client } from "@/lib/types";
-import { Button } from "@shared/ui/components/button";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { ClientSchema } from "@shared/lib/zod-schema";
 import { useFetch } from "@/hooks/useFetch";

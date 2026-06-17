@@ -1,4 +1,4 @@
-import { Field, FieldError, FieldLabel } from "@shared/ui/components/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import type { SignupFormType } from "@/hooks/useSignupForm";
 

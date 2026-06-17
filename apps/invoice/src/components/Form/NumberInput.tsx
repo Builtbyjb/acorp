@@ -1,4 +1,4 @@
-import { Field, FieldLabel, FieldError } from "@shared/ui/components/field";
+import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
 type NumberInputProps = {
