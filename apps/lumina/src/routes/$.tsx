@@ -15,13 +15,13 @@ function NotFound() {
     >
       {/* Ambient glows */}
       <div
-        className="pointer-events-none absolute -left-40 top-1/3 h-[500px] w-[500px] rounded-full opacity-30 blur-[120px]"
+        className="pointer-events-none absolute -left-40 top-1/3 h-125 w-125 rounded-full opacity-30 blur-[120px]"
         style={{
           background: "radial-gradient(circle, #22d3ee, transparent 70%)",
         }}
       />
       <div
-        className="pointer-events-none absolute -right-40 bottom-1/4 h-[500px] w-[500px] rounded-full opacity-25 blur-[120px]"
+        className="pointer-events-none absolute -right-40 bottom-1/4 h-125 w-125 rounded-full opacity-25 blur-[120px]"
         style={{
           background: "radial-gradient(circle, #f59e0b, transparent 70%)",
         }}
@@ -29,7 +29,7 @@ function NotFound() {
 
       {/* Film grain overlay */}
       <div
-        className="pointer-events-none fixed inset-0 z-[100] opacity-[0.035] mix-blend-overlay"
+        className="pointer-events-none fixed inset-0 z-100 opacity-[0.035] mix-blend-overlay"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
         }}
@@ -72,22 +72,20 @@ function NotFound() {
           </div>
         </div>
 
-        <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-cyan-400">
-          Scene missing
-        </p>
+        <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-cyan-400">Scene missing</p>
         <h1
           className="mb-6 font-extrabold tracking-tight text-white"
           style={{ fontSize: "clamp(2.5rem, 8vw, 5rem)", lineHeight: 1 }}
         >
           This scene
           <br />
-          <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-amber-400 bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-cyan-400 via-blue-500 to-amber-400 bg-clip-text text-transparent">
             got cut.
           </span>
         </h1>
         <p className="mx-auto mb-10 max-w-md text-lg leading-relaxed text-[#8a8a9a]">
-          The page you're looking for isn't in the final cut. It may have been
-          moved, renamed, or never made it past the storyboard.
+          The page you're looking for isn't in the final cut. It may have been moved, renamed, or never made it past the
+          storyboard.
         </p>
 
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
