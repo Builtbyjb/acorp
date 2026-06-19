@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Shield, Lock, Check } from "lucide-react";
 import Logo from "@/components/Logo";
 import { useAuth } from "@/hooks/auth";
 
@@ -57,21 +57,29 @@ function SignupPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16 bg-background">
-      <div className="w-full max-w-sm animate-fade-up">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/40 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative w-full max-w-md animate-fade-up">
         <div className="mb-8 flex justify-center">
           <Logo />
         </div>
 
-        <Card className="w-full border-black/10 rounded-none">
-          <CardHeader>
-            <div className="flex items-center gap-4 mb-2">
-              <ArrowLeft
-                className="h-6 w-6 cursor-pointer hover:scale-110 transition-transform"
+        <Card className="w-full border-border/60 rounded-3xl shadow-lg shadow-primary/5">
+          <CardHeader className="space-y-1">
+            <div className="flex items-center gap-3 mb-2">
+              <button
                 onClick={() => navigate({ to: "/" })}
-              />
-              <CardTitle className="text-xl font-bold">Sign up</CardTitle>
+                className="p-1 rounded-lg hover:bg-accent transition-colors"
+                aria-label="Back to home"
+              >
+                <ArrowLeft className="h-5 w-5 text-muted-foreground" />
+              </button>
+              <CardTitle className="text-xl font-bold">Create your workspace</CardTitle>
             </div>
-            <CardDescription className="text-neutral-500">Create your OpenComms workspace</CardDescription>
+            <CardDescription>Start messaging your community in minutes</CardDescription>
           </CardHeader>
 
           <CardContent>
@@ -88,8 +96,8 @@ function SignupPage() {
                       autoComplete="given-name"
                       value={form.firstname}
                       onChange={(e) => setForm((f) => ({ ...f, firstname: e.target.value }))}
+                      className="h-10 rounded-xl"
                     />
-                    {/*{errors.firstname && <FieldError errors={[errors.firstname]} />}*/}
                   </Field>
 
                   <Field data-invalid={!!errors.lastname}>
@@ -102,8 +110,8 @@ function SignupPage() {
                       autoComplete="family-name"
                       value={form.lastname}
                       onChange={(e) => setForm((f) => ({ ...f, lastname: e.target.value }))}
+                      className="h-10 rounded-xl"
                     />
-                    {/*{errors.lastname && <FieldError errors={[errors.lastname]} />}*/}
                   </Field>
                 </div>
 
@@ -117,8 +125,8 @@ function SignupPage() {
                     autoComplete="organization"
                     value={form.organizationName}
                     onChange={(e) => setForm((f) => ({ ...f, organizationName: e.target.value }))}
+                    className="h-10 rounded-xl"
                   />
-                  {/*{errors.organizationName && <FieldError errors={[errors.organizationName]} />}*/}
                 </Field>
 
                 <Field data-invalid={!!errors.email}>
@@ -132,8 +140,8 @@ function SignupPage() {
                     autoComplete="email"
                     value={form.email}
                     onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                    className="h-10 rounded-xl"
                   />
-                  {/*{errors.email && <FieldError errors={[errors.email]} />}*/}
                 </Field>
 
                 <Field data-invalid={!!errors.password}>
@@ -147,35 +155,56 @@ function SignupPage() {
                     autoComplete="new-password"
                     value={form.password}
                     onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+                    className="h-10 rounded-xl"
                   />
-                  {/*{errors.password && <FieldError errors={[errors.password]} />}*/}
                 </Field>
               </FieldGroup>
             </form>
           </CardContent>
 
-          <CardFooter className="bg-white border-t border-black/5 flex-col gap-3">
+          <CardFooter className="bg-muted/30 border-t border-border/60 flex-col gap-3 rounded-b-3xl">
             <Button type="submit" form="signup-form" className="w-full" disabled={isSubmitting}>
               {isSubmitting && <Spinner className="mr-2" aria-hidden="true" />}
               {isSubmitting ? "Creating account..." : "Create account"}
             </Button>
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-muted-foreground">
+              <span className="inline-flex items-center gap-1">
+                <Check className="h-3 w-3 text-primary" />
+                Free 14-day trial
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <Check className="h-3 w-3 text-primary" />
+                No credit card
+              </span>
+            </div>
           </CardFooter>
         </Card>
 
         <p className="text-center text-sm mt-6 text-muted-foreground">
           Already have an account?{" "}
-          <Link to="/login" className="font-semibold text-primary hover:opacity-70">
+          <Link to="/login" className="font-semibold text-primary hover:underline">
             Log in
           </Link>
         </p>
 
-        <p className="text-center text-xs text-neutral-400 mt-4">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-1.5">
+            <Shield className="h-3.5 w-3.5 text-primary" />
+            GDPR ready
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <Lock className="h-3.5 w-3.5 text-primary" />
+            Encrypted at rest
+          </span>
+        </div>
+
+        <p className="text-center text-xs text-muted-foreground mt-4">
           By signing up, you agree to our{" "}
-          <Link to="/terms" className="underline hover:text-foreground">
+          <Link to="/terms" className="underline hover:text-primary transition-colors">
             Terms of Service
           </Link>{" "}
           and{" "}
-          <Link to="/privacy" className="underline hover:text-foreground">
+          <Link to="/privacy" className="underline hover:text-primary transition-colors">
             Privacy Policy
           </Link>
           .

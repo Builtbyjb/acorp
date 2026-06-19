@@ -12,6 +12,7 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import { ChevronRight, LogOut } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type NavItem = {
   title: string;
@@ -31,15 +32,8 @@ type SidebarProps = {
 
 function BetaBadge() {
   return (
-    <span
-      className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold border ml-auto"
-      style={{
-        backgroundColor: "rgba(255,255,255,0.08)",
-        borderColor: "rgba(255,255,255,0.15)",
-        color: "rgba(255,255,255,0.60)",
-      }}
-    >
-      <span className="w-1 h-1" style={{ backgroundColor: "rgba(255,255,255,0.60)" }} />
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold border border-primary/20 rounded-full bg-primary/10 text-primary ml-auto">
+      <span className="w-1 h-1 rounded-full bg-primary animate-pulse" />
       Beta
     </span>
   );
@@ -51,10 +45,11 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
 
-  const isActive = (url: string) => currentPath === url || (url !== "/dashboard" && currentPath.startsWith(url));
+  const isActive = (url: string) =>
+    currentPath === url || (url !== "/dashboard" && currentPath.startsWith(url));
 
   return (
-    <Sidebar variant="inset" className="bg-black border-r border-white/10" {...props}>
+    <Sidebar variant="inset" className="border-r border-border/60 bg-sidebar" {...props}>
       <SidebarHeader className="pb-0">
         <SidebarMenu>
           <SidebarMenuItem
@@ -64,14 +59,17 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
               navigate({ to: "/dashboard" });
             }}
           >
-            <div className="flex items-center gap-3 px-2 py-2 transition-colors hover:bg-white/5">
-              <div className="w-8 h-8 flex items-center justify-center text-black text-sm font-bold shrink-0 bg-white">
+            <div className="flex items-center gap-3 px-2 py-2 rounded-xl transition-colors hover:bg-sidebar-accent">
+              <div className="w-8 h-8 flex items-center justify-center rounded-xl text-sidebar-primary-foreground text-sm font-bold shrink-0 bg-sidebar-primary">
                 {props.username?.charAt(0).toUpperCase()}
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="truncate font-semibold leading-tight text-white">{props.businessname}</span>
-                <span className="truncate text-sm leading-tight text-white">{props.username}</span>
-                <span className="truncate text-sm leading-tight text-white/50">{props.email}</span>
+                <span className="truncate font-semibold leading-tight text-sidebar-foreground">
+                  {props.businessname}
+                </span>
+                <span className="truncate text-xs leading-tight text-sidebar-foreground/70">
+                  {props.username}
+                </span>
               </div>
             </div>
             <BetaBadge />
@@ -79,7 +77,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
         </SidebarMenu>
       </SidebarHeader>
 
-      <Separator className="my-2 bg-white/10" />
+      <Separator className="my-2 bg-sidebar-border" />
 
       <SidebarContent>
         <SidebarGroup>
@@ -92,11 +90,12 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger
-                    className="flex gap-3 items-center w-full px-3 py-2.5 transition-all duration-200 hover:cursor-pointer hover:bg-white/5"
-                    style={{
-                      backgroundColor: isActive(item.url) ? "rgba(255,255,255,0.08)" : "transparent",
-                      color: isActive(item.url) ? "#ffffff" : "rgba(255,255,255,0.50)",
-                    }}
+                    className={cn(
+                      "flex gap-3 items-center w-full px-3 py-2.5 rounded-xl transition-all duration-200 hover:cursor-pointer hover:bg-sidebar-accent",
+                      isActive(item.url)
+                        ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                        : "text-sidebar-foreground/70"
+                    )}
                     onClick={() => {
                       if (!item.items) {
                         navigate({ to: item.url });
@@ -104,16 +103,18 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
                       }
                     }}
                   >
-                    <span style={{ color: isActive(item.url) ? "#ffffff" : "rgba(255,255,255,0.50)" }}>
+                    <span
+                      className={cn(
+                        "transition-colors",
+                        isActive(item.url) ? "text-sidebar-primary" : "text-sidebar-foreground/60"
+                      )}
+                    >
                       {item.icon}
                     </span>
                     <span className="text-sm font-medium">{item.title}</span>
                     {item.badge && item.badge}
                     {item.items && (
-                      <ChevronRight
-                        className="ml-auto h-3.5 w-3.5 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 flex-shrink-0"
-                        style={{ color: "rgba(255,255,255,0.50)" }}
-                      />
+                      <ChevronRight className="ml-auto h-3.5 w-3.5 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 flex-shrink-0 text-sidebar-foreground/50" />
                     )}
                   </CollapsibleTrigger>
 
@@ -123,17 +124,20 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
                         {item.items.map((subItem) => (
                           <button
                             key={subItem.title}
-                            className="flex items-center gap-2.5 px-3 py-2 text-sm font-medium transition-all duration-200 text-left w-full cursor-pointer hover:bg-white/5"
-                            style={{
-                              backgroundColor: isActive(subItem.url) ? "rgba(255,255,255,0.06)" : "transparent",
-                              color: isActive(subItem.url) ? "#ffffff" : "rgba(255,255,255,0.50)",
-                            }}
+                            className={cn(
+                              "flex items-center gap-2.5 px-3 py-2 text-sm font-medium transition-all duration-200 text-left w-full cursor-pointer rounded-xl hover:bg-sidebar-accent",
+                              isActive(subItem.url)
+                                ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                                : "text-sidebar-foreground/70"
+                            )}
                             onClick={() => {
                               setOpenMobile(false);
                               navigate({ to: subItem.url });
                             }}
                           >
-                            <span style={{ color: isActive(subItem.url) ? "#ffffff" : "rgba(255,255,255,0.50)" }}>
+                            <span
+                              className={isActive(subItem.url) ? "text-sidebar-primary" : "text-sidebar-foreground/50"}
+                            >
                               {subItem.icon}
                             </span>
                             {subItem.title}
@@ -146,12 +150,12 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
               </Collapsible>
             ))}
 
-            <Separator className="my-2 bg-white/10" />
+            <Separator className="my-2 bg-sidebar-border" />
 
             {/* Logout */}
             <SidebarMenuItem>
               <button
-                className="flex gap-3 items-center w-full px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:cursor-pointer hover:bg-red-500/10 text-red-400 hover:text-red-300"
+                className="flex gap-3 items-center w-full px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:cursor-pointer hover:bg-destructive/10 text-destructive rounded-xl"
                 onClick={() => props.logout()}
               >
                 <LogOut className="h-4 w-4 shrink-0" />

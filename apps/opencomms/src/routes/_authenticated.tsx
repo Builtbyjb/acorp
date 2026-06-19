@@ -2,42 +2,39 @@ import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import Sidebar from "@/components/Sidebar";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-// import Header from "@/components/Header";
 import { useAuth } from "@/hooks/auth";
-// import { useLayout } from "@/hooks/useLayout";
 import { LayoutDashboard, MessageCircle, Users, Megaphone, Settings } from "lucide-react";
 
 const navItems = [
   {
     title: "Dashboard",
     url: "/dashboard",
-    icon: <LayoutDashboard />,
+    icon: <LayoutDashboard className="h-4 w-4" />,
   },
   {
     title: "Messages",
     url: "/messages",
-    icon: <MessageCircle />,
+    icon: <MessageCircle className="h-4 w-4" />,
   },
   {
     title: "Contacts",
     url: "/contacts",
-    icon: <Users />,
+    icon: <Users className="h-4 w-4" />,
   },
   {
     title: "Campaigns",
     url: "/campaigns",
-    icon: <Megaphone />,
+    icon: <Megaphone className="h-4 w-4" />,
   },
   {
     title: "Settings",
     url: "/settings",
-    icon: <Settings />,
+    icon: <Settings className="h-4 w-4" />,
   },
 ];
 
 function AuthLayout() {
   const { user, logout } = useAuth();
-  // const { title } = useLayout();
 
   return (
     <SidebarProvider>
@@ -48,13 +45,13 @@ function AuthLayout() {
         navItems={navItems}
         logout={logout}
       />
-      <SidebarInset>
-        <header className="flex items-center gap-2 ml-4 mt-4">
-          <SidebarTrigger className="h-9 w-9 bg-accent hover:bg-accent" size="icon-lg" />
+      <SidebarInset className="bg-background">
+        <header className="flex items-center gap-2 px-4 py-3 border-b border-border/60 bg-card/50 backdrop-blur-sm sticky top-0 z-30">
+          <SidebarTrigger className="h-9 w-9" size="icon-lg" />
           <Separator orientation="vertical" className="h-6" />
-          {/*<Header title={title} />*/}
+          <div className="flex-1" />
         </header>
-        <div className="mt-8 mx-auto w-[90%]">
+        <div className="p-4 md:p-6 lg:p-8">
           <Outlet />
         </div>
       </SidebarInset>

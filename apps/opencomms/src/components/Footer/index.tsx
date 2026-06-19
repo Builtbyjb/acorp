@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Separator } from "@/components/ui/separator";
+import { Shield, Lock } from "lucide-react";
 
 type Item = {
   label: string;
@@ -19,42 +20,66 @@ type Props = {
 
 export default function Footer({ footerItems, logo, description }: Props) {
   return (
-    <footer className="border-t border-black/10 px-6 py-10 bg-white">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div>
-          {logo}
-          <p className="text-sm mt-2 max-w-xs leading-relaxed text-neutral-500">{description}</p>
-        </div>
-
-        <div className="flex items-start gap-12">
-          {footerItems.map((footerItem, idx) => (
-            <div key={idx}>
-              <p className="text-xs font-bold uppercase tracking-widest mb-3 text-black">{footerItem.title}</p>
-              <ul className="flex flex-col gap-2">
-                {footerItem.items.map((item, idx) => (
-                  <li key={idx}>
-                    <Link to={item.to} className="text-sm transition-opacity hover:opacity-60 text-neutral-500">
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+    <footer className="border-t border-border/60 bg-card px-6 py-12">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row items-start justify-between gap-10">
+          <div className="max-w-sm">
+            {logo}
+            <p className="text-sm mt-3 leading-relaxed text-muted-foreground">
+              {description}
+            </p>
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                <Shield className="h-3 w-3" />
+                GDPR ready
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                <Lock className="h-3 w-3" />
+                Encrypted at rest
+              </span>
             </div>
-          ))}
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-10">
+            {footerItems.map((footerItem, idx) => (
+              <div key={idx}>
+                <p className="text-xs font-bold uppercase tracking-widest mb-3 text-foreground">
+                  {footerItem.title}
+                </p>
+                <ul className="flex flex-col gap-2">
+                  {footerItem.items.map((item, idx) => (
+                    <li key={idx}>
+                      <Link
+                        to={item.to}
+                        className="text-sm transition-colors hover:text-primary text-muted-foreground"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <Separator className="max-w-7xl mx-auto mt-8 bg-black/10" />
+        <Separator className="my-8 bg-border/60" />
 
-      <div className="max-w-7xl mx-auto mt-6 flex items-center justify-between text-black">
-        <p className="text-xs text-neutral-500">© {new Date().getFullYear()} ACorp. All rights reserved.</p>
-        <div className="flex items-center gap-4">
-          <Link to="/privacy-policy" className="text-xs transition-opacity hover:opacity-60 text-neutral-500">
-            Privacy
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-muted-foreground">
+          <p className="text-xs">
+            © {new Date().getFullYear()} OpenComms. All rights reserved.
+          </p>
+          <div className="flex items-center gap-6">
+            <Link to="/privacy" className="text-xs hover:text-primary transition-colors">
+              Privacy
+            </Link>
+            <Link to="/terms" className="text-xs hover:text-primary transition-colors">
+              Terms
+            </Link>
+          <Link to="/" className="text-xs hover:text-primary transition-colors">
+            Security
           </Link>
-          <Link to="/terms-of-service" className="text-xs transition-opacity hover:opacity-60 text-neutral-500">
-            Terms
-          </Link>
+          </div>
         </div>
       </div>
     </footer>

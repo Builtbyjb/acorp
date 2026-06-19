@@ -23,8 +23,16 @@ function GuestLayout() {
       items: [
         { label: "Features", to: "/#features" },
         { label: "Pricing", to: "/#pricing" },
+        { label: "Security", to: "/" },
         { label: "Log in", to: "/login" },
         { label: "Sign up", to: "/signup" },
+      ],
+    },
+    {
+      title: "Company",
+      items: [
+        { label: "About", to: "/" },
+        { label: "Contact", to: "mailto:hello@opencomms.app" },
       ],
     },
     {

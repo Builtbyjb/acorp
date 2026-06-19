@@ -8,8 +8,8 @@ export default defineConfig([
   globalIgnores([
     "node_modules/*",
     ".git/*",
-    "apps/invoice/dist/*",
-    "apps/invoice/node_modules/*",
+    "apps/*/dist/*",
+    "apps/*/node_modules/*",
     "apps/server/.wrangler/tmp/*",
   ]),
   {
