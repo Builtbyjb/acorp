@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { PlusIcon, SmsIcon, WhatsAppIcon } from '../-icons.tsx'
 import { useLayout } from '@/hooks/useLayout'
 
-export const Route = createFileRoute('/_auth/campaigns')({
+export const Route = createFileRoute('/_authenticated/campaigns')({
   component: CampaignsPage,
 })
 

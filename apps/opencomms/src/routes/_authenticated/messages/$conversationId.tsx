@@ -6,7 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { SmsIcon, WhatsAppIcon, SendIcon } from '../../-icons.tsx'
 import { useLayout } from '@/hooks/useLayout'
 
-export const Route = createFileRoute('/_auth/messages/$conversationId')({
+export const Route = createFileRoute('/_authenticated/messages/$conversationId')({
   component: ConversationPage,
 })
 

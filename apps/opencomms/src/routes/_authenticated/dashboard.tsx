@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { PlusIcon, CampaignsIcon, ContactsIcon, MessagesIcon, SmsIcon, WhatsAppIcon } from '../-icons.tsx'
 import { useLayout } from '@/hooks/useLayout'
 
-export const Route = createFileRoute('/_auth/dashboard')({
+export const Route = createFileRoute('/_authenticated/dashboard')({
   component: DashboardPage,
 })
 

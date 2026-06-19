@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { PlusIcon, SearchIcon, SmsIcon, WhatsAppIcon } from '../-icons.tsx'
 import { useLayout } from '@/hooks/useLayout'
 
-export const Route = createFileRoute('/_auth/contacts')({
+export const Route = createFileRoute('/_authenticated/contacts')({
   component: ContactsPage,
 })
 

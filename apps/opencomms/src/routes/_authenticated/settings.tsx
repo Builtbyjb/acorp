@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { SmsIcon, WhatsAppIcon } from '../-icons.tsx'
 import { useLayout } from '@/hooks/useLayout'
 
-export const Route = createFileRoute('/_auth/settings')({
+export const Route = createFileRoute('/_authenticated/settings')({
   component: SettingsPage,
 })
 
