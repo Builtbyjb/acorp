@@ -1,4 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { X } from 'lucide-react'
 
 export const Route = createFileRoute('/_guest/terms')({
   component: TermsPage,
@@ -20,75 +23,48 @@ const TOC = [
 function TermsPage() {
   return (
     <>
-      {/* ── Hero ── */}
       <section className="relative overflow-hidden pt-16 pb-12 px-6">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: 'radial-gradient(circle, #7F8CAA22 1.5px, transparent 1.5px)',
-            backgroundSize: '28px 28px',
-          }}
-        />
-        <div className="relative mx-auto max-w-4xl">
-          <div className="flex items-center gap-2 mb-6">
-            <Link to="/" className="text-xs transition-opacity hover:opacity-70" style={{ color: '#7F8CAA' }}>Home</Link>
-            <span style={{ color: '#7F8CAA' }}>·</span>
-            <span className="text-xs" style={{ color: '#0f172a' }}>Terms of Service</span>
-          </div>
+        <div className="absolute inset-0 pointer-events-none">
           <div
-            className="animate-fade-in inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold tracking-[0.18em] uppercase mb-5"
-            style={{ backgroundColor: '#ffffff70', borderColor: '#7F8CAA28', color: '#7F8CAA' }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#4382df' }} />
-            Legal
-          </div>
-          <h1
-            className="animate-fade-up font-extrabold tracking-tight mb-4"
+            className="absolute inset-0 opacity-[0.4]"
             style={{
-              fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
-              letterSpacing: '-0.03em',
-              color: '#0f172a',
-              lineHeight: '1',
+              backgroundImage: 'radial-gradient(circle, hsl(var(--primary) / 0.12) 1.5px, transparent 1.5px)',
+              backgroundSize: '28px 28px',
             }}
-          >
+          />
+        </div>
+        <div className="relative mx-auto max-w-4xl">
+          <div className="flex items-center gap-2 mb-6 text-sm">
+            <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>
+            <span className="text-muted-foreground">·</span>
+            <span className="text-foreground font-medium">Terms of Service</span>
+          </div>
+          <Badge variant="secondary" className="mb-4">Legal</Badge>
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground mb-4">
             Terms of Service
           </h1>
-          <p className="text-sm" style={{ color: '#7F8CAA' }}>
-            Last updated: January 1, 2025
-          </p>
+          <p className="text-sm text-muted-foreground">Last updated: January 1, 2025</p>
         </div>
       </section>
 
-      {/* ── Body ── */}
       <section className="px-6 pb-24">
         <div className="mx-auto max-w-4xl space-y-6">
-          {/* TOC card */}
-          <div
-            className="bg-white rounded-3xl p-8"
-            style={{ boxShadow: '0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07' }}
-          >
-            <p
-              className="text-xs font-bold tracking-[0.25em] uppercase mb-4"
-              style={{ color: '#7F8CAA' }}
-            >
-              Table of Contents
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {TOC.map((item) => (
-                <p key={item} className="text-sm" style={{ color: '#7F8CAA' }}>
-                  {item}
-                </p>
-              ))}
-            </div>
-          </div>
+          <Card>
+            <CardContent className="p-8">
+              <p className="text-xs font-bold tracking-[0.25em] uppercase mb-4 text-muted-foreground">
+                Table of Contents
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {TOC.map((item) => (
+                  <p key={item} className="text-sm text-muted-foreground">{item}</p>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
-          {/* Main content card */}
-          <div
-            className="bg-white rounded-3xl overflow-hidden"
-            style={{ boxShadow: '0 1px 4px #0f172a0a, 0 0 0 1px #0f172a06' }}
-          >
-            <div className="px-8 md:px-12 py-10">
-              <p className="text-sm leading-relaxed mb-8" style={{ color: '#7F8CAA' }}>
+          <Card>
+            <CardContent className="p-8 md:p-12">
+              <p className="text-sm leading-relaxed mb-8 text-muted-foreground">
                 Please read these Terms of Service carefully before using OpenComms. By
                 creating an account or using the service, you agree to be bound by these terms.
               </p>
@@ -99,7 +75,7 @@ function TermsPage() {
                   body: (
                     <p>
                       By accessing or using OpenComms, you agree to these Terms and our{' '}
-                      <Link to="/privacy" className="font-medium transition-opacity hover:opacity-70" style={{ color: '#4382df' }}>
+                      <Link to="/privacy" className="font-medium text-primary hover:underline">
                         Privacy Policy
                       </Link>.
                       If you are using the platform on behalf of an organisation, you represent that
@@ -133,9 +109,7 @@ function TermsPage() {
                           "Violate carrier guidelines or Meta's WhatsApp Business Policy",
                         ].map((item) => (
                           <li key={item} className="flex items-start gap-2.5">
-                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#4382df" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="mt-1 flex-shrink-0">
-                              <path d="M2 5l2.5 2.5L8 2.5" />
-                            </svg>
+                            <X size={14} className="mt-1 flex-shrink-0 text-destructive" />
                             <span>{item}</span>
                           </li>
                         ))}
@@ -210,11 +184,7 @@ function TermsPage() {
                   body: (
                     <p>
                       For questions about these terms, contact us at{' '}
-                      <a
-                        href="mailto:legal@opencomms.io"
-                        className="font-medium transition-opacity hover:opacity-70"
-                        style={{ color: '#4382df' }}
-                      >
+                      <a href="mailto:legal@opencomms.io" className="font-medium text-primary hover:underline">
                         legal@opencomms.io
                       </a>.
                     </p>
@@ -223,32 +193,19 @@ function TermsPage() {
               ].map((section, i) => (
                 <div
                   key={section.title}
-                  className="py-7 text-sm leading-relaxed"
-                  style={{
-                    color: '#7F8CAA',
-                    borderTopColor: i > 0 ? '#7F8CAA14' : 'transparent',
-                    borderTopWidth: i > 0 ? 1 : 0,
-                    borderTopStyle: 'solid',
-                  }}
+                  className={`py-7 text-sm leading-relaxed text-muted-foreground ${i > 0 ? 'border-t border-border/60' : ''}`}
                 >
-                  <h2
-                    className="text-base font-bold mb-3"
-                    style={{ color: '#0f172a' }}
-                  >
-                    {section.title}
-                  </h2>
+                  <h2 className="text-base font-bold mb-3 text-foreground">{section.title}</h2>
                   {section.body}
                 </div>
               ))}
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
-          {/* Related link */}
           <div className="flex justify-end">
             <Link
               to="/privacy"
-              className="group inline-flex items-center gap-2 text-sm font-semibold transition-opacity hover:opacity-70"
-              style={{ color: '#4382df' }}
+              className="group inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
             >
               Read our Privacy Policy
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-0.5">

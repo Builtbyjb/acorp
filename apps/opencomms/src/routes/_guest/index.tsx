@@ -1,288 +1,455 @@
+import * as React from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowRight, SmsIcon, WhatsAppIcon } from '../-icons.tsx'
-
-export const Route = createFileRoute('/_guest/')({
-  component: LandingPage,
-})
+import { ArrowRight, Check, Lock, Shield, Sparkles, Clock, Users, MessageCircle, BarChart3, Calendar, ShieldCheck } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 
 const FEATURES = [
   {
-    icon: (
-      <svg className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z" />
-      </svg>
-    ),
-    title: 'Bulk Broadcasts',
-    description: 'Reach your entire community in seconds. Send a single message to thousands of contacts with real-time delivery receipts.',
+    icon: MessageCircle,
+    title: 'Unified inbox',
+    description: 'One place for every SMS and WhatsApp conversation. No more switching between tools or losing context.',
   },
   {
-    icon: (
-      <svg className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-      </svg>
-    ),
-    title: '1-on-1 Conversations',
-    description: 'Build personal relationships. Have direct, two-way conversations with individual members — answer questions and make them feel heard.',
+    icon: Users,
+    title: 'Smart contacts',
+    description: 'Organise people with tags, custom fields, and full conversation history. Import a CSV in seconds.',
   },
   {
-    icon: (
-      <svg className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-      </svg>
-    ),
-    title: 'Contact Management',
-    description: 'Organise contacts with tags, custom fields, and full conversation history. Import from CSV or sync from your existing tools.',
+    icon: Sparkles,
+    title: 'Bulk broadcasts',
+    description: 'Send a single message to thousands. Personalise with merge fields and preview before you send.',
   },
   {
-    icon: (
-      <svg className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-      </svg>
-    ),
-    title: 'Delivery Analytics',
-    description: 'Track delivery rates, open rates, and response rates for every message and campaign — broken down by channel and segment.',
+    icon: Calendar,
+    title: 'Scheduled campaigns',
+    description: 'Plan ahead across time zones. Set it, forget it, and let OpenComms deliver at the perfect moment.',
   },
   {
-    icon: (
-      <svg className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-        <line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
-      </svg>
-    ),
-    title: 'Scheduled Campaigns',
-    description: 'Send at the right moment. Schedule broadcasts in advance across multiple time zones — set it and let OpenComms handle the rest.',
+    icon: BarChart3,
+    title: 'Clear analytics',
+    description: 'Track delivery, replies, and engagement by channel and segment — no spreadsheets required.',
   },
   {
-    icon: (
-      <svg className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-        <path d="M7 11V7a5 5 0 0110 0v4" />
-      </svg>
-    ),
-    title: 'Secure & Compliant',
-    description: 'GDPR-compliant opt-in/opt-out management, encrypted message storage, and audit logs — your community data stays protected.',
+    icon: ShieldCheck,
+    title: 'Built-in compliance',
+    description: 'GDPR-ready opt-in/opt-out management, encrypted storage, and a complete audit trail for peace of mind.',
+  },
+]
+
+const USE_CASES = [
+  {
+    id: 'community',
+    label: 'Community updates',
+    title: 'Keep every member in the loop',
+    description: 'From event reminders to important announcements, send trusted updates that people actually read.',
+    stats: [
+      { label: 'Average open rate', value: '94%' },
+      { label: 'Delivery rate', value: '99.2%' },
+    ],
+  },
+  {
+    id: 'support',
+    label: 'Member support',
+    title: 'Personal replies at scale',
+    description: 'Answer questions, reschedule appointments, and resolve issues one-to-one without losing the human touch.',
+    stats: [
+      { label: 'Faster response', value: '3x' },
+      { label: 'Member satisfaction', value: '96%' },
+    ],
+  },
+  {
+    id: 'events',
+    label: 'Event promotion',
+    title: 'Fill every seat',
+    description: 'Promote events with targeted broadcasts, send reminders, and collect RSVPs directly in the thread.',
+    stats: [
+      { label: 'Attendance lift', value: '+40%' },
+      { label: 'RSVP conversion', value: '28%' },
+    ],
+  },
+  {
+    id: 'fundraising',
+    label: 'Fundraising',
+    title: 'Reach donors where they are',
+    description: 'Share campaigns, thank contributors instantly, and build lasting relationships with your supporters.',
+    stats: [
+      { label: 'Donor response', value: '5x' },
+      { label: 'Repeat giving', value: '+22%' },
+    ],
   },
 ]
 
 const STEPS = [
-  { number: '01', title: 'Import your contacts', description: 'Upload a CSV, connect your CRM, or add contacts manually. Group them with tags for targeted outreach.' },
-  { number: '02', title: 'Choose your channel', description: 'Connect your SMS number or WhatsApp Business account. OpenComms handles the configuration.' },
-  { number: '03', title: 'Compose your message', description: 'Write a broadcast to everyone, or segment by tag. Preview before sending.' },
-  { number: '04', title: 'Send and track', description: 'Hit send or schedule for later. Track delivery rates and open a conversation with anyone who replies.' },
+  {
+    number: '01',
+    title: 'Import your people',
+    description: 'Upload a CSV or add contacts manually. Group them with tags so the right message always finds the right audience.',
+  },
+  {
+    number: '02',
+    title: 'Connect your channels',
+    description: 'Link your SMS number and WhatsApp Business account in a few clicks. We handle the tricky setup.',
+  },
+  {
+    number: '03',
+    title: 'Send with confidence',
+    description: 'Write once, broadcast to many, or reply one-to-one. Track everything and let compliance run in the background.',
+  },
 ]
 
+const SECURITY_FEATURES = [
+  'End-to-end encrypted message storage',
+  'GDPR-compliant opt-in / opt-out',
+  'Role-based team access',
+  'Full audit logs',
+  'SOC 2 Type II in progress',
+  'Data residency options',
+]
+
+const PRICING = [
+  {
+    name: 'Starter',
+    price: '$0',
+    description: 'For small communities trying things out',
+    features: ['Up to 250 contacts', '250 messages/month', '1 team member', 'SMS & WhatsApp', 'Basic analytics'],
+    cta: 'Start free',
+    popular: false,
+  },
+  {
+    name: 'Growth',
+    price: '$79',
+    description: 'For organisations ready to scale',
+    features: ['Up to 5,000 contacts', 'Unlimited messages', '3 team members', 'Scheduled campaigns', 'Advanced analytics', 'Priority support'],
+    cta: 'Start free trial',
+    popular: true,
+  },
+  {
+    name: 'Organization',
+    price: 'Custom',
+    description: 'For larger teams with advanced needs',
+    features: ['Unlimited contacts', 'Unlimited messages', 'Unlimited team members', 'SSO & SAML', 'Custom integrations', 'Dedicated success manager'],
+    cta: 'Contact sales',
+    popular: false,
+  },
+]
+
+const TESTIMONIALS = [
+  {
+    quote: 'OpenComms turned our member communications from a weekly headache into a five-minute task. The compliance features mean I never worry about consent.',
+    name: 'Sarah Chen',
+    role: 'Community Director, Riverfront Arts',
+    initials: 'SC',
+  },
+  {
+    quote: 'We switched from three different tools to OpenComms. One inbox, one contact list, one place to report results. It just makes sense.',
+    name: 'Marcus Okafor',
+    role: 'Operations Lead, Greenpath NGO',
+    initials: 'MO',
+  },
+  {
+    quote: 'Our donors actually reply now. Being able to have real conversations instead of one-way blasts has transformed our fundraising.',
+    name: 'Priya Nair',
+    role: 'Head of Development, HopeWorks',
+    initials: 'PN',
+  },
+]
+
+const LOGOS = [
+  'Riverfront Arts',
+  'Greenpath NGO',
+  'HopeWorks',
+  'City Youth Club',
+  'Northside Clinic',
+  'TeachFirst Network',
+]
+
+function HeroMockup() {
+  return (
+    <div className="relative w-full max-w-md mx-auto lg:mx-0 animate-float">
+      <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 via-primary/5 to-transparent rounded-[2.5rem] blur-2xl" />
+      <Card className="relative overflow-hidden border border-border/60 bg-card/95 backdrop-blur-sm">
+        <CardContent className="p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
+                O
+              </div>
+              <span className="font-semibold text-sm">OpenComms</span>
+            </div>
+            <Badge variant="secondary" className="text-xs">Live</Badge>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-xs font-semibold shrink-0">
+                MG
+              </div>
+              <div className="bg-muted rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm max-w-[75%]">
+                Hi Maria, just a reminder that the community meeting is this Friday at 6pm.
+              </div>
+            </div>
+            <div className="flex items-start gap-3 justify-end">
+              <div className="bg-primary text-primary-foreground rounded-2xl rounded-tr-sm px-4 py-2.5 text-sm max-w-[75%]">
+                Thanks! Will there be parking available?
+              </div>
+              <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-semibold shrink-0">
+                M
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-xs font-semibold shrink-0">
+                MG
+              </div>
+              <div className="bg-muted rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm max-w-[75%]">
+                Yes, the car park on Maple Street will be free after 5pm. See you there!
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 pt-2 border-t border-border/60">
+            <div className="flex-1 h-9 rounded-full bg-muted flex items-center px-4 text-xs text-muted-foreground">
+              Type a message…
+            </div>
+            <div className="h-9 w-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+              <ArrowRight className="h-4 w-4" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
 function LandingPage() {
+  const [activeUseCase, setActiveUseCase] = React.useState(USE_CASES[0].id)
+  const activeCase = USE_CASES.find((u) => u.id === activeUseCase) || USE_CASES[0]
+
   return (
     <>
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden pt-20 pb-28 px-6">
-        {/* Dot-grid background */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: 'radial-gradient(circle, #7F8CAA22 1.5px, transparent 1.5px)',
-            backgroundSize: '28px 28px',
-          }}
-        />
-        {/* Ambient glow — cobalt top-right */}
-        <div
-          className="absolute -top-48 -right-48 w-[600px] h-[600px] rounded-full blur-3xl pointer-events-none"
-          style={{ backgroundColor: '#4382df10' }}
-        />
-        {/* Ambient glow — slate bottom-left */}
-        <div
-          className="absolute bottom-0 left-1/3 w-80 h-80 rounded-full blur-3xl pointer-events-none"
-          style={{ backgroundColor: '#7F8CAA14' }}
-        />
-
-        <div className="relative mx-auto max-w-3xl text-center">
-          {/* Eyebrow pill */}
+      <section className="relative overflow-hidden pt-16 pb-24 lg:pt-24 lg:pb-32 px-6">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent/40 rounded-full blur-3xl" />
           <div
-            className="animate-fade-in inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold tracking-[0.18em] uppercase mb-7"
+            className="absolute inset-0 opacity-[0.4]"
             style={{
-              backgroundColor: '#ffffff70',
-              borderColor: '#7F8CAA28',
-              color: '#7F8CAA',
-              animationDelay: '0.05s',
+              backgroundImage: 'radial-gradient(circle, hsl(var(--primary) / 0.15) 1px, transparent 1px)',
+              backgroundSize: '32px 32px',
             }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#4382df' }} />
-            SMS &amp; WhatsApp Platform
-          </div>
+          />
+        </div>
 
-          {/* Display headline */}
-          <h1
-            className="animate-fade-up font-extrabold tracking-tight leading-[0.9] mb-7"
-            style={{
-              fontSize: 'clamp(3.5rem, 9vw, 7.5rem)',
-              letterSpacing: '-0.04em',
-              color: '#0f172a',
-              animationDelay: '0.12s',
-            }}
-          >
-            Send smarter.{' '}
-            <br />
-            <span style={{ WebkitTextStroke: '2.5px #4382df', color: 'transparent' }}>
-              Reach further.
-            </span>
-          </h1>
+        <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="space-y-8">
+            <div className="animate-fade-up" style={{ animationDelay: '0.05s' }}>
+              <Badge variant="secondary" className="px-3 py-1 text-xs font-medium">
+                <Sparkles className="h-3 w-3 mr-1.5 text-primary" />
+                No credit card required
+              </Badge>
+            </div>
 
-          {/* Subtext */}
-          <p
-            className="animate-fade-up mx-auto max-w-xl text-lg leading-relaxed mb-9"
-            style={{ color: '#7F8CAA', animationDelay: '0.22s' }}
-          >
-            One platform for bulk broadcasts and meaningful one-on-one conversations.
-            Built for businesses and organisations that put community first.
-          </p>
-
-          {/* CTA row */}
-          <div
-            className="animate-fade-up flex flex-wrap items-center justify-center gap-3 mb-8"
-            style={{ animationDelay: '0.32s' }}
-          >
-            <Link
-              to="/signup"
-              className="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-90 active:scale-95"
-              style={{ backgroundColor: '#4382df', boxShadow: '0 4px 20px #4382df35' }}
+            <h1
+              className="animate-fade-up text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-balance leading-[1.1]"
+              style={{ animationDelay: '0.12s' }}
             >
-              Get started free <ArrowRight size={14} />
-            </Link>
-            <a
-              href="#features"
-              className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/60 active:scale-95"
-              style={{ color: '#7F8CAA', borderColor: '#7F8CAA45' }}
-            >
-              See features
-            </a>
-          </div>
+              Reach your community{' '}
+              <span className="gradient-text">without the chaos</span>
+            </h1>
 
-          {/* Supporting chips */}
-          <div
-            className="animate-fade-in flex flex-wrap items-center justify-center gap-2"
-            style={{ animationDelay: '0.48s' }}
-          >
-            {[
-              { Icon: SmsIcon, label: 'SMS' },
-              { Icon: WhatsAppIcon, label: 'WhatsApp' },
-            ].map(({ Icon, label }) => (
-              <span
-                key={label}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold border"
-                style={{ backgroundColor: '#ffffff90', borderColor: '#7F8CAA25', color: '#7F8CAA' }}
-              >
-                <Icon size={11} />
-                {label}
+            <p
+              className="animate-fade-up text-lg text-muted-foreground max-w-lg leading-relaxed"
+              style={{ animationDelay: '0.22s' }}
+            >
+              One simple platform for bulk SMS and WhatsApp broadcasts, plus personal one-on-one conversations. Built for organisations that put people first.
+            </p>
+
+            <div
+              className="animate-fade-up flex flex-wrap items-center gap-3"
+              style={{ animationDelay: '0.32s' }}
+            >
+              <Link to="/signup">
+                <Button size="lg">
+                  Get started free <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link to="/login">
+                <Button size="lg" variant="outline">Log in to your account</Button>
+              </Link>
+            </div>
+
+            <div
+              className="animate-fade-up flex flex-wrap items-center gap-4 text-sm text-muted-foreground"
+              style={{ animationDelay: '0.42s' }}
+            >
+              <span className="inline-flex items-center gap-1.5">
+                <Clock className="h-4 w-4 text-primary" />
+                Up and running in 3 minutes
               </span>
-            ))}
-            <span
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold border"
-              style={{ backgroundColor: '#ffffff90', borderColor: '#7F8CAA25', color: '#7F8CAA' }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#4382df' }} />
-              Free 14-day trial
-            </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Shield className="h-4 w-4 text-primary" />
+                GDPR ready
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Lock className="h-4 w-4 text-primary" />
+                Encrypted at rest
+              </span>
+            </div>
+          </div>
+
+          <div className="animate-fade-up" style={{ animationDelay: '0.3s' }}>
+            <HeroMockup />
           </div>
         </div>
       </section>
 
-      {/* ── Features ── */}
-      <section id="features" className="px-6 pb-24">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-12 animate-fade-up">
-            <p
-              className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5"
-              style={{ color: '#7F8CAA' }}
-            >
-              Features
-            </p>
-            <h2
-              className="text-4xl font-bold tracking-tight"
-              style={{ color: '#0f172a' }}
-            >
-              Everything you need to engage.
-            </h2>
-            <p
-              className="text-lg max-w-xl leading-relaxed mt-3"
-              style={{ color: '#7F8CAA' }}
-            >
-              Two channels, one platform — meet your audience where they already are.
+      {/* ── Social proof ── */}
+      <section className="px-6 pb-20">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-10 animate-fade-up">
+            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+              Trusted by community-first organisations
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {FEATURES.map((f, i) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 animate-fade-up">
+            {LOGOS.map((logo) => (
               <div
-                key={f.title}
-                className="animate-fade-up bg-white rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-                style={{
-                  boxShadow: '0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07',
-                  animationDelay: `${0.1 + i * 0.08}s`,
-                }}
+                key={logo}
+                className="flex items-center justify-center h-14 rounded-2xl bg-card border border-border/60 text-sm font-semibold text-muted-foreground"
               >
-                <div
-                  className="mb-4 flex size-10 items-center justify-center rounded-2xl"
-                  style={{ backgroundColor: '#4382df0e', color: '#4382df' }}
-                >
-                  {f.icon}
-                </div>
-                <h3
-                  className="text-base font-bold tracking-tight mb-2"
-                  style={{ color: '#0f172a' }}
-                >
-                  {f.title}
-                </h3>
-                <p className="text-sm leading-relaxed" style={{ color: '#7F8CAA' }}>
-                  {f.description}
-                </p>
+                {logo}
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12 animate-fade-up">
+            {[
+              { value: '10M+', label: 'messages delivered' },
+              { value: '99.2%', label: 'average delivery rate' },
+              { value: '3,200+', label: 'organisations reached' },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="text-3xl font-extrabold text-primary">{stat.value}</p>
+                <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── How it works ── */}
-      <section id="how-it-works" className="px-6 pb-24">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-12 animate-fade-up">
-            <p
-              className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5"
-              style={{ color: '#7F8CAA' }}
-            >
-              How it works
-            </p>
-            <h2
-              className="text-4xl font-bold tracking-tight"
-              style={{ color: '#0f172a' }}
-            >
-              Up and running in minutes.
+      {/* ── Features ── */}
+      <section id="features" className="px-6 pb-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-14 animate-fade-up">
+            <Badge variant="secondary" className="mb-4">Features</Badge>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
+              Everything you need to stay connected
             </h2>
+            <p className="text-lg text-muted-foreground">
+              Two channels, one calm inbox. Built for people who would rather build relationships than wrestle with software.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {STEPS.map((step, i) => (
-              <div
-                key={step.number}
-                className="animate-fade-up bg-white rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-                style={{
-                  boxShadow: '0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07',
-                  animationDelay: `${0.08 + i * 0.1}s`,
-                }}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {FEATURES.map((feature, i) => (
+              <Card
+                key={feature.title}
+                className="group animate-fade-up hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5"
+                style={{ animationDelay: `${0.08 + i * 0.08}s` }}
               >
-                <span
-                  className="block text-4xl font-extrabold tracking-tight mb-4"
-                  style={{ color: '#4382df14', WebkitTextStroke: '1.5px #4382df30' }}
+                <CardContent className="p-7">
+                  <div className="mb-4 flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                    <feature.icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-lg font-bold mb-2 text-card-foreground">{feature.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Use cases ── */}
+      <section id="use-cases" className="px-6 pb-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-14 animate-fade-up">
+            <Badge variant="secondary" className="mb-4">Use cases</Badge>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
+              Made for the moments that matter
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              From urgent updates to quiet thank-yous, OpenComms fits how real communities communicate.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-12 gap-8 items-start animate-fade-up">
+            <div className="lg:col-span-4 flex flex-col gap-2">
+              {USE_CASES.map((useCase) => (
+                <button
+                  key={useCase.id}
+                  onClick={() => setActiveUseCase(useCase.id)}
+                  className={`text-left px-5 py-4 rounded-2xl transition-all duration-200 ${
+                    activeUseCase === useCase.id
+                      ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
+                      : 'bg-card border border-border/60 text-foreground hover:border-primary/30'
+                  }`}
                 >
+                  <span className="font-semibold">{useCase.label}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="lg:col-span-8">
+              <Card className="h-full border border-border/60">
+                <CardContent className="p-8 lg:p-10">
+                  <h3 className="text-2xl sm:text-3xl font-extrabold mb-4">{activeCase.title}</h3>
+                  <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                    {activeCase.description}
+                  </p>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {activeCase.stats.map((stat) => (
+                      <div
+                        key={stat.label}
+                        className="rounded-2xl bg-muted/50 p-5 border border-border/40"
+                      >
+                        <p className="text-3xl font-extrabold text-primary">{stat.value}</p>
+                        <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── How it works ── */}
+      <section id="how-it-works" className="px-6 pb-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-14 animate-fade-up">
+            <Badge variant="secondary" className="mb-4">How it works</Badge>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
+              Up and running in minutes, not days
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              We stripped away the complexity so you can focus on your community.
+            </p>
+          </div>
+
+          <div className="relative grid md:grid-cols-3 gap-8 animate-fade-up">
+            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-primary/20 via-primary to-primary/20" />
+            {STEPS.map((step) => (
+              <div key={step.number} className="relative text-center">
+                <div className="mx-auto mb-6 flex size-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground text-2xl font-extrabold shadow-lg shadow-primary/20">
                   {step.number}
-                </span>
-                <h3
-                  className="text-lg font-bold tracking-tight mb-2"
-                  style={{ color: '#0f172a' }}
-                >
-                  {step.title}
-                </h3>
-                <p className="text-sm leading-relaxed" style={{ color: '#7F8CAA' }}>
+                </div>
+                <h3 className="text-xl font-bold mb-3">{step.title}</h3>
+                <p className="text-muted-foreground leading-relaxed max-w-xs mx-auto">
                   {step.description}
                 </p>
               </div>
@@ -291,68 +458,203 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* ── Dark CTA block ── */}
-      <section className="px-6 pb-24">
-        <div className="mx-auto max-w-7xl">
-          <div
-            className="relative rounded-3xl overflow-hidden px-10 py-20 text-center"
-            style={{ backgroundColor: '#0f172a' }}
-          >
-            {/* Glow layer */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                backgroundImage:
-                  'radial-gradient(ellipse at 25% 60%, #4382df20 0%, transparent 55%), radial-gradient(ellipse at 80% 30%, #7F8CAA18 0%, transparent 50%)',
-              }}
-            />
-            {/* Grid layer */}
-            <div
-              className="absolute inset-0 pointer-events-none opacity-20"
-              style={{
-                backgroundImage:
-                  'linear-gradient(#4382df0e 1px, transparent 1px), linear-gradient(90deg, #4382df0e 1px, transparent 1px)',
-                backgroundSize: '48px 48px',
-              }}
-            />
+      {/* ── Security & compliance ── */}
+      <section id="security" className="px-6 pb-24">
+        <div className="max-w-7xl mx-auto">
+          <Card className="overflow-hidden border border-border/60 bg-gradient-to-br from-card via-card to-primary/5">
+            <CardContent className="p-8 lg:p-14">
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6">
+                  <Badge variant="secondary" className="mb-2">Security & compliance</Badge>
+                  <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+                    Your community data stays protected
+                  </h2>
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    Trust is the foundation of every community. That is why security and privacy are built into OpenComms from day one — not bolted on later.
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <Link to="/signup">
+                      <Button>Start securely</Button>
+                    </Link>
+                    <Link to="/privacy">
+                      <Button variant="outline">Read our privacy policy</Button>
+                    </Link>
+                  </div>
+                </div>
 
-            <div className="relative animate-fade-up">
-              <p
-                className="text-xs font-bold tracking-[0.25em] uppercase mb-4"
-                style={{ color: '#4382df' }}
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {SECURITY_FEATURES.map((feature) => (
+                    <div
+                      key={feature}
+                      className="flex items-start gap-3 p-4 rounded-2xl bg-background/80 border border-border/60"
+                    >
+                      <div className="flex-shrink-0 mt-0.5 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                        <Check className="h-3 w-3" />
+                      </div>
+                      <span className="text-sm font-medium text-foreground">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* ── Pricing ── */}
+      <section id="pricing" className="px-6 pb-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-14 animate-fade-up">
+            <Badge variant="secondary" className="mb-4">Pricing</Badge>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
+              Simple plans for every stage
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Start free, upgrade when you grow. No hidden fees, no surprise charges.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 animate-fade-up">
+            {PRICING.map((plan) => (
+              <Card
+                key={plan.name}
+                className={`relative ${
+                  plan.popular
+                    ? 'border-primary shadow-lg shadow-primary/10 ring-1 ring-primary'
+                    : 'border-border/60'
+                }`}
               >
-                Get started today
-              </p>
-              <h2
-                className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-5"
-                style={{ lineHeight: '1' }}
-              >
-                Ready to connect with
-                <br />
-                <span style={{ color: '#7F8CAA' }}>your community?</span>
+                {plan.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <Badge className="bg-primary text-primary-foreground">Most popular</Badge>
+                  </div>
+                )}
+                <CardContent className="p-7 flex flex-col h-full">
+                  <div className="mb-6">
+                    <h3 className="text-lg font-bold">{plan.name}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{plan.description}</p>
+                  </div>
+                  <div className="mb-6">
+                    <span className="text-4xl font-extrabold tracking-tight">{plan.price}</span>
+                    {plan.price !== 'Custom' && <span className="text-muted-foreground">/mo</span>}
+                  </div>
+                  <ul className="space-y-3 mb-8 flex-1">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2.5 text-sm">
+                        <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-muted-foreground">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link to="/signup" className="w-full">
+                    <Button
+                      variant={plan.popular ? 'default' : 'outline'}
+                      className="w-full"
+                    >
+                      {plan.cta}
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Testimonials ── */}
+      <section className="px-6 pb-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-14 animate-fade-up">
+            <Badge variant="secondary" className="mb-4">Testimonials</Badge>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
+              Loved by community builders
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 animate-fade-up">
+            {TESTIMONIALS.map((t) => (
+              <Card key={t.name} className="border-border/60">
+                <CardContent className="p-7 flex flex-col h-full">
+                  <div className="mb-6 flex gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <svg
+                        key={star}
+                        className="h-4 w-4 text-primary"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-foreground leading-relaxed mb-6 flex-1">
+                    "{t.quote}"
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
+                      {t.initials}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm">{t.name}</p>
+                      <p className="text-xs text-muted-foreground">{t.role}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Final CTA ── */}
+      <section className="px-6 pb-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-teal-700 px-8 py-16 lg:py-20 text-center animate-fade-up">
+            <div className="absolute inset-0 opacity-20">
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.3) 1.5px, transparent 1.5px)',
+                  backgroundSize: '28px 28px',
+                }}
+              />
+            </div>
+            <div className="relative max-w-2xl mx-auto space-y-6">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+                Ready to reach your community?
               </h2>
-              <p
-                className="text-base mb-10 max-w-lg mx-auto leading-relaxed"
-                style={{ color: '#7F8CAA' }}
-              >
-                Join hundreds of organisations already using OpenComms to keep their members
-                informed and engaged. Free for 14 days, no credit card required.
+              <p className="text-lg text-white/80">
+                Join thousands of organisations using OpenComms to keep their members informed, engaged, and protected.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <Link
-                  to="/signup"
-                  className="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-90 active:scale-95"
-                  style={{ backgroundColor: '#4382df', boxShadow: '0 4px 20px #4382df35' }}
-                >
-                  Get started free <ArrowRight size={14} />
+                <Link to="/signup">
+                  <Button size="lg" variant="secondary">
+                    Get started free <ArrowRight className="h-4 w-4" />
+                  </Button>
                 </Link>
-                <Link
-                  to="/login"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/10 active:scale-95"
-                  style={{ color: '#7F8CAA', borderColor: '#7F8CAA45' }}
-                >
-                  Log in to your account
+                <Link to="/login">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-white/30 text-white hover:bg-white/10 hover:text-white"
+                  >
+                    Log in
+                  </Button>
                 </Link>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-white/70">
+                <span className="inline-flex items-center gap-1.5">
+                  <Check className="h-3.5 w-3.5" />
+                  Free 14-day trial
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Check className="h-3.5 w-3.5" />
+                  No credit card
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Check className="h-3.5 w-3.5" />
+                  Cancel anytime
+                </span>
               </div>
             </div>
           </div>
@@ -361,3 +663,7 @@ function LandingPage() {
     </>
   )
 }
+
+export const Route = createFileRoute('/_guest/')({
+  component: LandingPage,
+})

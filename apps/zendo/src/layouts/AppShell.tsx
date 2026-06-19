@@ -12,15 +12,15 @@ export function AppShell() {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="flex flex-col h-svh overflow-hidden" style={{ backgroundColor: "#ebf0f0" }}>
+      <div className="flex flex-col h-svh overflow-hidden bg-zendo-cream">
         <TopBar />
 
         <div className="flex flex-1 overflow-hidden">
           {/* Desktop sidebar */}
           <div
             className={cn(
-              "hidden md:block overflow-hidden transition-all duration-200 flex-shrink-0",
-              sidebarOpen ? "w-60" : "w-0"
+              "hidden md:block overflow-hidden transition-all duration-300 ease-out flex-shrink-0",
+              sidebarOpen ? "w-60 translate-x-0" : "w-0 -translate-x-full"
             )}
           >
             {sidebarOpen && <Sidebar />}
@@ -28,10 +28,10 @@ export function AppShell() {
 
           {/* Main content */}
           <main
-            className="flex-1 overflow-y-auto"
+            className="flex-1 overflow-y-auto relative"
             style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 64px)" }}
           >
-            <div className="md:[padding-bottom:0]">
+            <div className="md:[padding-bottom:0] h-full">
               <Outlet />
             </div>
           </main>

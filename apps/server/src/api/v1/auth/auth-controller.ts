@@ -3,14 +3,15 @@ import { zValidator } from "@hono/zod-validator";
 import { Bindings } from "@/lib/types";
 import { drizzle } from "drizzle-orm/d1";
 import { DrizzleQueryError, eq } from "drizzle-orm";
-import { members, organizations, users } from "@/db/schema";
+import { members, organizations, users } from "@/db/schemas";
 import { parseToken, signToken, sendOTPEmail, handleZodValidate } from "@/lib/utils";
 import { setCookie, deleteCookie } from "hono/cookie";
 import type { TokenPayload } from "@/lib/types";
 import { ErrorResult } from "@/lib/types";
 import { getAccessTokenExp, ACCESS_TOKEN_MAX_AGE, getRefreshTokenExp, REFRESH_TOKEN_MAX_AGE } from "@/lib/constants";
-import { loginSchema, otpSchema, signupSchema, PaystackCustomerResponseSchema } from "./auth-zod-schema";
+import { loginSchema, otpSchema, signupSchema } from "./auth-zod-schema";
 import { validateReferral } from "./auth-service";
+import { detectProvider, getGateway, getCurrency } from "@/lib/payment";
 
 const authRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/auth");
 
@@ -78,22 +79,20 @@ authRouteV1.post(
         let member: { id: number } | undefined;
 
         try {
-            // Create Paystack customer
-            const response = await fetch("https://api.paystack.co/customer", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${c.env.PAYSTACK_SECRET}`,
-                },
-                body: JSON.stringify({
-                    email: data.email,
-                    first_name: data.firstname,
-                    last_name: data.lastname,
-                }),
-            });
+            // Detect payment provider
+            let provider: "paystack" | "stripe" | null = data.paymentProvider as "paystack" | "stripe" | null;
+            if (!provider) {
+                provider = detectProvider(data.country);
+            }
+            if (!provider) {
+                return c.json({ message: "Unable to determine payment provider. Please select a provider." }, 400);
+            }
 
-            const paystackResult = await response.json();
-            const parsePaystackResult = PaystackCustomerResponseSchema.parse(paystackResult);
+            const currency = data.currency || getCurrency(provider);
+            const gateway = getGateway(provider, c.env);
+
+            // Create customer with the selected gateway
+            const customer = await gateway.createCustomer(data.email, data.firstname, data.lastname);
 
             // Create organization
             organization = await db
@@ -105,9 +104,12 @@ authRouteV1.post(
                     city: data.city,
                     country: data.country,
                     website: data.website,
-                    paystackCustomerCode: parsePaystackResult.data.customer_code,
-                    paystackCustomerId: parsePaystackResult.data.id,
+                    paymentProvider: provider,
+                    currency,
                     referredBy,
+                    paystackCustomerCode: provider === "paystack" ? customer.customerCode : null,
+                    paystackCustomerId: provider === "paystack" ? (typeof customer.id === "number" ? customer.id : null) : null,
+                    stripeCustomerId: provider === "stripe" ? String(customer.id) : null,
                 })
                 .returning({ id: organizations.id })
                 .get();
@@ -145,8 +147,10 @@ authRouteV1.post(
                 username: user.username,
                 currentOrgId: organization.id,
                 otp: otp,
-                paystackCustomerCode: parsePaystackResult.data.customer_code,
-                paystackCustomerId: parsePaystackResult.data.id,
+                paymentProvider: provider,
+                paystackCustomerCode: provider === "paystack" ? customer.customerCode : undefined,
+                paystackCustomerId: provider === "paystack" ? Number(customer.id) : undefined,
+                stripeCustomerId: provider === "stripe" ? String(customer.id) : undefined,
                 exp: getAccessTokenExp(),
             };
 
@@ -209,8 +213,10 @@ authRouteV1.post(
             email: user.email,
             currentOrgId: parsed.currentOrgId,
             organizationName: organization.name,
-            paystackCustomerCode: organization.paystackCustomerCode,
-            paystackCustomerId: organization.paystackCustomerId,
+            paymentProvider: organization.paymentProvider || undefined,
+            paystackCustomerCode: organization.paystackCustomerCode || undefined,
+            paystackCustomerId: organization.paystackCustomerId || undefined,
+            stripeCustomerId: organization.stripeCustomerId || undefined,
             exp: getRefreshTokenExp(),
         };
 
@@ -231,8 +237,10 @@ authRouteV1.post(
             email: user.email,
             currentOrgId: parsed.currentOrgId,
             organizationName: organization.name,
-            paystackCustomerCode: organization.paystackCustomerCode,
-            paystackCustomerId: organization.paystackCustomerId,
+            paymentProvider: organization.paymentProvider || undefined,
+            paystackCustomerCode: organization.paystackCustomerCode || undefined,
+            paystackCustomerId: organization.paystackCustomerId || undefined,
+            stripeCustomerId: organization.stripeCustomerId || undefined,
             exp: getAccessTokenExp(),
         };
 
@@ -269,8 +277,10 @@ authRouteV1.get("/refresh-token", async (c) => {
         email: parsed.email,
         currentOrgId: parsed.currentOrgId,
         organizationName: organization.name,
+        paymentProvider: organization.paymentProvider || undefined,
         paystackCustomerCode: parsed.paystackCustomerCode,
         paystackCustomerId: parsed.paystackCustomerId,
+        stripeCustomerId: parsed.stripeCustomerId,
         exp: getAccessTokenExp(),
     };
 

@@ -1,29 +1,12 @@
 import { Link } from "@tanstack/react-router";
+import { Check } from "lucide-react";
 
-function ArrowRight({ size = 14 }: { size?: number }) {
+function ArrowRight({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 14 14" fill="none" stroke="currentColor"
       strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
       className="transition-transform group-hover:translate-x-0.5">
       <path d="M2 7h10M7 2l5 5-5 5" />
-    </svg>
-  );
-}
-
-function Check() {
-  return (
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"
-      stroke="#4382df" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M2 5l2.5 2.5L8 2.5" />
-    </svg>
-  );
-}
-
-function CheckMuted() {
-  return (
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"
-      stroke="#7F8CAA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M2 5l2.5 2.5L8 2.5" />
     </svg>
   );
 }
@@ -48,67 +31,48 @@ const PRO_FEATURES = [
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="pb-24 px-6">
-      <div className="max-w-7xl mx-auto">
+    <section id="pricing" className="py-24 px-6 bg-zendo-cream relative overflow-hidden">
+      <div aria-hidden="true" className="absolute bottom-0 right-[-10%] w-[500px] h-[500px] rounded-full bg-zendo-lavender/10 blur-[120px] pointer-events-none" />
+      <div aria-hidden="true" className="absolute top-20 left-[-5%] w-[350px] h-[350px] rounded-full bg-zendo-sky/10 blur-[100px] pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto">
         {/* Section header */}
-        <div className="mb-12">
-          <p
-            className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5"
-            style={{ color: "#7F8CAA" }}
-          >
-            Simple pricing
-          </p>
-          <h2
-            className="text-4xl font-bold tracking-tight"
-            style={{ color: "#0f172a" }}
-          >
+        <div className="mb-14 max-w-2xl">
+          <p className="eyebrow mb-4">Simple pricing</p>
+          <h2 className="section-heading">
             Start free. Upgrade when ready.
           </h2>
-          <p
-            className="text-lg max-w-xl leading-relaxed mt-3"
-            style={{ color: "#7F8CAA" }}
-          >
+          <p className="text-lg max-w-xl leading-relaxed mt-4 text-zendo-ink-light">
             No surprise fees. Cancel any time. Your data is always yours.
           </p>
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl">
           {/* Free */}
           <div
-            className="animate-fade-up bg-white rounded-3xl p-10 flex flex-col gap-6"
-            style={{
-              boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07",
-              animationDelay: "0.1s",
-            }}
+            className="animate-fade-up p-10 flex flex-col gap-6 rounded-[2rem] bg-white border border-zendo-ink/8 shadow-sm"
+            style={{ animationDelay: "0.1s" }}
           >
             <div>
-              <p
-                className="text-xs font-bold tracking-[0.25em] uppercase mb-4"
-                style={{ color: "#7F8CAA" }}
-              >
-                Free
-              </p>
+              <p className="eyebrow mb-4">Free</p>
               <div className="flex items-baseline gap-1">
-                <span className="text-5xl font-extrabold tracking-tight" style={{ color: "#0f172a" }}>
+                <span className="text-5xl font-extrabold tracking-tight text-zendo-ink">
                   $0
                 </span>
-                <span className="text-sm" style={{ color: "#7F8CAA" }}>/month</span>
+                <span className="text-sm text-zendo-ink-light">/month</span>
               </div>
-              <p className="text-sm mt-1" style={{ color: "#7F8CAA" }}>
+              <p className="text-sm mt-2 text-zendo-ink-light">
                 Perfect for individuals getting started.
               </p>
             </div>
 
-            <div style={{ borderTop: "1px solid #7F8CAA18" }} className="pt-6">
+            <div className="pt-6 border-t border-zendo-ink/10">
               <ul className="flex flex-col gap-3">
                 {FREE_FEATURES.map((f) => (
-                  <li key={f} className="flex items-center gap-2.5 text-sm" style={{ color: "#0f172a" }}>
-                    <span
-                      className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: "#7F8CAA14" }}
-                    >
-                      <CheckMuted />
+                  <li key={f} className="flex items-center gap-3 text-sm text-zendo-ink">
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 bg-zendo-sage/15 text-zendo-sage">
+                      <Check size={12} strokeWidth={3} />
                     </span>
                     {f}
                   </li>
@@ -118,8 +82,7 @@ export function PricingSection() {
 
             <Link
               to="/signup"
-              className="mt-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/60 active:scale-95"
-              style={{ color: "#7F8CAA", borderColor: "#7F8CAA45" }}
+              className="btn-outline mt-auto justify-center"
             >
               Get started free
             </Link>
@@ -127,50 +90,37 @@ export function PricingSection() {
 
           {/* Pro */}
           <div
-            className="animate-fade-up bg-white rounded-3xl p-10 flex flex-col gap-6 relative"
-            style={{
-              boxShadow: "0 1px 4px #0f172a0a, 0 0 0 2px #4382df50",
-              backgroundColor: "#ffffff",
-              animationDelay: "0.2s",
-            }}
+            className="animate-fade-up p-10 flex flex-col gap-6 rounded-[2.5rem] bg-zendo-ink text-white shadow-2xl shadow-zendo-ink/20 relative"
+            style={{ animationDelay: "0.2s" }}
           >
             {/* Most popular badge */}
-            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-              <span
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold text-white"
-                style={{ backgroundColor: "#4382df", boxShadow: "0 4px 12px #4382df35" }}
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-white/60 animate-pulse" />
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 text-xs font-bold text-zendo-ink bg-zendo-butter rounded-full shadow-lg">
+                <span className="w-1.5 h-1.5 rounded-full bg-zendo-coral animate-pulse" />
                 Most popular
               </span>
             </div>
 
             <div className="pt-2">
-              <p
-                className="text-xs font-bold tracking-[0.25em] uppercase mb-4"
-                style={{ color: "#4382df" }}
-              >
+              <p className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-bold tracking-wider uppercase text-zendo-coral bg-zendo-coral/10 rounded-full mb-4">
                 Pro
               </p>
               <div className="flex items-baseline gap-1">
-                <span className="text-lg self-start mt-2" style={{ color: "#7F8CAA" }}>$</span>
-                <span className="text-5xl font-extrabold tracking-tight" style={{ color: "#0f172a" }}>5</span>
-                <span className="text-sm" style={{ color: "#7F8CAA" }}>/month</span>
+                <span className="text-lg self-start mt-2 text-white/60">$</span>
+                <span className="text-5xl font-extrabold tracking-tight text-white">5</span>
+                <span className="text-sm text-white/60">/month</span>
               </div>
-              <p className="text-sm mt-1" style={{ color: "#7F8CAA" }}>
+              <p className="text-sm mt-2 text-white/70">
                 For serious makers who want every edge.
               </p>
             </div>
 
-            <div style={{ borderTop: "1px solid #4382df28" }} className="pt-6">
+            <div className="pt-6 border-t border-white/10">
               <ul className="flex flex-col gap-3">
                 {PRO_FEATURES.map((f) => (
-                  <li key={f} className="flex items-center gap-2.5 text-sm" style={{ color: "#0f172a" }}>
-                    <span
-                      className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: "#4382df14" }}
-                    >
-                      {f === "Everything in Free" ? <CheckMuted /> : <Check />}
+                  <li key={f} className="flex items-center gap-3 text-sm text-white/90">
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 bg-zendo-coral/20 text-zendo-coral">
+                      <Check size={12} strokeWidth={3} />
                     </span>
                     {f}
                   </li>
@@ -180,15 +130,14 @@ export function PricingSection() {
 
             <Link
               to="/signup"
-              className="group mt-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-92 active:scale-95"
-              style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+              className="group mt-auto justify-center inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold text-zendo-ink bg-white transition-all hover:bg-zendo-cream hover:gap-3 active:scale-95 rounded-full shadow-lg"
             >
               Start Pro free for 14 days <ArrowRight />
             </Link>
           </div>
         </div>
 
-        <p className="text-xs mt-6" style={{ color: "#7F8CAA" }}>
+        <p className="text-xs mt-6 text-zendo-ink-light">
           Pro trial requires no credit card. Billed monthly after trial ends. Cancel any time.
         </p>
       </div>

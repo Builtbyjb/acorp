@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/components/card";
-import { Badge } from "@shared/ui/components/badge";
-import { Button } from "@shared/ui/components/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { Invoice } from "@shared/lib/types";
 import { format } from "date-fns";
 import { formatCurrency, getBadgeVariant } from "@/lib/utils";
@@ -25,11 +25,11 @@ export default function RecentInvoices({ invoices, isLoading }: RecentInvoicesPr
   };
 
   return (
-    <Card className="col-span-1 lg:col-span-2">
+    <Card className="col-span-1 lg:col-span-2 border-black/10 rounded-none">
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle>Recent Invoices</CardTitle>
-          <CardDescription>Latest invoice activity</CardDescription>
+          <CardTitle className="text-lg font-bold">Recent Invoices</CardTitle>
+          <CardDescription className="text-neutral-500">Latest invoice activity</CardDescription>
         </div>
         <Button variant="outline" onClick={() => navigate({ to: "/invoices" })}>
           View all
@@ -37,29 +37,43 @@ export default function RecentInvoices({ invoices, isLoading }: RecentInvoicesPr
       </CardHeader>
       <CardContent>
         {!isLoading ? (
-          <div className="space-y-4">
-            {recentInvoices.map((invoice) => (
+          <div className="space-y-0">
+            {/* Header row */}
+            <div className="hidden md:grid grid-cols-12 gap-4 pb-3 border-b border-black/10 text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+              <div className="col-span-3">Invoice</div>
+              <div className="col-span-2">Date</div>
+              <div className="col-span-3">Amount</div>
+              <div className="col-span-2">Status</div>
+              <div className="col-span-2 text-right"></div>
+            </div>
+            {recentInvoices.map((invoice, i) => (
               <div
                 key={invoice.id}
-                className="flex items-center justify-between p-3 rounded-lg border border-border"
+                className={`grid grid-cols-1 md:grid-cols-12 gap-4 py-4 items-center transition-colors duration-200 hover:bg-black/[0.02] cursor-pointer ${i < recentInvoices.length - 1 ? "border-b border-black/5" : ""}`}
                 onClick={() => handleNavigate(invoice)}
               >
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">{invoice.invoiceNumber}</span>
-                    <Badge className={`${getBadgeVariant(invoice.status)} capitalize`}>{invoice.status}</Badge>
-                  </div>
-                  {/*<span className="text-sm text-muted-foreground">{invoice.client.name}</span>*/}
+                <div className="md:col-span-3">
+                  <span className="font-bold text-black">{invoice.invoiceNumber}</span>
                 </div>
-                <div className="flex flex-col items-end gap-1">
-                  <span className="font-semibold">
+                <div className="md:col-span-2 text-sm text-neutral-500">
+                  {format(new Date(invoice.issueDate), "MMM d, yyyy")}
+                </div>
+                <div className="md:col-span-3">
+                  <span className="font-bold text-black tabular-nums">
                     {formatCurrency(
                       calculateTotalAmount(invoice.items, invoice.taxRate, invoice.discount),
                       invoice.currency,
                     )}
                   </span>
-                  <span className="text-xs text-muted-foreground">
-                    {format(new Date(invoice.issueDate), "MMM d, yyyy")}
+                </div>
+                <div className="md:col-span-2">
+                  <Badge className={`${getBadgeVariant(invoice.status)} capitalize rounded-none border-0`}>
+                    {invoice.status}
+                  </Badge>
+                </div>
+                <div className="md:col-span-2 text-right">
+                  <span className="text-xs text-neutral-400 font-mono">
+                    {format(new Date(invoice.dueDate), "MMM d")}
                   </span>
                 </div>
               </div>

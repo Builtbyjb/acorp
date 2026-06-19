@@ -1,20 +1,17 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
-import NavBar from "@shared/ui/custom-components/Navbar";
-import Footer from "@shared/ui/custom-components/Footer";
+import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
+import NavBar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import Logo from "@/components/Logo";
 
 function GuestLayout() {
+  const routerState = useRouterState();
+  const isHomePage = routerState.location.pathname === "/";
+
   const navLinks = [{ to: "/pricing", label: "Pricing" }];
   const footerItems = [
     {
       title: "Product",
-      items: [
-        // { name: "Features", href: "#" },
-        { label: "Pricing", to: "/pricing" },
-        // { name: "Templates", href: "#" },
-        // { name: "Integrations", href: "#" },
-        // { name: "API", href: "#" },
-      ],
+      items: [{ label: "Pricing", to: "/pricing" }],
     },
     {
       title: "Company",
@@ -27,7 +24,7 @@ function GuestLayout() {
   return (
     <>
       <NavBar navLinks={navLinks} logo={<Logo />} />
-      <div className="mt-16 mb-16 w-[90%] sm:w-[80%] md:w-[70%] mx-auto">
+      <div className={isHomePage ? "" : "mt-16 mb-16 w-[90%] sm:w-[80%] md:w-[70%] mx-auto"}>
         <Outlet />
       </div>
       <Footer

@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@shared/ui/components/table";
-import { Badge } from "@shared/ui/components/badge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@shared/ui/components/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,7 +17,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@shared/ui/components/alert-dialog";
+} from "@/components/ui/alert-dialog";
 import { MoreHorizontal, Eye, Pencil, Trash2 } from "lucide-react";
 import { PaginationBar } from "@/components/PaginationBar";
 import type { Invoice } from "@shared/lib/types";
@@ -64,12 +64,11 @@ export default function InvoicesTable({
   const handleDelete = async () => {
     if (deleteId && clientId) {
       try {
-        const response = await doDELETE(`/api/v1/clients/${clientId}/invoices/${deleteId}/delete`);
+        const response = await doDELETE(`/api/v1/invoice/clients/${clientId}/invoices/${deleteId}/delete`);
         if (response instanceof Error) throw response;
 
         if (!response.ok) throw new Error("An error occurred while deleting the invoice");
 
-        // Parent manages re-fetching/pagination
         await onDelete(deleteId);
         toast.success("Invoice Deleted");
       } catch (error: unknown) {
@@ -92,15 +91,25 @@ export default function InvoicesTable({
         <SkeletonTable columns={invoiceSkeletonColumns} />
       ) : (
         <>
-          <div className="rounded-lg border border-border">
+          <div className="border border-black/10">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Invoice</TableHead>
-                  <TableHead className="hidden md:table-cell">Date</TableHead>
-                  <TableHead className="hidden lg:table-cell">Due Date</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Status</TableHead>
+                <TableRow className="border-b border-black/10 hover:bg-transparent">
+                  <TableHead className="text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Invoice
+                  </TableHead>
+                  <TableHead className="hidden md:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Date
+                  </TableHead>
+                  <TableHead className="hidden lg:table-cell text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Due Date
+                  </TableHead>
+                  <TableHead className="text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Amount
+                  </TableHead>
+                  <TableHead className="text-[10px] font-mono font-bold tracking-widest uppercase text-neutral-500">
+                    Status
+                  </TableHead>
                   <TableHead className="w-12.5"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -109,35 +118,35 @@ export default function InvoicesTable({
                   <>
                     {invoices.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={7} className="h-32 text-center text-muted-foreground">
+                        <TableCell colSpan={7} className="h-32 text-center text-neutral-500">
                           No invoices found. Create your first invoice to get started.
                         </TableCell>
                       </TableRow>
                     ) : (
                       invoices.map((invoice) => (
-                        <TableRow key={invoice.id}>
+                        <TableRow key={invoice.id} className="border-b border-black/5 hover:bg-black/[0.02]">
                           <TableCell
                             className="cursor-pointer"
                             onClick={() => handleNavigate(invoice.clientId, invoice.id)}
                           >
                             <div className="flex flex-col">
-                              <span className="font-medium">{invoice.invoiceNumber}</span>
+                              <span className="font-bold text-black">{invoice.invoiceNumber}</span>
                             </div>
                           </TableCell>
                           <TableCell
-                            className="hidden md:table-cell text-sm cursor-pointer"
+                            className="hidden md:table-cell text-sm cursor-pointer text-neutral-500"
                             onClick={() => handleNavigate(invoice.clientId, invoice.id)}
                           >
                             {format(new Date(invoice.issueDate), "MMM d, yyyy")}
                           </TableCell>
                           <TableCell
-                            className="hidden lg:table-cell text-sm cursor-pointer"
+                            className="hidden lg:table-cell text-sm cursor-pointer text-neutral-500"
                             onClick={() => handleNavigate(invoice.clientId, invoice.id)}
                           >
                             {format(new Date(invoice.dueDate), "MMM d, yyyy")}
                           </TableCell>
                           <TableCell
-                            className="font-semibold cursor-pointer"
+                            className="font-bold cursor-pointer text-black tabular-nums"
                             onClick={() => handleNavigate(invoice.clientId, invoice.id)}
                           >
                             {formatCurrency(
@@ -149,15 +158,17 @@ export default function InvoicesTable({
                             className="cursor-pointer"
                             onClick={() => handleNavigate(invoice.clientId, invoice.id)}
                           >
-                            <Badge className={`capitalize ${getBadgeVariant(invoice.status)}`}>{invoice.status}</Badge>
+                            <Badge className={`capitalize ${getBadgeVariant(invoice.status)} rounded-none border-0`}>
+                              {invoice.status}
+                            </Badge>
                           </TableCell>
                           <TableCell>
                             <DropdownMenu>
                               <DropdownMenuTrigger className="cursor-pointer">
-                                <MoreHorizontal className="h-4 w-4" />
+                                <MoreHorizontal className="h-4 w-4 text-neutral-500" />
                                 <span className="sr-only">Open menu</span>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end" className="w-44">
+                              <DropdownMenuContent align="end" className="w-44 border-black/10">
                                 <DropdownMenuItem
                                   onClick={() =>
                                     navigate({
@@ -180,13 +191,13 @@ export default function InvoicesTable({
                                   <Pencil className="mr-2 h-4 w-4" />
                                   Edit
                                 </DropdownMenuItem>
-                                <DropdownMenuSeparator />
+                                <DropdownMenuSeparator className="bg-black/10" />
                                 <DropdownMenuItem
                                   onClick={() => {
                                     setClientId(invoice.clientId);
                                     setDeleteId(invoice.id);
                                   }}
-                                  className="text-destructive"
+                                  className="text-black"
                                 >
                                   <Trash2 className="mr-2 h-4 w-4" />
                                   Delete
@@ -208,16 +219,16 @@ export default function InvoicesTable({
       )}
 
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
-        <AlertDialogContent>
+        <AlertDialogContent className="border-black/10 rounded-none">
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Invoice</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-black">Delete Invoice</AlertDialogTitle>
+            <AlertDialogDescription className="text-neutral-500">
               Are you sure you want to delete this invoice? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-white hover:bg-destructive/90">
+            <AlertDialogCancel className="rounded-none">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-black text-white hover:bg-black/90 rounded-none">
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

@@ -13,10 +13,10 @@ function Card({
       data-slot="card"
       data-size={size}
       className={cn(
-        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-3xl bg-card py-(--card-spacing) text-sm text-card-foreground transition-all duration-300 hover:-translate-y-1 hover:shadow-xl [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)]",
+        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-3xl bg-card py-(--card-spacing) text-sm text-card-foreground transition-all duration-300 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)]",
         className
       )}
-      style={{ boxShadow: "0 1px 4px #0f172a0c, 0 0 0 1px #0f172a07", ...style }}
+      style={{ boxShadow: "0 1px 3px rgba(28,25,23,0.04), 0 0 0 1px rgba(28,25,23,0.06)", ...style }}
       {...props}
     />
   )
@@ -40,10 +40,9 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-title"
       className={cn(
-        "font-heading text-base leading-snug font-semibold group-data-[size=sm]/card:text-sm",
+        "font-heading text-base leading-snug font-semibold text-card-foreground group-data-[size=sm]/card:text-sm",
         className
       )}
-      style={{ color: "#0f172a" }}
       {...props}
     />
   )
@@ -53,8 +52,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-sm leading-relaxed", className)}
-      style={{ color: "#7F8CAA" }}
+      className={cn("text-sm leading-relaxed text-muted-foreground", className)}
       {...props}
     />
   )
@@ -88,10 +86,9 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-footer"
       className={cn(
-        "flex items-center rounded-b-3xl border-t p-(--card-spacing)",
+        "flex items-center rounded-b-3xl border-t border-border p-(--card-spacing)",
         className
       )}
-      style={{ borderColor: "#7F8CAA14" }}
       {...props}
     />
   )

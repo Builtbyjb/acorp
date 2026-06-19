@@ -9,9 +9,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-white hover:opacity-90",
+          "bg-primary text-primary-foreground hover:brightness-110 shadow-sm shadow-primary/25",
         outline:
-          "border-2 border-[#7F8CAA45] text-[#7F8CAA] hover:bg-white/60",
+          "border-2 border-border text-muted-foreground hover:border-primary/50 hover:text-primary hover:bg-primary/5",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-accent",
         ghost:
@@ -45,12 +45,11 @@ function Button({
   style,
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants> & { style?: React.CSSProperties }) {
-  const isSolid = variant === "default" || variant === undefined
   return (
     <ButtonPrimitive
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
-      style={isSolid ? { boxShadow: "0 4px 20px #4382df35", ...style } : style}
+      style={style}
       {...props}
     />
   )

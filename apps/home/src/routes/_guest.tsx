@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import NavBar from "@shared/ui/components/Navbar";
+import NavBar from "@/components/Navbar";
 import Logo from "@/components/Logo";
-import Footer from "@shared/ui/components/Footer";
+import Footer from "@/components/Footer";
 
 function GuestLayout() {
   const navLinks = [
@@ -14,11 +14,11 @@ function GuestLayout() {
       title: "Products",
       items: [
         { label: "Invoice", to: "https://invoice.acorp.app" },
-        { label: "Zendo", to: "#" },
-        { label: "OpenComms", to: "#" },
-        { label: "Lumina", to: "#" },
-        { label: "Insights", to: "#" },
-        { label: "Traqr", to: "#" },
+        { label: "Zendo", to: "https://zendo.acorp.app" },
+        { label: "OpenComms", to: "https://opencomms.acorp.app" },
+        { label: "Lumina", to: "https://lumina.acorp.app" },
+        { label: "Insights", to: "https://insights.acorp.app" },
+        { label: "Traqr", to: "https://traqr.acorp.app" },
       ],
     },
     {
@@ -33,8 +33,8 @@ function GuestLayout() {
 
   return (
     <>
-      <NavBar navLinks={navLinks} logo={<Logo />} enableCTA={false} />
-      <main className="mt-12 mb-16 w-[90%] sm:w-[80%] md:w-[70%] mx-auto">
+      <NavBar navLinks={navLinks} logo={<Logo />} />
+      <main className="max-w-7xl mx-auto px-8 pt-12 pb-16">
         <Outlet />
       </main>
       <Footer

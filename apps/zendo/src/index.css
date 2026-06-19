@@ -1,74 +1,247 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme inline {
+  /* Zendo brand: warm, inviting, calm */
+  --color-zendo-cream: #fffbf5;
+  --color-zendo-cream-2: #fff5e9;
+  --color-zendo-ink: #2d2a26;
+  --color-zendo-ink-light: #6b6560;
+  --color-zendo-coral: #f27a5d;
+  --color-zendo-coral-light: #fff0eb;
+  --color-zendo-sage: #8fb996;
+  --color-zendo-sage-light: #eef6ef;
+  --color-zendo-sky: #7ec8e3;
+  --color-zendo-sky-light: #e9f7fc;
+  --color-zendo-butter: #ffe07a;
+  --color-zendo-butter-light: #fff8df;
+  --color-zendo-lavender: #c9b8e8;
+  --color-zendo-lavender-light: #f4effc;
+  --color-zendo-mint: #9fe2c4;
+  --color-zendo-mint-light: #e9f9f1;
+  --color-zendo-sand: #f7f1ea;
+  --color-zendo-blush: #ffd6d6;
+
+  --color-brand-bg: var(--color-zendo-cream);
+  --color-brand-secondary: var(--color-zendo-ink-light);
+  --color-brand-accent: var(--color-zendo-coral);
+  --color-brand-ink: var(--color-zendo-ink);
+}
 
 @layer base {
   :root {
-    /* ACorp Design Language — Precision Craft */
-    --background: 190 14% 93%;        /* #ebf0f0 Cloud */
-    --foreground: 222 74% 12%;        /* #0f172a Near-black */
-    --card: 0 0% 100%;                /* #ffffff White */
-    --card-foreground: 222 74% 12%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 74% 12%;
-    --primary: 217 70% 57%;           /* #4382df Cobalt */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 218 16% 57%;         /* #7F8CAA Slate */
-    --secondary-foreground: 0 0% 100%;
-    --muted: 190 10% 88%;
-    --muted-foreground: 218 16% 57%;  /* Slate */
-    --accent: 217 70% 57%;            /* Cobalt */
-    --accent-foreground: 0 0% 100%;
-    --destructive: 4 84% 58%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 218 16% 80%;
-    --input: 218 16% 80%;
-    --ring: 217 70% 57%;
-    --radius: 1rem;
-    /* App token: timer break color → Slate */
-    --timer: 218 16% 57%;
-  }
+    --background: #fffbf5;
+    --foreground: #2d2a26;
+    --card: #ffffff;
+    --card-foreground: #2d2a26;
+    --popover: #ffffff;
+    --popover-foreground: #2d2a26;
+    --primary: #f27a5d;
+    --primary-foreground: #ffffff;
+    --secondary: #8fb996;
+    --secondary-foreground: #ffffff;
+    --muted: #f7f1ea;
+    --muted-foreground: #6b6560;
+    --accent: #fff0eb;
+    --accent-foreground: #2d2a26;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: rgba(45, 42, 38, 0.1);
+    --input: rgba(45, 42, 38, 0.1);
+    --ring: #f27a5d;
+    --radius: 0.75rem;
 
-  * {
-    @apply border-border;
+    /* Sidebar: warm dark ink */
+    --sidebar: #2d2a26;
+    --sidebar-foreground: #fffbf5;
+    --sidebar-primary: #f27a5d;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: rgba(255, 255, 255, 0.08);
+    --sidebar-accent-foreground: #fffbf5;
+    --sidebar-border: rgba(255, 255, 255, 0.1);
+    --sidebar-ring: rgba(255, 255, 255, 0.2);
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: "GeistVariable", "Geist Variable", system-ui, -apple-system, sans-serif;
+    @apply bg-zendo-cream text-zendo-ink;
+    font-family:
+      "Geist Variable",
+      system-ui,
+      -apple-system,
+      sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color-scheme: light;
   }
+
+  ::selection {
+    background-color: rgba(242, 122, 93, 0.2);
+    color: #2d2a26;
+  }
 }
 
-/* ── Animation keyframes ─────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ── Warm, friendly scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(107, 101, 96, 0.25);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 101, 96, 0.4);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+/* ── Soft card shell ────────────────────────────────────────────────────── */
+.receipt-card {
+  @apply bg-white border border-zendo-ink/10 p-6 rounded-2xl shadow-sm;
 }
 
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-16px); }
-  to   { opacity: 1; transform: translateX(0); }
+/* ── Eyebrow label ──────────────────────────────────────────────────────── */
+.eyebrow {
+  @apply inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-bold tracking-wider uppercase text-zendo-coral bg-zendo-coral-light rounded-full;
 }
 
-/* ── Animation utilities ─────────────────────────────── */
-.animate-fade-up {
-  animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+/* ── Section heading ────────────────────────────────────────────────────── */
+.section-heading {
+  @apply text-4xl md:text-5xl font-bold tracking-tight text-zendo-ink;
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.5s ease both;
+/* ── Solid button (warm) ────────────────────────────────────────────────── */
+.btn-solid {
+  @apply inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold text-white bg-zendo-coral transition-all hover:bg-zendo-coral/90 hover:shadow-lg hover:shadow-zendo-coral/20 active:scale-95 rounded-full;
 }
 
-.animate-slide-left {
-  animation: slideInLeft 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+/* ── Outline button (warm) ──────────────────────────────────────────────── */
+.btn-outline {
+  @apply inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold border-2 border-zendo-ink/15 text-zendo-ink transition-all hover:bg-zendo-ink hover:text-white active:scale-95 rounded-full;
+}
+
+/* ── Ghost button (warm) ────────────────────────────────────────────────── */
+.btn-ghost {
+  @apply inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-zendo-ink transition-all hover:bg-zendo-coral/10 hover:text-zendo-coral active:scale-95 rounded-full;
+}
+
+/* ── Active nav pill ────────────────────────────────────────────────────── */
+.nav-active {
+  @apply relative px-3 py-1.5 text-sm font-medium transition-all text-zendo-ink bg-zendo-coral/10 rounded-full;
+}
+
+.nav-inactive {
+  @apply relative px-3 py-1.5 text-sm font-medium transition-all text-zendo-ink-light hover:text-zendo-ink hover:bg-zendo-ink/5 rounded-full;
+}
+
+/* ── Warm sidebar nav items ─────────────────────────────────────────────── */
+.sidebar-nav-active {
+  @apply text-white bg-zendo-coral/20 rounded-lg;
+}
+
+.sidebar-nav-inactive {
+  @apply text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors;
+}
+
+/* ── Monospace data labels ──────────────────────────────────────────────── */
+.data-label {
+  @apply text-[10px] font-mono font-bold tracking-widest uppercase text-zendo-ink-light;
+}
+
+/* ── Status badge (warm) ────────────────────────────────────────────────── */
+.status-badge {
+  @apply inline-flex items-center px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-zendo-coral text-white rounded-full;
+}
+
+/* ── Dashed placeholder ─────────────────────────────────────────────────── */
+.dashed-placeholder {
+  @apply border border-dashed border-zendo-ink/15 rounded-xl;
+}
+
+/* ── Ruler / measurement line ───────────────────────────────────────────── */
+.ruler {
+  border: none;
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    #2d2a26 0px,
+    #2d2a26 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  opacity: 0.2;
+}
+
+/* ── Calendar warm event colors ─────────────────────────────────────────── */
+.cal-color-1 {
+  @apply bg-zendo-coral/12 text-zendo-ink border-l-4 border-zendo-coral rounded-r-lg;
+}
+.cal-color-2 {
+  @apply bg-zendo-sage/12 text-zendo-ink border-l-4 border-zendo-sage rounded-r-lg;
+}
+.cal-color-3 {
+  @apply bg-zendo-sky/12 text-zendo-ink border-l-4 border-zendo-sky rounded-r-lg;
+}
+.cal-color-4 {
+  @apply bg-zendo-butter/25 text-zendo-ink border-l-4 border-zendo-butter rounded-r-lg;
+}
+.cal-color-5 {
+  @apply bg-zendo-lavender/15 text-zendo-ink border-l-4 border-zendo-lavender rounded-r-lg;
+}
+.cal-color-6 {
+  @apply bg-zendo-mint/15 text-zendo-ink border-l-4 border-zendo-mint rounded-r-lg;
+}
+.cal-color-7 {
+  @apply bg-zendo-sand text-zendo-ink-light border-l-4 border-zendo-sand rounded-r-lg;
+}
+.cal-color-8 {
+  @apply bg-white text-zendo-ink-light border-l-4 border-zendo-ink/10 rounded-r-lg;
+}
+
+/* ── Priority dots (warm scale) ─────────────────────────────────────────── */
+.priority-high {
+  @apply bg-zendo-coral;
+}
+.priority-medium {
+  @apply bg-zendo-butter;
+}
+.priority-low {
+  @apply bg-zendo-sage;
+}
+.priority-none {
+  @apply bg-transparent border border-zendo-ink/15;
+}
+
+/* ── Tag colors (warm) ──────────────────────────────────────────────────── */
+.tag-gray-1 {
+  @apply border border-zendo-ink/10 text-zendo-ink-light;
+}
+.tag-gray-2 {
+  @apply border border-zendo-ink/10 text-zendo-ink-light/70;
+}
+.tag-gray-3 {
+  @apply border border-zendo-ink/10 text-zendo-ink;
+}
+
+/* ── Stagger helpers ────────────────────────────────────────────────────── */
+.stagger-1 {
+  animation-delay: 0.05s;
+}
+.stagger-2 {
+  animation-delay: 0.12s;
+}
+.stagger-3 {
+  animation-delay: 0.22s;
+}
+.stagger-4 {
+  animation-delay: 0.32s;
+}
+.stagger-5 {
+  animation-delay: 0.48s;
+}
+.stagger-6 {
+  animation-delay: 0.6s;
 }

@@ -17,20 +17,9 @@ export const signupSchema = z.object({
     businessType: z.string().min(2),
     businessAddress: z.string().min(2),
     city: z.string().min(2),
-    country: z.string().min(2),
+    country: z.enum(["USA", "Canada", "Nigeria"]),
     website: z.string(),
     referral: z.string().optional(),
-});
-
-export const PaystackCustomerResponseSchema = z.object({
-    status: z.boolean(),
-    message: z.string(),
-    data: z.object({
-        email: z.string().email(),
-        integration: z.number(),
-        domain: z.string(),
-        customer_code: z.string(),
-        id: z.number(),
-        identified: z.boolean(),
-    }),
+    paymentProvider: z.enum(["paystack", "stripe"]).optional(),
+    currency: z.string().optional(),
 });

@@ -1,10 +1,19 @@
 import { Link } from "@tanstack/react-router";
+import { Sparkles } from "lucide-react";
 
-function ArrowRight({ size = 14 }: { size?: number }) {
+function ArrowRight({ size = 16 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" stroke="currentColor"
-      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      className="transition-transform group-hover:translate-x-0.5">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 14 14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="transition-transform group-hover:translate-x-0.5"
+    >
       <path d="M2 7h10M7 2l5 5-5 5" />
     </svg>
   );
@@ -12,71 +21,49 @@ function ArrowRight({ size = 14 }: { size?: number }) {
 
 export function CtaBanner() {
   return (
-    <section className="pb-24 px-6">
+    <section className="py-24 px-6 bg-white">
       <div className="max-w-7xl mx-auto">
-        <div
-          className="relative rounded-3xl overflow-hidden px-10 py-20 text-center"
-          style={{ backgroundColor: "#0f172a" }}
-        >
-          {/* Radial glow layer */}
+        <div className="relative rounded-[2.5rem] overflow-hidden px-8 md:px-16 py-20 text-center bg-zendo-ink">
+          {/* Soft gradient glows */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage:
-                "radial-gradient(ellipse at 25% 60%, #4382df20 0%, transparent 55%), radial-gradient(ellipse at 80% 30%, #7F8CAA18 0%, transparent 50%)",
-            }}
+            className="absolute top-[-50%] left-[-10%] w-[500px] h-[500px] rounded-full bg-zendo-coral/20 blur-[120px] pointer-events-none"
           />
-          {/* Grid overlay */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 pointer-events-none opacity-20"
-            style={{
-              backgroundImage:
-                "linear-gradient(#4382df0e 1px, transparent 1px), linear-gradient(90deg, #4382df0e 1px, transparent 1px)",
-              backgroundSize: "48px 48px",
-            }}
+            className="absolute bottom-[-50%] right-[-10%] w-[500px] h-[500px] rounded-full bg-zendo-sky/20 blur-[120px] pointer-events-none"
           />
 
           <div className="relative">
-            <p
-              className="text-xs font-bold tracking-[0.25em] uppercase mb-4"
-              style={{ color: "#4382df" }}
-            >
+            <p className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-bold tracking-wider uppercase text-zendo-butter bg-zendo-butter/10 rounded-full mb-6">
+              <Sparkles size={14} />
               Your next focus session starts now
             </p>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-5 leading-tight">
+            <h2 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 leading-[1.1]">
               Stop planning to be productive.
               <br />
-              <span style={{ color: "#7F8CAA" }}>Start being it.</span>
+              <span className="text-3xl">Start being it.</span>
             </h2>
-            <p
-              className="text-base mb-10 max-w-lg mx-auto leading-relaxed"
-              style={{ color: "#7F8CAA" }}
-            >
+            <p className="text-base md:text-lg mb-10 max-w-lg mx-auto leading-relaxed text-white/70">
               Join thousands of focused builders using Zendo to ship more and stress less.
             </p>
 
             <div className="flex flex-wrap gap-3 justify-center">
               <Link
                 to="/signup"
-                className="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all hover:gap-3 hover:opacity-92 active:scale-95"
-                style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+                className="group inline-flex items-center gap-2 px-8 py-4 text-sm font-bold bg-zendo-coral text-white transition-all hover:bg-zendo-coral/90 hover:gap-3 active:scale-95 rounded-full shadow-xl shadow-zendo-coral/25"
               >
                 Get started free <ArrowRight />
               </Link>
               <a
                 href="#pricing"
-                className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full border-2 transition-all hover:bg-white/10 active:scale-95"
-                style={{ color: "#7F8CAA", borderColor: "#7F8CAA45" }}
+                className="inline-flex items-center gap-2 px-8 py-4 text-sm font-bold border-2 border-white/20 text-white transition-all hover:bg-white hover:text-zendo-ink active:scale-95 rounded-full"
               >
                 View pricing
               </a>
             </div>
 
-            <p className="text-xs mt-6" style={{ color: "#4382df80" }}>
-              Free plan forever · Pro trial, no card needed
-            </p>
+            <p className="text-xs mt-6 text-white/50">Free plan forever · Pro trial, no card needed</p>
           </div>
         </div>
       </div>

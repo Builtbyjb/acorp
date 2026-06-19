@@ -1,5 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { signupSchema, type SignupFormSchema } from "@/components/SignupFormSteps/signup-schema";
+import type { Country } from "@/lib/constant";
 
 type SubmitFn = (value: SignupFormSchema) => Promise<void>;
 
@@ -14,7 +15,7 @@ export function useSignupForm(submit: SubmitFn) {
             businessType: "",
             businessAddress: "",
             city: "",
-            country: "",
+            country: "" as Country,
             website: "",
         },
         validators: {

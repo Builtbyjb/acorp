@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { pdf } from "@react-pdf/renderer";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Button } from "@shared/ui/components//button";
-import { Badge } from "@shared/ui/components/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/components/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@shared/ui/components/table";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowLeft, BadgeInfo, Download, Pencil, View } from "lucide-react";
 import type { Client } from "@/lib/types";
 import type { Invoice } from "@shared/lib/types";
@@ -27,6 +27,7 @@ function RouteComponent() {
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
+  const router = useRouter();
   const { user } = useAuth();
   const { doGET } = useFetch();
   const { setTitle } = useLayout();
@@ -58,7 +59,7 @@ function RouteComponent() {
       setClient(null);
       setLogoURL(null);
       try {
-        const response = await doGET(`/api/v1/clients/${clientId}/invoices/${invoiceId}`);
+        const response = await doGET(`/api/v1/invoice/clients/${clientId}/invoices/${invoiceId}`);
         if (response instanceof Error) throw response;
 
         const result = await response.json();
@@ -99,9 +100,15 @@ function RouteComponent() {
 
   const handlePreview = async () => {
     if (!invoice) return;
+
+    const previewWindow = window.open("", "_blank");
+    if (!previewWindow) return;
+
     const blob = await getBlob(invoice);
     const url = URL.createObjectURL(blob);
-    if (url) window.open(url, "_blank");
+    previewWindow.location.href = url;
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   return (
@@ -121,7 +128,7 @@ function RouteComponent() {
             />
           )}
           <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-            <Button variant="ghost" onClick={() => navigate({ to: `/clients/${clientId}` })} className="w-fit">
+            <Button variant="ghost" onClick={() => router.history.back()} className="w-fit">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back
             </Button>

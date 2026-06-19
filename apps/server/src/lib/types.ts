@@ -1,6 +1,6 @@
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import type { JWTPayload } from "hono/utils/jwt/types";
-import { clients, invoices } from "@/db/schema";
+import { clients, invoices } from "@/db/invoice-schema";
 
 export type Bindings = {
     DB: D1Database;
@@ -11,10 +11,17 @@ export type Bindings = {
     };
     ENV: string;
     PAYSTACK_SECRET: string;
+    STRIPE_SECRET_KEY: string;
+    STRIPE_WEBHOOK_SECRET: string;
+    STRIPE_PUBLISHABLE_KEY: string;
     INVOICE_URL: string;
     SERVER_URL: string;
     R2: R2Bucket;
     RATE_LIMITER: RateLimit;
+    ESMS_API_KEY: string;
+    WHATSAPP_PHONE_NUMBER_ID: string;
+    WHATSAPP_ACCESS_TOKEN: string;
+    META_GRAPH_API_VERSION: string;
 };
 
 export type TokenPayload = JWTPayload & {
@@ -24,8 +31,10 @@ export type TokenPayload = JWTPayload & {
     currentOrgId: number;
     organizationName?: string;
     otp?: string;
+    paymentProvider?: string;
     paystackCustomerCode?: string;
     paystackCustomerId?: number;
+    stripeCustomerId?: string;
 };
 
 export type ReturnId = {

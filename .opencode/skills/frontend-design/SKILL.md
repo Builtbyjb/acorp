@@ -36,11 +36,6 @@ The secondary color (30%) supports and complements the dominant. Think navigatio
 
 The accent color (10%) is where the action is. Call-to-action buttons, highlighted text, icons, and links. It’s the color that tells the visitor’s eye where to go next. 
 
-Use color scheme defined below:
-* Dominant color: #ebf0f0
-* Secondary color: #7F8CAA
-* Accent color: #4382df
-
 - **Motion**: Use animations for effects and micro-interactions. Use Motion library for React when available. Focus on high-impact moments: one well-orchestrated page load with staggered reveals (animation-delay) creates more delight than scattered micro-interactions. Use scroll-triggering and hover states that surprise.
 
 - **Spatial Composition**: Unexpected layouts. Asymmetry. Overlap. Diagonal flow. Grid-breaking elements. Generous negative space OR controlled density.

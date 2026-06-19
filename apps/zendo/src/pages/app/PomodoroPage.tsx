@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { Pause, Play, RotateCcw, SkipForward, Settings2 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -17,12 +17,12 @@ const RING_R = 90;
 const RING_CIRC = 2 * Math.PI * RING_R;
 
 function TimerRing({ progress, mode }: { progress: number; mode: TimerMode }) {
-  const ringColor = mode === "focus" ? "#4382df" : "#7F8CAA";
+  const ringColor = mode === "focus" ? "#f27a5d" : "#8fb996";
   const offset = RING_CIRC * (1 - progress);
 
   return (
     <svg width="220" height="220" viewBox="0 0 220 220" className="-rotate-90" aria-hidden="true">
-      <circle cx="110" cy="110" r={RING_R} fill="none" stroke="#7F8CAA18" strokeWidth="10" />
+      <circle cx="110" cy="110" r={RING_R} fill="none" stroke="#f7f1ea" strokeWidth="10" />
       <circle
         cx="110" cy="110" r={RING_R}
         fill="none"
@@ -31,10 +31,7 @@ function TimerRing({ progress, mode }: { progress: number; mode: TimerMode }) {
         strokeLinecap="round"
         strokeDasharray={RING_CIRC}
         strokeDashoffset={offset}
-        style={{
-          transition: "stroke-dashoffset 0.8s linear",
-          filter: `drop-shadow(0 0 10px ${ringColor}60)`,
-        }}
+        style={{ transition: "stroke-dashoffset 0.8s linear" }}
       />
     </svg>
   );
@@ -61,27 +58,36 @@ function PomodoroSettings({ open, onClose }: { open: boolean; onClose: () => voi
           { label: "Long break after (sessions)", key: "longBreakAfter" as const, min: 1, max: 10 },
         ].map(({ label, key, min, max }) => (
           <div key={key} className="flex flex-col gap-2">
-            <div className="flex items-center justify-between">
-              <Label className="text-sm font-medium">{label}</Label>
-              <span className="text-sm font-mono text-muted-foreground w-12 text-right">
-                {settings[key]} {key !== "longBreakAfter" ? "min" : ""}
+            <Label className="data-label">
+              {label}
+            </Label>
+            <div className="flex items-center gap-2">
+              <Input
+                type="number"
+                min={min}
+                max={max}
+                value={settings[key]}
+                onChange={(e) => {
+                  const v = parseInt(e.target.value, 10);
+                  if (!isNaN(v)) {
+                    updateSettings({ [key]: Math.max(min, Math.min(max, v)) });
+                  }
+                }}
+                className="w-24"
+              />
+              <span className="text-sm text-zendo-ink-light">
+                {key !== "longBreakAfter" ? "minutes" : "sessions"}
               </span>
             </div>
-            <Slider
-              min={min}
-              max={max}
-              step={1}
-              value={[settings[key]]}
-              onValueChange={([v]) => updateSettings({ [key]: v })}
-              className="w-full"
-            />
           </div>
         ))}
 
         <Separator />
 
         <div className="flex items-center justify-between">
-          <Label htmlFor="auto-breaks" className="text-sm">Auto-start breaks</Label>
+          <Label htmlFor="auto-breaks" className="data-label">
+            Auto-start breaks
+          </Label>
           <Switch
             id="auto-breaks"
             checked={settings.autoStartBreaks}
@@ -89,7 +95,9 @@ function PomodoroSettings({ open, onClose }: { open: boolean; onClose: () => voi
           />
         </div>
         <div className="flex items-center justify-between">
-          <Label htmlFor="auto-focus" className="text-sm">Auto-start focus sessions</Label>
+          <Label htmlFor="auto-focus" className="data-label">
+            Auto-start focus sessions
+          </Label>
           <Switch
             id="auto-focus"
             checked={settings.autoStartFocus}
@@ -98,8 +106,7 @@ function PomodoroSettings({ open, onClose }: { open: boolean; onClose: () => voi
         </div>
 
         <button
-          className="w-full inline-flex items-center justify-center py-3 text-sm font-semibold text-white rounded-full transition-all hover:opacity-92 active:scale-95"
-          style={{ backgroundColor: "#4382df", boxShadow: "0 4px 20px #4382df35" }}
+          className="w-full inline-flex items-center justify-center py-3 text-sm font-semibold bg-zendo-coral text-white hover:bg-zendo-coral/90 active:scale-95 transition-all rounded-full"
           onClick={onClose}
         >
           Save settings
@@ -113,25 +120,23 @@ function PomodoroSettings({ open, onClose }: { open: boolean; onClose: () => voi
 
 function TaskPicker() {
   const { activeTaskId, setActiveTask } = usePomodoroStore();
-  const tasks = useTaskStore((s) =>
-    s.tasks.filter((t) => !t.completedAt && !t.parentId).slice(0, 20)
-  );
+  const allTasks = useTaskStore((s) => s.tasks);
+  const tasks = useMemo(() =>
+    allTasks.filter((t) => !t.completedAt && !t.parentId).slice(0, 20),
+  [allTasks]);
   const activeTask = tasks.find((t) => t.id === activeTaskId);
 
   return (
     <div className="flex flex-col gap-2 w-full max-w-sm">
-      <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground text-center">
+      <p className="data-label text-center">
         Focusing on
       </p>
       {activeTask ? (
-        <div
-            className="flex items-center gap-2 rounded-xl px-3 py-2"
-            style={{ border: "1px solid #4382df2e", backgroundColor: "#4382df0e" }}
-          >
-            <span className="text-sm flex-1 truncate" style={{ color: "#0f172a" }}>{activeTask.title}</span>
+        <div className="flex items-center gap-2 border border-zendo-ink/10 px-3 py-2 bg-white rounded-xl">
+          <span className="text-sm flex-1 truncate text-zendo-ink">{activeTask.title}</span>
           <button
             onClick={() => setActiveTask(undefined)}
-            className="text-muted-foreground hover:text-foreground text-xs"
+            className="text-zendo-ink-light hover:text-zendo-coral text-xs transition-colors"
           >
             ×
           </button>
@@ -139,8 +144,7 @@ function TaskPicker() {
       ) : (
         <div className="relative">
           <select
-            className="w-full rounded-xl text-sm px-3 py-2 appearance-none focus:outline-none"
-            style={{ border: "1px solid #7F8CAA45", backgroundColor: "#ffffff", color: "#7F8CAA" }}
+            className="w-full text-sm px-3 py-2 appearance-none border border-zendo-ink/10 bg-white text-zendo-ink-light rounded-xl focus:outline-none focus:ring-2 focus:ring-zendo-coral/20"
             value=""
             onChange={(e) => setActiveTask(e.target.value || undefined)}
           >
@@ -173,8 +177,8 @@ function SessionHistory() {
   return (
     <div className="w-full max-w-sm flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Today</p>
-        <p className="text-xs text-muted-foreground">{totalFocusMins} min focused</p>
+        <p className="data-label">Today</p>
+        <p className="data-label">{totalFocusMins} min focused</p>
       </div>
       <ScrollArea className="max-h-32">
         <div className="flex gap-1.5 flex-wrap">
@@ -183,9 +187,9 @@ function SessionHistory() {
               key={s.id}
               title={`${s.mode} · ${s.durationMins}min${s.interrupted ? " (interrupted)" : ""}`}
               className={cn(
-                "h-5 w-5 rounded-md text-[9px] flex items-center justify-center font-bold",
+                "h-5 w-5 text-[9px] flex items-center justify-center font-bold rounded-md",
                 s.interrupted ? "opacity-30" : "",
-                s.mode === "focus" ? "bg-primary/30 text-primary" : "bg-secondary/30 text-secondary"
+                s.mode === "focus" ? "bg-zendo-coral text-white" : "bg-zendo-sage/20 text-zendo-sage"
               )}
             >
               {s.mode === "focus" ? "F" : s.mode === "short" ? "S" : "L"}
@@ -242,90 +246,94 @@ export function PomodoroPage() {
   const cycle = (cycleCount % settings.longBreakAfter) + 1;
 
   return (
-    <div className="flex flex-col items-center justify-start gap-8 px-6 py-8 min-h-full">
-      {/* Mode tabs */}
-      <Tabs value={mode} onValueChange={(v) => setMode(v as TimerMode)}>
-        <TabsList className="rounded-full">
-          <TabsTrigger value="focus" className="rounded-full text-xs px-4">Focus</TabsTrigger>
-          <TabsTrigger value="short" className="rounded-full text-xs px-4">Short break</TabsTrigger>
-          <TabsTrigger value="long" className="rounded-full text-xs px-4">Long break</TabsTrigger>
-        </TabsList>
-      </Tabs>
+    <div className="h-full p-4 md:p-6 bg-zendo-cream">
+      <div className="mb-6">
+        <p className="data-label mb-2">Focus</p>
+        <h1 className="text-2xl font-bold text-zendo-ink">Pomodoro</h1>
+      </div>
 
-      {/* Ring */}
-      <div className="relative w-[220px] h-[220px] flex-shrink-0">
-        <TimerRing progress={progress} mode={mode} />
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-1">
-          <span className="font-mono text-4xl font-bold tracking-tighter text-foreground tabular-nums">
-            {formatTime(secondsLeft)}
-          </span>
-          <span className="text-xs uppercase tracking-widest text-muted-foreground">
-            {MODE_LABELS[mode]}
-          </span>
-          {mode === "focus" && (
-            <span className="text-[10px] text-muted-foreground/60">
-              {cycle} / {settings.longBreakAfter}
-            </span>
-          )}
+      <div className="max-w-xl mx-auto">
+        <div className="bg-white border border-zendo-ink/8 rounded-[2rem] p-8 shadow-sm flex flex-col items-center gap-8">
+          {/* Mode tabs */}
+          <Tabs value={mode} onValueChange={(v) => setMode(v as TimerMode)}>
+            <TabsList className="rounded-full bg-zendo-cream border border-zendo-ink/10 p-1">
+              <TabsTrigger value="focus" className="rounded-full text-[10px] font-mono font-bold tracking-[0.2em] uppercase px-4 data-[state=active]:bg-zendo-coral data-[state=active]:text-white">Focus</TabsTrigger>
+              <TabsTrigger value="short" className="rounded-full text-[10px] font-mono font-bold tracking-[0.2em] uppercase px-4 data-[state=active]:bg-zendo-sage data-[state=active]:text-white">Short break</TabsTrigger>
+              <TabsTrigger value="long" className="rounded-full text-[10px] font-mono font-bold tracking-[0.2em] uppercase px-4 data-[state=active]:bg-zendo-sky data-[state=active]:text-white">Long break</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          {/* Ring */}
+          <div className="relative w-[220px] h-[220px] flex-shrink-0">
+            <TimerRing progress={progress} mode={mode} />
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-1">
+              <span className="font-mono text-4xl font-bold tracking-tighter text-zendo-ink tabular-nums">
+                {formatTime(secondsLeft)}
+              </span>
+              <span className="data-label">
+                {MODE_LABELS[mode]}
+              </span>
+              {mode === "focus" && (
+                <span className="text-[10px] font-mono text-zendo-ink-light/60">
+                  {cycle} / {settings.longBreakAfter}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Controls */}
+          <div className="flex items-center gap-3">
+            <button
+              className="h-10 w-10 rounded-full flex items-center justify-center border border-zendo-ink/10 text-zendo-ink-light bg-white hover:text-zendo-coral hover:border-zendo-coral/30 active:scale-95 transition-all"
+              onClick={reset}
+              title="Reset"
+            >
+              <RotateCcw className="h-4 w-4" />
+            </button>
+
+            {state === "running" ? (
+              <button
+                className="h-14 w-14 rounded-full flex items-center justify-center bg-zendo-coral text-white shadow-lg shadow-zendo-coral/25 active:scale-95 transition-all"
+                onClick={pause}
+              >
+                <Pause className="h-6 w-6" />
+              </button>
+            ) : (
+              <button
+                className="h-14 w-14 rounded-full flex items-center justify-center bg-zendo-coral text-white shadow-lg shadow-zendo-coral/25 active:scale-95 transition-all"
+                onClick={start}
+              >
+                <Play className="h-6 w-6 translate-x-0.5" />
+              </button>
+            )}
+
+            <button
+              className="h-10 w-10 rounded-full flex items-center justify-center border border-zendo-ink/10 text-zendo-ink-light bg-white hover:text-zendo-coral hover:border-zendo-coral/30 active:scale-95 transition-all"
+              onClick={skipToNext}
+              title="Skip"
+            >
+              <SkipForward className="h-4 w-4" />
+            </button>
+          </div>
+
+          {/* Task picker */}
+          <TaskPicker />
+
+          {/* Session history */}
+          <SessionHistory />
+
+          {/* Settings button */}
+          <button
+            className="inline-flex items-center gap-2 text-sm font-medium text-zendo-ink-light hover:text-zendo-coral transition-colors"
+            onClick={() => setSettingsOpen(true)}
+          >
+            <Settings2 className="h-4 w-4" />
+            Settings
+          </button>
+
+          <PomodoroSettings open={settingsOpen} onClose={() => setSettingsOpen(false)} />
         </div>
       </div>
-
-      {/* Controls */}
-      <div className="flex items-center gap-3">
-        <button
-          className="h-10 w-10 rounded-full flex items-center justify-center transition-opacity hover:opacity-60 active:scale-95"
-          style={{ border: "1px solid #7F8CAA28", color: "#7F8CAA", backgroundColor: "#ffffff" }}
-          onClick={reset}
-          title="Reset"
-        >
-          <RotateCcw className="h-4 w-4" />
-        </button>
-
-        {state === "running" ? (
-          <button
-            className="h-14 w-14 rounded-full flex items-center justify-center text-white transition-all active:scale-95"
-            style={{ backgroundColor: "#4382df", boxShadow: "0 4px 24px #4382df50" }}
-            onClick={pause}
-          >
-            <Pause className="h-6 w-6" />
-          </button>
-        ) : (
-          <button
-            className="h-14 w-14 rounded-full flex items-center justify-center text-white transition-all active:scale-95"
-            style={{ backgroundColor: "#4382df", boxShadow: "0 4px 24px #4382df50" }}
-            onClick={start}
-          >
-            <Play className="h-6 w-6 translate-x-0.5" />
-          </button>
-        )}
-
-        <button
-          className="h-10 w-10 rounded-full flex items-center justify-center transition-opacity hover:opacity-60 active:scale-95"
-          style={{ border: "1px solid #7F8CAA28", color: "#7F8CAA", backgroundColor: "#ffffff" }}
-          onClick={skipToNext}
-          title="Skip"
-        >
-          <SkipForward className="h-4 w-4" />
-        </button>
-      </div>
-
-      {/* Task picker */}
-      <TaskPicker />
-
-      {/* Session history */}
-      <SessionHistory />
-
-      {/* Settings button */}
-      <button
-        className="inline-flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-60 mt-auto"
-        style={{ color: "#7F8CAA" }}
-        onClick={() => setSettingsOpen(true)}
-      >
-        <Settings2 className="h-4 w-4" />
-        Settings
-      </button>
-
-      <PomodoroSettings open={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>
   );
 }

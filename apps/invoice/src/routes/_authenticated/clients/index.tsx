@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import ClientsTable from "@/components/ClientsTable";
 import ClientForm from "@/components/ClientForm";
-import { Button } from "@shared/ui/components/button";
+import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import type { Client } from "@/lib/types";
 import * as z from "zod";
@@ -35,7 +35,7 @@ function RouteComponent() {
 
   const pagination = usePagination<Client>({
     fetcher: async (pageToFetch, sizeToFetch) => {
-      const response = await doGET(`/api/v1/clients?page=${pageToFetch}&size=${sizeToFetch}`);
+      const response = await doGET(`/api/v1/invoice/clients?page=${pageToFetch}&size=${sizeToFetch}`);
       if (response instanceof Error) throw response;
       if (!response.ok) throw new Error("Failed to fetch clients");
       const result = await response.json();

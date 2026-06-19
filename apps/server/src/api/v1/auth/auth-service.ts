@@ -1,5 +1,5 @@
 import { DrizzleD1Database } from "drizzle-orm/d1";
-import { organizations } from "@/db/schema";
+import { organizations } from "@/db/schemas";
 import { eq } from "drizzle-orm";
 
 export async function validateReferral(db: DrizzleD1Database, referral: string): Promise<number | null> {

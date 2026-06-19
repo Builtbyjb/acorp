@@ -1,8 +1,8 @@
 import { createFileRoute, Link, redirect, useNavigate, useSearch } from "@tanstack/react-router";
-import { Button } from "@shared/ui/components/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@shared/ui/components/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Field, FieldDescription, FieldGroup } from "@shared/ui/components/field";
+import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 import { useState } from "react";
 import OTP from "@/components/OTP";
 import { ArrowLeft } from "lucide-react";
@@ -10,14 +10,14 @@ import Step1 from "@/components/SignupFormSteps/step1";
 import Step2 from "@/components/SignupFormSteps/step2";
 import Step3 from "@/components/SignupFormSteps/step3";
 import { STEPS } from "@/components/SignupFormSteps/form-steps";
-import { Progress } from "@shared/ui/components/progress";
+import { Progress } from "@/components/ui/progress";
 import { useSignupForm } from "@/hooks/useSignupForm";
 import type { SignupFormField } from "@/lib/types";
 import { useFetch } from "@/hooks/useFetch";
 import Logo from "@/components/Logo";
 import { handleError } from "@/lib/utils";
 import { z } from "zod";
-import { Spinner } from "@shared/ui/components/spinner";
+import { Spinner } from "@/components/ui/spinner";
 
 const QueryParamSchema = z.object({
   referral: z.string().optional(),
@@ -70,13 +70,13 @@ function RouteComponent() {
     <main className="flex flex-col items-center justify-center min-h-screen mx-auto w-[90%]">
       <Logo />
       <br />
-      <Card className="w-full max-w-sm">
+      <Card className="w-full max-w-sm border-black/10 rounded-none">
         <CardHeader>
           <div className="flex items-center gap-6 mb-2">
-            <ArrowLeft className="w-8 h-8 hover:scale-110" onClick={() => navigate({ to: "/" })} />
-            <CardTitle className="text-xl">Sign Up</CardTitle>
+            <ArrowLeft className="w-8 h-8 hover:scale-110 cursor-pointer" onClick={() => navigate({ to: "/" })} />
+            <CardTitle className="text-xl font-bold">Sign Up</CardTitle>
           </div>
-          <CardDescription>Tell us about yourself and your business</CardDescription>
+          <CardDescription className="text-neutral-500">Tell us about yourself and your business</CardDescription>
           <Progress value={progress} className="h-1" />
         </CardHeader>
         <CardContent>
@@ -98,7 +98,7 @@ function RouteComponent() {
             </FieldGroup>
           </form>
         </CardContent>
-        <CardFooter className="bg-background">
+        <CardFooter className="bg-white border-t border-black/5">
           <Field orientation="horizontal">
             <Button type="button" variant="outline" onClick={back} disabled={stepIndex === 0 || isSubmitting}>
               Back
@@ -110,7 +110,7 @@ function RouteComponent() {
           </Field>
         </CardFooter>
       </Card>
-      <div className="text-center text-xs mt-4 text-muted-foreground">
+      <div className="text-center text-xs mt-4 text-neutral-500">
         By clicking Submit, you agree to our{" "}
         <Link to="/terms-of-service" className="hover:font-bold underline">
           Terms of Service

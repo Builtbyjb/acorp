@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@shared/ui/components/button";
-import { Input } from "@shared/ui/components/input";
-import { Textarea } from "@shared/ui/components/textarea";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@shared/ui/components/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Plus, Trash2, Mail, Phone } from "lucide-react";
 import type { Client, SelectData } from "@/lib/types";
 import type { Invoice, InvoiceStatus } from "@shared/lib/types";
 import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
 import * as z from "zod";
-import { Field, FieldLabel, FieldError, FieldContent, FieldTitle } from "@shared/ui/components/field";
+import { Field, FieldLabel, FieldError, FieldContent, FieldTitle } from "@/components/ui/field";
 import { formatCurrency } from "@/lib/utils";
 import { calculateTotalAmount, calculateTaxAmount, calculateDiscount, calculateSubTotal } from "@shared/utils/util";
-import { Separator } from "@shared/ui/components/separator";
+import { Separator } from "@/components/ui/separator";
 import { CURRENCIES } from "@/lib/constant";
 import { useFetch } from "@/hooks/useFetch";
 import NumberInput from "../Form/NumberInput";
@@ -21,7 +21,7 @@ import DateField from "../Form/DateField";
 import SignatureCanvas from "react-signature-canvas";
 import { InvoiceFormSchema } from "@shared/lib/zod-schema";
 import { useNavigate } from "@tanstack/react-router";
-import { Spinner } from "@shared/ui/components/spinner";
+import { Spinner } from "@/components/ui/spinner";
 
 interface InvoiceFormProps {
   clientInfo: Client | null;
@@ -55,7 +55,7 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
 
       const payload = { ...value, clientId: clientInfo.id, signature };
 
-      const response = await doPOST(`/api/v1/clients/${clientInfo.id}/invoices/create`, payload);
+      const response = await doPOST(`/api/v1/invoice/clients/${clientInfo.id}/invoices/create`, payload);
       if (response instanceof Error) throw response;
 
       const result = await response.json();
@@ -84,7 +84,7 @@ export default function InvoiceForm({ clientInfo, existingInvoice, invoiceId }: 
 
       const payload = { ...value, clientId: clientInfo.id, signature };
 
-      const response = await doPUT(`/api/v1/clients/${clientInfo.id}/invoices/${invoiceId}/edit`, payload);
+      const response = await doPUT(`/api/v1/invoice/clients/${clientInfo.id}/invoices/${invoiceId}/edit`, payload);
       if (response instanceof Error) throw response;
 
       const result = await response.json();

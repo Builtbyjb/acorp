@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useLayout } from "@/hooks/useLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@shared/ui/components/card";
-import { Button } from "@shared/ui/components/button";
-import { Badge } from "@shared/ui/components/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { getBadgeVariant, formatCurrency } from "@/lib/utils";
 import { formatDate } from "@shared/utils/util";
 import { BadgeInfo, Calendar } from "lucide-react";
@@ -49,7 +49,7 @@ function RouteComponent() {
     (async () => {
       setIsLoading(true);
       try {
-        const response = await doGET("/api/v1/payments/paystack/subscriptions");
+        const response = await doGET("/api/v1/invoice/payments/subscriptions");
         if (response instanceof Error) throw response;
 
         const result = await response.json();
@@ -73,7 +73,7 @@ function RouteComponent() {
 
   const handleDisable = async (subscription: Subscription) => {
     try {
-      const response = await doPOST("/api/v1/payments/paystack/subscription/disable", {
+      const response = await doPOST("/api/v1/invoice/payments/subscription/disable", {
         subscriptionCode: subscription.subscriptionCode,
         emailToken: subscription.emailToken,
       });
@@ -94,7 +94,7 @@ function RouteComponent() {
 
   // const handleEnable = async (subscription: Subscription) => {
   //   try {
-  //     const response = await doPOST("/api/v1/payments/paystack/subscription/enable", {
+  //     const response = await doPOST("/api/v1/invoice/payments/paystack/subscription/enable", {
   //       subscriptionCode: subscription.subscriptionCode,
   //       emailToken: subscription.emailToken,
   //     });
@@ -115,7 +115,7 @@ function RouteComponent() {
 
   const handleUpdate = async (subscription: Subscription) => {
     try {
-      const response = await doPOST("/api/v1/payments/paystack/subscription/update", {
+      const response = await doPOST("/api/v1/invoice/payments/subscription/update", {
         subscriptionCode: subscription.subscriptionCode,
         emailToken: subscription.emailToken,
       });

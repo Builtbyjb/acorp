@@ -7,13 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { useTaskStore } from "@/stores/taskStore";
-
-const TAG_COLORS = [
-  "#a855f7", "#3b82f6", "#22c55e", "#f59e0b",
-  "#ef4444", "#ec4899", "#14b8a6", "#f97316",
-];
 
 interface Props {
   selectedIds: string[];
@@ -24,7 +18,6 @@ export function TagSelector({ selectedIds, onChange }: Props) {
   const tags = useTaskStore((s) => s.tags);
   const addTag = useTaskStore((s) => s.addTag);
   const [newTagName, setNewTagName] = useState("");
-  const [newTagColor, setNewTagColor] = useState(TAG_COLORS[0]);
 
   const toggle = (id: string) => {
     onChange(
@@ -36,10 +29,9 @@ export function TagSelector({ selectedIds, onChange }: Props) {
 
   const handleCreate = () => {
     if (!newTagName.trim()) return;
-    const tag = addTag(newTagName.trim(), newTagColor);
+    const tag = addTag(newTagName.trim(), "#f27a5d");
     onChange([...selectedIds, tag.id]);
     setNewTagName("");
-    setNewTagColor(TAG_COLORS[0]);
   };
 
   const selectedTags = tags.filter((t) => selectedIds.includes(t.id));
@@ -49,11 +41,10 @@ export function TagSelector({ selectedIds, onChange }: Props) {
       {selectedTags.map((tag) => (
         <span
           key={tag.id}
-          className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium"
-          style={{ background: tag.color + "25", color: tag.color }}
+          className="inline-flex items-center gap-1 border border-zendo-ink/10 px-2 py-0.5 text-[10px] text-zendo-ink-light font-mono rounded-full"
         >
           {tag.name}
-          <button onClick={() => toggle(tag.id)} className="hover:opacity-60">
+          <button onClick={() => toggle(tag.id)} className="hover:text-zendo-coral transition-colors">
             <X className="h-2.5 w-2.5" />
           </button>
         </span>
@@ -61,51 +52,38 @@ export function TagSelector({ selectedIds, onChange }: Props) {
 
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full border border-dashed border-border">
-            <Tag className="h-3 w-3 text-muted-foreground" />
+          <Button variant="ghost" size="icon" className="h-6 w-6 border border-dashed border-zendo-ink/15 rounded-lg hover:bg-zendo-coral/5 hover:border-zendo-coral/30 hover:text-zendo-coral">
+            <Tag className="h-3 w-3 text-zendo-ink-light" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-56 p-3" align="start">
+        <PopoverContent className="w-56 p-3 rounded-xl border border-zendo-ink/10 bg-white" align="start">
           <div className="flex flex-col gap-3">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tags</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-zendo-ink-light">Tags</p>
 
             <div className="flex flex-col gap-1 max-h-40 overflow-y-auto">
               {tags.map((tag) => (
                 <button
                   key={tag.id}
                   onClick={() => toggle(tag.id)}
-                  className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-muted/60 text-sm transition-colors"
+                  className="flex items-center gap-2 px-2 py-1.5 hover:bg-zendo-coral/5 text-sm transition-colors text-left rounded-lg"
                 >
-                  <span className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ background: tag.color }} />
-                  <span className="flex-1 text-left truncate">{tag.name}</span>
-                  {selectedIds.includes(tag.id) && <Check className="h-3.5 w-3.5 text-primary" />}
+                  <span className="h-2.5 w-2.5 flex-shrink-0 rounded-sm border border-zendo-ink/10" style={{ backgroundColor: tag.color }} />
+                  <span className="flex-1 text-left truncate text-zendo-ink-light">{tag.name}</span>
+                  {selectedIds.includes(tag.id) && <Check className="h-3.5 w-3.5 text-zendo-coral" />}
                 </button>
               ))}
             </div>
 
-            <div className="border-t border-border pt-2 flex flex-col gap-2">
-              <div className="flex gap-1">
-                {TAG_COLORS.map((c) => (
-                  <button
-                    key={c}
-                    onClick={() => setNewTagColor(c)}
-                    className={cn(
-                      "h-4 w-4 rounded-full border-2 flex-shrink-0 transition-transform",
-                      newTagColor === c ? "border-foreground scale-110" : "border-transparent"
-                    )}
-                    style={{ background: c }}
-                  />
-                ))}
-              </div>
+            <div className="border-t border-zendo-ink/10 pt-2 flex flex-col gap-2">
               <div className="flex gap-1.5">
                 <Input
                   placeholder="New tag…"
                   value={newTagName}
                   onChange={(e) => setNewTagName(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleCreate()}
-                  className="h-7 text-xs"
+                  className="h-7 text-xs border border-zendo-ink/10 bg-zendo-cream/50 rounded-lg focus-visible:ring-zendo-coral/20"
                 />
-                <Button size="icon" className="h-7 w-7 flex-shrink-0" onClick={handleCreate}>
+                <Button size="icon" className="h-7 w-7 flex-shrink-0 rounded-full bg-zendo-coral text-white hover:bg-zendo-coral/90" onClick={handleCreate}>
                   <Plus className="h-3.5 w-3.5" />
                 </Button>
               </div>

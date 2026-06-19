@@ -1,4 +1,4 @@
-import { Button } from "@shared/ui/components/button";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -7,16 +7,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@shared/ui/components/dialog";
+} from "@/components/ui/dialog";
 import type { Client } from "@/lib/types";
 import { useForm } from "@tanstack/react-form";
 import * as z from "zod";
-import { Field } from "@shared/ui/components/field";
+import { Field } from "@/components/ui/field";
 import { useEffect, useState } from "react";
 import { ClientSchema, ClientFormSchema } from "@shared/lib/zod-schema";
 import { useFetch } from "@/hooks/useFetch";
 import TextInputField from "../Form/TextInputField";
-import { Spinner } from "@shared/ui/components/spinner";
+import { Spinner } from "@/components/ui/spinner";
 
 type ClientFormProps = {
   open: boolean;
@@ -35,7 +35,7 @@ export default function ClientForm({ open, onOpenChange, client, addClient, edit
   const handleClientCreate = async (value: ClientFormType) => {
     setIsSubmitting(true);
     try {
-      const response = await doPOST("/api/v1/clients/create", value);
+      const response = await doPOST("/api/v1/invoice/clients/create", value);
       if (response instanceof Error) throw response;
 
       const result = await response.json();
@@ -59,7 +59,7 @@ export default function ClientForm({ open, onOpenChange, client, addClient, edit
     try {
       if (!client) throw new Error("Client not found");
 
-      const response = await doPUT(`/api/v1/clients/edit/${id}`, value);
+      const response = await doPUT(`/api/v1/invoice/clients/edit/${id}`, value);
       if (response instanceof Error) throw response;
 
       const newValue: Client = {

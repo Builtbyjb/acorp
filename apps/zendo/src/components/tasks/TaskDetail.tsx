@@ -36,15 +36,15 @@ export function TaskDetail({ task, open, onClose }: Props) {
     <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
       <SheetContent
         side="right"
-        className="w-full sm:max-w-md overflow-y-auto flex flex-col gap-0 p-0"
+        className="w-full sm:max-w-md overflow-y-auto flex flex-col gap-0 p-0 border-l border-zendo-ink/10 rounded-l-3xl bg-white"
       >
         <SheetHeader className="px-5 pt-5 pb-3 flex-row items-start justify-between space-y-0">
-          <SheetTitle className="text-base font-semibold pr-8 leading-snug">
+          <SheetTitle className="text-base font-bold pr-8 leading-snug text-zendo-ink">
             {editingTitle ? (
               <Input
                 defaultValue={task.title}
                 autoFocus
-                className="text-base font-semibold h-auto border-0 border-b border-border rounded-none px-0 focus-visible:ring-0"
+                className="text-base font-bold h-auto border-0 border-b border-zendo-ink/10 rounded-none px-0 focus-visible:ring-0 bg-transparent"
                 onBlur={(e) => {
                   const val = e.target.value.trim();
                   if (val && val !== task.title) updateTask(task.id, { title: val });
@@ -56,7 +56,7 @@ export function TaskDetail({ task, open, onClose }: Props) {
                 }}
               />
             ) : (
-              <button className="text-left hover:opacity-70 transition-opacity" onClick={() => setEditingTitle(true)}>
+              <button className="text-left hover:text-zendo-coral transition-colors" onClick={() => setEditingTitle(true)}>
                 {task.title}
               </button>
             )}
@@ -64,7 +64,7 @@ export function TaskDetail({ task, open, onClose }: Props) {
         </SheetHeader>
 
         <div className="px-5 flex flex-col gap-4 flex-1">
-          <Separator />
+          <Separator className="bg-zendo-ink/10" />
 
           {/* Meta row */}
           <div className="flex flex-wrap gap-3 items-center">
@@ -80,29 +80,29 @@ export function TaskDetail({ task, open, onClose }: Props) {
               type="date"
               value={task.dueDate ?? ""}
               onChange={(e) => updateTask(task.id, { dueDate: e.target.value || undefined })}
-              className="h-7 w-36 text-xs"
+              className="h-8 w-36 text-xs border border-zendo-ink/10 bg-zendo-cream/50 rounded-lg focus-visible:ring-zendo-coral/20"
             />
           </div>
 
           {/* Tags */}
           <div className="flex flex-col gap-1.5">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tags</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-zendo-ink-light">Tags</p>
             <TagSelector
               selectedIds={task.tags}
               onChange={(ids) => updateTask(task.id, { tags: ids })}
             />
           </div>
 
-          <Separator />
+          <Separator className="bg-zendo-ink/10" />
 
           {/* Description */}
           <div className="flex flex-col gap-1.5">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Description</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-zendo-ink-light">Description</p>
             <Textarea
               placeholder="Add a description…"
               defaultValue={task.description ?? ""}
               rows={4}
-              className="resize-none text-sm"
+              className="resize-none text-sm border border-zendo-ink/10 bg-zendo-cream/50 rounded-xl focus-visible:ring-zendo-coral/20"
               onBlur={(e) => {
                 const val = e.target.value;
                 if (val !== (task.description ?? "")) {
@@ -112,12 +112,12 @@ export function TaskDetail({ task, open, onClose }: Props) {
             />
           </div>
 
-          <Separator />
+          <Separator className="bg-zendo-ink/10" />
 
           {/* Subtasks */}
           {(subtasks.length > 0 || canAddSubtask) && (
             <div className="flex flex-col gap-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <p className="text-xs font-bold uppercase tracking-wider text-zendo-ink-light">
                 Subtasks ({subtasks.length})
               </p>
 
@@ -129,7 +129,7 @@ export function TaskDetail({ task, open, onClose }: Props) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="justify-start gap-2 text-muted-foreground text-xs"
+                  className="justify-start gap-2 text-zendo-ink-light text-xs rounded-lg hover:text-zendo-coral hover:bg-zendo-coral/5"
                   onClick={() => setAddingSubtask(true)}
                 >
                   + Add subtask
@@ -137,7 +137,7 @@ export function TaskDetail({ task, open, onClose }: Props) {
               )}
 
               {addingSubtask && (
-                <div className="p-3 rounded-xl" style={{ border: "1px solid #7F8CAA18", backgroundColor: "#ebf0f0" }}>
+                <div className="p-3 border border-zendo-ink/10 bg-zendo-cream/50 rounded-xl">
                   <TaskForm
                     parentId={task.id}
                     parentLevel={task.level as 0 | 1}
@@ -149,16 +149,16 @@ export function TaskDetail({ task, open, onClose }: Props) {
             </div>
           )}
 
-          <Separator />
+          <Separator className="bg-zendo-ink/10" />
 
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-zendo-ink-light font-mono">
             Created {new Date(task.createdAt).toLocaleDateString()}
           </p>
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-4 border-t border-border">
-          <Button variant="destructive" size="sm" className="gap-2 rounded-xl" onClick={handleDelete}>
+        <div className="px-5 py-4 border-t border-zendo-ink/10">
+          <Button variant="ghost" size="sm" className="gap-2 rounded-full bg-destructive text-white hover:bg-destructive/90" onClick={handleDelete}>
             <Trash2 className="h-3.5 w-3.5" /> Delete task
           </Button>
         </div>
@@ -174,14 +174,14 @@ function SubtaskRow({ task }: { task: Task }) {
 
   return (
     <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-2 p-2 rounded-lg text-sm" style={{ border: "1px solid #7F8CAA18", backgroundColor: "#ffffff" }}>
+        <div className="flex items-center gap-2 p-2 text-sm border border-zendo-ink/10 bg-white rounded-xl">
         <input
           type="checkbox"
           checked={isDone}
           onChange={() => isDone ? uncompleteTask(task.id) : completeTask(task.id)}
-          className="accent-primary h-3.5 w-3.5 flex-shrink-0"
+          className="h-4 w-4 flex-shrink-0 rounded-md border-2 border-zendo-ink/20 accent-zendo-sage"
         />
-        <span className={isDone ? "line-through text-muted-foreground" : ""}>{task.title}</span>
+        <span className={isDone ? "line-through text-zendo-ink-light" : "text-zendo-ink"}>{task.title}</span>
       </div>
       {subtasks.map((sub) => (
         <div key={sub.id} className="ml-5">

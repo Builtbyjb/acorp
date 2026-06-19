@@ -10,10 +10,10 @@ import { cn } from "@/lib/utils";
 import type { Priority } from "@/stores/taskStore";
 
 const PRIORITIES: { value: Priority; label: string; color: string }[] = [
-  { value: "high",   label: "High",   color: "text-red-400" },
-  { value: "medium", label: "Medium", color: "text-amber-400" },
-  { value: "low",    label: "Low",    color: "text-blue-400" },
-  { value: "none",   label: "None",   color: "text-muted-foreground" },
+  { value: "high",   label: "High",   color: "text-zendo-coral" },
+  { value: "medium", label: "Medium", color: "text-zendo-butter" },
+  { value: "low",    label: "Low",    color: "text-zendo-sage" },
+  { value: "none",   label: "None",   color: "text-zendo-ink-light" },
 ];
 
 interface Props {
@@ -31,18 +31,18 @@ export function PrioritySelector({ value, onChange, size = "sm" }: Props) {
         <Button
           variant="ghost"
           size={size === "sm" ? "icon" : "sm"}
-          className={cn("h-7 w-7", current.color)}
+          className={cn("h-7 w-7 rounded-lg hover:bg-zendo-ink/5", current.color)}
           title={`Priority: ${current.label}`}
         >
           <Flag className="h-3.5 w-3.5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent align="start" className="rounded-xl border border-zendo-ink/10 bg-white">
         {PRIORITIES.map((p) => (
           <DropdownMenuItem
             key={p.value}
             onClick={() => onChange(p.value)}
-            className={cn("gap-2", p.color)}
+            className={cn("gap-2 rounded-lg cursor-pointer", p.color)}
           >
             <Flag className="h-3.5 w-3.5" />
             {p.label}
@@ -56,10 +56,10 @@ export function PrioritySelector({ value, onChange, size = "sm" }: Props) {
 
 export function PriorityDot({ priority }: { priority: Priority }) {
   const colors: Record<Priority, string> = {
-    high:   "bg-red-400",
-    medium: "bg-amber-400",
-    low:    "bg-blue-400",
-    none:   "bg-transparent border border-border",
+    high:   "bg-zendo-coral",
+    medium: "bg-zendo-butter",
+    low:    "bg-zendo-sage",
+    none:   "bg-transparent border border-zendo-ink/10",
   };
   return (
     <span className={cn("inline-block h-2 w-2 rounded-full flex-shrink-0", colors[priority])} />

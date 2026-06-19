@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as GuestRouteImport } from './routes/_guest'
 import { Route as AuthPublicRouteImport } from './routes/_auth-public'
+import { Route as SplatRouteImport } from './routes/$'
 import { Route as GuestIndexRouteImport } from './routes/_guest.index'
 import { Route as AppUpcomingRouteImport } from './routes/app.upcoming'
 import { Route as AppTodayRouteImport } from './routes/app.today'
@@ -37,6 +38,11 @@ const GuestRoute = GuestRouteImport.update({
 } as any)
 const AuthPublicRoute = AuthPublicRouteImport.update({
   id: '/_auth-public',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GuestIndexRoute = GuestIndexRouteImport.update({
@@ -106,6 +112,7 @@ const AppProjectsProjectIdRoute = AppProjectsProjectIdRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/$': typeof SplatRoute
   '/': typeof GuestIndexRoute
   '/app': typeof AppRouteWithChildren
   '/login': typeof AuthPublicLoginRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/app/projects/': typeof AppProjectsIndexRoute
 }
 export interface FileRoutesByTo {
+  '/$': typeof SplatRoute
   '/': typeof GuestIndexRoute
   '/app': typeof AppRouteWithChildren
   '/login': typeof AuthPublicLoginRoute
@@ -139,6 +147,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/$': typeof SplatRoute
   '/_auth-public': typeof AuthPublicRouteWithChildren
   '/_guest': typeof GuestRouteWithChildren
   '/app': typeof AppRouteWithChildren
@@ -159,6 +168,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/$'
     | '/'
     | '/app'
     | '/login'
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
     | '/app/projects/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/$'
     | '/'
     | '/app'
     | '/login'
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/app/projects'
   id:
     | '__root__'
+    | '/$'
     | '/_auth-public'
     | '/_guest'
     | '/app'
@@ -210,6 +222,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  SplatRoute: typeof SplatRoute
   AuthPublicRoute: typeof AuthPublicRouteWithChildren
   GuestRoute: typeof GuestRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
@@ -236,6 +249,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthPublicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_guest/': {
@@ -385,6 +405,7 @@ const AppRouteChildren: AppRouteChildren = {
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  SplatRoute: SplatRoute,
   AuthPublicRoute: AuthPublicRouteWithChildren,
   GuestRoute: GuestRouteWithChildren,
   AppRoute: AppRouteWithChildren,

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import InvoiceForm from "@/components/InvoiceForm";
-import { Button } from "@shared/ui/components/button";
+import { Button } from "@/components/ui/button";
 import type { Client } from "@/lib/types";
 import type { Invoice } from "@shared/lib/types";
 import { ArrowLeft } from "lucide-react";
@@ -18,7 +18,7 @@ function RouteComponent() {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch(`${API_URL}/api/v1/clients/${clientId}/invoices/${invoiceId}`, {
+        const response = await fetch(`${API_URL}/api/v1/invoice/clients/${clientId}/invoices/${invoiceId}`, {
           method: "GET",
           credentials: "include",
         });

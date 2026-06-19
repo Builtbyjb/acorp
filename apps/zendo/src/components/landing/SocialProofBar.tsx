@@ -7,27 +7,21 @@ const STATS = [
 
 export function SocialProofBar() {
   return (
-    <section style={{ borderTop: "1px solid #7F8CAA20", borderBottom: "1px solid #7F8CAA20" }}>
+    <section className="border-y border-zendo-ink/8 bg-white/60 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-4">
           {STATS.map((stat, i) => (
             <div
               key={stat.label}
-              className="flex flex-col items-center justify-center gap-1.5 py-8 px-4 text-center"
-              style={{
-                borderLeft: i > 0 ? "1px solid #7F8CAA20" : "none",
-              }}
+              className="flex flex-col items-center justify-center gap-1.5 py-8 px-4 text-center border-l border-zendo-ink/8 first:border-l-0"
             >
-              <p
-                className="text-3xl md:text-4xl font-extrabold tracking-tight leading-none"
-                style={{ color: "#4382df" }}
-              >
+              <p className={cn(
+                "text-3xl md:text-4xl font-extrabold tracking-tight leading-none",
+                i === 0 ? "text-zendo-coral" : i === 1 ? "text-zendo-sage" : i === 2 ? "text-zendo-sky" : "text-zendo-butter"
+              )}>
                 {stat.number}
               </p>
-              <p
-                className="text-xs font-medium tracking-[0.18em] uppercase"
-                style={{ color: "#7F8CAA" }}
-              >
+              <p className="text-xs font-semibold tracking-[0.12em] uppercase text-zendo-ink-light">
                 {stat.label}
               </p>
             </div>
@@ -36,4 +30,8 @@ export function SocialProofBar() {
       </div>
     </section>
   );
+}
+
+function cn(...classes: (string | false | undefined)[]) {
+  return classes.filter(Boolean).join(" ");
 }

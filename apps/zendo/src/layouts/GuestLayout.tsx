@@ -4,7 +4,7 @@ import { SiteFooter } from "@/components/landing/SiteFooter";
 
 export function GuestLayout() {
   return (
-    <div className="flex flex-col min-h-svh bg-background">
+    <div className="flex flex-col min-h-svh bg-zendo-cream">
       <SiteNav />
       <main className="flex-1">
         <Outlet />

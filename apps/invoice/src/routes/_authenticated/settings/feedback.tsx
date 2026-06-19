@@ -3,10 +3,10 @@ import { useLayout } from "@/hooks/useLayout";
 import { useEffect } from "react";
 import { useForm } from "@tanstack/react-form";
 import * as z from "zod";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@shared/ui/components/card";
-import { Field, FieldLabel, FieldError } from "@shared/ui/components/field";
-import { Textarea } from "@shared/ui/components/textarea";
-import { Button } from "@shared/ui/components/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import TextInputField from "@/components/Form/TextInputField";
 import { useFetch } from "@/hooks/useFetch";
 import { toast } from "sonner";
@@ -32,7 +32,7 @@ function RouteComponent() {
     },
     onSubmit: async ({ value }) => {
       try {
-        const response = await doPOST("/api/v1/user/settings/feedback", value);
+        const response = await doPOST("/api/v1/invoice/user/settings/feedback", value);
         if (response instanceof Error) throw response;
 
         const result = await response.json();

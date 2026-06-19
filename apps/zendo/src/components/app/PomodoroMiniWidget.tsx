@@ -38,36 +38,28 @@ export function PomodoroMiniWidget() {
     };
   }, [state, tick]);
 
-  // Cobalt for focus, Slate for break
-  const ringColor = mode === "focus" ? "#4382df" : "#7F8CAA";
+  // Coral for focus, sage for break
+  const ringColor = mode === "focus" ? "#f27a5d" : "#8fb996";
 
   return (
     <button
       onClick={() => navigate({ to: "/app/pomodoro" })}
-      className="flex items-center gap-1.5 px-2 py-1 rounded-lg transition-all"
-      style={{
-        border: `1px solid ${state === "running" ? "#4382df2e" : "#7F8CAA22"}`,
-        backgroundColor: state === "running" ? "#4382df08" : "transparent",
-      }}
+      className="flex items-center gap-1.5 px-2 py-1 rounded-full border border-zendo-ink/10 bg-white transition-all hover:border-zendo-coral/30"
       title="Go to Pomodoro timer"
     >
       <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`} className="-rotate-90">
-        <circle cx={SIZE / 2} cy={SIZE / 2} r={R} fill="none" stroke="#7F8CAA28" strokeWidth="2.5" />
+        <circle cx={SIZE / 2} cy={SIZE / 2} r={R} fill="none" stroke="#f7f1ea" strokeWidth="2.5" />
         <circle
           cx={SIZE / 2} cy={SIZE / 2} r={R}
           fill="none"
           stroke={ringColor}
           strokeWidth="2.5"
-          strokeLinecap="round"
           strokeDasharray={CIRC}
           strokeDashoffset={dashOffset}
           style={{ transition: "stroke-dashoffset 0.5s linear" }}
         />
       </svg>
-      <span
-        className="text-xs font-mono tabular-nums min-w-[36px]"
-        style={{ color: "#0f172a" }}
-      >
+      <span className="text-xs font-mono text-zendo-ink tabular-nums min-w-[36px]">
         {formatTime(secondsLeft)}
       </span>
     </button>

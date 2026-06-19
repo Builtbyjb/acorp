@@ -25,29 +25,22 @@ export function TopBar() {
   };
 
   return (
-    <header
-      className="h-14 flex items-center gap-3 px-4 sticky top-0 z-40 backdrop-blur-md flex-shrink-0"
-      style={{ backgroundColor: "#ebf0f0e8", borderBottom: "1px solid #7F8CAA22" }}
-    >
+    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl h-14 flex items-center gap-3 px-4 flex-shrink-0 shadow-sm shadow-zendo-ink/5">
       {/* Sidebar toggle (desktop) */}
       <button
         onClick={toggleSidebar}
-        className="hidden md:flex h-8 w-8 items-center justify-center rounded-lg transition-opacity hover:opacity-60"
-        style={{ color: "#7F8CAA" }}
+        className="hidden md:flex h-8 w-8 items-center justify-center text-zendo-ink-light transition-colors hover:text-zendo-ink hover:bg-zendo-ink/5 rounded-lg"
         aria-label="Toggle sidebar"
       >
         <Menu className="h-4 w-4" />
       </button>
 
       {/* Logo */}
-      <Link to="/app/today" className="flex items-center gap-2 no-underline">
-        <div
-          className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-black"
-          style={{ backgroundColor: "#4382df" }}
-        >
+      <Link to="/app/today" className="flex items-center gap-2 no-underline group">
+        <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-gradient-to-br from-zendo-coral to-amber-400 text-white text-xs font-black shadow-sm transition-transform group-hover:scale-95">
           Z
         </div>
-        <span className="font-bold text-sm tracking-tight" style={{ color: "#0f172a" }}>
+        <span className="font-bold text-sm tracking-tight text-zendo-ink">
           Zendo
         </span>
       </Link>
@@ -60,16 +53,13 @@ export function TopBar() {
       {/* User avatar + menu */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button
-            className="h-8 w-8 rounded-full flex items-center justify-center text-white text-xs font-bold transition-opacity hover:opacity-80"
-            style={{ backgroundColor: "#4382df" }}
-          >
+          <button className="h-8 w-8 rounded-full flex items-center justify-center bg-zendo-ink text-white text-xs font-bold transition-opacity hover:opacity-80">
             {initials}
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuContent align="end" className="w-48 border border-zendo-ink/10 bg-white rounded-xl">
           <div className="px-2 py-1.5">
-            <p className="text-xs truncate" style={{ color: "#7F8CAA" }}>{user?.email}</p>
+            <p className="text-xs truncate text-zendo-ink-light">{user?.email}</p>
           </div>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>

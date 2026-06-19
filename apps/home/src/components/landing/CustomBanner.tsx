@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@shared/ui/components/card";
-import { Button } from "@shared/ui/components/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export default function CustomBanner() {
   const navigate = useNavigate();
@@ -9,20 +9,15 @@ export default function CustomBanner() {
     <section>
       <Card>
         <CardHeader>
-          <CardTitle>
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-2 text-muted-foreground">
-              Custom Development
-            </p>
-            <h3 className="text-2xl font-bold tracking-tight mb-2 text-foreground">Need something built for you?</h3>
-          </CardTitle>
+          <p className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase mb-2.5 text-muted-foreground">
+            Custom Development
+          </p>
+          <CardTitle>Need something built for you?</CardTitle>
         </CardHeader>
         <CardContent>
-          <div>
-            <p className="text-sm leading-relaxed max-w-md text-muted-foreground">
-              We're also open to building fully custom applications — tailored to your exact workflows, brand, and
-              goals.
-            </p>
-          </div>
+          <p className="text-sm leading-relaxed max-w-md text-muted-foreground">
+            We're also open to building fully custom applications — tailored to your exact workflows, brand, and goals.
+          </p>
         </CardContent>
         <CardFooter>
           <Button variant="default" onClick={() => navigate({ to: "/custom" })}>

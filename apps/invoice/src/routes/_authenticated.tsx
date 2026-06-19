@@ -1,9 +1,9 @@
 import { createFileRoute, redirect, Outlet } from "@tanstack/react-router";
-import Sidebar from "@shared/ui/custom-components/AppSidebar";
+import Sidebar from "@/components/Sidebar";
 import { useAuth } from "@/hooks/auth";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@shared/ui/components/sidebar";
-import { Separator } from "@shared/ui/components/separator";
-import Header from "@shared/ui/custom-components/Header";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import Header from "@/components/Header";
 import { useLayout } from "@/hooks/useLayout";
 
 import {
@@ -24,14 +24,14 @@ import {
 function ComingSoonBadge() {
   return (
     <span
-      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border ml-auto"
+      className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold border ml-auto"
       style={{
-        backgroundColor: "#7F8CAA10",
-        borderColor: "#7F8CAA28",
-        color: "#7F8CAA",
+        backgroundColor: "rgba(255,255,255,0.08)",
+        borderColor: "rgba(255,255,255,0.15)",
+        color: "rgba(255,255,255,0.60)",
       }}
     >
-      <span className="w-1 h-1 rounded-full animate-pulse" style={{ backgroundColor: "#7F8CAA" }} />
+      <span className="w-1 h-1 animate-pulse" style={{ backgroundColor: "rgba(255,255,255,0.60)" }} />
       Soon
     </span>
   );
@@ -85,7 +85,7 @@ const navItems = [
 ];
 
 function AuthenticatedLayout() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { title } = useLayout();
   return (
     <SidebarProvider>
@@ -94,10 +94,11 @@ function AuthenticatedLayout() {
         username={user?.username}
         email={user?.email}
         navItems={navItems}
+        logout={logout}
       />
       <SidebarInset>
         <header className="flex items-center gap-2 ml-4 mt-4">
-          <SidebarTrigger className="h-12 w-12 bg-accent hover:bg-accent" size={"icon-lg"} />
+          <SidebarTrigger className="h-12 w-12 bg-accent" size={"icon-lg"} />
           <Separator orientation="vertical" />
           <Header title={title} />
         </header>

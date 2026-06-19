@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Button } from "@shared/ui/components/button";
+import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import InvoicesTable from "@/components/InvoicesTable";
 import { useLayout } from "@/hooks/useLayout";
@@ -31,7 +31,7 @@ function RouteComponent() {
 
   const pagination = usePagination<Invoice>({
     fetcher: async (pageToFetch, sizeToFetch) => {
-      const response = await doGET(`/api/v1/invoices?page=${pageToFetch}&size=${sizeToFetch}`);
+      const response = await doGET(`/api/v1/invoice/invoices?page=${pageToFetch}&size=${sizeToFetch}`);
       if (response instanceof Error) throw response;
       if (!response.ok) throw new Error("Failed to fetch invoices");
       const result = await response.json();

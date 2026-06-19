@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "@shared/ui/components/button";
+import { Button } from "@/components/ui/button";
 import { Mail, MapPin, Phone, Plus, UserCircle, ArrowLeft } from "lucide-react";
 import InvoicesTable from "@/components/InvoicesTable";
 import type { Client } from "@/lib/types";
 import type { Invoice } from "@shared/lib/types";
 import { useNavigate } from "@tanstack/react-router";
 import { useLayout } from "@/hooks/useLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/components/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFetch } from "@/hooks/useFetch";
 import { usePagination } from "@/hooks/usePagination";
 import { InvoiceSchema, ClientSchema } from "@shared/lib/zod-schema";
@@ -41,7 +41,7 @@ function RouteComponent() {
 
   const pagination = usePagination<Invoice>({
     fetcher: async (pageToFetch, sizeToFetch) => {
-      const response = await doGET(`/api/v1/clients/${clientId}?page=${pageToFetch}&size=${sizeToFetch}`);
+      const response = await doGET(`/api/v1/invoice/clients/${clientId}?page=${pageToFetch}&size=${sizeToFetch}`);
       if (response instanceof Error) throw response;
 
       const result = await response.json();

@@ -29,14 +29,14 @@ export interface CalEvent {
 }
 
 export const EVENT_COLORS = [
-  "#a855f7",  // purple (primary)
-  "#3b82f6",  // blue
-  "#22c55e",  // green
+  "#f27a5d",  // coral
+  "#8fb996",  // sage
+  "#7ec8e3",  // sky
+  "#c9b8e8",  // lavender
+  "#9fe2c4",  // mint
   "#f59e0b",  // amber
-  "#ef4444",  // red
   "#ec4899",  // pink
-  "#14b8a6",  // teal
-  "#f97316",  // orange
+  "#6b6560",  // warm ink
 ];
 
 // ─── Store ────────────────────────────────────────────────────

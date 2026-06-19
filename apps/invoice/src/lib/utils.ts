@@ -1,6 +1,12 @@
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 import { CURRENCY_MAP } from "./constant";
 import { toast } from "sonner";
 import { z } from "zod";
+
+export function cn(...inputs: ClassValue[]) {
+    return twMerge(clsx(inputs));
+}
 
 export function formatCurrency(amount: number, currency?: string): string {
     if (currency) {
@@ -19,30 +25,29 @@ export function formatCurrency(amount: number, currency?: string): string {
 }
 
 export function getBadgeVariant(action: string): string {
-    const green = "bg-green-50 text-green-700";
-    const blue = "bg-sky-50 text-sky-700";
-    const gray = "bg-gray-200 text-gray-700";
-    const red = "bg-red-50 text-red-700";
+    const black = "bg-black text-white";
+    const gray = "bg-neutral-100 text-neutral-700";
+    const dark = "bg-neutral-800 text-white";
 
     switch (action) {
         case "active":
-            return green;
+            return black;
         case "blue":
-            return blue;
+            return dark;
         case "non-renewing":
             return gray;
         case "disabled":
-            return red;
+            return dark;
         case "paid":
-            return green;
+            return black;
         case "sent":
-            return blue;
+            return dark;
         case "draft":
             return gray;
         case "overdue":
-            return red;
+            return dark;
         case "cancelled":
-            return red;
+            return dark;
         default:
             return gray;
     }

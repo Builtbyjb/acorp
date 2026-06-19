@@ -10,9 +10,13 @@ type Plan = z.infer<typeof SubscriptionPlanSchema>;
 export function useSubscriptionPlan() {
     const { doGET, doPOST } = useFetch();
 
-    const fetchPlan = useCallback(async (): Promise<Plan[] | undefined> => {
+    const fetchPlan = useCallback(async (currency?: string, country?: string): Promise<Plan[] | undefined> => {
         try {
-            const response = await doGET("/api/v1/payments/paystack-fn/plans");
+            const params = new URLSearchParams();
+            if (currency) params.set("currency", currency);
+            if (country) params.set("country", country);
+            const queryParams = params.toString() ? `?${params.toString()}` : "";
+            const response = await doGET(`/api/v1/invoice/payments/plans/me${queryParams}`);
             if (response instanceof Error) throw response;
 
             const result = await response.json();
@@ -30,13 +34,14 @@ export function useSubscriptionPlan() {
     const subscribe = useCallback(
         async (plan: Plan): Promise<string | undefined> => {
             try {
-                const response = await doPOST("/api/v1/payments/paystack/subscribe", { planCode: plan.planCode });
+                const response = await doPOST("/api/v1/invoice/payments/subscribe", { planCode: plan.planCode });
                 if (response instanceof Error) throw response;
 
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.message);
 
-                return result.data.data.authorization_url;
+                // Support both Paystack (authorization_url) and Stripe (checkout_url)
+                return result.data.authorization_url || result.data.checkout_url;
             } catch (error: unknown) {
                 if (error instanceof Error) toast.error(error.message);
                 console.error(error);
