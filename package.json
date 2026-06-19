@@ -26,6 +26,12 @@
     "build:insights": "npx turbo build --filter=insights",
     "build:server": "npx turbo build --filter=server",
     "build": "npx turbo build",
+    "mobile:build:insights": "npx turbo build:mobile --filter=insights",
+    "mobile:build:invoice": "npx turbo build:mobile --filter=invoice",
+    "mobile:build:lumina": "npx turbo build:mobile --filter=lumina",
+    "mobile:build:opencomms": "npx turbo build:mobile --filter=opencomms",
+    "mobile:build:traqr": "npx turbo build:mobile --filter=traqr",
+    "mobile:build:zendo": "npx turbo build:mobile --filter=zendo",
     "lint:home": "npx turbo lint --filter=acorp",
     "lint:invoice": "npx turbo lint --filter=invoice",
     "lint:zendo": "npx turbo lint --filter=zendo",
@@ -37,6 +43,7 @@
     "lint": "npx turbo lint"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "better-sqlite3": "^12.11.1",
     "drizzle-kit": "^0.31.10",
     "turbo": "^2.9.8",

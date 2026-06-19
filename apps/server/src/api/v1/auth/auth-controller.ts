@@ -1,10 +1,10 @@
-import { Hono } from "hono";
+import { Hono, type Context } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { Bindings } from "@/lib/types";
 import { drizzle } from "drizzle-orm/d1";
 import { DrizzleQueryError, eq } from "drizzle-orm";
 import { members, organizations, users } from "@/db/schemas";
-import { parseToken, signToken, sendOTPEmail, handleZodValidate } from "@/lib/utils";
+import { parseToken, parseTokenValue, signToken, sendOTPEmail, handleZodValidate, getTokenFromCookieOrHeader } from "@/lib/utils";
 import { setCookie, deleteCookie } from "hono/cookie";
 import type { TokenPayload } from "@/lib/types";
 import { ErrorResult } from "@/lib/types";
@@ -12,6 +12,10 @@ import { getAccessTokenExp, ACCESS_TOKEN_MAX_AGE, getRefreshTokenExp, REFRESH_TO
 import { loginSchema, otpSchema, signupSchema } from "./auth-zod-schema";
 import { validateReferral } from "./auth-service";
 import { detectProvider, getGateway, getCurrency } from "@/lib/payment";
+
+function isMobileClient(c: Context): boolean {
+    return c.req.header("X-Mobile-Client") === "true";
+}
 
 const authRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/auth");
 
@@ -53,7 +57,11 @@ authRouteV1.post(
             maxAge: ACCESS_TOKEN_MAX_AGE,
         });
 
-        return c.json({ message: "OTP sent to your email" }, 200);
+        const mobile = isMobileClient(c);
+        return c.json(
+            { message: "OTP sent to your email", ...(mobile ? { otpToken: signResult } : {}) },
+            200,
+        );
     },
 );
 
@@ -165,7 +173,11 @@ authRouteV1.post(
                 maxAge: ACCESS_TOKEN_MAX_AGE,
             });
 
-            return c.json({ message: "Sign up completed" }, 200);
+            const mobile = isMobileClient(c);
+            return c.json(
+                { message: "Sign up completed", ...(mobile ? { otpToken: signResult } : {}) },
+                200,
+            );
         } catch (error) {
             // Clean up on failure
             if (error instanceof DrizzleQueryError) {
@@ -186,9 +198,16 @@ authRouteV1.post(
     }),
     async (c) => {
         const db = drizzle(c.env.DB);
-        const { otp } = c.req.valid("json");
+        const { otp, otpToken } = c.req.valid("json");
 
-        const parsed = await parseToken(c, "otp_token");
+        const otpTokenValue =
+            (isMobileClient(c) && otpToken ? otpToken : undefined) ??
+            getTokenFromCookieOrHeader(c, "otp_token");
+        if (!otpTokenValue) {
+            return c.json({ message: "OTP token not found" }, 401);
+        }
+
+        const parsed = await parseTokenValue(c, otpTokenValue);
         if (parsed instanceof ErrorResult) return c.json({ message: parsed.message }, parsed.code);
 
         // Verify OTP code
@@ -247,6 +266,7 @@ authRouteV1.post(
         const accessToken = await signToken(c, accessPayload);
         if (accessToken instanceof Error) c.json({ message: accessToken.message }, 500);
 
+        const mobile = isMobileClient(c);
         return c.json(
             {
                 accessToken: accessToken,
@@ -255,6 +275,7 @@ authRouteV1.post(
                     organizationName: organization.name,
                     email: user.email,
                 },
+                ...(mobile ? { refreshToken } : {}),
             },
             200,
         );

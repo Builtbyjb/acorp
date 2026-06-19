@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import type { AnyRouter } from "@tanstack/react-router";
 import type { User, AuthState, AuthResponse } from "@/lib/types";
 import { jwtDecode } from "jwt-decode";
 import { z } from "zod";
 import { useFetch } from "@/hooks/useFetch";
+import { isNativePlatform, setRefreshToken, clearRefreshToken, loadRefreshToken } from "@shared/mobile";
 
 const responseSchema = z.object({
   accessToken: z.string(),
@@ -14,7 +15,18 @@ const responseSchema = z.object({
   }),
 });
 
+const mobileLoginResponseSchema = z.object({
+  message: z.string(),
+  otpToken: z.string().optional(),
+});
+
+const mobileVerifyResponseSchema = responseSchema.extend({
+  refreshToken: z.string().optional(),
+});
+
 const AuthContext = createContext<AuthState | undefined>(undefined);
+
+let pendingOtpToken: string | null = null;
 
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -26,6 +38,11 @@ export function AuthProvider({ children, router }: AuthProviderProps) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const { doGET, doPOST } = useFetch();
 
+  useEffect(() => {
+    // Warm the secure storage token on native so subsequent fetches can attach it.
+    loadRefreshToken().catch(console.error);
+  }, []);
+
   const logout = async () => {
     try {
       const response = await doGET("/api/v1/auth/logout");
@@ -35,6 +52,7 @@ export function AuthProvider({ children, router }: AuthProviderProps) {
     } finally {
       setUser(null);
       setAccessToken(null);
+      await clearRefreshToken();
       await router.navigate({ to: "/login" });
     }
   };
@@ -84,21 +102,39 @@ export function AuthProvider({ children, router }: AuthProviderProps) {
     if (response instanceof Error) throw response;
 
     const result = await response.json();
-    if (response.ok) return response.ok;
-    else throw new Error(result.message);
+    if (response.ok) {
+      if (isNativePlatform()) {
+        const parsed = mobileLoginResponseSchema.parse(result);
+        if (parsed.otpToken) {
+          pendingOtpToken = parsed.otpToken;
+        }
+      }
+      return response.ok;
+    }
+    throw new Error(result.message);
   };
 
   const verifyOtp = async (otp: string): Promise<boolean> => {
-    const response = await doPOST("/api/v1/auth/verify-otp", { otp });
+    const payload: { otp: string; otpToken?: string } = { otp };
+    if (isNativePlatform() && pendingOtpToken) {
+      payload.otpToken = pendingOtpToken;
+    }
+
+    const response = await doPOST("/api/v1/auth/verify-otp", payload);
     if (response instanceof Error) throw response;
 
     if (!response.ok) throw new Error("Failed to verify OTP");
 
     const data = await response.json();
-    const parsed = responseSchema.parse(data);
+    const parsed = mobileVerifyResponseSchema.parse(data);
 
     setAccessToken(parsed.accessToken);
     setUser(parsed.user);
+
+    if (isNativePlatform() && parsed.refreshToken) {
+      await setRefreshToken(parsed.refreshToken);
+      pendingOtpToken = null;
+    }
 
     return response.ok;
   };

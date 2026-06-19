@@ -1,6 +1,7 @@
 import type { FetchInstance } from "@/lib/types";
 import { useCallback } from "react";
 import { toast } from "sonner";
+import { loadRefreshToken, getMobileHeaders } from "@shared/mobile";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const RETRY_INTERVAL = 2000; // 2s
@@ -10,9 +11,11 @@ export function useFetch(): FetchInstance {
         let maxRetries = 3;
         while (maxRetries > 0) {
             try {
+                await loadRefreshToken();
                 const response = await fetch(`${API_URL}${url}`, {
                     method: "GET",
                     credentials: "include",
+                    headers: getMobileHeaders(),
                 });
 
                 return response;
@@ -36,10 +39,13 @@ export function useFetch(): FetchInstance {
 
         while (maxRetries > 0) {
             try {
+                await loadRefreshToken();
                 const response = await fetch(`${API_URL}${url}`, {
                     method: "POST",
                     credentials: "include",
-                    headers: isFormData ? undefined : { "Content-Type": "application/json" },
+                    headers: isFormData
+                        ? getMobileHeaders()
+                        : { "Content-Type": "application/json", ...getMobileHeaders() },
                     body: isFormData ? data : JSON.stringify(data),
                 });
 
@@ -64,10 +70,13 @@ export function useFetch(): FetchInstance {
 
         while (maxRetries > 0) {
             try {
+                await loadRefreshToken();
                 const response = await fetch(`${API_URL}${url}`, {
                     method: "PUT",
                     credentials: "include",
-                    headers: isFormData ? undefined : { "Content-Type": "application/json" },
+                    headers: isFormData
+                        ? getMobileHeaders()
+                        : { "Content-Type": "application/json", ...getMobileHeaders() },
                     body: isFormData ? data : JSON.stringify(data),
                 });
 
@@ -90,9 +99,11 @@ export function useFetch(): FetchInstance {
         let maxRetries = 3;
         while (maxRetries > 0) {
             try {
+                await loadRefreshToken();
                 const response = await fetch(`${API_URL}${url}`, {
                     method: "DELETE",
                     credentials: "include",
+                    headers: getMobileHeaders(),
                 });
 
                 return response;

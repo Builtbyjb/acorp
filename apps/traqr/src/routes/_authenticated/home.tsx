@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScanLine } from "@/components/brand/scan-line";
+import { scanQr, isNativePlatform, getItem, setItem } from "@shared/mobile";
 import {
   Package,
   Scan,
@@ -15,6 +17,7 @@ import {
   ArrowRight,
   TrendingUp,
   TrendingDown,
+  Camera,
 } from "lucide-react";
 
 // ─── Mock data ──────────────────────────────────────────────────────────────
@@ -181,12 +184,55 @@ function StatusBadge({ status }: { status: string }) {
 
 // ─── Page ───────────────────────────────────────────────────────────────────
 
+const SCAN_HISTORY_KEY = "traqr_scan_history";
+
 export const Route = createFileRoute("/_authenticated/home")({
   component: DashboardHome,
 });
 
 function DashboardHome() {
   const maxScans = Math.max(...hourlyScans.map((d) => d.count));
+  const [lastScan, setLastScan] = useState<string | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const [history, setHistory] = useState<string[]>([]);
+
+  useEffect(() => {
+    getItem(SCAN_HISTORY_KEY).then((raw) => {
+      if (raw) {
+        try {
+          setHistory(JSON.parse(raw));
+        } catch {
+          // ignore corrupt history
+        }
+      }
+    });
+  }, []);
+
+  const addToHistory = (value: string) => {
+    setHistory((prev) => {
+      const next = [value, ...prev].slice(0, 50);
+      setItem(SCAN_HISTORY_KEY, JSON.stringify(next)).catch(() => {});
+      return next;
+    });
+  };
+
+  const handleScan = async () => {
+    if (!isNativePlatform()) {
+      setLastScan("QR scanning is only available in the mobile app.");
+      return;
+    }
+    setIsScanning(true);
+    try {
+      const result = await scanQr();
+      const value = result ?? "No QR code detected.";
+      setLastScan(value);
+      if (result) addToHistory(result);
+    } catch (error) {
+      setLastScan(error instanceof Error ? error.message : "Scan failed.");
+    } finally {
+      setIsScanning(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -273,7 +319,50 @@ function DashboardHome() {
             <ArrowRight size={18} className="text-slate-muted group-hover:text-scanner-dark transition-colors" />
           </div>
         </Card>
+        <Card
+          className="group cursor-pointer"
+          onClick={handleScan}
+          role="button"
+          aria-disabled={isScanning}
+        >
+          <div className="p-5 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-xl bg-scanner-bg flex items-center justify-center">
+              <Camera size={20} className="text-scanner-dark" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-slate-ink">
+                {isScanning ? "Scanning..." : "Scan QR code"}
+              </p>
+              <p className="text-xs text-slate-muted">
+                {lastScan ? `Last scan: ${lastScan}` : "Use the device camera to scan"}
+              </p>
+            </div>
+            <ArrowRight size={18} className="text-slate-muted group-hover:text-scanner-dark transition-colors" />
+          </div>
+        </Card>
       </div>
+
+      {history.length > 0 && (
+        <Card hover={false} className="mt-6">
+          <div className="p-5 border-b border-slate-border">
+            <h2 className="text-base font-bold text-slate-ink">Scan history</h2>
+            <p className="text-xs text-slate-muted">Recent QR codes scanned on this device</p>
+          </div>
+          <div className="p-3 space-y-1">
+            {history.slice(0, 10).map((value, idx) => (
+              <div
+                key={`${value}-${idx}`}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-elevated/50 transition-colors"
+              >
+                <div className="w-8 h-8 rounded-lg bg-scanner-bg flex items-center justify-center flex-shrink-0">
+                  <QrCode size={14} className="text-scanner-dark" />
+                </div>
+                <p className="text-sm text-slate-ink truncate flex-1 font-mono">{value}</p>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
 
       {/* Main grid */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">

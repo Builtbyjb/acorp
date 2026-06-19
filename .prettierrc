@@ -8,7 +8,7 @@
       }
     },
     {
-      "files": "*.ts",
+      "files": "**/*.{ts,js,mjs}",
       "options": {
         "printWidth": 120,
         "tabWidth": 4

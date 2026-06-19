@@ -29,7 +29,7 @@ export const PRODUCTS: Product[] = [
         id: "zendo",
         name: "Zendo",
         tagline: "Time & task planning, re-imagined",
-        available: true,
+        available: false,
         description:
             "A focused productivity companion designed to help you structure your day, prioritize ruthlessly, and protect deep work time. Built on the principle that clarity beats complexity — every time.",
         href: "https://zendo.acorp.app",
@@ -45,7 +45,7 @@ export const PRODUCTS: Product[] = [
         id: "opencomms",
         name: "OpenComms",
         tagline: "Community engagement for organizations",
-        available: true,
+        available: false,
         description:
             "Build genuine, lasting connections with your audience. OpenComms gives businesses and organizations the tools to engage their communities — through structured channels, direct messaging, and thoughtful moderation features.",
         href: "https://opencomms.acorp.app",

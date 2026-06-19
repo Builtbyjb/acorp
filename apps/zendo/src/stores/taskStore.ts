@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { zustandStorage } from "@shared/mobile/storage";
 
 // ─── Types ────────────────────────────────────────────────────
 
@@ -351,6 +352,9 @@ export const useTaskStore = create<TaskStore>()(
           .sort((a, b) => (a.dueDate ?? "").localeCompare(b.dueDate ?? ""));
       },
     }),
-    { name: "zendo_tasks" }
+    {
+      name: "zendo_tasks",
+      storage: createJSONStorage(() => zustandStorage),
+    }
   )
 );

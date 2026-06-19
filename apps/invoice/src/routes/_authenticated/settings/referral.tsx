@@ -11,6 +11,7 @@ import { formatCurrency, handleError } from "@/lib/utils";
 import { APP_NAME } from "@/lib/constant";
 import { toast } from "sonner";
 import { useFetch } from "@/hooks/useFetch";
+import { copyToClipboard } from "@shared/mobile";
 import * as z from "zod";
 
 const PayoutMethodSchema = z.object({
@@ -86,8 +87,8 @@ function RouteComponent() {
     })();
   }, [doGET]);
 
-  const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = async (text: string) => {
+    await copyToClipboard(text);
     toast.success("Copied to clipboard");
   };
 

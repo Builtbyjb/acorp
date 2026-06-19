@@ -1,5 +1,27 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { zustandStorage } from "@shared/mobile/storage";
+import { scheduleNotification, cancelNotification } from "@shared/mobile";
+
+const POMODORO_NOTIFICATION_ID = 1;
+
+function schedulePomodoroNotification(secondsLeft: number, mode: TimerMode) {
+  const endAt = new Date(Date.now() + secondsLeft * 1000);
+  scheduleNotification({
+    id: POMODORO_NOTIFICATION_ID,
+    title: "Zendo",
+    body: `${mode === "focus" ? "Focus" : mode === "short" ? "Short break" : "Long break"} session finished`,
+    scheduleAt: endAt,
+  }).catch(() => {
+    // ignore permission/no-native errors
+  });
+}
+
+function cancelPomodoroNotification() {
+  cancelNotification(POMODORO_NOTIFICATION_ID).catch(() => {
+    // ignore
+  });
+}
 
 // ─── Types ────────────────────────────────────────────────────
 
@@ -97,11 +119,14 @@ export const usePomodoroStore = create<PomodoroStore>()(
       },
 
       start: () => {
+        const { secondsLeft, mode } = get();
         set({ state: "running", _sessionStart: new Date().toISOString() });
+        schedulePomodoroNotification(secondsLeft, mode);
       },
 
       pause: () => {
         set({ state: "paused" });
+        cancelPomodoroNotification();
       },
 
       reset: () => {
@@ -111,6 +136,7 @@ export const usePomodoroStore = create<PomodoroStore>()(
           secondsLeft: modeDuration(mode, settings),
           _sessionStart: undefined,
         });
+        cancelPomodoroNotification();
       },
 
       tick: () => {
@@ -154,6 +180,10 @@ export const usePomodoroStore = create<PomodoroStore>()(
           state: autoStart ? "running" : "idle",
           _sessionStart: autoStart ? new Date().toISOString() : undefined,
         });
+
+        if (autoStart) {
+          schedulePomodoroNotification(modeDuration(next, settings), next);
+        }
       },
 
       skipToNext: () => {
@@ -186,6 +216,7 @@ export const usePomodoroStore = create<PomodoroStore>()(
     }),
     {
       name: "zendo_pomodoro",
+      storage: createJSONStorage(() => zustandStorage),
       partialize: (s) => ({
         settings: s.settings,
         sessions: s.sessions,

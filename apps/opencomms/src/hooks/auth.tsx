@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import type { AnyRouter } from "@tanstack/react-router";
 import type { User } from "@/lib/types";
+import { getItem, setItem, removeItem } from "@shared/mobile/storage";
 
 export type AuthState = {
   user: User | null;
@@ -31,9 +32,9 @@ function generateId() {
   return Math.floor(Math.random() * 1_000_000);
 }
 
-function loadDemoUsers(): Record<string, { user: User; password: string }> {
+async function loadDemoUsers(): Promise<Record<string, { user: User; password: string }>> {
   try {
-    const raw = localStorage.getItem(DEMO_USERS_KEY);
+    const raw = await getItem(DEMO_USERS_KEY);
     const parsed = raw ? (JSON.parse(raw) as Record<string, { user: User; password: string }>) : {};
     if (Object.keys(parsed).length === 0) {
       const demo: User = {
@@ -44,7 +45,7 @@ function loadDemoUsers(): Record<string, { user: User; password: string }> {
         currentOrgId: 1,
       };
       parsed[demo.email] = { user: demo, password: "password" };
-      localStorage.setItem(DEMO_USERS_KEY, JSON.stringify(parsed));
+      await setItem(DEMO_USERS_KEY, JSON.stringify(parsed));
     }
     return parsed;
   } catch {
@@ -52,38 +53,44 @@ function loadDemoUsers(): Record<string, { user: User; password: string }> {
   }
 }
 
-function saveDemoUsers(users: Record<string, { user: User; password: string }>) {
-  localStorage.setItem(DEMO_USERS_KEY, JSON.stringify(users));
+async function saveDemoUsers(users: Record<string, { user: User; password: string }>) {
+  await setItem(DEMO_USERS_KEY, JSON.stringify(users));
 }
 
-function getDemoSession(): { user: User } | null {
+async function getDemoSession(): Promise<{ user: User } | null> {
   try {
-    const raw = localStorage.getItem(DEMO_SESSION_KEY);
+    const raw = await getItem(DEMO_SESSION_KEY);
     return raw ? (JSON.parse(raw) as { user: User }) : null;
   } catch {
     return null;
   }
 }
 
-function setDemoSession(user: User | null) {
+async function setDemoSession(user: User | null) {
   if (user) {
-    localStorage.setItem(DEMO_SESSION_KEY, JSON.stringify({ user }));
+    await setItem(DEMO_SESSION_KEY, JSON.stringify({ user }));
   } else {
-    localStorage.removeItem(DEMO_SESSION_KEY);
+    await removeItem(DEMO_SESSION_KEY);
   }
 }
 
 export function AuthProvider({ children, router }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(() => getDemoSession()?.user ?? null);
+  const [user, setUser] = useState<User | null>(null);
   const [accessToken] = useState<string | null>("demo-token");
 
+  useEffect(() => {
+    getDemoSession().then((session) => {
+      if (session) setUser(session.user);
+    });
+  }, []);
+
   const login = useCallback(async (email: string): Promise<boolean> => {
-    const users = loadDemoUsers();
+    const users = await loadDemoUsers();
     const found = users[email.toLowerCase()];
     if (!found) return false;
 
     setUser(found.user);
-    setDemoSession(found.user);
+    await setDemoSession(found.user);
     return true;
   }, []);
 
@@ -95,7 +102,7 @@ export function AuthProvider({ children, router }: AuthProviderProps) {
       organizationName: string;
       password: string;
     }): Promise<boolean> => {
-      const users = loadDemoUsers();
+      const users = await loadDemoUsers();
       const email = data.email.toLowerCase();
       if (users[email]) return false;
 
@@ -106,12 +113,11 @@ export function AuthProvider({ children, router }: AuthProviderProps) {
         organizationName: data.organizationName,
         currentOrgId: generateId(),
       };
-
       users[email] = { user: newUser, password: data.password };
-      saveDemoUsers(users);
+      await saveDemoUsers(users);
 
       setUser(newUser);
-      setDemoSession(newUser);
+      await setDemoSession(newUser);
       return true;
     },
     [],
@@ -119,12 +125,12 @@ export function AuthProvider({ children, router }: AuthProviderProps) {
 
   const logout = useCallback(async () => {
     setUser(null);
-    setDemoSession(null);
+    await setDemoSession(null);
     await router.navigate({ to: "/login" });
   }, [router]);
 
   const authenticate = useCallback(async (): Promise<boolean> => {
-    const session = getDemoSession();
+    const session = await getDemoSession();
     if (session) {
       setUser(session.user);
       return true;

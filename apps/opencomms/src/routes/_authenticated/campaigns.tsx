@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -7,7 +7,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Progress } from '@/components/ui/progress'
 import { PlusIcon, SmsIcon, WhatsAppIcon } from '../-icons.tsx'
 import { useLayout } from '@/hooks/useLayout'
-import { Megaphone, Calendar, BarChart3 } from 'lucide-react'
+import { Megaphone, Calendar, BarChart3, Share2 } from 'lucide-react'
+import { shareText, scheduleNotification } from '@shared/mobile'
 
 const CAMPAIGNS = [
   { id: '1', name: 'June Newsletter', channel: 'sms', status: 'sent', recipients: 1180, delivered: 1163, failed: 17, sentAt: 'Jun 10 · 9:00 AM' },
@@ -35,9 +36,31 @@ const SUMMARY = [
 
 function CampaignsPage() {
   const { setTitle } = useLayout()
+  const scheduledRef = useRef(false)
   useEffect(() => {
     setTitle('Campaigns')
+
+    if (scheduledRef.current) return
+    scheduledRef.current = true
+
+    CAMPAIGNS.filter((c) => c.status === 'scheduled').forEach((c) => {
+      // Parse a fake scheduled date relative to now for demo purposes.
+      const scheduleAt = new Date(Date.now() + 60_000 * Number(c.id))
+      scheduleNotification({
+        id: 1000 + Number(c.id),
+        title: 'Campaign reminder',
+        body: `${c.name} is scheduled to send soon.`,
+        scheduleAt,
+      }).catch(() => {
+        // ignore permission errors
+      })
+    })
   }, [setTitle])
+
+  const handleShare = async () => {
+    const summary = `OpenComms campaigns: ${SUMMARY.map((s) => `${s.label}: ${s.value}`).join('\n')}`
+    await shareText(summary, 'Campaign Summary')
+  }
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -46,9 +69,14 @@ function CampaignsPage() {
           <h1 className="text-2xl font-extrabold tracking-tight">Campaigns</h1>
           <p className="text-sm text-muted-foreground mt-1">Broadcast the right message to the right people</p>
         </div>
-        <Button>
-          <PlusIcon size={14} className="mr-1.5" /> New campaign
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={handleShare}>
+            <Share2 size={14} className="mr-1.5" /> Share
+          </Button>
+          <Button>
+            <PlusIcon size={14} className="mr-1.5" /> New campaign
+          </Button>
+        </div>
       </div>
 
       {/* Summary strip */}
