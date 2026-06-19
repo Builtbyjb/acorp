@@ -36,17 +36,14 @@ function AuthenticatedLayout() {
     <div className="min-h-svh bg-slate-base flex">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-slate-ink/30 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <div className="fixed inset-0 bg-slate-ink/30 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
       {/* Sidebar */}
       <aside
         className={cn(
           "fixed lg:sticky top-0 left-0 z-50 h-svh w-64 bg-slate-paper border-r border-slate-border flex flex-col transition-transform",
-          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
       >
         <div className="p-5 border-b border-slate-border">
@@ -68,7 +65,7 @@ function AuthenticatedLayout() {
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                   active
                     ? "bg-scanner-bg text-scanner-dark"
-                    : "text-slate-muted hover:text-slate-ink hover:bg-slate-border"
+                    : "text-slate-muted hover:text-slate-ink hover:bg-slate-border",
                 )}
               >
                 <Icon size={18} />

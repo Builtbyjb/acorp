@@ -29,10 +29,7 @@ function Nav() {
       <Container>
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link
-            to="/"
-            className="group flex items-center gap-2.5 transition-opacity hover:opacity-80"
-          >
+          <Link to="/" className="group flex items-center gap-2.5 transition-opacity hover:opacity-80">
             <TraqrLogo color="#1a1c21" />
           </Link>
 
@@ -55,7 +52,7 @@ function Nav() {
                 >
                   {link.label}
                 </Link>
-              )
+              ),
             )}
           </nav>
 
@@ -116,7 +113,7 @@ function Nav() {
                   >
                     {link.label}
                   </Link>
-                )
+                ),
               )}
               <div className="mt-3 pt-3 border-t border-slate-border flex flex-col gap-2">
                 <Link
@@ -174,8 +171,8 @@ function Footer() {
               <TraqrLogo color="#1a1c21" />
             </Link>
             <p className="text-slate-muted leading-relaxed max-w-sm">
-              QR code management for warehouses, field service teams, and
-              enterprise logistics. Track, scan, and deliver with confidence.
+              QR code management for warehouses, field service teams, and enterprise logistics. Track, scan, and deliver
+              with confidence.
             </p>
           </div>
 
@@ -184,9 +181,7 @@ function Footer() {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
               {Object.entries(footerLinks).map(([category, links]) => (
                 <div key={category}>
-                  <p className="text-xs font-bold uppercase tracking-widest text-slate-ink mb-4">
-                    {category}
-                  </p>
+                  <p className="text-xs font-bold uppercase tracking-widest text-slate-ink mb-4">{category}</p>
                   <ul className="space-y-3">
                     {links.map((link) => (
                       <li key={link.label}>
@@ -207,9 +202,7 @@ function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-slate-border py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-slate-muted">
-            © {year} Traqr, Inc. All rights reserved.
-          </p>
+          <p className="text-xs text-slate-muted">© {year} Traqr, Inc. All rights reserved.</p>
           <div className="flex items-center gap-2 text-xs text-slate-muted">
             <span className="w-2 h-2 rounded-full bg-scanner animate-pulse-soft" />
             Systems operational

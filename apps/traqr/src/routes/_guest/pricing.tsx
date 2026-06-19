@@ -19,13 +19,7 @@ const plans = [
     highlight: false,
     cta: "Get started free",
     ctaTo: "/signup",
-    features: [
-      "50 QR codes per month",
-      "Basic scan tracking",
-      "CSV export",
-      "1 user",
-      "Email support",
-    ],
+    features: ["50 QR codes per month", "Basic scan tracking", "CSV export", "1 user", "Email support"],
   },
   {
     name: "Business",
@@ -125,8 +119,7 @@ function HeroSection() {
       <div
         className="absolute inset-0 pointer-events-none opacity-60"
         style={{
-          backgroundImage:
-            "radial-gradient(circle, #6b696428 1.5px, transparent 1.5px)",
+          backgroundImage: "radial-gradient(circle, #6b696428 1.5px, transparent 1.5px)",
           backgroundSize: "28px 28px",
         }}
       />
@@ -148,12 +141,10 @@ function HeroSection() {
               lineHeight: 1.05,
             }}
           >
-            One tool.{" "}
-            <span className="text-scanner-dark">Three tiers.</span>
+            One tool. <span className="text-scanner-dark">Three tiers.</span>
           </h1>
           <p className="text-lg leading-relaxed mt-6 max-w-md mx-auto text-slate-muted">
-            Start free, scale when you're ready. No surprise fees, no per-scan
-            charges.
+            Start free, scale when you're ready. No surprise fees, no per-scan charges.
           </p>
         </div>
       </Container>
@@ -172,25 +163,13 @@ function MotionBadge() {
 
 // ─── Plans ──────────────────────────────────────────────────────────────────
 
-function PlansSection({
-  annual,
-  onToggle,
-}: {
-  annual: boolean;
-  onToggle: () => void;
-}) {
+function PlansSection({ annual, onToggle }: { annual: boolean; onToggle: () => void }) {
   return (
     <section className="pb-16 bg-slate-base">
       <Container>
         {/* Toggle */}
         <div className="flex items-center justify-center gap-4 mb-12">
-          <span
-            className={`text-sm font-semibold ${
-              !annual ? "text-slate-ink" : "text-slate-muted"
-            }`}
-          >
-            Monthly
-          </span>
+          <span className={`text-sm font-semibold ${!annual ? "text-slate-ink" : "text-slate-muted"}`}>Monthly</span>
           <button
             type="button"
             onClick={onToggle}
@@ -203,16 +182,8 @@ function PlansSection({
               }`}
             />
           </button>
-          <span
-            className={`text-sm font-semibold ${
-              annual ? "text-slate-ink" : "text-slate-muted"
-            }`}
-          >
-            Annual
-          </span>
-          {annual && (
-            <Badge variant="scanner">Save 25%</Badge>
-          )}
+          <span className={`text-sm font-semibold ${annual ? "text-slate-ink" : "text-slate-muted"}`}>Annual</span>
+          {annual && <Badge variant="scanner">Save 25%</Badge>}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -221,7 +192,7 @@ function PlansSection({
               <HighlightCard key={plan.name} plan={plan} annual={annual} delay={0.1 + i * 0.1} />
             ) : (
               <StandardCard key={plan.name} plan={plan} annual={annual} delay={0.1 + i * 0.1} />
-            )
+            ),
           )}
         </div>
       </Container>
@@ -231,24 +202,14 @@ function PlansSection({
 
 type Plan = (typeof plans)[number];
 
-function StandardCard({
-  plan,
-  annual,
-  delay,
-}: {
-  plan: Plan;
-  annual: boolean;
-  delay: number;
-}) {
+function StandardCard({ plan, annual, delay }: { plan: Plan; annual: boolean; delay: number }) {
   const price = annual ? plan.annualPrice : plan.monthlyPrice;
 
   return (
     <Card style={{ animationDelay: `${delay}s` }}>
       <div className="p-8 flex flex-col h-full">
         <div className="mb-8">
-          <p className="text-sm font-semibold mb-1 text-slate-muted">
-            {plan.name}
-          </p>
+          <p className="text-sm font-semibold mb-1 text-slate-muted">{plan.name}</p>
           <div className="flex items-baseline gap-1 mb-3">
             <span
               className="font-extrabold tracking-tight text-slate-ink"
@@ -256,13 +217,9 @@ function StandardCard({
             >
               {price}
             </span>
-            {plan.period && (
-              <span className="text-sm text-slate-muted">{plan.period}</span>
-            )}
+            {plan.period && <span className="text-sm text-slate-muted">{plan.period}</span>}
           </div>
-          <p className="text-sm leading-relaxed text-slate-muted">
-            {plan.tagline}
-          </p>
+          <p className="text-sm leading-relaxed text-slate-muted">{plan.tagline}</p>
         </div>
 
         <ul className="flex flex-col gap-3 mb-8 flex-1">
@@ -287,15 +244,7 @@ function StandardCard({
   );
 }
 
-function HighlightCard({
-  plan,
-  annual,
-  delay,
-}: {
-  plan: Plan;
-  annual: boolean;
-  delay: number;
-}) {
+function HighlightCard({ plan, annual, delay }: { plan: Plan; annual: boolean; delay: number }) {
   const price = annual ? plan.annualPrice : plan.monthlyPrice;
 
   return (
@@ -308,9 +257,7 @@ function HighlightCard({
       </div>
       <div className="p-8 flex flex-col h-full" style={{ animationDelay: `${delay}s` }}>
         <div className="mb-8">
-          <p className="text-sm font-semibold mb-1 text-slate-muted">
-            {plan.name}
-          </p>
+          <p className="text-sm font-semibold mb-1 text-slate-muted">{plan.name}</p>
           <div className="flex items-baseline gap-1 mb-3">
             <span
               className="font-extrabold tracking-tight text-slate-ink"
@@ -318,13 +265,9 @@ function HighlightCard({
             >
               {price}
             </span>
-            {plan.period && (
-              <span className="text-sm text-slate-muted">{plan.period}</span>
-            )}
+            {plan.period && <span className="text-sm text-slate-muted">{plan.period}</span>}
           </div>
-          <p className="text-sm leading-relaxed text-slate-muted">
-            {plan.tagline}
-          </p>
+          <p className="text-sm leading-relaxed text-slate-muted">{plan.tagline}</p>
         </div>
 
         <ul className="flex flex-col gap-3 mb-8 flex-1">
@@ -355,11 +298,7 @@ function ComparisonSection() {
   return (
     <section className="pb-16 bg-slate-base">
       <Container size="lg">
-        <SectionHeader
-          eyebrow="Compare Plans"
-          title="Feature breakdown."
-          className="mb-10"
-        />
+        <SectionHeader eyebrow="Compare Plans" title="Feature breakdown." className="mb-10" />
 
         <Card hover={false}>
           <div className="overflow-x-auto">
@@ -385,9 +324,7 @@ function ComparisonSection() {
                 {comparisonRows.map((row, i) => (
                   <tr
                     key={row.feature}
-                    className={`${
-                      i !== comparisonRows.length - 1 ? "border-b border-slate-border/50" : ""
-                    }`}
+                    className={`${i !== comparisonRows.length - 1 ? "border-b border-slate-border/50" : ""}`}
                   >
                     <td className="px-7 py-4 text-sm text-slate-ink">{row.feature}</td>
                     {(["starter", "business", "enterprise"] as const).map((tier) => {
@@ -403,9 +340,7 @@ function ComparisonSection() {
                               <div className="w-4 h-0.5 rounded-full bg-slate-border mx-auto" />
                             )
                           ) : (
-                            <span className="text-sm font-medium text-slate-ink font-mono">
-                              {val}
-                            </span>
+                            <span className="text-sm font-medium text-slate-ink font-mono">{val}</span>
                           )}
                         </td>
                       );
@@ -427,22 +362,13 @@ function FAQSection() {
   return (
     <section className="pb-16 bg-slate-base">
       <Container size="md">
-        <SectionHeader
-          eyebrow="Questions"
-          title="Pricing FAQ."
-          align="center"
-          className="mb-10"
-        />
+        <SectionHeader eyebrow="Questions" title="Pricing FAQ." align="center" className="mb-10" />
         <div className="space-y-3">
           {faqs.map((faq, i) => (
             <Card key={i} hover={false}>
               <div className="p-6">
-                <p className="text-base font-semibold text-slate-ink mb-2">
-                  {faq.question}
-                </p>
-                <p className="text-sm leading-relaxed text-slate-muted">
-                  {faq.answer}
-                </p>
+                <p className="text-base font-semibold text-slate-ink mb-2">{faq.question}</p>
+                <p className="text-sm leading-relaxed text-slate-muted">{faq.answer}</p>
               </div>
             </Card>
           ))}
@@ -478,9 +404,7 @@ function CtaSection() {
           />
 
           <div className="relative">
-            <p className="text-xs font-bold tracking-[0.25em] uppercase mb-4 text-scanner">
-              Not Sure Which Plan?
-            </p>
+            <p className="text-xs font-bold tracking-[0.25em] uppercase mb-4 text-scanner">Not Sure Which Plan?</p>
             <h2
               className="text-4xl md:text-5xl font-extrabold text-slate-paper tracking-tight mb-5"
               style={{ lineHeight: 1.05 }}
@@ -490,8 +414,7 @@ function CtaSection() {
               <span className="text-slate-subtle">No pressure.</span>
             </h2>
             <p className="text-base mb-10 max-w-md mx-auto leading-relaxed text-slate-muted">
-              Book a 15-minute call with the team. We'll show you exactly how
-              Traqr fits your operation.
+              Book a 15-minute call with the team. We'll show you exactly how Traqr fits your operation.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Button asChild size="lg">

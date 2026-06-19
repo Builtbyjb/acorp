@@ -65,17 +65,11 @@ function MockDashboard() {
             <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-scanner-bg">
               <QrCode size={16} className="text-scanner-dark" />
             </div>
-            <span className="text-xs font-semibold tracking-tight text-slate-ink">
-              Traqr Dashboard
-            </span>
+            <span className="text-xs font-semibold tracking-tight text-slate-ink">Traqr Dashboard</span>
           </div>
           <div className="flex gap-1.5">
             {["#c4c2bc", "#c4c2bc", "#c4c2bc"].map((bg, i) => (
-              <div
-                key={i}
-                className="w-2.5 h-2.5 rounded-full"
-                style={{ backgroundColor: bg }}
-              />
+              <div key={i} className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: bg }} />
             ))}
           </div>
         </div>
@@ -88,9 +82,7 @@ function MockDashboard() {
             { label: "On Time", value: "94%" },
           ].map((stat) => (
             <div key={stat.label}>
-              <p className="text-lg font-bold leading-none mb-1 text-slate-ink font-mono">
-                {stat.value}
-              </p>
+              <p className="text-lg font-bold leading-none mb-1 text-slate-ink font-mono">{stat.value}</p>
               <p className="text-xs text-slate-muted">{stat.label}</p>
             </div>
           ))}
@@ -111,9 +103,7 @@ function MockDashboard() {
                   <QrCode size={14} className="text-scanner-dark" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-slate-ink font-mono">
-                    {pkg.id}
-                  </p>
+                  <p className="text-xs font-semibold text-slate-ink font-mono">{pkg.id}</p>
                   <p className="text-xs text-slate-muted">{pkg.location}</p>
                 </div>
               </div>
@@ -169,8 +159,7 @@ function HeroSection() {
       <div
         className="absolute inset-0 pointer-events-none opacity-60"
         style={{
-          backgroundImage:
-            "radial-gradient(circle, #6b696428 1.5px, transparent 1.5px)",
+          backgroundImage: "radial-gradient(circle, #6b696428 1.5px, transparent 1.5px)",
           backgroundSize: "28px 28px",
         }}
       />
@@ -215,8 +204,7 @@ function HeroSection() {
             >
               Track every
               <br />
-              package.{" "}
-              <span className="text-scanner-dark">Scan</span>
+              package. <span className="text-scanner-dark">Scan</span>
               <br />
               <span className="text-scanner-dark">to know.</span>
             </motion.h1>
@@ -228,9 +216,8 @@ function HeroSection() {
               transition={{ duration: 0.5, delay: 0.22 }}
               className="text-lg max-w-lg leading-relaxed mt-8 mb-10 text-slate-muted"
             >
-              Create QR codes in seconds, print labels at scale, and scan
-              anywhere to see exactly where every package stands — built for
-              warehouses, field teams, and logistics operations.
+              Create QR codes in seconds, print labels at scale, and scan anywhere to see exactly where every package
+              stands — built for warehouses, field teams, and logistics operations.
             </motion.p>
 
             {/* CTA row */}
@@ -258,11 +245,7 @@ function HeroSection() {
               transition={{ duration: 0.5, delay: 0.42 }}
               className="flex flex-wrap gap-3"
             >
-              {[
-                "Instant QR Generation",
-                "Print Ready",
-                "Real-time Tracking",
-              ].map((chip) => (
+              {["Instant QR Generation", "Print Ready", "Real-time Tracking"].map((chip) => (
                 <span
                   key={chip}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold border border-slate-border bg-slate-paper/80 text-slate-muted"
@@ -286,13 +269,7 @@ function HeroSection() {
 
 // ─── Trust strip ────────────────────────────────────────────────────────────
 
-const trustLogos = [
-  "FastFreight",
-  "Atlas Logistics",
-  "PortCity Warehousing",
-  "FieldCore",
-  "RouteOne",
-];
+const trustLogos = ["FastFreight", "Atlas Logistics", "PortCity Warehousing", "FieldCore", "RouteOne"];
 
 function TrustStrip() {
   return (
@@ -303,10 +280,7 @@ function TrustStrip() {
         </p>
         <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
           {trustLogos.map((logo) => (
-            <span
-              key={logo}
-              className="text-sm font-semibold text-slate-subtle tracking-tight"
-            >
+            <span key={logo} className="text-sm font-semibold text-slate-subtle tracking-tight">
               {logo}
             </span>
           ))}
@@ -334,8 +308,7 @@ const useCases = [
   {
     icon: Truck,
     title: "Last-mile delivery",
-    description:
-      "Give drivers scannable proof of delivery. Customers and dispatch see status updates in real time.",
+    description: "Give drivers scannable proof of delivery. Customers and dispatch see status updates in real time.",
   },
   {
     icon: Box,
@@ -366,16 +339,10 @@ function UseCasesSection() {
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-scanner-bg">
                       <Icon size={22} className="text-scanner-dark" />
                     </div>
-                    <span className="text-xs font-bold tracking-[0.2em] text-slate-subtle">
-                      0{i + 1}
-                    </span>
+                    <span className="text-xs font-bold tracking-[0.2em] text-slate-subtle">0{i + 1}</span>
                   </div>
-                  <h3 className="text-xl font-bold mb-2 text-slate-ink">
-                    {useCase.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-slate-muted">
-                    {useCase.description}
-                  </p>
+                  <h3 className="text-xl font-bold mb-2 text-slate-ink">{useCase.title}</h3>
+                  <p className="text-sm leading-relaxed text-slate-muted">{useCase.description}</p>
                 </div>
               </Card>
             );
@@ -400,15 +367,13 @@ const steps = [
     number: "02",
     icon: Settings2,
     title: "Customize & label",
-    description:
-      "Add metadata: destination, contents, priority level, and any custom fields your workflow requires.",
+    description: "Add metadata: destination, contents, priority level, and any custom fields your workflow requires.",
   },
   {
     number: "03",
     icon: Printer,
     title: "Print & attach",
-    description:
-      "Export print-ready PDFs or PNG sheets. Stick labels directly onto packages before they ship.",
+    description: "Export print-ready PDFs or PNG sheets. Stick labels directly onto packages before they ship.",
   },
   {
     number: "04",
@@ -439,16 +404,10 @@ function HowItWorksSection() {
                     <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-scanner-bg">
                       <Icon size={20} className="text-scanner-dark" />
                     </div>
-                    <span className="text-xs font-bold tracking-[0.2em] text-slate-subtle">
-                      {step.number}
-                    </span>
+                    <span className="text-xs font-bold tracking-[0.2em] text-slate-subtle">{step.number}</span>
                   </div>
-                  <h3 className="text-lg font-bold mb-2 text-slate-ink">
-                    {step.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-slate-muted">
-                    {step.description}
-                  </p>
+                  <h3 className="text-lg font-bold mb-2 text-slate-ink">{step.title}</h3>
+                  <p className="text-sm leading-relaxed text-slate-muted">{step.description}</p>
                 </div>
               </Card>
             );
@@ -465,38 +424,32 @@ const features = [
   {
     icon: QrCode,
     title: "Instant QR Generation",
-    description:
-      "Generate unique, scannable QR codes for any package or asset in under a second.",
+    description: "Generate unique, scannable QR codes for any package or asset in under a second.",
   },
   {
     icon: Layers,
     title: "Bulk Creation",
-    description:
-      "Create hundreds of QR codes at once using custom naming patterns and CSV imports.",
+    description: "Create hundreds of QR codes at once using custom naming patterns and CSV imports.",
   },
   {
     icon: Printer,
     title: "Print-Ready Export",
-    description:
-      "Download print-ready PDF label sheets or individual PNG files formatted for any label size.",
+    description: "Download print-ready PDF label sheets or individual PNG files formatted for any label size.",
   },
   {
     icon: Package,
     title: "Package Assignment",
-    description:
-      "Link each QR code to shipment data, contents, destinations, and custom metadata.",
+    description: "Link each QR code to shipment data, contents, destinations, and custom metadata.",
   },
   {
     icon: History,
     title: "Scan History",
-    description:
-      "Every scan is logged with timestamp, location, and user — a complete chain of custody.",
+    description: "Every scan is logged with timestamp, location, and user — a complete chain of custody.",
   },
   {
     icon: BarChart3,
     title: "Analytics Dashboard",
-    description:
-      "Track delivery performance, scan rates, and package flow across your entire operation.",
+    description: "Track delivery performance, scan rates, and package flow across your entire operation.",
   },
 ];
 
@@ -504,10 +457,7 @@ function FeaturesSection() {
   return (
     <section id="features" className="py-24 bg-slate-base">
       <Container>
-        <SectionHeader
-          eyebrow="What You Get"
-          title="Everything you need. Nothing you don't."
-        />
+        <SectionHeader eyebrow="What You Get" title="Everything you need. Nothing you don't." />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {features.map((feature, i) => {
@@ -518,12 +468,8 @@ function FeaturesSection() {
                   <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-scanner-bg mb-5">
                     <Icon size={20} className="text-scanner-dark" />
                   </div>
-                  <h3 className="text-lg font-bold mb-2 text-slate-ink">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-slate-muted">
-                    {feature.description}
-                  </p>
+                  <h3 className="text-lg font-bold mb-2 text-slate-ink">{feature.title}</h3>
+                  <p className="text-sm leading-relaxed text-slate-muted">{feature.description}</p>
                 </div>
               </Card>
             );
@@ -534,9 +480,7 @@ function FeaturesSection() {
         <Card className="mt-5" hover={false}>
           <div className="p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="max-w-sm">
-              <p className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5 text-slate-muted">
-                Why Traqr
-              </p>
+              <p className="text-xs font-bold tracking-[0.25em] uppercase mb-2.5 text-slate-muted">Why Traqr</p>
               <h3 className="text-2xl font-bold tracking-tight text-slate-ink">
                 Built for operations, not IT departments.
               </h3>
@@ -554,9 +498,7 @@ function FeaturesSection() {
                   <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 bg-scanner-bg text-scanner-dark">
                     <CheckIcon />
                   </div>
-                  <span className="text-sm leading-snug text-slate-muted">
-                    {point}
-                  </span>
+                  <span className="text-sm leading-snug text-slate-muted">{point}</span>
                 </li>
               ))}
             </ul>
@@ -571,15 +513,13 @@ function FeaturesSection() {
 
 const testimonials = [
   {
-    quote:
-      "We cut receiving time by 60% in the first month. Traqr just works the way our warehouse works.",
+    quote: "We cut receiving time by 60% in the first month. Traqr just works the way our warehouse works.",
     author: "Marcus Chen",
     role: "Operations Manager, FastFreight",
     metric: "60% faster receiving",
   },
   {
-    quote:
-      "My technicians scan parts when they pick them up and when they install them. No more lost inventory.",
+    quote: "My technicians scan parts when they pick them up and when they install them. No more lost inventory.",
     author: "Sarah Okonkwo",
     role: "Field Service Lead, FieldCore",
     metric: "Zero lost parts",
@@ -610,12 +550,12 @@ function TestimonialsSection() {
               <div className="p-7 flex flex-col h-full">
                 <div className="mb-6">
                   {[...Array(5)].map((_, j) => (
-                    <span key={j} className="text-scanner text-sm">★</span>
+                    <span key={j} className="text-scanner text-sm">
+                      ★
+                    </span>
                   ))}
                 </div>
-                <p className="text-base leading-relaxed text-slate-ink mb-6 flex-1">
-                  “{t.quote}”
-                </p>
+                <p className="text-base leading-relaxed text-slate-ink mb-6 flex-1">“{t.quote}”</p>
                 <div className="pt-6 border-t border-slate-border">
                   <Badge variant="scanner" className="mb-3">
                     {t.metric}
@@ -661,9 +601,7 @@ function IntegrationsSection() {
                 <div className="w-10 h-10 mx-auto rounded-lg bg-slate-border flex items-center justify-center mb-3">
                   <Zap size={18} className="text-slate-muted" />
                 </div>
-                <p className="text-sm font-semibold text-slate-ink">
-                  {integration.name}
-                </p>
+                <p className="text-sm font-semibold text-slate-ink">{integration.name}</p>
                 <p className="text-xs text-slate-muted">{integration.category}</p>
               </div>
             </Card>
@@ -688,18 +626,16 @@ function PricingPreviewSection() {
               subtitle="No per-scan fees. No hidden charges. Just straightforward pricing for teams that move physical things."
             />
             <ul className="space-y-3 mb-8">
-              {[
-                "50 free QR codes to start",
-                "Unlimited scans on every plan",
-                "Cancel or upgrade anytime",
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-3 text-slate-muted">
-                  <div className="w-5 h-5 rounded-full bg-scanner-bg text-scanner-dark flex items-center justify-center">
-                    <CheckIcon />
-                  </div>
-                  <span className="text-sm">{item}</span>
-                </li>
-              ))}
+              {["50 free QR codes to start", "Unlimited scans on every plan", "Cancel or upgrade anytime"].map(
+                (item) => (
+                  <li key={item} className="flex items-center gap-3 text-slate-muted">
+                    <div className="w-5 h-5 rounded-full bg-scanner-bg text-scanner-dark flex items-center justify-center">
+                      <CheckIcon />
+                    </div>
+                    <span className="text-sm">{item}</span>
+                  </li>
+                ),
+              )}
             </ul>
             <Button asChild size="lg">
               <Link to="/pricing" className="group">
@@ -713,9 +649,7 @@ function PricingPreviewSection() {
               <div className="p-7">
                 <p className="text-sm font-semibold text-slate-muted mb-2">Starter</p>
                 <p className="text-4xl font-bold text-slate-ink mb-1">Free</p>
-                <p className="text-sm text-slate-muted mb-6">
-                  Perfect for small teams.
-                </p>
+                <p className="text-sm text-slate-muted mb-6">Perfect for small teams.</p>
                 <ul className="space-y-2 mb-6">
                   {["50 QR codes/mo", "1 user", "Email support"].map((f) => (
                     <li key={f} className="flex items-center gap-2 text-sm text-slate-muted">
@@ -784,12 +718,7 @@ function FAQSection() {
   return (
     <section className="py-24 bg-slate-base">
       <Container size="md">
-        <SectionHeader
-          eyebrow="FAQ"
-          title="Questions? Answered."
-          align="center"
-          className="mb-16"
-        />
+        <SectionHeader eyebrow="FAQ" title="Questions? Answered." align="center" className="mb-16" />
         <div className="space-y-3">
           {faqs.map((faq, i) => (
             <Card key={i} hover={false}>
@@ -798,9 +727,7 @@ function FAQSection() {
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 className="w-full p-6 flex items-center justify-between text-left"
               >
-                <span className="text-base font-semibold text-slate-ink pr-4">
-                  {faq.question}
-                </span>
+                <span className="text-base font-semibold text-slate-ink pr-4">{faq.question}</span>
                 <ChevronDown
                   size={20}
                   className={`flex-shrink-0 text-slate-muted transition-transform ${
@@ -810,9 +737,7 @@ function FAQSection() {
               </button>
               {openIndex === i && (
                 <div className="px-6 pb-6">
-                  <p className="text-sm leading-relaxed text-slate-muted">
-                    {faq.answer}
-                  </p>
+                  <p className="text-sm leading-relaxed text-slate-muted">{faq.answer}</p>
                 </div>
               )}
             </Card>
@@ -849,9 +774,7 @@ function CtaSection() {
           />
 
           <div className="relative">
-            <p className="text-xs font-bold tracking-[0.25em] uppercase mb-4 text-scanner">
-              Get Started Today
-            </p>
+            <p className="text-xs font-bold tracking-[0.25em] uppercase mb-4 text-scanner">Get Started Today</p>
             <h2
               className="text-4xl md:text-5xl font-extrabold text-slate-paper tracking-tight mb-5"
               style={{ lineHeight: 1.05 }}
@@ -861,8 +784,7 @@ function CtaSection() {
               <span className="text-slate-subtle">lost packages?</span>
             </h2>
             <p className="text-base mb-10 max-w-md mx-auto leading-relaxed text-slate-muted">
-              Start free. No credit card required. Your first 50 QR codes are
-              on us.
+              Start free. No credit card required. Your first 50 QR codes are on us.
             </p>
             <Button asChild size="lg">
               <Link to="/signup" className="group">

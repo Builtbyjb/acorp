@@ -13,47 +13,26 @@ function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <AuthLayout
-      title="Welcome back."
-      subtitle="Sign in to your Traqr account."
-    >
+    <AuthLayout title="Welcome back." subtitle="Sign in to your Traqr account.">
       <form className="flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <label
-            htmlFor="email"
-            className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-muted"
-          >
+          <label htmlFor="email" className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-muted">
             Email address
           </label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="you@company.com"
-          />
+          <Input id="email" type="email" placeholder="you@company.com" />
         </div>
 
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <label
-              htmlFor="password"
-              className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-muted"
-            >
+            <label htmlFor="password" className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-muted">
               Password
             </label>
-            <a
-              href="#"
-              className="text-xs font-medium text-scanner-dark hover:opacity-70 transition-opacity"
-            >
+            <a href="#" className="text-xs font-medium text-scanner-dark hover:opacity-70 transition-opacity">
               Forgot password?
             </a>
           </div>
           <div className="relative">
-            <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
-              className="pr-11"
-            />
+            <Input id="password" type={showPassword ? "text" : "password"} placeholder="••••••••" className="pr-11" />
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
@@ -78,10 +57,7 @@ function LoginPage() {
 
       <p className="text-sm text-center text-slate-muted">
         Don't have an account?{" "}
-        <Link
-          to="/signup"
-          className="font-semibold text-scanner-dark hover:opacity-70 transition-opacity"
-        >
+        <Link to="/signup" className="font-semibold text-scanner-dark hover:opacity-70 transition-opacity">
           Create one free →
         </Link>
       </p>

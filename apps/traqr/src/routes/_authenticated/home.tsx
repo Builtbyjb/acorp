@@ -51,20 +51,97 @@ const stats = [
 ];
 
 const recentPackages = [
-  { id: "PKG-4821", name: "Industrial Valves (Qty 24)", location: "New York Hub", status: "En Route" as const, lastScan: "2 min ago", carrier: "FastFreight" },
-  { id: "PKG-4820", name: "HVAC Control Units", location: "Chicago Depot", status: "Delivered" as const, lastScan: "18 min ago", carrier: "Atlas Logistics" },
-  { id: "PKG-4819", name: "Safety Harness Kits", location: "Miami Port", status: "Processing" as const, lastScan: "42 min ago", carrier: "PortCity" },
-  { id: "PKG-4818", name: "Compressor Parts", location: "Los Angeles", status: "En Route" as const, lastScan: "1 hr ago", carrier: "RouteOne" },
-  { id: "PKG-4817", name: "Electrical Conduit", location: "Seattle Hub", status: "Exception" as const, lastScan: "2 hr ago", carrier: "FastFreight" },
-  { id: "PKG-4816", name: "Pallet Jacks (2)", location: "Dallas Depot", status: "Delivered" as const, lastScan: "3 hr ago", carrier: "FieldCore" },
+  {
+    id: "PKG-4821",
+    name: "Industrial Valves (Qty 24)",
+    location: "New York Hub",
+    status: "En Route" as const,
+    lastScan: "2 min ago",
+    carrier: "FastFreight",
+  },
+  {
+    id: "PKG-4820",
+    name: "HVAC Control Units",
+    location: "Chicago Depot",
+    status: "Delivered" as const,
+    lastScan: "18 min ago",
+    carrier: "Atlas Logistics",
+  },
+  {
+    id: "PKG-4819",
+    name: "Safety Harness Kits",
+    location: "Miami Port",
+    status: "Processing" as const,
+    lastScan: "42 min ago",
+    carrier: "PortCity",
+  },
+  {
+    id: "PKG-4818",
+    name: "Compressor Parts",
+    location: "Los Angeles",
+    status: "En Route" as const,
+    lastScan: "1 hr ago",
+    carrier: "RouteOne",
+  },
+  {
+    id: "PKG-4817",
+    name: "Electrical Conduit",
+    location: "Seattle Hub",
+    status: "Exception" as const,
+    lastScan: "2 hr ago",
+    carrier: "FastFreight",
+  },
+  {
+    id: "PKG-4816",
+    name: "Pallet Jacks (2)",
+    location: "Dallas Depot",
+    status: "Delivered" as const,
+    lastScan: "3 hr ago",
+    carrier: "FieldCore",
+  },
 ];
 
 const recentScans = [
-  { id: "SCN-98231", packageId: "PKG-4821", location: "New York Hub", user: "D. Reyes", time: "2 min ago", type: "Outbound" },
-  { id: "SCN-98230", packageId: "PKG-4820", location: "Chicago Depot", user: "M. Chen", time: "18 min ago", type: "Delivery" },
-  { id: "SCN-98229", packageId: "PKG-4819", location: "Miami Port", user: "A. Patel", time: "42 min ago", type: "Receiving" },
-  { id: "SCN-98228", packageId: "PKG-4818", location: "Los Angeles", user: "J. Kim", time: "1 hr ago", type: "Transfer" },
-  { id: "SCN-98227", packageId: "PKG-4817", location: "Seattle Hub", user: "R. Torres", time: "2 hr ago", type: "Exception" },
+  {
+    id: "SCN-98231",
+    packageId: "PKG-4821",
+    location: "New York Hub",
+    user: "D. Reyes",
+    time: "2 min ago",
+    type: "Outbound",
+  },
+  {
+    id: "SCN-98230",
+    packageId: "PKG-4820",
+    location: "Chicago Depot",
+    user: "M. Chen",
+    time: "18 min ago",
+    type: "Delivery",
+  },
+  {
+    id: "SCN-98229",
+    packageId: "PKG-4819",
+    location: "Miami Port",
+    user: "A. Patel",
+    time: "42 min ago",
+    type: "Receiving",
+  },
+  {
+    id: "SCN-98228",
+    packageId: "PKG-4818",
+    location: "Los Angeles",
+    user: "J. Kim",
+    time: "1 hr ago",
+    type: "Transfer",
+  },
+  {
+    id: "SCN-98227",
+    packageId: "PKG-4817",
+    location: "Seattle Hub",
+    user: "R. Torres",
+    time: "2 hr ago",
+    type: "Exception",
+  },
 ];
 
 const hourlyScans = [
@@ -143,14 +220,10 @@ function DashboardHome() {
                   <span
                     className={cn(
                       "inline-flex items-center gap-1 text-xs font-semibold",
-                      stat.trend === "up" ? "text-scanner-dark" : "text-safety-dark"
+                      stat.trend === "up" ? "text-scanner-dark" : "text-safety-dark",
                     )}
                   >
-                    {stat.trend === "up" ? (
-                      <TrendingUp size={12} />
-                    ) : (
-                      <TrendingDown size={12} />
-                    )}
+                    {stat.trend === "up" ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                     {stat.change}
                   </span>
                 </div>
@@ -322,4 +395,3 @@ function DashboardHome() {
     </div>
   );
 }
-
