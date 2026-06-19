@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
     generateOTP,
     getNewInvoiceNumber,
@@ -83,7 +83,7 @@ describe("handleZodValidate", () => {
 
     it("returns 400 response when validation fails", () => {
         const c = { json: vi.fn() } as any;
-        const result = handleZodValidate({ success: false, error: new Error("Invalid") }, c);
+        handleZodValidate({ success: false, error: new Error("Invalid") }, c);
         expect(c.json).toHaveBeenCalledWith({ message: "Zod Validation Error" }, 400);
     });
 });

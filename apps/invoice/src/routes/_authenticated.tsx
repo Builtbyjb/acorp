@@ -1,9 +1,9 @@
 import { createFileRoute, redirect, Outlet } from "@tanstack/react-router";
-import Sidebar from "@shared/ui/custom-components/AppSidebar";
+import Sidebar from "@/components/Sidebar";
 import { useAuth } from "@/hooks/auth";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@shared/ui/components/sidebar";
-import { Separator } from "@shared/ui/components/separator";
-import Header from "@shared/ui/custom-components/Header";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import Header from "@/components/Header";
 import { useLayout } from "@/hooks/useLayout";
 
 import {
@@ -98,7 +98,7 @@ function AuthenticatedLayout() {
       />
       <SidebarInset>
         <header className="flex items-center gap-2 ml-4 mt-4">
-          <SidebarTrigger className="h-12 w-12 bg-accent hover:bg-accent" size={"icon-lg"} />
+          <SidebarTrigger className="h-12 w-12 bg-accent" size={"icon-lg"} />
           <Separator orientation="vertical" />
           <Header title={title} />
         </header>

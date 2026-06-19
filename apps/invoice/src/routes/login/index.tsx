@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
-import { Button } from "@shared/ui/components/button";
-import { Spinner } from "@shared/ui/components/spinner";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@shared/ui/components/card";
-import { Input } from "@shared/ui/components/input";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
 import * as z from "zod";
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@shared/ui/components/field";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { ArrowLeft } from "lucide-react";
 import OTP from "@/components/OTP";
 import { useAuth } from "@/hooks/auth";

@@ -11,8 +11,8 @@ import { authMiddleware } from "@/middleware/authentication";
 import { zValidator } from "@hono/zod-validator";
 import { drizzle } from "drizzle-orm/d1";
 import { eq } from "drizzle-orm";
-import { organizations } from "@/db/schemas";
-import { getGateway, PaymentProvider } from "@/lib/payment";
+import { organizations, users } from "@/db/schemas";
+import { getGateway, PaymentProvider, countryToCurrency, detectProvider } from "@/lib/payment";
 
 const paymentRouteV1 = new Hono<{ Bindings: Bindings }>().basePath("/payments");
 
@@ -122,42 +122,113 @@ paymentRouteV1.post("/webhook", async (c) => {
 /* Protected routes (auth required) */
 paymentRouteV1.use("*", authMiddleware());
 
-/* Helper to get provider from JWT or organization */
-async function getProvider(c: any): Promise<{ provider: PaymentProvider; gateway: any }> {
+/* Helper to get the authenticated user's organization from the DB */
+async function getOrganization(c: any) {
     const jwtPayload = c.get("jwtPayload") as TokenPayload;
-    const provider = (jwtPayload.paymentProvider || "paystack") as PaymentProvider;
-    const gateway = getGateway(provider, c.env);
-    return { provider, gateway };
+    const db = drizzle(c.env.DB);
+    return db.select().from(organizations).where(eq(organizations.id, jwtPayload.currentOrgId)).get();
 }
 
 /* Helper to get organization currency for the authenticated user */
 async function getOrganizationCurrency(c: any): Promise<string> {
-    const jwtPayload = c.get("jwtPayload") as TokenPayload;
-    const db = drizzle(c.env.DB);
-    const org = await db
-        .select({ currency: organizations.currency })
-        .from(organizations)
-        .where(eq(organizations.id, jwtPayload.currentOrgId))
-        .get();
+    const org = await getOrganization(c);
     return org?.currency || "NGN";
 }
 
-/* Helper to get customer ID based on provider */
-function getCustomerId(jwtPayload: TokenPayload, provider: PaymentProvider): string | number | undefined {
-    if (provider === "paystack") return jwtPayload.paystackCustomerId;
-    return jwtPayload.stripeCustomerId;
+/* Resolve provider from explicit currency/country hints or fall back to stored provider */
+function resolveProvider(
+    storedProvider: PaymentProvider,
+    queryCurrency?: string,
+    queryCountry?: string,
+): PaymentProvider {
+    if (queryCurrency) {
+        const normalized = queryCurrency.toUpperCase();
+        if (normalized === "NGN") return "paystack";
+        if (normalized === "USD" || normalized === "CAD") return "stripe";
+    }
+    if (queryCountry) {
+        const fromCountry = detectProvider(queryCountry);
+        if (fromCountry) return fromCountry;
+    }
+    return storedProvider;
 }
 
-/* Organization plans endpoint — provider and currency inferred from auth */
-paymentRouteV1.get("/plans/me", async (c) => {
-    const { provider } = await getProvider(c);
+/* Resolve currency from explicit currency, country, organization, or provider default */
+async function resolveCurrency(c: any, provider: PaymentProvider): Promise<string> {
     const queryCurrency = c.req.query("currency");
-    const currency = queryCurrency || (await getOrganizationCurrency(c));
+    if (queryCurrency) return queryCurrency.toUpperCase();
+
+    const country = c.req.query("country");
+    if (country) {
+        const currencyFromCountry = countryToCurrency(country);
+        if (currencyFromCountry) return currencyFromCountry;
+    }
+
+    const orgCurrency = await getOrganizationCurrency(c);
+    if (orgCurrency) return orgCurrency;
+
+    return provider === "paystack" ? "NGN" : "USD";
+}
+
+/* Helper to get customer ID based on provider from the latest DB record */
+function getCustomerIdFromOrg(
+    org: Awaited<ReturnType<typeof getOrganization>>,
+    provider: PaymentProvider,
+): string | number | undefined {
+    if (!org) return undefined;
+    if (provider === "paystack") return org.paystackCustomerId || undefined;
+    return org.stripeCustomerId || undefined;
+}
+
+/* Create a customer with the given provider if one does not exist, and update the org record */
+async function createCustomerIfNeeded(
+    c: any,
+    provider: PaymentProvider,
+    org: Awaited<ReturnType<typeof getOrganization>>,
+): Promise<string | number> {
+    if (!org) throw new Error("Organization not found");
+
+    const existing = getCustomerIdFromOrg(org, provider);
+    if (existing) return existing;
+
+    const jwtPayload = c.get("jwtPayload") as TokenPayload;
+    const db = drizzle(c.env.DB);
+    const gateway = getGateway(provider, c.env);
+
+    const user = await db.select().from(users).where(eq(users.id, jwtPayload.userId)).get();
+    const customer = await gateway.createCustomer(
+        jwtPayload.email,
+        user?.firstname || user?.username || "",
+        user?.lastname || "",
+    );
+
+    const updateSet: any = {};
+    if (provider === "paystack") {
+        updateSet.paystackCustomerCode = customer.customerCode;
+        updateSet.paystackCustomerId = typeof customer.id === "number" ? customer.id : null;
+        updateSet.paymentProvider = provider;
+    } else {
+        updateSet.stripeCustomerId = String(customer.id);
+        updateSet.paymentProvider = provider;
+    }
+
+    await db.update(organizations).set(updateSet).where(eq(organizations.id, org.id));
+
+    return provider === "paystack" ? updateSet.paystackCustomerId : updateSet.stripeCustomerId;
+}
+
+/* Organization plans endpoint — provider and currency inferred from auth and query hints */
+paymentRouteV1.get("/plans/me", async (c) => {
+    const jwtPayload = c.get("jwtPayload") as TokenPayload;
+    const org = await getOrganization(c);
+    const storedProvider = (org?.paymentProvider || jwtPayload.paymentProvider || "paystack") as PaymentProvider;
+    const provider = resolveProvider(storedProvider, c.req.query("currency"), c.req.query("country"));
+    const currency = await resolveCurrency(c, provider);
     const plans = await getProviderPlans(provider, c.env.PAYSTACK_SECRET, currency);
     return c.json({ plans: [freePlan(provider, currency), ...plans] }, 200);
 });
 
-/* Subscribe endpoint — provider-aware */
+/* Subscribe endpoint — provider derived from plan code, customer created if missing */
 paymentRouteV1.post(
     "/subscribe",
     zValidator("json", PaystackSubscribeSchema, (result, c) => {
@@ -166,9 +237,14 @@ paymentRouteV1.post(
     async (c) => {
         const data = c.req.valid("json");
         const jwtPayload = c.get("jwtPayload") as TokenPayload;
-        const { provider, gateway } = await getProvider(c);
 
-        const customerId = getCustomerId(jwtPayload, provider);
+        const provider: PaymentProvider = data.planCode.startsWith("price_") ? "stripe" : "paystack";
+        const gateway = getGateway(provider, c.env);
+        const org = await getOrganization(c);
+
+        if (!org) return c.json({ message: "Organization not found" }, 400);
+
+        const customerId = await createCustomerIfNeeded(c, provider, org);
         if (!customerId) return c.json({ message: "No customer ID found" }, 400);
 
         const hasActive = await gateway.hasActiveSubscription(customerId);
@@ -189,10 +265,12 @@ paymentRouteV1.post(
 /* Subscriptions endpoint — provider-aware */
 paymentRouteV1.get("/subscriptions", async (c) => {
     const jwtPayload = c.get("jwtPayload") as TokenPayload;
-    const { provider, gateway } = await getProvider(c);
+    const org = await getOrganization(c);
+    const provider = (org?.paymentProvider || jwtPayload.paymentProvider || "paystack") as PaymentProvider;
+    const gateway = getGateway(provider, c.env);
 
-    const customerId = getCustomerId(jwtPayload, provider);
-    if (!customerId) return c.json({ message: "No customer ID found" }, 500);
+    const customerId = getCustomerIdFromOrg(org, provider);
+    if (!customerId) return c.json({ data: [] }, 200);
 
     const result = await gateway.fetchSubscriptions(customerId);
     if (result instanceof Error) return c.json({ message: "Failed to fetch subscriptions" }, 500);
@@ -225,7 +303,9 @@ paymentRouteV1.post(
         const data = c.req.valid("json");
         const db = drizzle(c.env.DB);
         const jwtPayload = c.get("jwtPayload") as TokenPayload;
-        const { provider, gateway } = await getProvider(c);
+        const org = await getOrganization(c);
+        const provider = (org?.paymentProvider || jwtPayload.paymentProvider || "paystack") as PaymentProvider;
+        const gateway = getGateway(provider, c.env);
 
         const response = await gateway.disableSubscription(data.subscriptionCode, data.emailToken);
 
@@ -257,7 +337,10 @@ paymentRouteV1.post(
     }),
     async (c) => {
         const data = c.req.valid("json");
-        const { provider, gateway } = await getProvider(c);
+        const jwtPayload = c.get("jwtPayload") as TokenPayload;
+        const org = await getOrganization(c);
+        const provider = (org?.paymentProvider || jwtPayload.paymentProvider || "paystack") as PaymentProvider;
+        const gateway = getGateway(provider, c.env);
 
         const response = await gateway.getSubscriptionUpdateLink(data.subscriptionCode);
 

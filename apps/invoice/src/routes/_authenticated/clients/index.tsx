@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import ClientsTable from "@/components/ClientsTable";
 import ClientForm from "@/components/ClientForm";
-import { Button } from "@shared/ui/components/button";
+import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import type { Client } from "@/lib/types";
 import * as z from "zod";

@@ -17,14 +17,17 @@ export function BottomNav() {
   const isActive = (to: string) => pathname === to || pathname.startsWith(to + "/");
 
   return (
-    <nav className="flex md:hidden fixed bottom-0 inset-x-0 z-50 bg-white border-t border-black/10">
+    <nav className="flex md:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-t border-zendo-ink/10">
       {TABS.map(({ to, label, icon: Icon }) => {
         const active = isActive(to);
         return (
           <Link
             key={to}
             to={to}
-            className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] font-medium transition-opacity ${active ? "text-black" : "text-neutral-500"}`}
+            className={cn(
+              "flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] font-medium transition-colors",
+              active ? "text-zendo-coral" : "text-zendo-ink-light"
+            )}
             style={{ paddingBottom: "calc(0.625rem + env(safe-area-inset-bottom))" }}
           >
             <Icon className="h-5 w-5" />
@@ -35,7 +38,7 @@ export function BottomNav() {
 
       {/* More */}
       <button
-        className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] font-medium text-neutral-500 transition-opacity hover:opacity-60"
+        className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] font-medium text-zendo-ink-light transition-colors hover:text-zendo-ink"
         style={{ paddingBottom: "calc(0.625rem + env(safe-area-inset-bottom))" }}
         onClick={() => setMoreSheetOpen(true)}
       >
@@ -44,4 +47,8 @@ export function BottomNav() {
       </button>
     </nav>
   );
+}
+
+function cn(...classes: (string | false | undefined)[]) {
+  return classes.filter(Boolean).join(" ");
 }

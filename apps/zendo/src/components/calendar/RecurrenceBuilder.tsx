@@ -35,32 +35,32 @@ export function RecurrenceBuilder({ value, onChange }: Props) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Label htmlFor="recurrence-toggle" className="text-sm font-medium font-mono uppercase text-xs tracking-wider">Repeat</Label>
-        <Switch id="recurrence-toggle" checked={enabled} onCheckedChange={setEnabled} className="rounded-none" />
+        <Label htmlFor="recurrence-toggle" className="text-xs font-bold uppercase tracking-wider text-zendo-ink-light">Repeat</Label>
+        <Switch id="recurrence-toggle" checked={enabled} onCheckedChange={setEnabled} />
       </div>
 
       {enabled && value && (
         <div className="flex flex-col gap-3 pl-1">
           {/* Frequency + Interval */}
           <div className="flex items-center gap-2">
-            <span className="text-sm text-black/60 font-mono uppercase text-xs tracking-wider">Every</span>
+            <span className="text-sm text-zendo-ink-light font-medium">Every</span>
             <Input
               type="number"
               min={1}
               max={99}
               value={value.interval}
               onChange={(e) => update({ interval: Math.max(1, Number(e.target.value)) })}
-              className="w-16 h-8 text-sm text-center rounded-none border-black/10 bg-transparent"
+              className="w-16 h-8 text-sm text-center rounded-lg border-zendo-ink/10 bg-zendo-cream/50 focus-visible:ring-zendo-coral/20"
             />
             <Select value={value.freq} onValueChange={(v) => update({ freq: v as RecurrenceFreq })}>
-              <SelectTrigger className="h-8 flex-1 rounded-none border-black/10 bg-transparent">
+              <SelectTrigger className="h-8 flex-1 rounded-lg border-zendo-ink/10 bg-zendo-cream/50 focus:ring-zendo-coral/20">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="rounded-none border-black/10">
-                <SelectItem value="daily">Day{value.interval > 1 ? "s" : ""}</SelectItem>
-                <SelectItem value="weekly">Week{value.interval > 1 ? "s" : ""}</SelectItem>
-                <SelectItem value="monthly">Month{value.interval > 1 ? "s" : ""}</SelectItem>
-                <SelectItem value="yearly">Year{value.interval > 1 ? "s" : ""}</SelectItem>
+              <SelectContent className="rounded-xl border-zendo-ink/10 bg-white">
+                <SelectItem value="daily" className="rounded-lg">Day{value.interval > 1 ? "s" : ""}</SelectItem>
+                <SelectItem value="weekly" className="rounded-lg">Week{value.interval > 1 ? "s" : ""}</SelectItem>
+                <SelectItem value="monthly" className="rounded-lg">Month{value.interval > 1 ? "s" : ""}</SelectItem>
+                <SelectItem value="yearly" className="rounded-lg">Year{value.interval > 1 ? "s" : ""}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -74,10 +74,10 @@ export function RecurrenceBuilder({ value, onChange }: Props) {
                   type="button"
                   onClick={() => toggleDay(i)}
                   className={[
-                    "w-9 h-9 rounded-none text-xs font-semibold border transition-colors",
+                    "w-9 h-9 rounded-lg text-xs font-semibold border transition-colors",
                     (value.daysOfWeek ?? []).includes(i)
-                      ? "bg-black text-white border-black"
-                      : "border-black/10 text-black/60 hover:border-black/30",
+                      ? "bg-zendo-coral text-white border-zendo-coral"
+                      : "border-zendo-ink/10 text-zendo-ink-light hover:border-zendo-coral/30 hover:text-zendo-coral",
                   ].join(" ")}
                 >
                   {day}
@@ -89,16 +89,16 @@ export function RecurrenceBuilder({ value, onChange }: Props) {
           {/* End condition */}
           <div className="grid grid-cols-2 gap-2">
             <div className="flex flex-col gap-1.5">
-              <Label className="text-xs text-black/60 font-mono uppercase tracking-wider">End date</Label>
+              <Label className="text-xs text-zendo-ink-light font-bold uppercase tracking-wider">End date</Label>
               <Input
                 type="date"
                 value={value.endDate ?? ""}
                 onChange={(e) => update({ endDate: e.target.value || undefined, count: undefined })}
-                className="h-8 text-xs rounded-none border-black/10 bg-transparent"
+                className="h-8 text-xs rounded-lg border-zendo-ink/10 bg-zendo-cream/50 focus-visible:ring-zendo-coral/20"
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label className="text-xs text-black/60 font-mono uppercase tracking-wider">After occurrences</Label>
+              <Label className="text-xs text-zendo-ink-light font-bold uppercase tracking-wider">After occurrences</Label>
               <Input
                 type="number"
                 min={1}
@@ -106,7 +106,7 @@ export function RecurrenceBuilder({ value, onChange }: Props) {
                 placeholder="∞"
                 value={value.count ?? ""}
                 onChange={(e) => update({ count: e.target.value ? Number(e.target.value) : undefined, endDate: undefined })}
-                className="h-8 text-xs rounded-none border-black/10 bg-transparent"
+                className="h-8 text-xs rounded-lg border-zendo-ink/10 bg-zendo-cream/50 focus-visible:ring-zendo-coral/20"
               />
             </div>
           </div>

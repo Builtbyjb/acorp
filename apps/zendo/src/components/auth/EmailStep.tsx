@@ -21,7 +21,7 @@ interface Props {
   isLoading?: boolean;
 }
 
-function ArrowRight({ size = 14 }: { size?: number }) {
+function ArrowRight({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 14 14" fill="none" stroke="currentColor"
       strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
@@ -40,12 +40,12 @@ export function EmailStep({ heading, subheading, submitLabel, onSubmit, isLoadin
   });
 
   return (
-    <div className="animate-fade-up bg-white border-2 border-black p-10 flex flex-col gap-6">
+    <div className="animate-fade-up bg-white border border-zendo-ink/10 p-8 md:p-10 rounded-[2rem] shadow-xl shadow-zendo-ink/5 flex flex-col gap-6">
       <div className="flex flex-col gap-1.5">
-        <h1 className="text-2xl font-bold tracking-tight text-black">
+        <h1 className="text-2xl font-bold tracking-tight text-zendo-ink">
           {heading}
         </h1>
-        <p className="text-sm text-neutral-500">{subheading}</p>
+        <p className="text-sm text-zendo-ink-light">{subheading}</p>
       </div>
 
       <form
@@ -62,7 +62,7 @@ export function EmailStep({ heading, subheading, submitLabel, onSubmit, isLoadin
         >
           {(field) => (
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="email" className="text-sm font-medium text-black font-mono">
+              <Label htmlFor="email" className="text-sm font-medium text-zendo-ink">
                 Email address
               </Label>
               <Input
@@ -74,7 +74,7 @@ export function EmailStep({ heading, subheading, submitLabel, onSubmit, isLoadin
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={[
-                  "border border-black/10 bg-transparent rounded-none",
+                  "border border-zendo-ink/10 bg-zendo-cream/50 rounded-xl focus-visible:ring-zendo-coral/20",
                   field.state.meta.errors.length > 0 ? "border-destructive" : "",
                 ].join(" ")}
               />
@@ -92,7 +92,7 @@ export function EmailStep({ heading, subheading, submitLabel, onSubmit, isLoadin
             <button
               type="submit"
               disabled={!canSubmit || isSubmitting || isLoading}
-              className="group inline-flex items-center justify-center gap-2 w-full px-7 py-3.5 text-sm font-semibold bg-black text-white transition-all hover:gap-3 hover:opacity-90 active:opacity-70 disabled:opacity-50 disabled:pointer-events-none"
+              className="group inline-flex items-center justify-center gap-2 w-full px-7 py-3.5 text-sm font-semibold bg-zendo-coral text-white transition-all hover:gap-3 hover:bg-zendo-coral/90 active:scale-95 disabled:opacity-50 disabled:pointer-events-none rounded-full shadow-lg shadow-zendo-coral/20"
             >
               {isSubmitting || isLoading ? "Sending…" : submitLabel}
               {!isSubmitting && !isLoading && <ArrowRight />}

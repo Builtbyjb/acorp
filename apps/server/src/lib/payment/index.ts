@@ -46,3 +46,17 @@ export function getCurrency(provider: PaymentProvider): string {
             return "NGN";
     }
 }
+
+const COUNTRY_CURRENCY_MAP: Record<string, string> = {
+    nigeria: "NGN",
+    usa: "USD",
+    "united states": "USD",
+    us: "USD",
+    canada: "CAD",
+    ca: "CAD",
+};
+
+export function countryToCurrency(country: string): string | null {
+    const normalized = country.toLowerCase().trim();
+    return COUNTRY_CURRENCY_MAP[normalized] || null;
+}

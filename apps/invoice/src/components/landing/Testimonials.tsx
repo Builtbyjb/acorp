@@ -65,7 +65,7 @@ export default function Testimonials() {
               transition: "all 0.5s ease-out 0.1s",
             }}
           >
-            What people are <span className="text-outline text-black">saying.</span>
+            What people are saying.
           </h2>
         </div>
 

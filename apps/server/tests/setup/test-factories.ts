@@ -1,5 +1,4 @@
 import { drizzle } from "drizzle-orm/d1";
-import { eq } from "drizzle-orm";
 import { users, organizations, members, roles } from "@/db/schemas";
 import { sign } from "hono/jwt";
 import type { D1Database } from "@cloudflare/workers-types";

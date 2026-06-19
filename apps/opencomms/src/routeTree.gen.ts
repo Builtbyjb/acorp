@@ -9,201 +9,208 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as GuestRouteImport } from './routes/_guest'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as SplatRouteImport } from './routes/$'
-import { Route as GuestRouteRouteImport } from './routes/_guest/route'
-import { Route as AuthRouteRouteImport } from './routes/_auth/route'
+import { Route as SignupIndexRouteImport } from './routes/signup/index'
+import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as GuestIndexRouteImport } from './routes/_guest/index'
 import { Route as GuestTermsRouteImport } from './routes/_guest/terms'
-import { Route as GuestSignupRouteImport } from './routes/_guest/signup'
 import { Route as GuestPrivacyRouteImport } from './routes/_guest/privacy'
-import { Route as GuestLoginRouteImport } from './routes/_guest/login'
-import { Route as AuthSettingsRouteImport } from './routes/_auth/settings'
-import { Route as AuthDashboardRouteImport } from './routes/_auth/dashboard'
-import { Route as AuthContactsRouteImport } from './routes/_auth/contacts'
-import { Route as AuthCampaignsRouteImport } from './routes/_auth/campaigns'
-import { Route as AuthMessagesRouteRouteImport } from './routes/_auth/messages/route'
-import { Route as AuthMessagesIndexRouteImport } from './routes/_auth/messages/index'
-import { Route as AuthMessagesConversationIdRouteImport } from './routes/_auth/messages/$conversationId'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedContactsRouteImport } from './routes/_authenticated/contacts'
+import { Route as AuthenticatedCampaignsRouteImport } from './routes/_authenticated/campaigns'
+import { Route as AuthenticatedMessagesIndexRouteImport } from './routes/_authenticated/messages/index'
+import { Route as AuthenticatedMessagesConversationIdRouteImport } from './routes/_authenticated/messages/$conversationId'
 
+const GuestRoute = GuestRouteImport.update({
+  id: '/_guest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SplatRoute = SplatRouteImport.update({
   id: '/$',
   path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GuestRouteRoute = GuestRouteRouteImport.update({
-  id: '/_guest',
+const SignupIndexRoute = SignupIndexRouteImport.update({
+  id: '/signup/',
+  path: '/signup/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRouteRoute = AuthRouteRouteImport.update({
-  id: '/_auth',
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GuestIndexRoute = GuestIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => GuestRouteRoute,
+  getParentRoute: () => GuestRoute,
 } as any)
 const GuestTermsRoute = GuestTermsRouteImport.update({
   id: '/terms',
   path: '/terms',
-  getParentRoute: () => GuestRouteRoute,
-} as any)
-const GuestSignupRoute = GuestSignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => GuestRouteRoute,
+  getParentRoute: () => GuestRoute,
 } as any)
 const GuestPrivacyRoute = GuestPrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
-  getParentRoute: () => GuestRouteRoute,
+  getParentRoute: () => GuestRoute,
 } as any)
-const GuestLoginRoute = GuestLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => GuestRouteRoute,
-} as any)
-const AuthSettingsRoute = AuthSettingsRouteImport.update({
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => AuthRouteRoute,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthDashboardRoute = AuthDashboardRouteImport.update({
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => AuthRouteRoute,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthContactsRoute = AuthContactsRouteImport.update({
+const AuthenticatedContactsRoute = AuthenticatedContactsRouteImport.update({
   id: '/contacts',
   path: '/contacts',
-  getParentRoute: () => AuthRouteRoute,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthCampaignsRoute = AuthCampaignsRouteImport.update({
+const AuthenticatedCampaignsRoute = AuthenticatedCampaignsRouteImport.update({
   id: '/campaigns',
   path: '/campaigns',
-  getParentRoute: () => AuthRouteRoute,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthMessagesRouteRoute = AuthMessagesRouteRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthMessagesIndexRoute = AuthMessagesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthMessagesRouteRoute,
-} as any)
-const AuthMessagesConversationIdRoute =
-  AuthMessagesConversationIdRouteImport.update({
-    id: '/$conversationId',
-    path: '/$conversationId',
-    getParentRoute: () => AuthMessagesRouteRoute,
+const AuthenticatedMessagesIndexRoute =
+  AuthenticatedMessagesIndexRouteImport.update({
+    id: '/messages/',
+    path: '/messages/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMessagesConversationIdRoute =
+  AuthenticatedMessagesConversationIdRouteImport.update({
+    id: '/messages/$conversationId',
+    path: '/messages/$conversationId',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof GuestIndexRoute
   '/$': typeof SplatRoute
-  '/messages': typeof AuthMessagesRouteRouteWithChildren
-  '/campaigns': typeof AuthCampaignsRoute
-  '/contacts': typeof AuthContactsRoute
-  '/dashboard': typeof AuthDashboardRoute
-  '/settings': typeof AuthSettingsRoute
-  '/login': typeof GuestLoginRoute
+  '/': typeof GuestIndexRoute
+  '/campaigns': typeof AuthenticatedCampaignsRoute
+  '/contacts': typeof AuthenticatedContactsRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/privacy': typeof GuestPrivacyRoute
-  '/signup': typeof GuestSignupRoute
   '/terms': typeof GuestTermsRoute
-  '/messages/$conversationId': typeof AuthMessagesConversationIdRoute
-  '/messages/': typeof AuthMessagesIndexRoute
+  '/login/': typeof LoginIndexRoute
+  '/signup/': typeof SignupIndexRoute
+  '/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
+  '/messages/': typeof AuthenticatedMessagesIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof GuestIndexRoute
   '/$': typeof SplatRoute
-  '/campaigns': typeof AuthCampaignsRoute
-  '/contacts': typeof AuthContactsRoute
-  '/dashboard': typeof AuthDashboardRoute
-  '/settings': typeof AuthSettingsRoute
-  '/login': typeof GuestLoginRoute
+  '/': typeof GuestIndexRoute
+  '/campaigns': typeof AuthenticatedCampaignsRoute
+  '/contacts': typeof AuthenticatedContactsRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/privacy': typeof GuestPrivacyRoute
-  '/signup': typeof GuestSignupRoute
   '/terms': typeof GuestTermsRoute
-  '/messages/$conversationId': typeof AuthMessagesConversationIdRoute
-  '/messages': typeof AuthMessagesIndexRoute
+  '/login': typeof LoginIndexRoute
+  '/signup': typeof SignupIndexRoute
+  '/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
+  '/messages': typeof AuthenticatedMessagesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_auth': typeof AuthRouteRouteWithChildren
-  '/_guest': typeof GuestRouteRouteWithChildren
   '/$': typeof SplatRoute
-  '/_auth/messages': typeof AuthMessagesRouteRouteWithChildren
-  '/_auth/campaigns': typeof AuthCampaignsRoute
-  '/_auth/contacts': typeof AuthContactsRoute
-  '/_auth/dashboard': typeof AuthDashboardRoute
-  '/_auth/settings': typeof AuthSettingsRoute
-  '/_guest/login': typeof GuestLoginRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_guest': typeof GuestRouteWithChildren
+  '/_authenticated/campaigns': typeof AuthenticatedCampaignsRoute
+  '/_authenticated/contacts': typeof AuthenticatedContactsRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_guest/privacy': typeof GuestPrivacyRoute
-  '/_guest/signup': typeof GuestSignupRoute
   '/_guest/terms': typeof GuestTermsRoute
   '/_guest/': typeof GuestIndexRoute
-  '/_auth/messages/$conversationId': typeof AuthMessagesConversationIdRoute
-  '/_auth/messages/': typeof AuthMessagesIndexRoute
+  '/login/': typeof LoginIndexRoute
+  '/signup/': typeof SignupIndexRoute
+  '/_authenticated/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
+  '/_authenticated/messages/': typeof AuthenticatedMessagesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/$'
-    | '/messages'
+    | '/'
     | '/campaigns'
     | '/contacts'
     | '/dashboard'
     | '/settings'
-    | '/login'
     | '/privacy'
-    | '/signup'
     | '/terms'
+    | '/login/'
+    | '/signup/'
     | '/messages/$conversationId'
     | '/messages/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/$'
+    | '/'
     | '/campaigns'
     | '/contacts'
     | '/dashboard'
     | '/settings'
-    | '/login'
     | '/privacy'
-    | '/signup'
     | '/terms'
+    | '/login'
+    | '/signup'
     | '/messages/$conversationId'
     | '/messages'
   id:
     | '__root__'
-    | '/_auth'
-    | '/_guest'
     | '/$'
-    | '/_auth/messages'
-    | '/_auth/campaigns'
-    | '/_auth/contacts'
-    | '/_auth/dashboard'
-    | '/_auth/settings'
-    | '/_guest/login'
+    | '/_authenticated'
+    | '/_guest'
+    | '/_authenticated/campaigns'
+    | '/_authenticated/contacts'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/settings'
     | '/_guest/privacy'
-    | '/_guest/signup'
     | '/_guest/terms'
     | '/_guest/'
-    | '/_auth/messages/$conversationId'
-    | '/_auth/messages/'
+    | '/login/'
+    | '/signup/'
+    | '/_authenticated/messages/$conversationId'
+    | '/_authenticated/messages/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  GuestRouteRoute: typeof GuestRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  GuestRoute: typeof GuestRouteWithChildren
+  LoginIndexRoute: typeof LoginIndexRoute
+  SignupIndexRoute: typeof SignupIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_guest': {
+      id: '/_guest'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof GuestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$': {
       id: '/$'
       path: '/$'
@@ -211,18 +218,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_guest': {
-      id: '/_guest'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof GuestRouteRouteImport
+    '/signup/': {
+      id: '/signup/'
+      path: '/signup'
+      fullPath: '/signup/'
+      preLoaderRoute: typeof SignupIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthRouteRouteImport
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_guest/': {
@@ -230,145 +237,110 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof GuestIndexRouteImport
-      parentRoute: typeof GuestRouteRoute
+      parentRoute: typeof GuestRoute
     }
     '/_guest/terms': {
       id: '/_guest/terms'
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof GuestTermsRouteImport
-      parentRoute: typeof GuestRouteRoute
-    }
-    '/_guest/signup': {
-      id: '/_guest/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof GuestSignupRouteImport
-      parentRoute: typeof GuestRouteRoute
+      parentRoute: typeof GuestRoute
     }
     '/_guest/privacy': {
       id: '/_guest/privacy'
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof GuestPrivacyRouteImport
-      parentRoute: typeof GuestRouteRoute
+      parentRoute: typeof GuestRoute
     }
-    '/_guest/login': {
-      id: '/_guest/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof GuestLoginRouteImport
-      parentRoute: typeof GuestRouteRoute
-    }
-    '/_auth/settings': {
-      id: '/_auth/settings'
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
       path: '/settings'
       fullPath: '/settings'
-      preLoaderRoute: typeof AuthSettingsRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_auth/dashboard': {
-      id: '/_auth/dashboard'
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthDashboardRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_auth/contacts': {
-      id: '/_auth/contacts'
+    '/_authenticated/contacts': {
+      id: '/_authenticated/contacts'
       path: '/contacts'
       fullPath: '/contacts'
-      preLoaderRoute: typeof AuthContactsRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof AuthenticatedContactsRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_auth/campaigns': {
-      id: '/_auth/campaigns'
+    '/_authenticated/campaigns': {
+      id: '/_authenticated/campaigns'
       path: '/campaigns'
       fullPath: '/campaigns'
-      preLoaderRoute: typeof AuthCampaignsRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof AuthenticatedCampaignsRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_auth/messages': {
-      id: '/_auth/messages'
+    '/_authenticated/messages/': {
+      id: '/_authenticated/messages/'
       path: '/messages'
-      fullPath: '/messages'
-      preLoaderRoute: typeof AuthMessagesRouteRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_auth/messages/': {
-      id: '/_auth/messages/'
-      path: '/'
       fullPath: '/messages/'
-      preLoaderRoute: typeof AuthMessagesIndexRouteImport
-      parentRoute: typeof AuthMessagesRouteRoute
+      preLoaderRoute: typeof AuthenticatedMessagesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_auth/messages/$conversationId': {
-      id: '/_auth/messages/$conversationId'
-      path: '/$conversationId'
+    '/_authenticated/messages/$conversationId': {
+      id: '/_authenticated/messages/$conversationId'
+      path: '/messages/$conversationId'
       fullPath: '/messages/$conversationId'
-      preLoaderRoute: typeof AuthMessagesConversationIdRouteImport
-      parentRoute: typeof AuthMessagesRouteRoute
+      preLoaderRoute: typeof AuthenticatedMessagesConversationIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
-interface AuthMessagesRouteRouteChildren {
-  AuthMessagesConversationIdRoute: typeof AuthMessagesConversationIdRoute
-  AuthMessagesIndexRoute: typeof AuthMessagesIndexRoute
+interface AuthenticatedRouteChildren {
+  AuthenticatedCampaignsRoute: typeof AuthenticatedCampaignsRoute
+  AuthenticatedContactsRoute: typeof AuthenticatedContactsRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedMessagesConversationIdRoute: typeof AuthenticatedMessagesConversationIdRoute
+  AuthenticatedMessagesIndexRoute: typeof AuthenticatedMessagesIndexRoute
 }
 
-const AuthMessagesRouteRouteChildren: AuthMessagesRouteRouteChildren = {
-  AuthMessagesConversationIdRoute: AuthMessagesConversationIdRoute,
-  AuthMessagesIndexRoute: AuthMessagesIndexRoute,
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedCampaignsRoute: AuthenticatedCampaignsRoute,
+  AuthenticatedContactsRoute: AuthenticatedContactsRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedMessagesConversationIdRoute:
+    AuthenticatedMessagesConversationIdRoute,
+  AuthenticatedMessagesIndexRoute: AuthenticatedMessagesIndexRoute,
 }
 
-const AuthMessagesRouteRouteWithChildren =
-  AuthMessagesRouteRoute._addFileChildren(AuthMessagesRouteRouteChildren)
-
-interface AuthRouteRouteChildren {
-  AuthMessagesRouteRoute: typeof AuthMessagesRouteRouteWithChildren
-  AuthCampaignsRoute: typeof AuthCampaignsRoute
-  AuthContactsRoute: typeof AuthContactsRoute
-  AuthDashboardRoute: typeof AuthDashboardRoute
-  AuthSettingsRoute: typeof AuthSettingsRoute
-}
-
-const AuthRouteRouteChildren: AuthRouteRouteChildren = {
-  AuthMessagesRouteRoute: AuthMessagesRouteRouteWithChildren,
-  AuthCampaignsRoute: AuthCampaignsRoute,
-  AuthContactsRoute: AuthContactsRoute,
-  AuthDashboardRoute: AuthDashboardRoute,
-  AuthSettingsRoute: AuthSettingsRoute,
-}
-
-const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
-  AuthRouteRouteChildren,
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
 )
 
-interface GuestRouteRouteChildren {
-  GuestLoginRoute: typeof GuestLoginRoute
+interface GuestRouteChildren {
   GuestPrivacyRoute: typeof GuestPrivacyRoute
-  GuestSignupRoute: typeof GuestSignupRoute
   GuestTermsRoute: typeof GuestTermsRoute
   GuestIndexRoute: typeof GuestIndexRoute
 }
 
-const GuestRouteRouteChildren: GuestRouteRouteChildren = {
-  GuestLoginRoute: GuestLoginRoute,
+const GuestRouteChildren: GuestRouteChildren = {
   GuestPrivacyRoute: GuestPrivacyRoute,
-  GuestSignupRoute: GuestSignupRoute,
   GuestTermsRoute: GuestTermsRoute,
   GuestIndexRoute: GuestIndexRoute,
 }
 
-const GuestRouteRouteWithChildren = GuestRouteRoute._addFileChildren(
-  GuestRouteRouteChildren,
-)
+const GuestRouteWithChildren = GuestRoute._addFileChildren(GuestRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  AuthRouteRoute: AuthRouteRouteWithChildren,
-  GuestRouteRoute: GuestRouteRouteWithChildren,
   SplatRoute: SplatRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  GuestRoute: GuestRouteWithChildren,
+  LoginIndexRoute: LoginIndexRoute,
+  SignupIndexRoute: SignupIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

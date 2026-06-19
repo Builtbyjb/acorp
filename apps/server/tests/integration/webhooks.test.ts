@@ -54,7 +54,7 @@ describe("Webhooks E2E", () => {
 
     describe("GET /api/v1/invoice/payments/callback", () => {
         it("redirects for Paystack callback with reference", async () => {
-            const { org } = await createTestUser(env.DB, env.JWT_SECRET, {
+            await createTestUser(env.DB, env.JWT_SECRET, {
                 paystackCustomerId: 12345,
             });
             const res = await makeRequest(env, "GET", "/api/v1/invoice/payments/callback?reference=ref_test");
@@ -64,7 +64,7 @@ describe("Webhooks E2E", () => {
         });
 
         it("redirects for Stripe callback with session_id", async () => {
-            const { org } = await createTestUser(env.DB, env.JWT_SECRET, {
+            await createTestUser(env.DB, env.JWT_SECRET, {
                 stripeCustomerId: "cus_test",
             });
             const res = await makeRequest(env, "GET", "/api/v1/invoice/payments/callback?session_id=cs_test");

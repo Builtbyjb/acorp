@@ -9,6 +9,7 @@ import authRouteV1 from "./api/v1/auth/auth-controller";
 
 /* App routes */
 import invoiceRouteV1 from "./api/v1/invoice";
+import opencommsRouteV1 from "./api/v1/opencomms";
 
 import { INTERNAL_ERROR_MESSAGE } from "./lib/constants";
 
@@ -35,6 +36,7 @@ app.onError((error, c) => {
 /* Register routes */
 app.route("/api/v1", authRouteV1);
 app.route("/api/v1", invoiceRouteV1);
+app.route("/api/v1", opencommsRouteV1);
 
 export default {
     fetch: app.fetch,

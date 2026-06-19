@@ -88,7 +88,7 @@ export function TaskForm({ parentId, parentLevel, projectId, sectionId, initialV
       <form.Field name="title" validators={{ onChange: ({ value }) => validateTitle(value) }}>
         {(field) => (
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="task-title" className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500">Task name *</Label>
+            <Label htmlFor="task-title" className="text-xs font-bold uppercase tracking-wider text-zendo-ink-light">Task name *</Label>
             <Input
               id="task-title"
               placeholder="What needs to be done?"
@@ -96,10 +96,10 @@ export function TaskForm({ parentId, parentLevel, projectId, sectionId, initialV
               onBlur={field.handleBlur}
               onChange={(e) => field.handleChange(e.target.value)}
               autoFocus
-              className={cn("border border-black/10 bg-transparent rounded-none h-9", field.state.meta.errors.length > 0 ? "border-black" : "")}
+              className={cn("border border-zendo-ink/10 bg-zendo-cream/50 rounded-xl h-10 focus-visible:ring-zendo-coral/20", field.state.meta.errors.length > 0 ? "border-destructive" : "")}
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-xs text-black font-mono">{field.state.meta.errors[0]?.toString()}</p>
+              <p className="text-xs text-destructive">{field.state.meta.errors[0]?.toString()}</p>
             )}
           </div>
         )}
@@ -109,14 +109,14 @@ export function TaskForm({ parentId, parentLevel, projectId, sectionId, initialV
       <form.Field name="description">
         {(field) => (
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="task-desc" className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500">Description</Label>
+            <Label htmlFor="task-desc" className="text-xs font-bold uppercase tracking-wider text-zendo-ink-light">Description</Label>
             <Textarea
               id="task-desc"
               placeholder="Add details, notes, or context…"
               rows={3}
               value={field.state.value}
               onChange={(e) => field.handleChange(e.target.value)}
-              className="resize-none border border-black/10 bg-transparent rounded-none"
+              className="resize-none border border-zendo-ink/10 bg-zendo-cream/50 rounded-xl focus-visible:ring-zendo-coral/20"
             />
           </div>
         )}
@@ -127,14 +127,14 @@ export function TaskForm({ parentId, parentLevel, projectId, sectionId, initialV
         <form.Field name="stageId">
           {(field) => (
             <div className="flex flex-col gap-1.5">
-              <Label className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500">Stage</Label>
+              <Label className="text-xs font-bold uppercase tracking-wider text-zendo-ink-light">Stage</Label>
               <Select value={field.state.value} onValueChange={field.handleChange}>
-                <SelectTrigger className="h-9 border border-black/10 bg-transparent rounded-none">
+                <SelectTrigger className="h-10 border border-zendo-ink/10 bg-zendo-cream/50 rounded-xl focus:ring-zendo-coral/20">
                   <SelectValue placeholder="Stage" />
                 </SelectTrigger>
-                <SelectContent className="rounded-none border border-black/10">
+                <SelectContent className="rounded-xl border border-zendo-ink/10 bg-white">
                   {sortedStages.map((s) => (
-                    <SelectItem key={s.id} value={s.id} className="rounded-none">{s.name}</SelectItem>
+                    <SelectItem key={s.id} value={s.id} className="rounded-lg">{s.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -145,8 +145,8 @@ export function TaskForm({ parentId, parentLevel, projectId, sectionId, initialV
         <form.Field name="dueDate">
           {(field) => (
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="task-due" className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500">Due date</Label>
-              <Input id="task-due" type="date" value={field.state.value} onChange={(e) => field.handleChange(e.target.value)} className="h-9 border border-black/10 bg-transparent rounded-none" />
+              <Label htmlFor="task-due" className="text-xs font-bold uppercase tracking-wider text-zendo-ink-light">Due date</Label>
+              <Input id="task-due" type="date" value={field.state.value} onChange={(e) => field.handleChange(e.target.value)} className="h-10 border border-zendo-ink/10 bg-zendo-cream/50 rounded-xl focus-visible:ring-zendo-coral/20" />
             </div>
           )}
         </form.Field>
@@ -156,15 +156,15 @@ export function TaskForm({ parentId, parentLevel, projectId, sectionId, initialV
       {!parentId && !projectId && (
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-1.5">
-            <Label className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500">Project</Label>
+            <Label className="text-xs font-bold uppercase tracking-wider text-zendo-ink-light">Project</Label>
             <Select value={selProject} onValueChange={(v) => { setSelProject(v); setSelSection(""); }}>
-              <SelectTrigger className="h-9 border border-black/10 bg-transparent rounded-none">
+              <SelectTrigger className="h-10 border border-zendo-ink/10 bg-zendo-cream/50 rounded-xl focus:ring-zendo-coral/20">
                 <SelectValue placeholder="Inbox" />
               </SelectTrigger>
-              <SelectContent className="rounded-none border border-black/10">
-                <SelectItem value="" className="rounded-none">Inbox</SelectItem>
+              <SelectContent className="rounded-xl border border-zendo-ink/10 bg-white">
+                <SelectItem value="" className="rounded-lg">Inbox</SelectItem>
                 {projects.filter((p) => !p.archived).map((p) => (
-                  <SelectItem key={p.id} value={p.id} className="rounded-none">{p.name}</SelectItem>
+                  <SelectItem key={p.id} value={p.id} className="rounded-lg">{p.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -172,15 +172,15 @@ export function TaskForm({ parentId, parentLevel, projectId, sectionId, initialV
 
           {selProject && filteredSections.length > 0 && (
             <div className="flex flex-col gap-1.5">
-              <Label className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500">Section</Label>
+              <Label className="text-xs font-bold uppercase tracking-wider text-zendo-ink-light">Section</Label>
               <Select value={selSection} onValueChange={setSelSection}>
-                <SelectTrigger className="h-9 border border-black/10 bg-transparent rounded-none">
+                <SelectTrigger className="h-10 border border-zendo-ink/10 bg-zendo-cream/50 rounded-xl focus:ring-zendo-coral/20">
                   <SelectValue placeholder="No section" />
                 </SelectTrigger>
-                <SelectContent className="rounded-none border border-black/10">
-                  <SelectItem value="" className="rounded-none">No section</SelectItem>
+                <SelectContent className="rounded-xl border border-zendo-ink/10 bg-white">
+                  <SelectItem value="" className="rounded-lg">No section</SelectItem>
                   {filteredSections.map((s) => (
-                    <SelectItem key={s.id} value={s.id} className="rounded-none">{s.name}</SelectItem>
+                    <SelectItem key={s.id} value={s.id} className="rounded-lg">{s.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -192,21 +192,21 @@ export function TaskForm({ parentId, parentLevel, projectId, sectionId, initialV
       {/* Priority + Tags */}
       <div className="flex items-start gap-4">
         <div className="flex flex-col gap-1.5">
-          <Label className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500">Priority</Label>
+          <Label className="text-xs font-bold uppercase tracking-wider text-zendo-ink-light">Priority</Label>
           <PrioritySelector value={priority} onChange={setPriority} />
         </div>
         <div className="flex flex-col gap-1.5 flex-1">
-          <Label className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500">Tags</Label>
+          <Label className="text-xs font-bold uppercase tracking-wider text-zendo-ink-light">Tags</Label>
           <TagSelector selectedIds={tags} onChange={setTags} />
         </div>
       </div>
 
       {/* Actions */}
       <div className="flex justify-end gap-2 pt-2">
-        <Button type="button" variant="ghost" size="sm" onClick={onCancel} className="rounded-none text-neutral-500 hover:text-black hover:bg-black/5">Cancel</Button>
+        <Button type="button" variant="ghost" size="sm" onClick={onCancel} className="rounded-full text-zendo-ink-light hover:text-zendo-ink hover:bg-zendo-ink/5">Cancel</Button>
         <form.Subscribe selector={(s) => [s.canSubmit, s.isSubmitting] as const}>
           {([canSubmit, isSubmitting]) => (
-            <Button type="submit" size="sm" disabled={!canSubmit || isSubmitting} className="rounded-none bg-black text-white hover:bg-neutral-800">
+            <Button type="submit" size="sm" disabled={!canSubmit || isSubmitting} className="rounded-full bg-zendo-coral text-white hover:bg-zendo-coral/90 shadow-sm shadow-zendo-coral/20">
               {isSubmitting ? "Saving…" : initialValues?.id ? "Save changes" : "Add task"}
             </Button>
           )}
@@ -215,5 +215,3 @@ export function TaskForm({ parentId, parentLevel, projectId, sectionId, initialV
     </form>
   );
 }
-
-

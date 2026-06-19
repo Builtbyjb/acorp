@@ -1,6 +1,6 @@
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { Toaster } from "@shared/ui/components/sonner";
+import { Toaster } from "@/components/ui/sonner";
 import { type Context } from "@/lib/types";
 import { LayoutProvider } from "@/hooks/useLayout";
 import { BadgeAlert, BadgeCheck, BadgeInfo } from "lucide-react";

@@ -1,5 +1,5 @@
-import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from "@shared/ui/components/item";
-import { Button } from "@shared/ui/components/button";
+import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
+import { Button } from "@/components/ui/button";
 import type { ReactNode } from "react";
 
 type BannerProps = {

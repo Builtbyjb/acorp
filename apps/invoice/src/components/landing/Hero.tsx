@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight, FileText } from "lucide-react";
-import { Button } from "@shared/ui/components/button";
+import { Button } from "@/components/ui/button";
 import type { Invoice, InvoiceItem } from "@shared/lib/types";
 
 const mockInvoice: Omit<Invoice, "id" | "clientId" | "createdAt"> & { clientName: string; clientEmail: string } = {
@@ -56,7 +56,7 @@ export default function Hero() {
               Print
             </h1>
             <h1
-              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.85] text-outline text-brand-ink animate-fade-up"
+              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.85] text-brand-ink animate-fade-up"
               style={{ animationDelay: "0.2s" }}
             >
               Money.

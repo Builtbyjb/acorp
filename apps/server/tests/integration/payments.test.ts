@@ -100,6 +100,91 @@ describe("Payments E2E", () => {
             expect(body.plans).toBeDefined();
             expect(body.plans.every((p: any) => p.currency === "CAD")).toBe(true);
         });
+
+        it("returns NGN plans for country=Nigeria with paystack user", async () => {
+            const { refreshToken } = await createTestUser(env.DB, env.JWT_SECRET, {
+                paymentProvider: "paystack",
+                currency: "USD",
+            });
+            const res = await makeRequest(env, "GET", "/api/v1/invoice/payments/plans/me?country=Nigeria", {
+                cookies: { refresh_token: refreshToken },
+            });
+            const { status, body } = await parseResponse(res);
+            expect(status).toBe(200);
+            expect(body.plans).toBeDefined();
+            expect(body.plans.every((p: any) => p.currency === "NGN")).toBe(true);
+        });
+
+        it("returns CAD plans for country=Canada with stripe user", async () => {
+            const { refreshToken } = await createTestUser(env.DB, env.JWT_SECRET, {
+                paymentProvider: "stripe",
+                currency: "USD",
+            });
+            const res = await makeRequest(env, "GET", "/api/v1/invoice/payments/plans/me?country=Canada", {
+                cookies: { refresh_token: refreshToken },
+            });
+            const { status, body } = await parseResponse(res);
+            expect(status).toBe(200);
+            expect(body.plans).toBeDefined();
+            expect(body.plans.every((p: any) => p.currency === "CAD")).toBe(true);
+        });
+
+        it("returns USD plans for country=USA with stripe user", async () => {
+            const { refreshToken } = await createTestUser(env.DB, env.JWT_SECRET, {
+                paymentProvider: "stripe",
+                currency: "CAD",
+            });
+            const res = await makeRequest(env, "GET", "/api/v1/invoice/payments/plans/me?country=USA", {
+                cookies: { refresh_token: refreshToken },
+            });
+            const { status, body } = await parseResponse(res);
+            expect(status).toBe(200);
+            expect(body.plans).toBeDefined();
+            expect(body.plans.every((p: any) => p.currency === "USD")).toBe(true);
+        });
+
+        it("falls back to organization currency when country is unknown", async () => {
+            const { refreshToken } = await createTestUser(env.DB, env.JWT_SECRET, {
+                paymentProvider: "stripe",
+                currency: "CAD",
+            });
+            const res = await makeRequest(env, "GET", "/api/v1/invoice/payments/plans/me?country=Unknown", {
+                cookies: { refresh_token: refreshToken },
+            });
+            const { status, body } = await parseResponse(res);
+            expect(status).toBe(200);
+            expect(body.plans).toBeDefined();
+            expect(body.plans.every((p: any) => p.currency === "CAD")).toBe(true);
+        });
+
+        it("gives explicit currency precedence over country", async () => {
+            const { refreshToken } = await createTestUser(env.DB, env.JWT_SECRET, {
+                paymentProvider: "stripe",
+                currency: "USD",
+            });
+            const res = await makeRequest(env, "GET", "/api/v1/invoice/payments/plans/me?country=Nigeria&currency=CAD", {
+                cookies: { refresh_token: refreshToken },
+            });
+            const { status, body } = await parseResponse(res);
+            expect(status).toBe(200);
+            expect(body.plans).toBeDefined();
+            expect(body.plans.every((p: any) => p.currency === "CAD")).toBe(true);
+        });
+
+        it("switches provider to stripe for Canada even when org is paystack", async () => {
+            const { refreshToken } = await createTestUser(env.DB, env.JWT_SECRET, {
+                paymentProvider: "paystack",
+                currency: "NGN",
+            });
+            const res = await makeRequest(env, "GET", "/api/v1/invoice/payments/plans/me?country=Canada", {
+                cookies: { refresh_token: refreshToken },
+            });
+            const { status, body } = await parseResponse(res);
+            expect(status).toBe(200);
+            expect(body.plans).toBeDefined();
+            expect(body.plans.every((p: any) => p.currency === "CAD")).toBe(true);
+            expect(body.plans.some((p: any) => p.planCode.startsWith("price_"))).toBe(true);
+        });
     });
 
     describe("POST /api/v1/invoice/payments/subscribe", () => {

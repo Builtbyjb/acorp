@@ -70,8 +70,7 @@ export default function Features() {
               transition: "all 0.5s ease-out 0.1s",
             }}
           >
-            Everything you need,{" "}
-            <span className="text-outline text-brand-ink">nothing you don't.</span>
+            Everything you need, nothing you don't.
           </h2>
           <p
             className="text-lg text-brand-secondary leading-relaxed"
