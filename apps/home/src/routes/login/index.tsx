@@ -1,18 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Button } from "@shared/ui/components/button";
-import { Input } from "@shared/ui/components/input";
-import { Label } from "@shared/ui/components/label";
+// import { useState } from "react";
+import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
 import { ArrowRight } from "lucide-react";
 
 function RouteComponent() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Placeholder login logic
-    console.log("Login attempt:", { email, password });
+    // console.log("Login attempt:", { email, password });
   };
 
   return (
@@ -33,7 +33,7 @@ function RouteComponent() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-xs font-bold uppercase tracking-widest" style={{ color: "#737373" }}>
+            {/*<Label htmlFor="email" className="text-xs font-bold uppercase tracking-widest" style={{ color: "#737373" }}>
               Email
             </Label>
             <Input
@@ -44,11 +44,15 @@ function RouteComponent() {
               placeholder="you@company.com"
               className="rounded-none border-black/10 bg-white"
               required
-            />
+            />*/}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-xs font-bold uppercase tracking-widest" style={{ color: "#737373" }}>
+            {/*<Label
+              htmlFor="password"
+              className="text-xs font-bold uppercase tracking-widest"
+              style={{ color: "#737373" }}
+            >
               Password
             </Label>
             <Input
@@ -59,7 +63,7 @@ function RouteComponent() {
               placeholder="••••••••"
               className="rounded-none border-black/10 bg-white"
               required
-            />
+            />*/}
           </div>
 
           <Button type="submit" className="w-full">
