@@ -1,7 +1,6 @@
-import { GlowOrb, GradientText } from "@/components/landing/utils";
+import { GlowOrb, GradientText, COLORS } from "@/components/landing/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play, ScanFace, Sparkles } from "lucide-react";
-import { COLORS } from "@/components/landing/utils";
 
 function hash01(i: number, offset: number) {
   const v = Math.sin(i * 12.9898 + offset * 78.233) * 43758.5453;
@@ -18,11 +17,22 @@ function ParticleField() {
         const delay = `${hash01(i, 4) * 5}s`;
         const duration = `${hash01(i, 5) * 10 + 10}s`;
         const opacity = hash01(i, 6) * 0.4 + 0.1;
-        const color = i % 3 === 0 ? "cyan" : i % 3 === 1 ? "amber" : "#fff";
+        const colorKey = i % 3 === 0 ? "cyan" : i % 3 === 1 ? "amber" : "white";
+        const color = colorKey === "white" ? "#fff" : COLORS[colorKey];
         return (
           <div
             key={i}
-            className={`absolute rounded-full animate-float bg-${color} w-${size} h-${size} opacity-${opacity} top-${top} left-${left} animate-[${delay}] transition duration-${duration}`}
+            className="absolute rounded-full animate-float"
+            style={{
+              width: `${size * 4}px`,
+              height: `${size * 4}px`,
+              left,
+              top,
+              opacity,
+              backgroundColor: color,
+              animationDelay: delay,
+              animationDuration: duration,
+            }}
           />
         );
       })}
