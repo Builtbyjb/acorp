@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { PRODUCTS } from "@/lib/store/products";
 import CustomBanner from "@/components/landing/CustomBanner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,7 +48,6 @@ function PageHeader() {
 }
 
 function ProductList() {
-  const navigate = useNavigate();
   return (
     <section>
       <div className="flex flex-col gap-4">
