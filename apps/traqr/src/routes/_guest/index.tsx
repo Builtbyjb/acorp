@@ -225,7 +225,7 @@ function HeroSection() {
               transition={{ duration: 0.5, delay: 0.32 }}
               className="flex flex-wrap items-center gap-4 mb-10"
             >
-              <DownloadButton size="lg">Download App</DownloadButton>
+              <DownloadButton>Download App</DownloadButton>
             </motion.div>
 
             {/* Status chips */}
@@ -771,7 +771,7 @@ function CtaSection() {
             <p className="text-base mb-10 max-w-md mx-auto leading-relaxed text-slate-muted">
               Start free. No credit card required. Your first 50 QR codes are on us.
             </p>
-            <DownloadButton size="lg">Download App</DownloadButton>
+            <DownloadButton>Download App</DownloadButton>
           </div>
         </div>
       </Container>

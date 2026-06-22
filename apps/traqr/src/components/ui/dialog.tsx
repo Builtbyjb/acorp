@@ -57,7 +57,11 @@ function DialogContent({
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            render={<Button variant="ghost" className="absolute top-2 right-2" size="icon" />}
+            render={
+              <Button variant="ghost" className="absolute top-2 right-2" size="icon">
+                <XIcon />
+              </Button>
+            }
           >
             <XIcon />
             <span className="sr-only">Close</span>
@@ -90,7 +94,17 @@ function DialogFooter({
       {...props}
     >
       {children}
-      {showCloseButton && <DialogPrimitive.Close render={<Button variant="outline" />}>Close</DialogPrimitive.Close>}
+      {showCloseButton && (
+        <DialogPrimitive.Close
+          render={
+            <Button variant="outline">
+              <XIcon />
+            </Button>
+          }
+        >
+          Close
+        </DialogPrimitive.Close>
+      )}
     </div>
   );
 }

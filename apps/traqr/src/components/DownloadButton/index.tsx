@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Button, type ButtonProps } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
-export function DownloadButton({ children = "Download App", ...props }: ButtonProps) {
+export function DownloadButton({ children = "Download App", ...props }) {
   const [open, setOpen] = useState(false);
 
   return (

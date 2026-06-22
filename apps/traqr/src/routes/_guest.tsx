@@ -26,9 +26,7 @@ function Nav() {
 
           {/* Auth CTAs */}
           <div className="hidden md:flex items-center gap-2">
-            <DownloadButton asChild size="sm">
-              Download App
-            </DownloadButton>
+            <DownloadButton>Download App</DownloadButton>
           </div>
 
           {/* Mobile menu button */}
@@ -54,7 +52,7 @@ function Nav() {
           <Container>
             <nav className="py-4 flex flex-col gap-1">
               <div className="mt-3 pt-3 border-t border-slate-border flex flex-col gap-2">
-                <DownloadButton asChild>Download App</DownloadButton>
+                <DownloadButton>Download App</DownloadButton>
               </div>
             </nav>
           </Container>
