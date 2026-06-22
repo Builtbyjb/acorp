@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -9,7 +9,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { PlusIcon, SearchIcon, SmsIcon, WhatsAppIcon } from '../-icons.tsx'
 import { useLayout } from '@/hooks/useLayout'
 import { Filter, Download, MessageCircle } from 'lucide-react'
-import { isNativePlatform, pickImage } from '@shared/mobile'
 
 const CONTACTS = [
   { id: '1', name: 'Maria Gonzalez', phone: '+1 (555) 201-4832', channel: 'wa', tags: ['Members', 'VIP'], lastActive: '3h ago', status: 'subscribed' },
@@ -36,17 +35,9 @@ function initials(n: string) { return n.split(' ').map((w) => w[0]).join('') }
 function ContactsPage() {
   const { setTitle } = useLayout()
   const [search, setSearch] = useState('')
-  const [avatars, setAvatars] = useState<Record<string, string>>({})
   useEffect(() => {
     setTitle('Contacts')
   }, [setTitle])
-
-  const handlePickAvatar = async (id: string) => {
-    const photo = await pickImage()
-    if (photo?.dataUrl) {
-      setAvatars((prev) => ({ ...prev, [id]: photo.dataUrl! }))
-    }
-  }
 
   const filtered = CONTACTS.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -116,11 +107,7 @@ function ContactsPage() {
                     <TableRow key={c.id} className="group">
                       <TableCell className="pl-6">
                         <div className="flex items-center gap-2.5">
-                          <Avatar
-                            className={`size-7 flex-shrink-0 ${isNativePlatform() ? 'cursor-pointer' : ''}`}
-                            onClick={() => isNativePlatform() && handlePickAvatar(c.id)}
-                          >
-                            {avatars[c.id] ? <AvatarImage src={avatars[c.id]} alt={c.name} /> : null}
+                          <Avatar className="size-7 flex-shrink-0">
                             <AvatarFallback className="text-white text-[10px] font-bold bg-primary">
                               {initials(c.name)}
                             </AvatarFallback>

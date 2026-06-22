@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { zustandStorage } from "@shared/mobile/storage";
 
 // ─── Types ────────────────────────────────────────────────────
 
@@ -101,7 +100,7 @@ export const useCalendarStore = create<CalendarStore>()(
     }),
     {
       name: "zendo_calendar",
-      storage: createJSONStorage(() => zustandStorage),
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );

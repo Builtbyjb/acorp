@@ -2,7 +2,6 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
-@import "@shared/mobile/safe-area.css";
 
 :root {
   /* Teal & Sand palette */

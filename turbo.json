@@ -4,9 +4,6 @@
     "build": {
       "outputs": ["dist/**"]
     },
-    "build:mobile": {
-      "outputs": ["dist/**"]
-    },
     "check-types": {
       "dependsOn": ["^check-types"]
     },

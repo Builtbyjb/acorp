@@ -3,10 +3,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Network, Send, FileDown, Share2 } from "lucide-react";
-import { Network as CapacitorNetwork } from "@capacitor/network";
-import { getItem, setItem, shareText, saveBlob } from "@shared/mobile";
 
 const QUEUE_KEY = "insights_submission_queue";
+
+const storage = {
+  getItem: (key: string): string | null => localStorage.getItem(key),
+  setItem: (key: string, value: string) => localStorage.setItem(key, value),
+};
 
 interface QueuedSubmission {
   id: string;
@@ -21,13 +24,21 @@ export const Route = createFileRoute("/_authenticated/home")({
 function RouteComponent() {
   const [name, setName] = useState("");
   const [value, setValue] = useState("");
-  const [queue, setQueue] = useState<QueuedSubmission[]>([]);
+  const [queue, setQueue] = useState<QueuedSubmission[]>(() => {
+    const raw = storage.getItem(QUEUE_KEY);
+    if (!raw) return [];
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  });
   const [status, setStatus] = useState("");
-  const [isOnline, setIsOnline] = useState(true);
+  const [isOnline, setIsOnline] = useState(() => navigator.onLine);
 
   const saveQueue = useCallback((next: QueuedSubmission[]) => {
     setQueue(next);
-    setItem(QUEUE_KEY, JSON.stringify(next)).catch(() => {});
+    storage.setItem(QUEUE_KEY, JSON.stringify(next));
   }, []);
 
   const flushQueue = useCallback(async () => {
@@ -48,23 +59,16 @@ function RouteComponent() {
   }, [queue, saveQueue]);
 
   useEffect(() => {
-    getItem(QUEUE_KEY).then((raw) => {
-      if (raw) {
-        try {
-          setQueue(JSON.parse(raw));
-        } catch {
-          // ignore corrupt history
-        }
-      }
-    });
-
-    CapacitorNetwork.getStatus().then((s) => setIsOnline(s.connected));
-    const unsub = CapacitorNetwork.addListener("networkStatusChange", (s) => {
-      setIsOnline(s.connected);
-      if (s.connected) flushQueue();
-    });
+    const handleOnline = () => {
+      setIsOnline(true);
+      flushQueue();
+    };
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
     return () => {
-      unsub.then((l) => l.remove());
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, [flushQueue]);
 
@@ -89,7 +93,7 @@ function RouteComponent() {
     setValue("");
   };
 
-  const exportReport = async () => {
+  const exportReport = () => {
     const report = {
       generatedAt: new Date().toISOString(),
       totalQueued: queue.length,
@@ -97,12 +101,21 @@ function RouteComponent() {
       submissions: queue,
     };
     const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
-    await saveBlob(blob, `insights-report-${Date.now()}.json`, "application/json");
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `insights-report-${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const shareReport = async () => {
     const summary = `Insights report: ${queue.length} items queued. Online: ${isOnline}.`;
-    await shareText(summary, "Insights Report");
+    if (navigator.share) {
+      await navigator.share({ title: "Insights Report", text: summary });
+    }
   };
 
   return (
