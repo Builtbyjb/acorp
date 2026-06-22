@@ -107,7 +107,6 @@
   }
   body {
     @apply selection:bg-brand-accent/20 selection:text-brand-ink bg-background text-foreground;
-    background-color: #000;
   }
   html {
     @apply font-sans;
@@ -240,6 +239,17 @@
 
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Disable infinite/continuous animations when reduced motion is preferred */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-h,
+  .animate-marquee-v,
+  .animate-float,
+  .animate-float-delayed,
+  .animate-pulse-glow {
+    animation: none !important;
+  }
 }
 
 /* ── Marquee Mask (gradient fade edges) ──────────────────────────────────── */

@@ -4,7 +4,7 @@ import { useLayout } from "@/hooks/useLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Copy, Users, Building } from "lucide-react";
+import { BadgeInfo, Copy, Users, Building } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { formatCurrency, handleError } from "@/lib/utils";
@@ -12,6 +12,7 @@ import { APP_NAME } from "@/lib/constant";
 import { toast } from "sonner";
 import { useFetch } from "@/hooks/useFetch";
 import { copyToClipboard } from "@shared/mobile";
+import Banner from "@/components/Banner";
 import * as z from "zod";
 
 const PayoutMethodSchema = z.object({
@@ -127,6 +128,7 @@ function RouteComponent() {
 
   return (
     <div className="space-y-8 mb-8">
+      <Banner backgroundColor={"bg-sky-100"} icon={<BadgeInfo />} text={"Coming soon!"} />
       <Card>
         <CardHeader>
           <CardTitle>Join Our Referral Program</CardTitle>

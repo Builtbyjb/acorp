@@ -181,6 +181,7 @@ function BusinessSettings({ settings }: { settings: BusinessSettingsType }) {
         form.setFieldValue("city", settings.city);
         form.setFieldValue("country", settings.country);
         if (settings.logoURL) setAvatar(settings.logoURL);
+        console.log(settings.logoURL);
       }
     })();
   }, [settings, form]);
