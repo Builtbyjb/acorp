@@ -17,6 +17,7 @@ const emailFormSchema = z.object({
   email: z.string().email(),
 });
 
+
 function RouteComponent() {
   const navigate = useNavigate();
   const [isVerified, setIsVerified] = useState(false);

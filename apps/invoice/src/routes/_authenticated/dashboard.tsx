@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { Suspense, lazy, useState, useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import StatsCards from "@/components/StatsCards";
-import RevenueChart from "@/components/RevenueChart";
-import StatusChart from "@/components/StatusChart";
 import RecentInvoices from "@/components/RecentInvoices";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const RevenueChart = lazy(() => import("@/components/RevenueChart"));
+const StatusChart = lazy(() => import("@/components/StatusChart"));
 import { useLayout } from "@/hooks/useLayout";
 import type { DashboardStats } from "@shared/lib/types";
 import { InvoiceSchema, InvoiceStatusSchema, TopStatsSchema } from "@shared/lib/zod-schema";
@@ -92,10 +94,19 @@ function RouteComponent() {
   return (
     <div className="flex flex-col space-y-6 mb-32">
       <StatsCards stats={dashboardStats.topStats} isLoading={isLoading} />
-      <div className="grid gap-6 lg:grid-cols-3">
-        <RevenueChart data={dashboardStats.monthlyRevenues} isLoading={isLoading} />
-        <StatusChart data={dashboardStats.invoiceData} isLoading={isLoading} />
-      </div>
+      <Suspense
+        fallback={
+          <div className="grid gap-6 lg:grid-cols-3">
+            <Skeleton className="h-72 w-full" />
+            <Skeleton className="h-72 w-full" />
+          </div>
+        }
+      >
+        <div className="grid gap-6 lg:grid-cols-3">
+          <RevenueChart data={dashboardStats.monthlyRevenues} isLoading={isLoading} />
+          <StatusChart data={dashboardStats.invoiceData} isLoading={isLoading} />
+        </div>
+      </Suspense>
       <RecentInvoices invoices={dashboardStats.recentInvoices} isLoading={isLoading} />
     </div>
   );

@@ -60,7 +60,7 @@ function DashboardPreview() {
               </div>
               <div className="flex items-end gap-2">
                 {Array.from({ length: 14 }).map((_, i) => {
-                  const height = 35 + Math.sin(i * 0.8) * 25 + Math.random() * 25;
+                  const height = 35 + Math.sin(i * 0.8) * 25 + ((i * 17) % 25);
                   return (
                     <div
                       key={i}

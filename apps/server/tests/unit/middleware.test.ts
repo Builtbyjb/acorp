@@ -5,6 +5,8 @@ import rateLimiterMiddleware from "@/middleware/rate-limiter";
 import { createMockEnv } from "../setup/test-env";
 import { drizzle } from "drizzle-orm/d1";
 import { organizations } from "@/db/schemas";
+import { sign } from "hono/jwt";
+import { TokenPayload } from "@/lib/types";
 
 function createMockContext(options: {
     env?: any;
@@ -74,6 +76,32 @@ describe("authMiddleware", () => {
             { message: "Unauthorized: Invalid token" },
             401,
         );
+    });
+
+    it("authenticates using Authorization header on mobile", async () => {
+        const env = createMockEnv();
+        const payload: TokenPayload = {
+            userId: 1,
+            username: "test",
+            email: "test@acorp.app",
+            currentOrgId: 1,
+            exp: Math.floor(Date.now() / 1000) + 3600,
+        };
+        const token = await sign(payload, env.JWT_SECRET);
+
+        const middleware = authMiddleware();
+        const c = createMockContext({
+            env,
+            headers: {
+                authorization: `Bearer ${token}`,
+                "x-mobile-client": "true",
+            },
+        });
+        const next = vi.fn();
+        await middleware(c, next);
+
+        expect(next).toHaveBeenCalled();
+        expect(c.json).not.toHaveBeenCalled();
     });
 });
 

@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { zustandStorage } from "@shared/mobile/storage";
 
 // ─── Types ────────────────────────────────────────────────────
 
@@ -60,7 +61,7 @@ interface CalendarStore {
 
 export const useCalendarStore = create<CalendarStore>()(
   persist(
-    (set, _get) => ({
+    (set) => ({
       events: [],
       view: "week",
       currentDate: new Date().toISOString().split("T")[0],
@@ -98,6 +99,9 @@ export const useCalendarStore = create<CalendarStore>()(
           events: s.events.filter((e) => e.seriesId !== seriesId),
         })),
     }),
-    { name: "zendo_calendar" }
+    {
+      name: "zendo_calendar",
+      storage: createJSONStorage(() => zustandStorage),
+    }
   )
 );

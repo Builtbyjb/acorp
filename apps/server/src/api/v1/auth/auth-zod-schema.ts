@@ -6,6 +6,7 @@ export const loginSchema = z.object({
 
 export const otpSchema = z.object({
     otp: z.string().length(8),
+    otpToken: z.string().optional(),
 });
 
 export const signupSchema = z.object({
