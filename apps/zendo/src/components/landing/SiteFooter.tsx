@@ -5,7 +5,6 @@ const FOOTER_COLS = [
     title: "Product",
     links: [
       { label: "Features", href: "#features" },
-      { label: "Pricing", href: "#pricing" },
       { label: "Changelog", href: "#" },
     ],
   },
@@ -42,9 +41,7 @@ export function SiteFooter() {
               <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-gradient-to-br from-zendo-coral to-amber-400 text-white text-xs font-black shadow-md shadow-zendo-coral/20 transition-transform group-hover:scale-95">
                 Z
               </div>
-              <span className="font-bold text-base tracking-tight text-zendo-ink">
-                Zendo
-              </span>
+              <span className="font-bold text-base tracking-tight text-zendo-ink">Zendo</span>
             </Link>
             <p className="text-sm leading-relaxed max-w-[200px] text-zendo-ink-light">
               Calm, focused productivity. Calendar, tasks, and Pomodoro in one place.
@@ -76,9 +73,7 @@ export function SiteFooter() {
           {/* Link columns */}
           {FOOTER_COLS.map((col) => (
             <div key={col.title} className="flex flex-col gap-3">
-              <p className="text-xs font-bold uppercase tracking-widest text-zendo-ink">
-                {col.title}
-              </p>
+              <p className="text-xs font-bold uppercase tracking-widest text-zendo-ink">{col.title}</p>
               {col.links.map((link) =>
                 "to" in link ? (
                   <Link
@@ -96,7 +91,7 @@ export function SiteFooter() {
                   >
                     {link.label}
                   </a>
-                )
+                ),
               )}
             </div>
           ))}

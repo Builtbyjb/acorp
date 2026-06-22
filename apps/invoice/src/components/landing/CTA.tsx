@@ -1,15 +1,9 @@
-import { useNavigate } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { DownloadButton } from "@/components/DownloadButton";
 import { useInView } from "@/hooks/useInView";
 
-const trustMarkers = [
-  "No credit card required",
-  "Free up to 5 invoices/mo",
-  "Cancel anytime",
-];
+const trustMarkers = ["No credit card required", "Free up to 5 invoices/mo", "Cancel anytime"];
 
 export default function CTA() {
-  const navigate = useNavigate();
   const { ref, isVisible } = useInView<HTMLElement>({ threshold: 0.2 });
 
   return (
@@ -70,19 +64,9 @@ export default function CTA() {
                 transition: "all 0.5s ease-out 0.3s",
               }}
             >
-              <button
-                onClick={() => navigate({ to: "/signup" })}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold text-white bg-brand-ink transition-all duration-300 hover:bg-brand-ink/90 hover:shadow-lg active:scale-[0.97] group"
-              >
-                CREATE YOUR FIRST INVOICE
-                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-              </button>
-              <button
-                onClick={() => navigate({ to: "/pricing" })}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold text-brand-ink border-2 border-brand-ink bg-transparent transition-all duration-300 hover:bg-brand-ink hover:text-white active:scale-[0.97]"
-              >
-                VIEW PRICING
-              </button>
+              <DownloadButton className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold text-white bg-brand-ink transition-all duration-300 hover:bg-brand-ink/90 hover:shadow-lg active:scale-[0.97]">
+                Download App
+              </DownloadButton>
             </div>
 
             {/* Trust Markers */}
@@ -102,7 +86,6 @@ export default function CTA() {
               ))}
             </div>
           </div>
-
         </div>
       </div>
     </section>

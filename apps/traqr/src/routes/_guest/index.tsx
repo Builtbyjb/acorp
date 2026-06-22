@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
   QrCode,
   Layers,
@@ -8,8 +8,6 @@ import {
   BarChart3,
   Settings2,
   Scan,
-  ArrowRight,
-  Check,
   Warehouse,
   Wrench,
   Truck,
@@ -18,7 +16,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
-import { Button } from "@/components/ui/button";
+import { DownloadButton } from "@/components/DownloadButton";
 import { Card } from "@/components/ui/card";
 import { SectionHeader } from "@/components/ui/section-header";
 import { Badge } from "@/components/ui/badge";
@@ -143,7 +141,7 @@ function LandingPage() {
       <FeaturesSection />
       <TestimonialsSection />
       <IntegrationsSection />
-      <PricingPreviewSection />
+      {/*<PricingPreviewSection />*/}
       <FAQSection />
       <CtaSection />
     </main>
@@ -227,15 +225,7 @@ function HeroSection() {
               transition={{ duration: 0.5, delay: 0.32 }}
               className="flex flex-wrap items-center gap-4 mb-10"
             >
-              <Button asChild size="lg">
-                <Link to="/signup" className="group">
-                  Start for free
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <a href="#how-it-works">See how it works</a>
-              </Button>
+              <DownloadButton size="lg">Download App</DownloadButton>
             </motion.div>
 
             {/* Status chips */}
@@ -614,73 +604,68 @@ function IntegrationsSection() {
 
 // ─── Pricing Preview ────────────────────────────────────────────────────────
 
-function PricingPreviewSection() {
-  return (
-    <section className="py-24 bg-slate-paper/50">
-      <Container>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <SectionHeader
-              eyebrow="Pricing"
-              title="Start free. Scale when you're ready."
-              subtitle="No per-scan fees. No hidden charges. Just straightforward pricing for teams that move physical things."
-            />
-            <ul className="space-y-3 mb-8">
-              {["50 free QR codes to start", "Unlimited scans on every plan", "Cancel or upgrade anytime"].map(
-                (item) => (
-                  <li key={item} className="flex items-center gap-3 text-slate-muted">
-                    <div className="w-5 h-5 rounded-full bg-scanner-bg text-scanner-dark flex items-center justify-center">
-                      <CheckIcon />
-                    </div>
-                    <span className="text-sm">{item}</span>
-                  </li>
-                ),
-              )}
-            </ul>
-            <Button asChild size="lg">
-              <Link to="/pricing" className="group">
-                View full pricing
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-            </Button>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Card hover={false} className="sm:translate-y-6">
-              <div className="p-7">
-                <p className="text-sm font-semibold text-slate-muted mb-2">Starter</p>
-                <p className="text-4xl font-bold text-slate-ink mb-1">Free</p>
-                <p className="text-sm text-slate-muted mb-6">Perfect for small teams.</p>
-                <ul className="space-y-2 mb-6">
-                  {["50 QR codes/mo", "1 user", "Email support"].map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm text-slate-muted">
-                      <Check size={14} className="text-scanner" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Card>
-            <Card>
-              <div className="p-7">
-                <p className="text-sm font-semibold text-slate-muted mb-2">Business</p>
-                <p className="text-4xl font-bold text-slate-ink mb-1">$29</p>
-                <p className="text-sm text-slate-muted mb-6">/mo, billed annually</p>
-                <ul className="space-y-2 mb-6">
-                  {["Unlimited QR codes", "5 users", "Priority support"].map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm text-slate-muted">
-                      <Check size={14} className="text-scanner" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Card>
-          </div>
-        </div>
-      </Container>
-    </section>
-  );
-}
+// function PricingPreviewSection() {
+//   return (
+//     <section className="py-24 bg-slate-paper/50">
+//       <Container>
+//         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+//           <div>
+//             <SectionHeader
+//               eyebrow="Pricing"
+//               title="Start free. Scale when you're ready."
+//               subtitle="No per-scan fees. No hidden charges. Just straightforward pricing for teams that move physical things."
+//             />
+//             <ul className="space-y-3 mb-8">
+//               {["50 free QR codes to start", "Unlimited scans on every plan", "Cancel or upgrade anytime"].map(
+//                 (item) => (
+//                   <li key={item} className="flex items-center gap-3 text-slate-muted">
+//                     <div className="w-5 h-5 rounded-full bg-scanner-bg text-scanner-dark flex items-center justify-center">
+//                       <CheckIcon />
+//                     </div>
+//                     <span className="text-sm">{item}</span>
+//                   </li>
+//                 ),
+//               )}
+//             </ul>
+//             <DownloadButton size="lg">Download App</DownloadButton>
+//           </div>
+//           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+//             <Card hover={false} className="sm:translate-y-6">
+//               <div className="p-7">
+//                 <p className="text-sm font-semibold text-slate-muted mb-2">Starter</p>
+//                 <p className="text-4xl font-bold text-slate-ink mb-1">Free</p>
+//                 <p className="text-sm text-slate-muted mb-6">Perfect for small teams.</p>
+//                 <ul className="space-y-2 mb-6">
+//                   {["50 QR codes/mo", "1 user", "Email support"].map((f) => (
+//                     <li key={f} className="flex items-center gap-2 text-sm text-slate-muted">
+//                       <Check size={14} className="text-scanner" />
+//                       {f}
+//                     </li>
+//                   ))}
+//                 </ul>
+//               </div>
+//             </Card>
+//             <Card>
+//               <div className="p-7">
+//                 <p className="text-sm font-semibold text-slate-muted mb-2">Business</p>
+//                 <p className="text-4xl font-bold text-slate-ink mb-1">$29</p>
+//                 <p className="text-sm text-slate-muted mb-6">/mo, billed annually</p>
+//                 <ul className="space-y-2 mb-6">
+//                   {["Unlimited QR codes", "5 users", "Priority support"].map((f) => (
+//                     <li key={f} className="flex items-center gap-2 text-sm text-slate-muted">
+//                       <Check size={14} className="text-scanner" />
+//                       {f}
+//                     </li>
+//                   ))}
+//                 </ul>
+//               </div>
+//             </Card>
+//           </div>
+//         </div>
+//       </Container>
+//     </section>
+//   );
+// }
 
 // ─── FAQ ─────────────────────────────────────────────────────────────────────
 
@@ -786,12 +771,7 @@ function CtaSection() {
             <p className="text-base mb-10 max-w-md mx-auto leading-relaxed text-slate-muted">
               Start free. No credit card required. Your first 50 QR codes are on us.
             </p>
-            <Button asChild size="lg">
-              <Link to="/signup" className="group">
-                Create your first QR code
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-            </Button>
+            <DownloadButton size="lg">Download App</DownloadButton>
           </div>
         </div>
       </Container>

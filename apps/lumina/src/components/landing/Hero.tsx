@@ -1,6 +1,6 @@
 import { GlowOrb, GradientText, COLORS } from "@/components/landing/utils";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, ScanFace, Sparkles } from "lucide-react";
+import { DownloadAppButton } from "@/components/landing/DownloadAppButton";
+import { ScanFace, Sparkles, Play } from "lucide-react";
 
 function hash01(i: number, offset: number) {
   const v = Math.sin(i * 12.9898 + offset * 78.233) * 43758.5453;
@@ -78,14 +78,7 @@ export default function Hero() {
           </p>
 
           <div className="mb-12 flex flex-wrap items-center gap-4">
-            <Button size="lg">
-              Start creating free
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-            </Button>
-            <Button variant="outline" size="lg">
-              <Play className="size-4 fill-white text-white" />
-              Watch demo
-            </Button>
+            <DownloadAppButton size="lg">Download App</DownloadAppButton>
           </div>
 
           <div className="flex flex-wrap items-center gap-6">

@@ -6,7 +6,6 @@ export default function Footer({ logo }: { logo: React.ReactNode }) {
       heading: "Product",
       links: [
         { label: "Features", href: "/#features" },
-        { label: "Pricing", href: "/pricing" },
         { label: "Changelog", href: "#" },
         { label: "Roadmap", href: "#" },
       ],
