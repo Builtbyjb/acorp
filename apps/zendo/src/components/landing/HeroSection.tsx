@@ -1,24 +1,6 @@
-import { Link } from "@tanstack/react-router";
+import { DownloadAppButton } from "@/components/landing/DownloadAppButton";
 import { ProductMockup } from "./ProductMockup";
 import { Sparkles } from "lucide-react";
-
-function ArrowRight({ size = 16 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 14 14"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="transition-transform group-hover:translate-x-0.5"
-    >
-      <path d="M2 7h10M7 2l5 5-5 5" />
-    </svg>
-  );
-}
 
 export function HeroSection() {
   return (
@@ -68,12 +50,9 @@ export function HeroSection() {
 
           {/* CTAs */}
           <div className="animate-fade-up flex flex-wrap gap-3 justify-center" style={{ animationDelay: "0.32s" }}>
-            <Link to="/signup" className="btn-solid group shadow-xl shadow-zendo-coral/25">
-              Get started free <ArrowRight />
-            </Link>
-            <a href="#preview" className="btn-outline">
-              See it in action
-            </a>
+            <DownloadAppButton className="btn-solid group shadow-xl shadow-zendo-coral/25">
+              Download App
+            </DownloadAppButton>
           </div>
 
           {/* Supporting chips */}

@@ -1,15 +1,5 @@
-import { Link } from "@tanstack/react-router";
+import { DownloadAppButton } from "@/components/landing/DownloadAppButton";
 import { Check } from "lucide-react";
-
-function ArrowRight({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" stroke="currentColor"
-      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      className="transition-transform group-hover:translate-x-0.5">
-      <path d="M2 7h10M7 2l5 5-5 5" />
-    </svg>
-  );
-}
 
 const FREE_FEATURES = [
   "Unlimited tasks",
@@ -80,12 +70,9 @@ export function PricingSection() {
               </ul>
             </div>
 
-            <Link
-              to="/signup"
-              className="btn-outline mt-auto justify-center"
-            >
-              Get started free
-            </Link>
+            <DownloadAppButton className="btn-outline mt-auto justify-center">
+              Download App
+            </DownloadAppButton>
           </div>
 
           {/* Pro */}
@@ -128,12 +115,11 @@ export function PricingSection() {
               </ul>
             </div>
 
-            <Link
-              to="/signup"
+            <DownloadAppButton
               className="group mt-auto justify-center inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold text-zendo-ink bg-white transition-all hover:bg-zendo-cream hover:gap-3 active:scale-95 rounded-full shadow-lg"
             >
-              Start Pro free for 14 days <ArrowRight />
-            </Link>
+              Download App
+            </DownloadAppButton>
           </div>
         </div>
 

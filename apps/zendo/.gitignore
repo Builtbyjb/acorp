@@ -1,7 +1,3 @@
-# Capacitor native projects
-ios/
-android/
-
 # Logs
 logs
 *.log

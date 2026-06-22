@@ -2,7 +2,6 @@ import { HeroSection } from "@/components/landing/HeroSection";
 import { SocialProofBar } from "@/components/landing/SocialProofBar";
 import { FeaturesSection } from "@/components/landing/FeaturesSection";
 import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
-import { PricingSection } from "@/components/landing/PricingSection";
 import { CtaBanner } from "@/components/landing/CtaBanner";
 
 export function LandingPage() {
@@ -12,7 +11,7 @@ export function LandingPage() {
       <SocialProofBar />
       <FeaturesSection />
       <TestimonialsSection />
-      <PricingSection />
+      {/*<PricingSection />*/}
       <CtaBanner />
     </>
   );

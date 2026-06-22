@@ -1,23 +1,5 @@
-import { Link } from "@tanstack/react-router";
+import { DownloadAppButton } from "@/components/landing/DownloadAppButton";
 import { Sparkles } from "lucide-react";
-
-function ArrowRight({ size = 16 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 14 14"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="transition-transform group-hover:translate-x-0.5"
-    >
-      <path d="M2 7h10M7 2l5 5-5 5" />
-    </svg>
-  );
-}
 
 export function CtaBanner() {
   return (
@@ -49,18 +31,11 @@ export function CtaBanner() {
             </p>
 
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link
-                to="/signup"
+              <DownloadAppButton
                 className="group inline-flex items-center gap-2 px-8 py-4 text-sm font-bold bg-zendo-coral text-white transition-all hover:bg-zendo-coral/90 hover:gap-3 active:scale-95 rounded-full shadow-xl shadow-zendo-coral/25"
               >
-                Get started free <ArrowRight />
-              </Link>
-              <a
-                href="#pricing"
-                className="inline-flex items-center gap-2 px-8 py-4 text-sm font-bold border-2 border-white/20 text-white transition-all hover:bg-white hover:text-zendo-ink active:scale-95 rounded-full"
-              >
-                View pricing
-              </a>
+                Download App
+              </DownloadAppButton>
             </div>
 
             <p className="text-xs mt-6 text-white/50">Free plan forever · Pro trial, no card needed</p>

@@ -1,6 +1,5 @@
-import { useNavigate } from "@tanstack/react-router";
-import { ArrowRight, FileText } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { FileText } from "lucide-react";
+import { DownloadButton } from "@/components/DownloadButton";
 import type { Invoice, InvoiceItem } from "@shared/lib/types";
 
 const mockInvoice: Omit<Invoice, "id" | "clientId" | "createdAt"> & { clientName: string; clientEmail: string } = {
@@ -26,7 +25,6 @@ const calculateTotal = (items: InvoiceItem[]) => {
 };
 
 export default function Hero() {
-  const navigate = useNavigate();
   const total = calculateTotal(mockInvoice.items);
 
   return (
@@ -68,30 +66,18 @@ export default function Hero() {
             className="text-lg md:text-xl text-brand-secondary max-w-md leading-relaxed font-medium animate-fade-up"
             style={{ animationDelay: "0.3s" }}
           >
-            Create, send, and track professional invoices in under a minute. The financial tool built for the creative class.
+            Create, send, and track professional invoices in under a minute. The financial tool built for the creative
+            class.
           </p>
 
           {/* CTAs */}
-          <div
-            className="flex flex-col sm:flex-row gap-4 animate-fade-up"
-            style={{ animationDelay: "0.4s" }}
-          >
-            <Button
+          <div className="flex flex-col sm:flex-row gap-4 animate-fade-up" style={{ animationDelay: "0.4s" }}>
+            <DownloadButton
               size="lg"
               className="bg-brand-ink text-white hover:bg-brand-ink/90 rounded-none px-8 h-14 text-base font-bold group transition-all duration-300 hover:shadow-lg"
-              onClick={() => navigate({ to: "/signup" })}
             >
-              START FREE
-              <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="rounded-none px-8 h-14 text-base font-bold border-2 border-brand-ink text-brand-ink hover:bg-brand-ink hover:text-white transition-all duration-300"
-              onClick={() => navigate({ to: "/pricing" })}
-            >
-              VIEW PRICING
-            </Button>
+              Download App
+            </DownloadButton>
           </div>
 
           {/* Dashed line */}
@@ -118,12 +104,20 @@ export default function Hero() {
                 <div className="w-8 h-8 bg-brand-ink flex items-center justify-center mb-3">
                   <FileText className="text-white w-4 h-4" />
                 </div>
-                <p className="text-[10px] font-mono font-bold tracking-widest text-brand-secondary uppercase">ACORP INVOICE</p>
+                <p className="text-[10px] font-mono font-bold tracking-widest text-brand-secondary uppercase">
+                  ACORP INVOICE
+                </p>
                 <p className="text-xs font-mono text-brand-secondary">{mockInvoice.invoiceNumber}</p>
               </div>
               <div className="text-right">
                 <p className="text-[10px] font-mono font-bold tracking-widest text-brand-secondary uppercase">DUE</p>
-                <p className="text-xs font-mono text-brand-ink">{new Date(mockInvoice.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                <p className="text-xs font-mono text-brand-ink">
+                  {new Date(mockInvoice.dueDate).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </p>
               </div>
             </div>
 
@@ -132,7 +126,9 @@ export default function Hero() {
 
             {/* Client */}
             <div className="mb-6">
-              <p className="text-[10px] font-mono font-bold tracking-widest text-brand-secondary uppercase mb-1">BILL TO</p>
+              <p className="text-[10px] font-mono font-bold tracking-widest text-brand-secondary uppercase mb-1">
+                BILL TO
+              </p>
               <p className="text-sm font-bold text-brand-ink">{mockInvoice.clientName}</p>
               <p className="text-xs font-mono text-brand-secondary">{mockInvoice.clientEmail}</p>
             </div>
@@ -143,10 +139,12 @@ export default function Hero() {
                 <div key={i} className="flex justify-between items-start text-sm">
                   <div>
                     <p className="font-bold text-brand-ink">{item.description}</p>
-                    <p className="text-xs font-mono text-brand-secondary">{item.quantity}x @ ${item.unitPrice.toLocaleString()}</p>
+                    <p className="text-xs font-mono text-brand-secondary">
+                      {item.quantity}x @ ${item.unitPrice.toLocaleString()}
+                    </p>
                   </div>
                   <p className="font-mono font-bold text-brand-ink tabular-nums">
-                    ${(item.quantity * item.unitPrice).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    ${(item.quantity * item.unitPrice).toLocaleString("en-US", { minimumFractionDigits: 2 })}
                   </p>
                 </div>
               ))}
@@ -159,7 +157,7 @@ export default function Hero() {
             <div className="flex justify-between items-center">
               <p className="text-[10px] font-mono font-bold tracking-widest text-brand-secondary uppercase">TOTAL</p>
               <p className="text-2xl font-bold font-mono text-brand-ink tabular-nums">
-                ${total.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                ${total.toLocaleString("en-US", { minimumFractionDigits: 2 })}
               </p>
             </div>
 

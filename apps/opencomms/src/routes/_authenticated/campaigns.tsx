@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -8,7 +8,6 @@ import { Progress } from '@/components/ui/progress'
 import { PlusIcon, SmsIcon, WhatsAppIcon } from '../-icons.tsx'
 import { useLayout } from '@/hooks/useLayout'
 import { Megaphone, Calendar, BarChart3, Share2 } from 'lucide-react'
-import { shareText, scheduleNotification } from '@shared/mobile'
 
 const CAMPAIGNS = [
   { id: '1', name: 'June Newsletter', channel: 'sms', status: 'sent', recipients: 1180, delivered: 1163, failed: 17, sentAt: 'Jun 10 · 9:00 AM' },
@@ -36,30 +35,15 @@ const SUMMARY = [
 
 function CampaignsPage() {
   const { setTitle } = useLayout()
-  const scheduledRef = useRef(false)
   useEffect(() => {
     setTitle('Campaigns')
-
-    if (scheduledRef.current) return
-    scheduledRef.current = true
-
-    CAMPAIGNS.filter((c) => c.status === 'scheduled').forEach((c) => {
-      // Parse a fake scheduled date relative to now for demo purposes.
-      const scheduleAt = new Date(Date.now() + 60_000 * Number(c.id))
-      scheduleNotification({
-        id: 1000 + Number(c.id),
-        title: 'Campaign reminder',
-        body: `${c.name} is scheduled to send soon.`,
-        scheduleAt,
-      }).catch(() => {
-        // ignore permission errors
-      })
-    })
   }, [setTitle])
 
   const handleShare = async () => {
     const summary = `OpenComms campaigns: ${SUMMARY.map((s) => `${s.label}: ${s.value}`).join('\n')}`
-    await shareText(summary, 'Campaign Summary')
+    if (navigator.share) {
+      await navigator.share({ title: 'Campaign Summary', text: summary })
+    }
   }
 
   return (

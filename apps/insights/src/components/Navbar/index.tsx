@@ -1,60 +1,29 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+// import { useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 // import { Separator } from "@/components/ui/separator";
-
-type NavLink = {
-  label: string;
-  to: string;
-};
+import { DownloadButton } from "@/components/DownloadButton";
 
 type Props = {
-  navLinks: NavLink[];
   logo: React.ReactNode;
 };
 
-export default function Navbar({ navLinks, logo }: Props) {
+export default function Navbar({ logo }: Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   // const navigate = useNavigate();
-  const routerState = useRouterState();
-  const currentPath = routerState.location.pathname;
+  // const routerState = useRouterState();
+  // const currentPath = routerState.location.pathname;
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/60 bg-background/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <div className="flex gap-8">
-          {logo}
-
-          {/* Desktop nav links */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const isActive = currentPath === link.to || currentPath.startsWith(link.to + "/");
-              return (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className={`relative px-3 py-1.5 text-sm font-medium transition-all ${isActive ? "text-black" : "text-slate-500"}`}
-                >
-                  {isActive && <span className="absolute inset-0 bg-slate-200 rounded-full" />}
-                  <span className="relative">{link.label}</span>
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
+        <div className="flex gap-8">{logo}</div>
 
         {/* Desktop CTAs */}
-        {/*<div className="hidden md:flex items-center gap-3">
-          <Button variant="outline" onClick={() => navigate({ to: "/login" })}>
-            Log in
-          </Button>
-          <a href="mailto:hello@acorp.dev">
-            <Button>
-              Get started <ArrowRight />
-            </Button>
-          </a>
-        </div>*/}
+        <div className="hidden md:flex items-center gap-3">
+          <DownloadButton>Download App</DownloadButton>
+        </div>
 
         {/* Mobile toggle */}
         <Button
@@ -72,41 +41,9 @@ export default function Navbar({ navLinks, logo }: Props) {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-slate-200 bg-background">
           <div className="flex flex-col gap-1 px-6 py-4">
-            {navLinks.map((link) => {
-              const isActive = currentPath === link.to;
-              return (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className="px-3 py-2 text-sm font-medium transition-all"
-                  style={{
-                    color: isActive ? "#000000" : "#737373",
-                    backgroundColor: isActive ? "#00000008" : "transparent",
-                  }}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-
-            {/*<>
-                <Separator className="my-2 bg-black/10" />
-                <div className="flex flex-col gap-3 pt-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      navigate({ to: "/login" });
-                    }}
-                  >
-                    Log in
-                  </Button>
-                  <a href="mailto:hello@acorp.dev">
-                    <Button>Get started</Button>
-                  </a>
-                </div>
-              </>*/}
+            <div className="flex flex-col gap-3 pt-2">
+              <DownloadButton>Download App</DownloadButton>
+            </div>
           </div>
         </div>
       )}
