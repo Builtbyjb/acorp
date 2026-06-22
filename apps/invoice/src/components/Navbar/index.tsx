@@ -52,11 +52,9 @@ export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
             <Button variant="outline" onClick={() => navigate({ to: "/login" })}>
               Log in
             </Button>
-            <a href="mailto:hello@acorp.dev">
-              <Button>
-                Get started <ArrowRight />
-              </Button>
-            </a>
+            <Button onClick={() => navigate({ to: "/signup" })}>
+              Get started <ArrowRight />
+            </Button>
           </div>
         )}
 

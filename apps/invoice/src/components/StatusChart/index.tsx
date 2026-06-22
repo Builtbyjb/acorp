@@ -20,7 +20,7 @@ export default function StatusChart({ data, isLoading }: StatusChartProps) {
       </CardHeader>
       <CardContent>
         {!isLoading ? (
-          <div className="h-75">
+          <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie

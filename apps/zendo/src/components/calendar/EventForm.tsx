@@ -35,7 +35,7 @@ export function EventForm({ initialValues, defaultDate, onSuccess, onCancel, onD
     : (defaultDate ?? new Date().toISOString().slice(0, 16));
   const defaultEnd = initialValues?.end
     ? initialValues.end.slice(0, 16)
-    : (defaultDate ?? new Date(Date.now() + 3600000).toISOString().slice(0, 16));
+    : (defaultDate ?? new Date(new Date().getTime() + 3600000).toISOString().slice(0, 16));
 
   const [allDay, setAllDay] = useState(initialValues?.allDay ?? false);
   const [color, setColor] = useState(initialValues?.color ?? EVENT_COLORS[0]);

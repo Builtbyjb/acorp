@@ -11,6 +11,10 @@ export default defineConfig([
     "apps/*/dist/*",
     "apps/*/node_modules/*",
     "apps/server/.wrangler/tmp/*",
+    "apps/*/ios/*",
+    "apps/*/android/*",
+    "ios/*",
+    "android/*",
   ]),
   {
     ignores: ["dist/", "routeTree.gen.ts", "node_modules/", ".wrangler/"],

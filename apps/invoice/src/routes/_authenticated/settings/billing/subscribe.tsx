@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, ArrowLeft, ShieldCheck, Lock, Sparkles, HelpCircle } from "lucide-react";
+import { Check, BadgeInfo, ArrowLeft, ShieldCheck, Lock, HelpCircle } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { z } from "zod";
 import { SubscriptionPlanSchema } from "@shared/lib/zod-schema";
 import { useSubscriptionPlan } from "@/hooks/useSubscriptionPlan";
 import { useFetch } from "@/hooks/useFetch";
+import Banner from "@/components/Banner";
 
 type Plan = z.infer<typeof SubscriptionPlanSchema>;
 
@@ -303,30 +304,23 @@ function RouteComponent() {
   const isLoading = isLoadingPlans || isLoadingSubscriptions || detectionState === "loading";
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
-      <Button
-        variant="ghost"
-        onClick={() => navigate({ to: "/settings/billing" })}
-        className="w-fit mb-8 -ml-3 text-muted-foreground hover:text-foreground"
-      >
+    <div className="mb-16">
+      <Banner backgroundColor={"bg-sky-100"} icon={<BadgeInfo />} text={"Coming soon!"} />
+      <Button variant="ghost" onClick={() => navigate({ to: "/settings/billing" })}>
         <ArrowLeft className="mr-2 h-4 w-4" />
         Back to billing
       </Button>
 
       {/* Header */}
-      <div className="text-center mb-10">
-        <Badge variant="secondary" className="mb-4 px-3 py-1">
-          <Sparkles className="h-3 w-3 mr-1.5" />
-          Upgrade in seconds
-        </Badge>
+      <div className="mb-10 mt-8">
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">Choose the plan that fits your business</h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
+        <p className="text-muted-foreground text-base">
           Prices are shown in your local currency. Switch currency anytime if you need to bill internationally.
         </p>
       </div>
 
       {/* Currency selector */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+      <div className="flex flex-col sm:flex-row items-center gap-4 mb-12">
         {detectionState === "detected" && country && (
           <p className="text-sm text-muted-foreground">
             Showing prices for <span className="font-medium text-foreground">{country}</span>
@@ -378,13 +372,13 @@ function RouteComponent() {
             return (
               <Card
                 key={plan.id}
-                className={`relative flex flex-col h-full transition-all duration-200 ${
+                className={`flex flex-col h-full transition-all duration-200 ${
                   isFeatured
                     ? "ring-2 ring-primary shadow-xl md:-translate-y-2"
                     : "border-border shadow-sm hover:shadow-md"
                 }`}
               >
-                <div className="absolute -top-3 inset-x-0 flex justify-center gap-2 px-4 flex-wrap">
+                <div className="inset-x-0 flex justify-center gap-2 px-4 flex-wrap">
                   {isFeatured && <Badge className="px-3 py-1 text-xs font-semibold shadow-sm">Most popular</Badge>}
                   {isActive && (
                     <Badge variant="outline" className="bg-background px-3 py-1 text-xs font-semibold shadow-sm">

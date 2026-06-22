@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft, BadgeInfo, Download, Pencil, View } from "lucide-react";
+import { ArrowLeft, BadgeInfo, Download, Pencil, Share2, View } from "lucide-react";
 import type { Client } from "@/lib/types";
 import type { Invoice } from "@shared/lib/types";
 import { InvoiceSchema, ClientSchema } from "@shared/lib/zod-schema";
@@ -15,6 +15,7 @@ import { formatCurrency, getBadgeVariant } from "@/lib/utils";
 import { useAuth } from "@/hooks/auth";
 import { useLayout } from "@/hooks/useLayout";
 import { useFetch } from "@/hooks/useFetch";
+import { saveAndOpenFile, saveAndShareFile } from "@shared/mobile";
 import ImagePreview from "@/components/ImagePreview";
 import Banner from "@/components/Banner";
 import { SkeletonInvoicePage } from "@/components/Skeleton";
@@ -90,12 +91,15 @@ function RouteComponent() {
   const handleDownload = async () => {
     if (!invoice) return;
     const blob = await getBlob(invoice);
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `invoice-${invoice?.invoiceNumber}.pdf`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const fileName = `invoice-${invoice?.invoiceNumber}.pdf`;
+    await saveAndOpenFile(blob, fileName, "application/pdf");
+  };
+
+  const handleShare = async () => {
+    if (!invoice) return;
+    const blob = await getBlob(invoice);
+    const fileName = `invoice-${invoice.invoiceNumber}.pdf`;
+    await saveAndShareFile(blob, fileName, `Invoice ${invoice.invoiceNumber}`, "application/pdf");
   };
 
   const handlePreview = async () => {
@@ -148,6 +152,10 @@ function RouteComponent() {
               <Button variant="outline" onClick={handlePreview}>
                 <View className="mr-2 h-4 w-4" />
                 Preview
+              </Button>
+              <Button variant="outline" onClick={handleShare}>
+                <Share2 className="mr-2 h-4 w-4" />
+                Share
               </Button>
               <Button onClick={handleDownload}>
                 <Download className="mr-2 h-4 w-4" />

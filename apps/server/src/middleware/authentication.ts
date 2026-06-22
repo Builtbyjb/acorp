@@ -1,11 +1,11 @@
 import { MiddlewareHandler } from "hono";
 import type { TokenPayload, Bindings } from "@/lib/types";
-import { getCookie } from "hono/cookie";
+import { getTokenFromCookieOrHeader } from "@/lib/utils";
 import { verify } from "hono/jwt";
 
 export function authMiddleware(): MiddlewareHandler<{ Bindings: Bindings; Variables: { jwtPayload: TokenPayload } }> {
     return async (c, next) => {
-        const token = getCookie(c, "refresh_token");
+        const token = getTokenFromCookieOrHeader(c, "refresh_token");
         if (!token) {
             console.log("refresh_token token not found");
             return c.json({ message: "Unauthorized: Refresh token not found" }, 401);

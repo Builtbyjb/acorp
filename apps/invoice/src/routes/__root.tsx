@@ -1,5 +1,4 @@
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { Toaster } from "@/components/ui/sonner";
 import { type Context } from "@/lib/types";
 import { LayoutProvider } from "@/hooks/useLayout";
@@ -15,7 +14,9 @@ function RootComponent() {
       <div>
         <LayoutProvider>
           <Outlet />
-          <TanStackRouterDevtools />
+          {/*<Suspense fallback={null}>
+            <TanStackRouterDevtools />
+          </Suspense>*/}
           <Toaster
             position="top-center"
             icons={{

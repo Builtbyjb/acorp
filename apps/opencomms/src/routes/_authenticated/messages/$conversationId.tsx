@@ -7,7 +7,8 @@ import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { SmsIcon, WhatsAppIcon, SendIcon } from '../../-icons.tsx'
 import { useLayout } from '@/hooks/useLayout'
-import { Phone, MoreVertical } from 'lucide-react'
+import { Phone, MoreVertical, Share2 } from 'lucide-react'
+import { shareText } from '@shared/mobile'
 
 interface Message {
   id: number
@@ -67,6 +68,11 @@ function ConversationPage() {
   const ChannelIcon = isWA ? WhatsAppIcon : SmsIcon
   const channelLabel = isWA ? 'WhatsApp' : 'SMS'
 
+  const handleShare = async () => {
+    const text = conv.messages.map((m) => `${m.direction === 'outgoing' ? 'Me' : conv.name}: ${m.text}`).join('\n')
+    await shareText(text, `Conversation with ${conv.name}`)
+  }
+
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -89,6 +95,9 @@ function ConversationPage() {
           <ChannelIcon size={11} />
           {channelLabel}
         </Badge>
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={handleShare}>
+          <Share2 className="h-4 w-4" />
+        </Button>
         <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
           <Phone className="h-4 w-4" />
         </Button>
