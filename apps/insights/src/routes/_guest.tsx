@@ -4,11 +4,9 @@ import Logo from "@/components/Logo";
 import Footer from "@/components/Footer";
 
 function RouteComponent() {
-  const navLinks = [{ label: "Pricing", to: "/pricing" }];
-
   return (
     <>
-      <Navbar navLinks={navLinks} logo={<Logo />} />
+      <Navbar logo={<Logo />} />
       <main className="max-w-7xl mx-auto px-8 pt-16 pb-16">
         <Outlet />
       </main>

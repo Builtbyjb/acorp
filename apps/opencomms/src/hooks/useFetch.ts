@@ -1,6 +1,5 @@
 import { useCallback } from "react";
 import type { FetchInstance } from "@/lib/types";
-import { loadRefreshToken, getMobileHeaders } from "@shared/mobile";
 
 const API_URL = import.meta.env.VITE_API_URL ?? "";
 const RETRY_INTERVAL = 2000;
@@ -10,11 +9,9 @@ export function useFetch(): FetchInstance {
     let maxRetries = 3;
     while (maxRetries > 0) {
       try {
-        await loadRefreshToken();
         return await fetch(`${API_URL}${url}`, {
           method: "GET",
           credentials: "include",
-          headers: getMobileHeaders(),
         });
       } catch (error) {
         console.error(error);
@@ -33,13 +30,10 @@ export function useFetch(): FetchInstance {
 
     while (maxRetries > 0) {
       try {
-        await loadRefreshToken();
         return await fetch(`${API_URL}${url}`, {
           method: "POST",
           credentials: "include",
-          headers: isFormData
-            ? getMobileHeaders()
-            : { "Content-Type": "application/json", ...getMobileHeaders() },
+          headers: isFormData ? undefined : { "Content-Type": "application/json" },
           body: isFormData ? data : JSON.stringify(data),
         });
       } catch (error) {
@@ -59,13 +53,10 @@ export function useFetch(): FetchInstance {
 
     while (maxRetries > 0) {
       try {
-        await loadRefreshToken();
         return await fetch(`${API_URL}${url}`, {
           method: "PUT",
           credentials: "include",
-          headers: isFormData
-            ? getMobileHeaders()
-            : { "Content-Type": "application/json", ...getMobileHeaders() },
+          headers: isFormData ? undefined : { "Content-Type": "application/json" },
           body: isFormData ? data : JSON.stringify(data),
         });
       } catch (error) {
@@ -83,11 +74,9 @@ export function useFetch(): FetchInstance {
     let maxRetries = 3;
     while (maxRetries > 0) {
       try {
-        await loadRefreshToken();
         return await fetch(`${API_URL}${url}`, {
           method: "DELETE",
           credentials: "include",
-          headers: getMobileHeaders(),
         });
       } catch (error) {
         console.error(error);

@@ -11,21 +11,12 @@ function GuestLayout() {
   const routerState = useRouterState();
   const isHomePage = routerState.location.pathname === "/";
 
-  const navLinks = [
-    { to: "/#features", label: "Features" },
-    { to: "/#how-it-works", label: "How it works" },
-    { to: "/#pricing", label: "Pricing" },
-  ];
-
   const footerItems = [
     {
       title: "Product",
       items: [
         { label: "Features", to: "/#features" },
-        { label: "Pricing", to: "/#pricing" },
         { label: "Security", to: "/" },
-        { label: "Log in", to: "/login" },
-        { label: "Sign up", to: "/signup" },
       ],
     },
     {
@@ -46,7 +37,7 @@ function GuestLayout() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <NavBar navLinks={navLinks} logo={<Logo />} />
+      <NavBar logo={<Logo />} />
       <main className={isHomePage ? "flex-1" : "flex-1 mt-16 mb-16 w-[90%] sm:w-[80%] md:w-[70%] mx-auto"}>
         <Outlet />
       </main>

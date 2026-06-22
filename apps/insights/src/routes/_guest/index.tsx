@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Users, Zap, ArrowRight, Check, Globe2, Shield, Radio, Play, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { createFileRoute } from "@tanstack/react-router";
+import { Users, Zap, Check, Globe2, Shield, Radio, Sparkles } from "lucide-react";
+import { DownloadButton } from "@/components/DownloadButton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { STATS, STEPS, WHY_POINTS, CAPABILITIES } from "@/lib/store/home";
 import LogoTicker from "@/components/LogoTicker";
@@ -152,21 +152,7 @@ function RouteComponent() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Link
-              to="/signup"
-              className="group inline-flex h-11 items-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-primary/30 active:scale-95"
-            >
-              Start for free
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-            <Button
-              variant="outline"
-              size="lg"
-              className="group h-11 gap-2 rounded-full border-slate-200 bg-white/70 px-6 text-sm font-semibold text-slate-600 backdrop-blur-sm transition-all hover:border-slate-300 hover:bg-white hover:text-slate-900 active:scale-95"
-            >
-              <Play className="h-4 w-4 fill-current" />
-              See a demo
-            </Button>
+            <DownloadButton>Download App</DownloadButton>
           </div>
         </div>
 
@@ -285,13 +271,7 @@ function RouteComponent() {
                     <span className="text-sm leading-relaxed text-slate-600">{point}</span>
                   </div>
                 ))}
-                <Link
-                  to="/signup"
-                  className="group mt-2 inline-flex h-10 items-center gap-2 rounded-full border border-primary/30 bg-transparent px-5 text-sm font-semibold text-primary transition-all hover:bg-primary hover:text-white"
-                >
-                  Start evaluating
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
+                <DownloadButton>Download App</DownloadButton>
               </CardContent>
             </Card>
           </div>
@@ -456,19 +436,7 @@ function RouteComponent() {
               start, no credit card required.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <Link
-                to="/signup"
-                className="group inline-flex h-11 items-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 active:scale-95"
-              >
-                Start for free
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                to="/pricing"
-                className="inline-flex h-11 items-center justify-center rounded-full border border-slate-600 bg-transparent px-6 text-sm font-semibold text-slate-300 transition-all hover:border-slate-500 hover:bg-white/5 hover:text-white"
-              >
-                View pricing
-              </Link>
+              <DownloadButton>Download App</DownloadButton>
             </div>
           </div>
         </div>

@@ -3,18 +3,9 @@ import { motion } from "framer-motion";
 import { TraqrLogo } from "@/components/brand/logo";
 import { GrainOverlay } from "@/components/brand/grain-overlay";
 import { Container } from "@/components/ui/container";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
-
-// ─── Navigation ────────────────────────────────────────────────────────────
-
-const navLinks = [
-  { label: "Features", href: "/#features" },
-  { label: "How it works", href: "/#how-it-works" },
-  { label: "Use cases", href: "/#use-cases" },
-  { label: "Pricing", href: "/pricing" },
-];
+import { DownloadButton } from "@/components/DownloadButton";
 
 function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -33,43 +24,9 @@ function Nav() {
             <TraqrLogo color="#1a1c21" />
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) =>
-              link.href.startsWith("/#") ? (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="px-4 py-2 text-sm font-medium text-slate-muted rounded-lg transition-colors hover:text-slate-ink hover:bg-slate-border"
-                >
-                  {link.label}
-                </a>
-              ) : (
-                <Link
-                  key={link.label}
-                  to={link.href as "/pricing"}
-                  className="px-4 py-2 text-sm font-medium text-slate-muted rounded-lg transition-colors hover:text-slate-ink hover:bg-slate-border"
-                >
-                  {link.label}
-                </Link>
-              ),
-            )}
-          </nav>
-
           {/* Auth CTAs */}
           <div className="hidden md:flex items-center gap-2">
-            <Link
-              to="/login"
-              className="px-4 py-2 text-sm font-medium text-slate-muted rounded-lg transition-colors hover:text-slate-ink hover:bg-slate-border"
-            >
-              Sign in
-            </Link>
-            <Button asChild size="sm">
-              <Link to="/signup" className="group">
-                Get Started
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-            </Button>
+            <DownloadButton>Download App</DownloadButton>
           </div>
 
           {/* Mobile menu button */}
@@ -94,40 +51,8 @@ function Nav() {
         >
           <Container>
             <nav className="py-4 flex flex-col gap-1">
-              {navLinks.map((link) =>
-                link.href.startsWith("/#") ? (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="px-4 py-3 text-sm font-medium text-slate-ink rounded-lg hover:bg-slate-border transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                ) : (
-                  <Link
-                    key={link.label}
-                    to={link.href as "/pricing"}
-                    onClick={() => setMobileOpen(false)}
-                    className="px-4 py-3 text-sm font-medium text-slate-ink rounded-lg hover:bg-slate-border transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ),
-              )}
               <div className="mt-3 pt-3 border-t border-slate-border flex flex-col gap-2">
-                <Link
-                  to="/login"
-                  onClick={() => setMobileOpen(false)}
-                  className="px-4 py-3 text-sm font-medium text-slate-muted rounded-lg hover:bg-slate-border transition-colors"
-                >
-                  Sign in
-                </Link>
-                <Button asChild>
-                  <Link to="/signup" onClick={() => setMobileOpen(false)}>
-                    Get Started
-                  </Link>
-                </Button>
+                <DownloadButton>Download App</DownloadButton>
               </div>
             </nav>
           </Container>
@@ -137,14 +62,11 @@ function Nav() {
   );
 }
 
-// ─── Footer ────────────────────────────────────────────────────────────────
-
 const footerLinks = {
   Product: [
     { label: "Features", href: "/#features" },
     { label: "How it works", href: "/#how-it-works" },
     { label: "Use cases", href: "/#use-cases" },
-    { label: "Pricing", href: "/pricing" },
   ],
   Company: [
     { label: "About", href: "#" },
@@ -212,8 +134,6 @@ function Footer() {
     </footer>
   );
 }
-
-// ─── Layout ────────────────────────────────────────────────────────────────
 
 function GuestLayout() {
   return (

@@ -15,7 +15,6 @@ import { formatCurrency, getBadgeVariant } from "@/lib/utils";
 import { useAuth } from "@/hooks/auth";
 import { useLayout } from "@/hooks/useLayout";
 import { useFetch } from "@/hooks/useFetch";
-import { saveAndOpenFile, saveAndShareFile } from "@shared/mobile";
 import ImagePreview from "@/components/ImagePreview";
 import Banner from "@/components/Banner";
 import { SkeletonInvoicePage } from "@/components/Skeleton";
@@ -91,15 +90,30 @@ function RouteComponent() {
   const handleDownload = async () => {
     if (!invoice) return;
     const blob = await getBlob(invoice);
-    const fileName = `invoice-${invoice?.invoiceNumber}.pdf`;
-    await saveAndOpenFile(blob, fileName, "application/pdf");
+    const fileName = `invoice-${invoice.invoiceNumber}.pdf`;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const handleShare = async () => {
     if (!invoice) return;
     const blob = await getBlob(invoice);
     const fileName = `invoice-${invoice.invoiceNumber}.pdf`;
-    await saveAndShareFile(blob, fileName, `Invoice ${invoice.invoiceNumber}`, "application/pdf");
+    const file = new File([blob], fileName, { type: "application/pdf" });
+    if (navigator.share && navigator.canShare?.({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: `Invoice ${invoice.invoiceNumber}`,
+      });
+    } else {
+      await handleDownload();
+    }
   };
 
   const handlePreview = async () => {

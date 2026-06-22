@@ -7,12 +7,7 @@ function GuestLayout() {
   const routerState = useRouterState();
   const isHomePage = routerState.location.pathname === "/";
 
-  const navLinks = [{ to: "/pricing", label: "Pricing" }];
   const footerItems = [
-    {
-      title: "Product",
-      items: [{ label: "Pricing", to: "/pricing" }],
-    },
     {
       title: "Company",
       items: [
@@ -23,7 +18,7 @@ function GuestLayout() {
   ];
   return (
     <>
-      <NavBar navLinks={navLinks} logo={<Logo />} />
+      <NavBar logo={<Logo />} />
       <div className={isHomePage ? "" : "mt-16 mb-16 w-[90%] sm:w-[80%] md:w-[70%] mx-auto"}>
         <Outlet />
       </div>

@@ -1,1 +1,0 @@
-ALTER TABLE `organizations` ADD `total_earnings` integer DEFAULT 0 NOT NULL;

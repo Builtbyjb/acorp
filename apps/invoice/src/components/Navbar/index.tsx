@@ -1,62 +1,30 @@
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+// import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-
-type NavLink = {
-  label: string;
-  to: string;
-};
+import { DownloadButton } from "@/components/DownloadButton";
 
 type Props = {
-  navLinks: NavLink[];
   logo: React.ReactNode;
-  enableCTA?: boolean;
 };
 
-export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
+export default function Navbar({ logo }: Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const navigate = useNavigate();
-  const routerState = useRouterState();
-  const currentPath = routerState.location.pathname;
+  // const routerState = useRouterState();
+  // const currentPath = routerState.location.pathname;
 
   return (
     <header className="sticky top-0 z-50 border-b border-black/10 bg-white/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <div className="flex gap-8">
-          {logo}
-
-          {/* Desktop nav links */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const isActive = currentPath === link.to || currentPath.startsWith(link.to + "/");
-              return (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className="relative px-3 py-1.5 text-sm font-medium transition-all"
-                  style={{ color: isActive ? "#000000" : "#737373" }}
-                >
-                  {isActive && <span className="absolute inset-0" style={{ backgroundColor: "#00000008" }} />}
-                  <span className="relative">{link.label}</span>
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
+        <div className="flex gap-8">{logo}</div>
 
         {/* Desktop CTAs */}
-        {enableCTA && (
-          <div className="hidden md:flex items-center gap-3">
-            <Button variant="outline" onClick={() => navigate({ to: "/login" })}>
-              Log in
-            </Button>
-            <Button onClick={() => navigate({ to: "/signup" })}>
-              Get started <ArrowRight />
-            </Button>
-          </div>
-        )}
+        <div className="hidden md:flex items-center gap-3">
+          <DownloadButton className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold text-white bg-brand-ink transition-all duration-300 hover:bg-brand-ink/90 hover:shadow-lg active:scale-[0.97]">
+            Download App
+          </DownloadButton>
+        </div>
 
         {/* Mobile toggle */}
         <Button
@@ -73,44 +41,11 @@ export default function Navbar({ navLinks, logo, enableCTA = true }: Props) {
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-black/10 bg-white">
-          <div className="flex flex-col gap-1 px-6 py-4">
-            {navLinks.map((link) => {
-              const isActive = currentPath === link.to;
-              return (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className="px-3 py-2 text-sm font-medium transition-all"
-                  style={{
-                    color: isActive ? "#000000" : "#737373",
-                    backgroundColor: isActive ? "#00000008" : "transparent",
-                  }}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-
-            {enableCTA && (
-              <>
-                <Separator className="my-2 bg-black/10" />
-                <div className="flex flex-col gap-3 pt-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      navigate({ to: "/login" });
-                    }}
-                  >
-                    Log in
-                  </Button>
-                  <a href="mailto:hello@acorp.dev">
-                    <Button>Get started</Button>
-                  </a>
-                </div>
-              </>
-            )}
+          <Separator className="my-2 bg-black/10" />
+          <div className="flex flex-col gap-3 pt-2">
+            <DownloadButton className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold text-white bg-brand-ink transition-all duration-300 hover:bg-brand-ink/90 hover:shadow-lg active:scale-[0.97]">
+              Download App
+            </DownloadButton>
           </div>
         </div>
       )}

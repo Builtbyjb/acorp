@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { DownloadAppButton } from "@/components/landing/DownloadAppButton";
 import { GlowOrb, GradientText } from "./utils";
 import { Check } from "lucide-react";
 
@@ -9,7 +9,6 @@ const plans = [
     price: "$0",
     desc: "Try Lumina with no commitment.",
     features: ["5 videos/month", "720p export", "Basic styles", "Lumina watermark"],
-    cta: "Start free",
     featured: false,
   },
   {
@@ -18,7 +17,6 @@ const plans = [
     period: "/mo",
     desc: "For solo creators posting daily.",
     features: ["Unlimited videos", "1080p export", "All styles", "No watermark", "Brand kit"],
-    cta: "Start creating",
     featured: true,
   },
   {
@@ -27,7 +25,6 @@ const plans = [
     period: "/mo",
     desc: "For teams and agencies.",
     features: ["Everything in Creator", "4K export", "API access", "Team workspaces", "Priority support"],
-    cta: "Contact sales",
     featured: false,
   },
 ];
@@ -84,7 +81,7 @@ export default function Pricing() {
                     </li>
                   ))}
                 </ul>
-                <Button
+                <DownloadAppButton
                   className={`w-full rounded-full font-semibold ${
                     plan.featured
                       ? "bg-linear-to-r from-cyan-400 to-blue-500 text-[#030305] hover:shadow-[0_0_24px_rgba(34,211,238,0.35)]"
@@ -92,8 +89,8 @@ export default function Pricing() {
                   }`}
                   variant={plan.featured ? "default" : "outline"}
                 >
-                  {plan.cta}
-                </Button>
+                  Download App
+                </DownloadAppButton>
               </CardContent>
             </Card>
           ))}

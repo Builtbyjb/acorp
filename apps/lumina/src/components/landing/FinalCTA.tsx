@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { DownloadAppButton } from "@/components/landing/DownloadAppButton";
 
 export default function FinalCTA() {
   return (
@@ -38,13 +37,12 @@ export default function FinalCTA() {
             <p className="mx-auto mb-10 max-w-lg text-base leading-relaxed text-[#8a8a9a]">
               No credit card. No learning curve. Just describe what you want and watch Lumina build it in seconds.
             </p>
-            <Button
+            <DownloadAppButton
               size="lg"
               className="group inline-flex h-12 items-center gap-2 rounded-full bg-white px-8 text-sm font-semibold text-[#030305] shadow-[0_0_28px_rgba(255,255,255,0.2)] transition-all hover:gap-2.5 hover:shadow-[0_0_40px_rgba(34,211,238,0.4)] active:scale-95"
             >
-              Create your first video
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-            </Button>
+              Download App
+            </DownloadAppButton>
           </div>
         </div>
       </div>

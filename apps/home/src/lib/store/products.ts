@@ -13,7 +13,7 @@ export const PRODUCTS: Product[] = [
         id: "invoice",
         name: "Invoice",
         tagline: "Professional invoicing, simplified",
-        available: true,
+        available: false,
         description:
             "Create, send, and track polished invoices in seconds. Purpose-built for freelancers, contractors, and small teams who want to get paid faster — with zero friction and full professionalism.",
         href: "https://invoice.acorp.app",

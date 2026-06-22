@@ -8,7 +8,6 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { SmsIcon, WhatsAppIcon, SendIcon } from '../../-icons.tsx'
 import { useLayout } from '@/hooks/useLayout'
 import { Phone, MoreVertical, Share2 } from 'lucide-react'
-import { shareText } from '@shared/mobile'
 
 interface Message {
   id: number
@@ -70,7 +69,9 @@ function ConversationPage() {
 
   const handleShare = async () => {
     const text = conv.messages.map((m) => `${m.direction === 'outgoing' ? 'Me' : conv.name}: ${m.text}`).join('\n')
-    await shareText(text, `Conversation with ${conv.name}`)
+    if (navigator.share) {
+      await navigator.share({ title: `Conversation with ${conv.name}`, text })
+    }
   }
 
   return (

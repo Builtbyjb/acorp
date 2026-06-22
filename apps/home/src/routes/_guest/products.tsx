@@ -1,9 +1,7 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { PRODUCTS } from "@/lib/store/products";
-import { ArrowRight } from "lucide-react";
 import CustomBanner from "@/components/landing/CustomBanner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Breadcrumb,
@@ -50,7 +48,6 @@ function PageHeader() {
 }
 
 function ProductList() {
-  const navigate = useNavigate();
   return (
     <section>
       <div className="flex flex-col gap-4">
@@ -90,12 +87,13 @@ function ProductList() {
               </div>
             </CardContent>
             <CardFooter>
-              <div className="flex items-center gap-3">
-                <Button onClick={() => navigate({ to: product.href })}>
-                  Open {product.name}
-                  <ArrowRight />
-                </Button>
-              </div>
+              <Link
+                to={product.href}
+                target="_blank"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold transition-all hover:gap-2.5 text-white bg-black px-4 py-2 hover:scale-105"
+              >
+                Open {product.name}
+              </Link>
             </CardFooter>
           </Card>
         ))}

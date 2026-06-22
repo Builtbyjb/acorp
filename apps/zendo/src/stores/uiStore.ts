@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { zustandStorage } from "@shared/mobile/storage";
 
 interface UIStore {
   sidebarOpen: boolean;
@@ -27,7 +26,7 @@ export const useUIStore = create<UIStore>()(
     }),
     {
       name: "zendo_ui",
-      storage: createJSONStorage(() => zustandStorage),
+      storage: createJSONStorage(() => localStorage),
       partialize: (s) => ({ sidebarOpen: s.sidebarOpen, activeProjectId: s.activeProjectId }),
     }
   )

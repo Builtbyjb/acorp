@@ -1,7 +1,12 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import type { AnyRouter } from "@tanstack/react-router";
 import type { User } from "@/lib/types";
-import { getItem, setItem, removeItem } from "@shared/mobile/storage";
+
+const storage = {
+  getItem: (key: string): string | null => localStorage.getItem(key),
+  setItem: (key: string, value: string) => localStorage.setItem(key, value),
+  removeItem: (key: string) => localStorage.removeItem(key),
+};
 
 export type AuthState = {
   user: User | null;
@@ -34,7 +39,7 @@ function generateId() {
 
 async function loadDemoUsers(): Promise<Record<string, { user: User; password: string }>> {
   try {
-    const raw = await getItem(DEMO_USERS_KEY);
+    const raw = storage.getItem(DEMO_USERS_KEY);
     const parsed = raw ? (JSON.parse(raw) as Record<string, { user: User; password: string }>) : {};
     if (Object.keys(parsed).length === 0) {
       const demo: User = {
@@ -45,7 +50,7 @@ async function loadDemoUsers(): Promise<Record<string, { user: User; password: s
         currentOrgId: 1,
       };
       parsed[demo.email] = { user: demo, password: "password" };
-      await setItem(DEMO_USERS_KEY, JSON.stringify(parsed));
+      storage.setItem(DEMO_USERS_KEY, JSON.stringify(parsed));
     }
     return parsed;
   } catch {
@@ -54,12 +59,12 @@ async function loadDemoUsers(): Promise<Record<string, { user: User; password: s
 }
 
 async function saveDemoUsers(users: Record<string, { user: User; password: string }>) {
-  await setItem(DEMO_USERS_KEY, JSON.stringify(users));
+  storage.setItem(DEMO_USERS_KEY, JSON.stringify(users));
 }
 
 async function getDemoSession(): Promise<{ user: User } | null> {
   try {
-    const raw = await getItem(DEMO_SESSION_KEY);
+    const raw = storage.getItem(DEMO_SESSION_KEY);
     return raw ? (JSON.parse(raw) as { user: User }) : null;
   } catch {
     return null;
@@ -68,9 +73,9 @@ async function getDemoSession(): Promise<{ user: User } | null> {
 
 async function setDemoSession(user: User | null) {
   if (user) {
-    await setItem(DEMO_SESSION_KEY, JSON.stringify({ user }));
+    storage.setItem(DEMO_SESSION_KEY, JSON.stringify({ user }));
   } else {
-    await removeItem(DEMO_SESSION_KEY);
+    storage.removeItem(DEMO_SESSION_KEY);
   }
 }
 

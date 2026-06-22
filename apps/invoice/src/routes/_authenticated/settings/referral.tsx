@@ -11,7 +11,6 @@ import { formatCurrency, handleError } from "@/lib/utils";
 import { APP_NAME } from "@/lib/constant";
 import { toast } from "sonner";
 import { useFetch } from "@/hooks/useFetch";
-import { copyToClipboard } from "@shared/mobile";
 import Banner from "@/components/Banner";
 import * as z from "zod";
 
@@ -89,7 +88,21 @@ function RouteComponent() {
   }, [doGET]);
 
   const handleCopy = async (text: string) => {
-    await copyToClipboard(text);
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
     toast.success("Copied to clipboard");
   };
 
